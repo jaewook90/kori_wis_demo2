@@ -18,75 +18,81 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
+        padding: EdgeInsets.only(top: 100),
         child: Dialog(
-          backgroundColor: Color(0xff000000),
+          alignment: Alignment.topCenter,
+          backgroundColor: Colors.transparent,
           child:
-              Stack(children: [
-                Container(
-                  width: screenWidth,
-                  height: screenHeight,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(paymentBackground), fit: BoxFit.cover)),
-                ),
-                Positioned(
-                    left: 80 * 0.75,
-                    top: 215 * 0.75,
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      color: Colors.transparent,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            // shape: RoundedRectangleBorder(
-                            //     side: BorderSide(width: 1, color: Colors.white),
-                            //     borderRadius: BorderRadius.circular(0))
+              Container(
+                height: 1401,
+                width: 992,
+                child: Stack(children: [
+                  Container(
+                    width: screenWidth,
+                    height: screenHeight,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(paymentBackground), alignment: Alignment.topCenter)),
+                  ),
+                  Positioned(
+                      left: 52,
+                      top: 31,
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        color: Colors.transparent,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(width: 1, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(0))
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: null,
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: null,
-                      ),
-                    )),
-                Positioned(
-                    left: 1176 * 0.75,
-                    top: 215 * 0.75,
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      color: Colors.transparent,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            // shape: RoundedRectangleBorder(
-                            //     side: BorderSide(width: 1, color: Colors.white),
-                            //     borderRadius: BorderRadius.circular(0))
+                      )),
+                  Positioned(
+                      left: 888,
+                      top: 31,
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        color: Colors.transparent,
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(width: 1, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(0))
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: null,
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                        child: null,
-                      ),
-                    )),
-                Positioned(
-                    left: 520 * 0.75,
-                    top: 575 * 0.75,
-                    child: Container(
-                      width: 300,
-                      height: 65,
-                      color: Colors.transparent,
-                      child: Text('11,500 원', style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 53,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xffffffff),
-                      ),),
-                    )),
-                OrderModuleButtonsFinal(screens: 2,)
-              ]),
+                      )),
+                  Positioned(
+                      left: 395,
+                      top: 315.5,
+                      child: Container(
+                        width: 300,
+                        height: 65,
+                        color: Colors.transparent,
+                        child: Text('11,500 원', style: TextStyle(
+                          fontFamily: 'kor',
+                          fontSize: 53,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xffffffff),
+                        ),),
+                      )),
+                  OrderModuleButtonsFinal(screens: 2,)
+                ]),
+              ),
 
         ));
   }

@@ -21,8 +21,6 @@ class NavModuleButtonsFinal extends StatefulWidget {
 class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
   late ServingModel _servingProvider;
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -42,33 +40,33 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     if (widget.screens == 0) {
-      // 메인 화면
-      buttonPositionWidth = [143];
-      buttonPositionHeight = [1015];
+      // 이동 중
+      buttonPositionWidth = [107];
+      buttonPositionHeight = [1367];
 
-      buttonSize = [1155, 230];
+      buttonSize = [866, 172];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 1) {
       // 서빙 일시 정지
-      buttonPositionWidth = [143, 143, 743];
-      buttonPositionHeight = [1015, 1291, 1291];
+      buttonPositionWidth = [107, 107, 406, 705];
+      buttonPositionHeight = [1311, 1501, 1501, 1501];
 
       buttonSize = [];
-      buttonSize1 = [1155, 230];
-      buttonSize2 = [555, 325];
+      buttonSize1 = [866, 160];
+      buttonSize2 = [268, 200];
 
-      buttonRadius = 50;
+      buttonRadius = 30;
     } else if (widget.screens == 2) {
       // 택배 일시 정지
-      buttonPositionWidth = [143, 143, 143, 743];
-      buttonPositionHeight = [1015, 1352, 1630, 1630];
+      buttonPositionWidth = [107, 107, 406, 705];
+      buttonPositionHeight = [1311, 1501, 1501, 1501];
 
       buttonSize = [];
-      buttonSize1 = [1155, 230];
-      buttonSize2 = [555, 325];
+      buttonSize1 = [866, 160];
+      buttonSize2 = [268, 200];
 
-      buttonRadius = 50;
+      buttonRadius = 30;
     }
     // else if (widget.screens == 3) {
     //   // 서빙 상품 선택 화면
@@ -82,29 +80,28 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
     return Stack(children: [
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
-          left: buttonPositionWidth[i] * pixelRatio,
-          top: buttonPositionHeight[i] * pixelRatio,
+          left: buttonPositionWidth[i],
+          top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
-                    borderRadius:
-                        BorderRadius.circular(buttonRadius * pixelRatio)),
+                    side: BorderSide(width: 1, color: Colors.tealAccent),
+                    borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize: widget.screens == 1
                     ? i == 0
-                        ? Size(buttonSize1[buttonWidth] * pixelRatio,
-                            buttonSize1[buttonHeight] * pixelRatio)
-                        : Size(buttonSize2[buttonWidth] * pixelRatio,
-                            buttonSize2[buttonHeight] * pixelRatio)
+                        ? Size(
+                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
+                        : Size(
+                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
                     : widget.screens == 2
-                        ? i == 0 || i == 1
-                            ? Size(buttonSize1[buttonWidth] * pixelRatio,
-                                buttonSize1[buttonHeight] * pixelRatio)
-                            : Size(buttonSize2[buttonWidth] * pixelRatio,
-                                buttonSize2[buttonHeight] * pixelRatio)
-                        : Size(buttonSize[buttonWidth] * pixelRatio,
-                            buttonSize[buttonHeight] * pixelRatio)),
+                        ? i == 0
+                            ? Size(buttonSize1[buttonWidth],
+                                buttonSize1[buttonHeight])
+                            : Size(buttonSize2[buttonWidth],
+                                buttonSize2[buttonHeight])
+                        : Size(
+                            buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
                     navPage(
@@ -132,8 +129,16 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                   enablePop: false)
                               .navPageToPage();
                           _servingProvider.playAd = false;
-                        } else {
+                        } else if (i == 0) {
                           // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                          navPage(
+                                  context: context,
+                                  page: NavigatorProgressModuleFinal(),
+                                  enablePop: false)
+                              .navPageToPage();
+                          _servingProvider.playAd = false;
+                        } else {
+                          // 추후에는 거점으로 복귀
                           navPage(
                                   context: context,
                                   page: NavigatorProgressModuleFinal(),
@@ -152,7 +157,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                       page: NavigatorProgressModuleFinal(),
                                       enablePop: false)
                                   .navPageToPage();
-                              _servingProvider.playAd=false;
+                              _servingProvider.playAd = false;
                             } else if (i == 1) {
                               navPage(
                                       context: context,
@@ -167,7 +172,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                       page: NavigatorProgressModuleFinal(),
                                       enablePop: false)
                                   .navPageToPage();
-                              _servingProvider.playAd=false;
+                              _servingProvider.playAd = false;
                             } else {
                               //
                               // 지정 대기 장소로 이동 API 추가
@@ -176,7 +181,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                       page: NavigatorProgressModuleFinal(),
                                       enablePop: false)
                                   .navPageToPage();
-                              _servingProvider.playAd=false;
+                              _servingProvider.playAd = false;
                             }
                           }
                         : widget.screens == 3

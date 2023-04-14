@@ -21,7 +21,7 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
   String? navUrl;
   String? chgUrl;
 
-  String backgroundImage = "assets/screens/Shipping/koriZFinalShippingDoneTest.png";
+  String backgroundImage = "assets/screens/Shipping/koriZFinalShippingDone.png";
 
   @override
   Widget build(BuildContext context) {

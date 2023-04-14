@@ -69,8 +69,12 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
     print(menuLength.runtimeType);
 
     return Container(
+      padding: EdgeInsets.only(top: 100),
+        decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
       child: Dialog(
-        backgroundColor: Color(0xff000000),
+        alignment: Alignment.topCenter,
+        backgroundColor: Colors.transparent,
         shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(0),
             borderSide: BorderSide(
@@ -78,76 +82,40 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
               style: BorderStyle.solid,
               width: 1,
             )),
-        child: Stack(children: [
-          Container(
-            constraints: BoxConstraints.expand(),
-            decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage(orderBookImg))),
-            child: Container(),
-          ),
-          Positioned(
-              left: 1150 * 0.75,
-              top: 264 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      // shape: RoundedRectangleBorder(
-                      //   side: BorderSide(width: 1, color: Colors.white),
-                      //     borderRadius: BorderRadius.circular(0))
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: null,
-                ),
-              )),
-          OrderModuleButtonsFinal(screens: 0,),
-          Positioned(
-            left: 310 * 0.75,
-            top: 235 * 0.75,
-            child: Text(
-              '상품을 선택해 주세요',
-              style: TextStyle(fontFamily: 'kor', fontSize: 60),
+        child: Container(
+          height: 1561,
+          width: 992,
+          child: Stack(children: [
+            Container(
+              constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                  // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
+                  image: DecorationImage(image: AssetImage(orderBookImg))),
+              child: Container(),
             ),
-          ),
-          Positioned(
-              left: 608 * 0.75,
-              top: 460 * 0.75,
-              child: Container(
-                width: 120 * 0.75,
-                height: 50 * 0.75,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(downArrowIcon1),
-                        fit: BoxFit.cover)),
-              )),
-          Positioned(
-              left: 608 * 0.75,
-              top: 430 * 0.75,
-              child: Container(
-                width: 120 * 0.75,
-                height: 50 * 0.75,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(downArrowIcon2),
-                        fit: BoxFit.cover)),
-              )),
-          Positioned(
-              left: 608 * 0.75,
-              top: 400 * 0.75,
-              child: Container(
-                width: 120 * 0.75,
-                height: 50 * 0.75,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(downArrowIcon3),
-                        fit: BoxFit.cover)),
-              ))
-        ]),
+            Positioned(
+                left: 888,
+                top: 30.8,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(width: 1, color: Colors.white),
+                            borderRadius: BorderRadius.circular(0))
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: null,
+                  ),
+                )),
+            OrderModuleButtonsFinal(screens: 0,)
+          ]),
+        ),
       ),
     );
   }

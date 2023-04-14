@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/receiptModalFinal.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Widgets/KoriAppBar.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +93,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     downArrowIcon3 = 'assets/icons/decoration/DownArrow3.png';
   }
 
-  void showReceiptSelectPopup(context) {
+  void showTraySetPopup(context) {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -164,43 +166,94 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            navPage(
-                    context: context,
-                    page: ServiceScreenFinal(),
-                    enablePop: false)
-                .navPageToPage();
-          },
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
-          color: Color(0xffB7B7B7),
-          iconSize: screenHeight * 0.03,
-          alignment: Alignment.centerRight,
-        ),
+        // leading:
         actions: [
-          IconButton(
-            padding: EdgeInsets.only(right: screenWidth * 0.05),
-            onPressed: () {
-              _servingProvider.clearAllTray();
-              // _servingProvider.initServing();
-              navPage(
-                      context: context,
-                      page: ServiceScreenFinal(),
-                      enablePop: false)
-                  .navPageToPage();
-            },
-            icon: Icon(
-              Icons.home_outlined,
+          Container(
+            width: screenWidth,
+            height: 108,
+            child: Stack(
+              children: [
+                Positioned(
+                    left: 30,
+                    top: 25,
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Backward.png',
+                              ),
+                              fit: BoxFit.fill)),
+                    )),
+                Positioned(
+                  left: 20,
+                  top: 18,
+                  child: FilledButton(onPressed: () {
+                    navPage(context: context, page: ServiceScreenFinal(), enablePop: false).navPageToPage();
+                  }, child: null, style: FilledButton.styleFrom(
+                      fixedSize: Size(80, 80),
+                      shape: RoundedRectangleBorder(
+                          // side: BorderSide(color: Colors.white, width: 1),
+                          borderRadius: BorderRadius.circular(0)
+                      ),
+                      backgroundColor: Colors.transparent
+                  ),),
+                ),
+                Positioned(
+                    left: 130,
+                    top: 25,
+                    child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/appBar/appBar_Home.png',
+                                ),
+                                fit: BoxFit.fill)),
+                      ),
+                    ),
+                Positioned(
+                  left: 120,
+                  top: 18,
+                  child: FilledButton(onPressed: () {
+                    navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+                  }, child: null, style: FilledButton.styleFrom(
+                      fixedSize: Size(80, 80),
+                      shape: RoundedRectangleBorder(
+                          // side: BorderSide(color: Colors.white, width: 1),
+                          borderRadius: BorderRadius.circular(0)
+                      ),
+                      backgroundColor: Colors.transparent
+                  ),),
+                ),
+                Positioned(
+                    right: 50,
+                    top: 25,
+                    child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/appBar/appBar_Battery.png',
+                                ),
+                                fit: BoxFit.fill)),
+                      ),
+                    ),
+                Center(
+                  child: Text(
+                    "시간",
+                    style: TextStyle(fontFamily: 'kor', fontSize: 60),
+                  ),
+                )
+              ],
             ),
-            color: Color(0xffB7B7B7),
-            iconSize: screenHeight * 0.03,
-            alignment: Alignment.center,
-          ),
-          Icon(Icons.battery_charging_full,
-              color: Colors.teal, size: screenHeight * 0.03),
-          SizedBox(width: screenWidth * 0.03)
+          )
+          // SizedBox(width: screenWidth * 0.03)
         ],
-        toolbarHeight: screenHeight * 0.045,
+        toolbarHeight: 110,
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -305,88 +358,116 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               ),
               // 초기화 버튼
               Positioned(
-                  left: 1148 * 0.75,
-                  top: 1010 * 0.75,
-                  child: IconButton(
-                    onPressed: () {
+                  right: 188,
+                  top: 812,
+                  child: FilledButton(
+                    onPressed: (){
                       setState(() {
                         _servingProvider.clearTray1();
                       });
                     },
-                    icon: Image.asset(resetIcon),
-                    iconSize: 77 * 0.75,
+                    child: null,
+                    style: FilledButton.styleFrom(
+                      fixedSize: Size(64, 64),
+                      shape: RoundedRectangleBorder(
+                        // side: BorderSide(color: Colors.white, width: 1),
+                        borderRadius: BorderRadius.circular(0)
+                      ),
+                      backgroundColor: Colors.transparent
+                    ),
                   )),
               Positioned(
-                  left: 1148 * 0.75,
-                  top: 1261 * 0.75,
-                  child: IconButton(
-                    onPressed: () {
+                  right: 188,
+                  top: 1030,
+                  child: FilledButton(
+                    onPressed: (){
                       setState(() {
                         _servingProvider.clearTray2();
                       });
                     },
-                    icon: Image.asset(resetIcon),
-                    iconSize: 77 * 0.75,
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: Size(64, 64),
+                        shape: RoundedRectangleBorder(
+                            // side: BorderSide(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(0)
+                        ),
+                        backgroundColor: Colors.transparent
+                    ),
                   )),
               Positioned(
-                  left: 1148 * 0.75,
-                  top: 1544 * 0.75,
-                  child: IconButton(
-                    onPressed: () {
+                  right: 188,
+                  top: 1296,
+                  child: FilledButton(
+                    onPressed: (){
                       setState(() {
                         _servingProvider.clearTray3();
                       });
                     },
-                    icon: Image.asset(resetIcon),
-                    iconSize: 77 * 0.75,
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: Size(64, 64),
+                        shape: RoundedRectangleBorder(
+                            // side: BorderSide(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(0)
+                        ),
+                        backgroundColor: Colors.transparent
+                    ),
                   )),
               //트레이1
               Positioned(
-                top: 944*0.75,
-                left: 570*0.75,
+                top: 757,
+                left: 394,
                 child: Offstage(
                   offstage: offStageTray1!,
                   child: Stack(
                     children: [
                       Positioned(
-                        left: 52*0.75,
-                        top: 140*0.75,
+                        left: 32,
+                        top: 120,
                         child: Container(
-                          width: 65 * 0.75,
-                          height: 50 * 0.75,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                          ),
+                          width: 50,
+                          height: 30,
                           child: Offstage(
                               offstage: servedItem1!,
-                              child: Text(
-                                '$table1 번',
-                                style: buttonFont,
+                              child: Center(
+                                child: Text(
+                                  '$table1 번',
+                                  style: buttonFont,
+                                ),
                               )),
                         ),
                       ),
                       Positioned(
-                        left: 140*0.75,
-                        top: 35*0.75,
+                        left: 145.5,
+                        top: 25.9,
                         child: Offstage(
                           offstage: servedItem1!,
                           child: Container(
-                              width: 320 * 0.75,
-                              height: 160 * 0.75,
+                              width: 146,
+                              height: 120,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        _servingProvider.itemImageList![0]),
-                                    fit: BoxFit.fill),
+                                        _servingProvider.itemImageList![0]),),
+                                  borderRadius: BorderRadius.circular(0),
+                                  // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               )),
                         ),
                       ),
                       Container(
-                        width: 518 * 0.75,
-                        height: 229 * 0.75,
+                        width: 388.5,
+                        height: 171.8,
                         child: TextButton(
                             onPressed: () {
                               print("tapped");
                               _servingProvider.tray1Select = true;
                               _servingProvider.trayCheckAll = false;
-                              showReceiptSelectPopup(context);
+                              showTraySetPopup(context);
                             },
                             child: Container(),
                             style: TextButton.styleFrom(
@@ -394,8 +475,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                 fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
                                 shape: RoundedRectangleBorder(
-                                  side: BorderSide(color: Colors.green, width: 1),
-                                  borderRadius: BorderRadius.circular(20)))),
+                                    side: BorderSide(
+                                        color: Colors.green, width: 1),
+                                    borderRadius: BorderRadius.circular(20)))),
                       ),
                     ],
                   ),
@@ -403,161 +485,142 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               ),
               //트레이2
               Positioned(
-                top: 1195*0.75,
-                left: 570*0.75,
+                top: 975.8,
+                left: 394,
                 child: Offstage(
                   offstage: offStageTray2!,
                   child: Stack(
                     children: [
                       Positioned(
-                        left: 55*0.75,
-                        top: 140*0.75,
+                        left: 32,
+                        top: 120,
                         child: Container(
-                          width: 65 * 0.75,
-                          height: 50 * 0.75,
+                          width: 50,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                          ),
                           child: Offstage(
                               offstage: servedItem2!,
-                              child: Text(
-                                '$table2 번',
-                                style: buttonFont,
+                              child: Center(
+                                child: Text(
+                                  '$table2 번',
+                                  style: buttonFont,
+                                ),
                               )),
                         ),
                       ),
                       Positioned(
-                        left: 140*0.75,
-                        top: 35*0.75,
+                        left: 145.5,
+                        top: 25.9,
                         child: Offstage(
                           offstage: servedItem2!,
                           child: Container(
-                              width: 320 * 0.75,
-                              height: 160 * 0.75,
+                              width: 146,
+                              height: 120,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        _servingProvider.itemImageList![1]),
-                                    fit: BoxFit.fill),
+                                        _servingProvider.itemImageList![1])),
+                                  borderRadius: BorderRadius.circular(0),
+                                  // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               )),
                         ),
                       ),
                       Container(
-                        width: 518 * 0.75,
-                        height: 229 * 0.75,
-                        child: TextButton(
-                            onPressed: () {
-                              print("tapped");
-                              _servingProvider.tray2Select = true;
-                              _servingProvider.trayCheckAll = false;
-                              showReceiptSelectPopup(context);
-                            },
-                            child: Container(),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                fixedSize:
-                                Size(textButtonWidth, textButtonHeight),
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide(color: Colors.green, width: 1),
-                                    borderRadius: BorderRadius.circular(20))))
-                      ),
+                          width: 388.5,
+                          height: 171.8,
+                          child: TextButton(
+                              onPressed: () {
+                                print("tapped");
+                                _servingProvider.tray2Select = true;
+                                _servingProvider.trayCheckAll = false;
+                                showTraySetPopup(context);
+                              },
+                              child: Container(),
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  fixedSize:
+                                      Size(textButtonWidth, textButtonHeight),
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.green, width: 1),
+                                      borderRadius:
+                                          BorderRadius.circular(20))))),
                     ],
                   ),
                 ),
               ),
               //트레이3
               Positioned(
-                top: 1446*0.75,
-                left: 570*0.75,
+                top: 1217.6,
+                left: 394,
                 child: Offstage(
                   offstage: offStageTray3!,
                   child: Stack(
                     children: [
                       Positioned(
-                        left: 52*0.75,
-                        top: 172*0.75,
+                        left: 32,
+                        top: 145,
                         child: Container(
-                          width: 65 * 0.75,
-                          height: 50 * 0.75,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                          ),
+                          width: 50,
+                          height: 30,
                           child: Offstage(
                               offstage: servedItem3!,
-                              child: Text(
-                                '$table3 번',
-                                style: buttonFont,
+                              child: Center(
+                                child: Text(
+                                  '$table3 번',
+                                  style: buttonFont,
+                                ),
                               )),
                         ),
                       ),
                       Positioned(
-                        left: 140*0.75,
-                        top: 105*0.75,
+                        left: 145.5,
+                        top: 51,
                         child: Offstage(
                           offstage: servedItem3!,
                           child: Container(
-                              width: 320 * 0.75,
-                              height: 160 * 0.75,
+                              width: 146,
+                              height: 120,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        _servingProvider.itemImageList![2]),
-                                    fit: BoxFit.fill),
+                                        _servingProvider.itemImageList![2])),
+                                  borderRadius: BorderRadius.circular(0),
+                                  // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               )),
                         ),
                       ),
                       Container(
-                        width: 518 * 0.75,
-                        height: 293 * 0.75,
-                        child: TextButton(
-                            onPressed: () {
-                              print("tapped");
-                              _servingProvider.tray3Select = true;
-                              _servingProvider.trayCheckAll = false;
-                              showReceiptSelectPopup(context);
-                            },
-                            child: Container(),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                fixedSize:
-                                Size(textButtonWidth, textButtonHeight),
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide(color: Colors.green, width: 1),
-                                    borderRadius: BorderRadius.circular(20))))
-                      ),
+                          width: 518 * 0.75,
+                          height: 293 * 0.75,
+                          child: TextButton(
+                              onPressed: () {
+                                print("tapped");
+                                _servingProvider.tray3Select = true;
+                                _servingProvider.trayCheckAll = false;
+                                showTraySetPopup(context);
+                              },
+                              child: Container(),
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  fixedSize:
+                                      Size(textButtonWidth, textButtonHeight),
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.green, width: 1),
+                                      borderRadius:
+                                          BorderRadius.circular(20))))),
                     ],
                   ),
                 ),
               ),
-              Positioned(
-                  left: 470*0.75,
-                  top: 470*0.75,
-                  child:Text('선반을 고른 후 상품을 선택해주세요.'),
-              ),
-              Positioned(
-                left: 657*0.75,
-                  top: 590*0.75,
-                  child: Container(
-                    width: 120*0.75,
-                    height: 50*0.75,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage(downArrowIcon1), fit: BoxFit.cover)
-                    ),
-                  )),
-              Positioned(
-                  left: 657*0.75,
-                  top: 560*0.75,
-                  child: Container(
-                    width: 120*0.75,
-                    height: 50*0.75,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage(downArrowIcon2), fit: BoxFit.cover)
-                    ),
-                  )),
-              Positioned(
-                  left: 657*0.75,
-                  top: 530*0.75,
-                  child: Container(
-                    width: 120*0.75,
-                    height: 50*0.75,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage(downArrowIcon3), fit: BoxFit.cover)
-                    ),
-                  ))
             ]),
           ],
         ),

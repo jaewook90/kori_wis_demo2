@@ -48,12 +48,15 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
               style: BorderStyle.solid,
               width: 1,
             )),
+        alignment: Alignment.topCenter,
         child: Container(
+          width: screenWidth,
+          height: screenHeight*0.8,
           child: Stack(
             children: [
               Container(
                 width: screenWidth,
-                height: screenHeight*0.8,
+                height: screenHeight,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(itemSelectBG), fit: BoxFit.fill)),

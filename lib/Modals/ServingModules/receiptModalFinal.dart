@@ -98,78 +98,58 @@ class _SelectReceiptModalFinalState extends State<SelectReceiptModalFinal> {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double textButtonWidth = screenWidth * 0.4;
-    double textButtonHeight = screenHeight * 0.15;
 
     goalPosition = _networkProvider.goalPosition;
 
-    TextStyle? tableButtonFont = Theme.of(context).textTheme.headlineLarge;
-
-    // if (orderedItems.length == 0) {
-    //   for (int i = 0; i < _networkProvider.goalPosition.length; i++) {
-    //     orderedItems.add(testItems[Random().nextInt(testItems.length)]);
-    //     print(orderedItems);
-    //   }
-    // }
-
     return Container(
+      padding: EdgeInsets.only(top: 100),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
       child: Dialog(
-        backgroundColor: Color(0xff000000),
-        child: Stack(children: [
-          Container(
-            width: screenWidth,
-            height: screenHeight,
-            decoration: BoxDecoration(
-              border: Border.fromBorderSide((BorderSide(
-                color: Colors.white,
-                width: 1
-              ))),
-                image: DecorationImage(
-                    image: AssetImage(receiptSelectBG), fit: BoxFit.cover)),
-          ),
-          Positioned(
-              left: 1176 * 0.75,
-              top: 307 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                // color: Colors.white,
-                // decoration: BoxDecoration(
-                //   border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                // ),
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0))),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _servingProvider.item1 = "";
-                    _servingProvider.item2 = "";
-                    _servingProvider.item3 = "";
+        alignment: Alignment.topCenter,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          height: 1514,
+          width: 993,
+          child: Stack(children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.fromBorderSide((BorderSide(
+                  color: Colors.white,
+                  width: 1
+                ))),
+                  image: DecorationImage(
+                      image: AssetImage(receiptSelectBG))),
+            ),
+            Positioned(
+                left: 886,
+                top: 38,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(width: 1, color: Colors.white),
+                            borderRadius: BorderRadius.circular(0))),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _servingProvider.item1 = "";
+                      _servingProvider.item2 = "";
+                      _servingProvider.item3 = "";
 
-                    print(_servingProvider.item1);
-                    print(_servingProvider.item2);
-                    print(_servingProvider.item3);
-                  },
-                  child: null,
-                ),
-              )),
-          Positioned(
-              left: 290 * 0.75,
-              top: 170 * 0.75,
-              child: Container(
-                width: 600,
-                height: 80,
-                // color: Colors.white,
-                // decoration: BoxDecoration(
-                //   border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                // ),
-                child: Text('주문서를 선택 해 주세요', style: TextStyle(fontFamily: 'kor', color: Color(0xffffffff), fontSize: 60, fontWeight: FontWeight.bold),)
-              )),
-          Positioned(
-            child: ServingModuleButtonsFinal(screens: 3,),)
-        ]),
+                      print(_servingProvider.item1);
+                      print(_servingProvider.item2);
+                      print(_servingProvider.item3);
+                    },
+                    child: null,
+                  ),
+                )),
+
+            ServingModuleButtonsFinal(screens: 3,)
+          ]),
+        ),
       ),
     );
   }

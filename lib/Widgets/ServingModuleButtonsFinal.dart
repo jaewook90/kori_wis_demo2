@@ -37,8 +37,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
   late var homeButtonName = List<String>.empty();
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -182,52 +180,52 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
     if (widget.screens == 0) {
       // 서빙화면(주문하기 및 서빙시작)
-      buttonPositionWidth = [109, 757];
-      buttonPositionHeight = [225, 225];
+      buttonPositionWidth = [81.8, 568.6];
+      buttonPositionHeight = [155, 155];
 
-      buttonSize = [570, 220];
+      buttonSize = [428.3, 160];
 
       buttonRadius = 30;
     } else if (widget.screens == 1) {
       // 서빙 상품 선택 화면
-      buttonPositionWidth = [100, 688, 100, 688];
-      buttonPositionHeight = [600, 600, 1180, 1180];
+      buttonPositionWidth = [70.3, 517.3, 70.3, 517.3];
+      buttonPositionHeight = [315.8, 315.8, 757.5, 757.5];
 
-      buttonSize = [545, 545];
+      buttonSize = [412, 412];
 
-      buttonRadius = 30;
+      buttonRadius = 35;
     } else if (widget.screens == 2) {
       // 서빙 테이블 선택 화면
-      buttonPositionWidth = [254, 254, 254, 254, 788, 788, 788, 788];
-      buttonPositionHeight = [515, 964, 1390, 1822, 515, 964, 1390, 1822];
+      buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
+      buttonPositionHeight = [245.5, 565.6, 870.7, 1178, 245.5, 565.6, 870.7, 1178];
 
-      buttonSize = [292, 167];
+      buttonSize = [207, 120];
 
       buttonRadius = 0;
     } else if (widget.screens == 3) {
       // 주문표 버전 선택 화면
-      buttonPositionWidth = [70, 688, 70, 688, 70, 688, 70, 688];
-      buttonPositionHeight = [444, 444, 872, 872, 1300, 1300, 1728, 1728];
+      buttonPositionWidth = [39.5, 513.3, 39.5, 513.3, 39.5, 513.3, 39.5, 513.3];
+      buttonPositionHeight = [160.5, 160.5, 488.5, 488.5, 814, 814, 1140, 1140];
 
-      buttonSize = [570, 378];
+      buttonSize = [439.5, 291];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 4) {
       // 팝업 ( 추가 여부 / 카운트다운 )
-      buttonPositionWidth = [70, 695];
-      buttonPositionHeight = [327, 327];
+      buttonPositionWidth = [55, 516];
+      buttonPositionHeight = [115, 115];
 
-      buttonSize = [565, 194];
+      buttonSize = [420, 142];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 5) {
       // 완료 화면
-      buttonPositionWidth = [143];
-      buttonPositionHeight = [1308];
+      buttonPositionWidth = [107.3];
+      buttonPositionHeight = [1372.5];
 
-      buttonSize = [1155, 230];
+      buttonSize = [866, 160];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -249,17 +247,17 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     return Stack(children: [
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
-          left: buttonPositionWidth[i] * pixelRatio,
-          top: buttonPositionHeight[i] * pixelRatio,
+          left: buttonPositionWidth[i],
+          top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
-                        BorderRadius.circular(buttonRadius * pixelRatio)),
-                fixedSize: Size(buttonSize[buttonWidth] * pixelRatio,
-                    buttonSize[buttonHeight] * pixelRatio)),
+                        BorderRadius.circular(buttonRadius)),
+                fixedSize: Size(buttonSize[buttonWidth],
+                    buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
                     if (i == 0) {

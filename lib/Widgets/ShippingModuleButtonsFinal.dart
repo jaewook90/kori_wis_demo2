@@ -95,49 +95,49 @@ class _ShippingModuleButtonsFinalState
 
     if (widget.screens == 0) {
       // 택배 메인 화면
-      buttonPositionWidth = [139];
-      buttonPositionHeight = [1408];
+      buttonPositionWidth = [104];
+      buttonPositionHeight = [1378];
 
-      buttonSize = [1160, 254];
+      buttonSize = [870, 160];
 
       buttonRadius = 50;
     } else if (widget.screens == 1) {
       // 키패드 화면
       buttonPositionWidth = [
-        154,
-        546,
-        938,
-        154,
-        546,
-        938,
-        154,
-        546,
-        938,
-        154,
-        546,
-        938
+        115,
+        409,
+        703,
+        115,
+        409,
+        703,
+        115,
+        409,
+        703,
+        115,
+        409,
+        703
       ];
       buttonPositionHeight = [
-        699,
-        699,
-        699,
-        1085,
-        1085,
-        1085,
-        1471,
-        1471,
-        1471,
-        1857,
-        1857,
-        1857
+        520.5,
+        520.5,
+        520.5,
+        810,
+        810,
+        810,
+        1100,
+        1100,
+        1100,
+        1394,
+        1394,
+        1394
       ];
 
-      buttonSize = [349, 344];
+      buttonSize = [261, 258];
 
       buttonRadius = 50;
     } else if (widget.screens == 2) {
       // 목적지 리스트
-      buttonPositionWidth = [100, 100, 694, 100, 694, 100, 694];
+      buttonPositionWidth = [75, 100, 75, 100, 75, 100, 75];
       buttonPositionHeight = [423, 691, 691, 1020, 1020, 1345, 1345];
 
       buttonSize = [];
@@ -172,26 +172,26 @@ class _ShippingModuleButtonsFinalState
       buttonRadius = 50;
     }
 
-    if (widget.screens != 3) {
-      for (int i = 0; i < buttonPositionHeight.length; i++) {
-        buttonPositionHeight[i] = buttonPositionHeight[i] * pixelRatio;
-      }
-      for (int i = 0; i < buttonPositionWidth.length; i++) {
-        buttonPositionWidth[i] = buttonPositionWidth[i] * pixelRatio;
-      }
-      if (buttonSize.isNotEmpty) {
-        for (int i = 0; i < buttonSize.length; i++) {
-          buttonSize[i] = buttonSize[i] * pixelRatio;
-        }
-      }else if (buttonSize.isEmpty) {
-        for (int i = 0; i < buttonSize1.length; i++) {
-          buttonSize1[i] = buttonSize1[i] * pixelRatio;
-        }
-        for (int i = 0; i < buttonSize2.length; i++) {
-          buttonSize2[i] = buttonSize2[i] * pixelRatio;
-        }
-      }
-    }
+    // if (widget.screens != 3) {
+    //   for (int i = 0; i < buttonPositionHeight.length; i++) {
+    //     buttonPositionHeight[i] = buttonPositionHeight[i] * pixelRatio;
+    //   }
+    //   for (int i = 0; i < buttonPositionWidth.length; i++) {
+    //     buttonPositionWidth[i] = buttonPositionWidth[i] * pixelRatio;
+    //   }
+    //   if (buttonSize.isNotEmpty) {
+    //     for (int i = 0; i < buttonSize.length; i++) {
+    //       buttonSize[i] = buttonSize[i] * pixelRatio;
+    //     }
+    //   }else if (buttonSize.isEmpty) {
+    //     for (int i = 0; i < buttonSize1.length; i++) {
+    //       buttonSize1[i] = buttonSize1[i] * pixelRatio;
+    //     }
+    //     for (int i = 0; i < buttonSize2.length; i++) {
+    //       buttonSize2[i] = buttonSize2[i] * pixelRatio;
+    //     }
+    //   }
+    // }
 
     buttonNumbers = buttonPositionHeight.length;
 

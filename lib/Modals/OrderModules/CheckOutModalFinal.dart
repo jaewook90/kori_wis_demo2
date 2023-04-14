@@ -17,8 +17,12 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   Widget build(BuildContext context) {
 
     return Container(
+      padding: EdgeInsets.only(top: 100),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
       child: Dialog(
-        backgroundColor: Color(0xff000000),
+        alignment: Alignment.topCenter,
+        backgroundColor: Colors.transparent,
         shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(0),
             borderSide: BorderSide(
@@ -26,143 +30,126 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
               style: BorderStyle.solid,
               width: 1,
             )),
-        child: Stack(children: [
-          Container(
-            constraints: BoxConstraints.expand(),
-            decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage(shoppingCartImg))),
-            child: Container(),
-          ),
-          Positioned(
-              left: 110 * 0.75,
-              top: 264 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      // shape: RoundedRectangleBorder(
-                      //     side: BorderSide(width: 1, color: Colors.white),
-                      //     borderRadius: BorderRadius.circular(0))
+        child: Container(
+          height: 1401,
+          width: 998,
+          child: Stack(children: [
+            Container(
+              constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                  image: DecorationImage(image: AssetImage(shoppingCartImg))),
+              child: Container(),
+            ),
+            Positioned(
+                left: 52,
+                top: 29.8,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(width: 1, color: Colors.white),
+                            borderRadius: BorderRadius.circular(0))
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: null,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: null,
-                ),
-              )),
-          Positioned(
-              left: 1150 * 0.75,
-              top: 264 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      // shape: RoundedRectangleBorder(
-                      //     side: BorderSide(width: 1, color: Colors.white),
-                      //     borderRadius: BorderRadius.circular(0))
+                )),
+            Positioned(
+                left: 891,
+                top: 29.8,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(width: 1, color: Colors.white),
+                            borderRadius: BorderRadius.circular(0))
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: null,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: null,
-                ),
-              )),
-          // 1번 목록 예시
-          Positioned(
-              left: 1003 * 0.75,
-              top: 427 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: Text('1', style: TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 40,
-                  color: Color(0xffffffff),
-                ),),
-              )),
-          Positioned(
-              left: 925 * 0.75,
-              top: 535 * 0.75,
-              child: Container(
-                width: 300,
-                height: 48,
-                color: Colors.transparent,
-                child: Text('6,700', style: TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 40,
-                  color: Color(0xffffffff),
-                ),),
-              )),
-          Positioned(
-              left: 1003 * 0.75,
-              top: 735 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: Text('2', style: TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 40,
-                  color: Color(0xffffffff),
-                ),),
-              )),
-          Positioned(
-              left: 925 * 0.75,
-              top: 843 * 0.75,
-              child: Container(
-                width: 300,
-                height: 48,
-                color: Colors.transparent,
-                child: Text('4,800', style: TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 40,
-                  color: Color(0xffffffff),
-                ),),
-              )),
-          Positioned(
-              left: 1150 * 0.75,
-              top: 264 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      // shape: RoundedRectangleBorder(
-                      //     side: BorderSide(width: 1, color: Colors.white),
-                      //     borderRadius: BorderRadius.circular(0))
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: null,
-                ),
-              )),
-          Positioned(
-              left: 320 * 0.75,
-              top: 1728 * 0.75,
-              child: Container(
-                width: 300,
-                height: 80,
-                color: Colors.transparent,
-                child: Text('11,500', style: TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 55,
-                  color: Color(0xffffffff),
-                ),),
-              )),
-          OrderModuleButtonsFinal(screens: 1,)
-        ]),
+                )),
+            // 1번 목록 예시
+            Positioned(
+                left: 771,
+                top: 162,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: Text('1', style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffffffff),
+                  ),),
+                )),
+            Positioned(
+                left: 725,
+                top: 255,
+                child: Container(
+                  width: 300,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: Text('6,700 원', style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffffffff),
+                  ),),
+                )),
+            Positioned(
+                left: 771,
+                top: 410,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: Text('2', style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffffffff),
+                  ),),
+                )),
+            Positioned(
+                left: 725,
+                top: 503,
+                child: Container(
+                  width: 300,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: Text('4,800 원', style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffffffff),
+                  ),),
+                )),
+            Positioned(
+                left: 250,
+                top: 1213,
+                child: Container(
+                  width: 300,
+                  height: 80,
+                  color: Colors.transparent,
+                  child: Text('11,500 원', style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 55,
+                    color: Color(0xffffffff),
+                  ),),
+                )),
+            OrderModuleButtonsFinal(screens: 1,)
+          ]),
+        ),
       ),
     );
   }

@@ -103,28 +103,36 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
     TextStyle? tableButtonFont = Theme.of(context).textTheme.headlineLarge;
 
     return Container(
+      padding: EdgeInsets.only(top: 90),
+      // height: 1536,
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(color: Colors.white))
+      ),
       child: Dialog(
+        // shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
           backgroundColor: Color(0xff000000),
           child: Stack(
             children: [
               Container(
-                width: screenWidth,
-                height: screenHeight,
+                // width: screenWidth,
+                height: 1536,
                 decoration: BoxDecoration(
+                    border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                     image: DecorationImage(
-                        image: AssetImage(itemSelectBG), fit: BoxFit.cover)),
+                        image: AssetImage(itemSelectBG))),
               ),
               Positioned(
-                  left: 1176 * 0.75,
-                  top: 214 * 0.75,
+                  left: 880,
+                  top: 23,
                   child: Container(
-                    width: 48,
-                    height: 48,
+                    width: 60,
+                    height: 60,
                     color: Colors.transparent,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
+                            side: BorderSide(width: 1, color: Colors.white),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);
@@ -139,62 +147,9 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                       child: null,
                     ),
                   )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '상품 선택 화면',
-                    style: TextStyle(
-                        fontSize: 80,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
               ServingModuleButtonsFinal(
                 screens: 1,
               ),
-              Positioned(
-                left: 310 * 0.75,
-                top: 235 * 0.75,
-                child: Text(
-                  '상품을 선택해 주세요',
-                  style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                ),
-              ),
-              Positioned(
-                  left: 608 * 0.75,
-                  top: 460 * 0.75,
-                  child: Container(
-                    width: 120 * 0.75,
-                    height: 50 * 0.75,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(downArrowIcon1),
-                            fit: BoxFit.cover)),
-                  )),
-              Positioned(
-                  left: 608 * 0.75,
-                  top: 430 * 0.75,
-                  child: Container(
-                    width: 120 * 0.75,
-                    height: 50 * 0.75,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(downArrowIcon2),
-                            fit: BoxFit.cover)),
-                  )),
-              Positioned(
-                  left: 608 * 0.75,
-                  top: 400 * 0.75,
-                  child: Container(
-                    width: 120 * 0.75,
-                    height: 50 * 0.75,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(downArrowIcon3),
-                            fit: BoxFit.cover)),
-                  ))
             ],
           )),
     );
