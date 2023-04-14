@@ -115,6 +115,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     }
 
     return Container(
+      padding: EdgeInsets.only(top: 90),
       child: Dialog(
         backgroundColor: Color.fromRGBO(45, 45, 45, 45),
         shape: OutlineInputBorder(

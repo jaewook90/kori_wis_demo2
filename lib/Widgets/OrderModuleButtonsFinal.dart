@@ -21,8 +21,6 @@ class OrderModuleButtonsFinal extends StatefulWidget {
 class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   late OrderModel _orderProvider;
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -157,39 +155,39 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
     if (widget.screens == 0) {
       // 장바구니 담기
-      buttonPositionWidth = [130, 685, 130, 685, 370];
-      buttonPositionHeight = [625, 625, 1190, 1190, 1855];
+      buttonPositionWidth = [60.3, 515.6, 60.3, 515.6, 256];
+      buttonPositionHeight = [321, 321, 772.5, 772.5, 1310.5];
 
-      buttonSize1 = [520, 520];
-      buttonSize2 = [835, 175];
+      buttonSize1 = [420, 420];
+      buttonSize2 = [675.8, 142.5];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
 
-      SelButtonPositionWidth = [122, 682, 122, 682, 370];
-      ;
-      SelButtonPositionHeight = [625, 625, 1188, 1188, 1855];
-      SelButtonSize = [530, 530];
+      SelButtonPositionWidth = [55, 507, 56, 507, 370];
+
+      SelButtonPositionHeight = [316, 316, 768.5, 768.5, 1855];
+      SelButtonSize = [432, 432];
 
       if (selectedQt == 0) {
         _orderProvider.SelectedItemsQT = [true, true, true, true];
       }
     } else if (widget.screens == 1) {
       // 장바구니 확인
-      buttonPositionWidth = [890, 1055, 890, 1055, 748];
-      buttonPositionHeight = [430, 430, 735, 735, 1700];
+      buttonPositionWidth = [683.5, 817, 683.5, 817, 563.5];
+      buttonPositionHeight = [154, 154, 400, 400, 1188.3];
 
       buttonSize1 = [53, 80];
-      buttonSize2 = [457, 180];
+      buttonSize2 = [370.5, 142.5];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
 
       ;
     } else if (widget.screens == 2) {
       // 결제 선택 및 금액 확인
-      buttonPositionWidth = [97, 700];
-      buttonPositionHeight = [785, 785];
+      buttonPositionWidth = [58.8, 520.3];
+      buttonPositionHeight = [466, 466];
 
-      buttonSize = [535, 418];
+      buttonSize = [409.5, 318.8];
 
       buttonRadius = 50;
     }
@@ -201,13 +199,13 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       if (widget.screens == 0)
         for (int i = 0; i < buttonNumbers - 1; i++)
           Positioned(
-            left: SelButtonPositionWidth[i] * pixelRatio,
-            top: SelButtonPositionHeight[i] * pixelRatio,
+            left: SelButtonPositionWidth[i],
+            top: SelButtonPositionHeight[i],
             child: Offstage(
               offstage: _orderProvider.SelectedItemsQT![i],
               child: Container(
-                  width: SelButtonSize[buttonWidth] * pixelRatio,
-                  height: SelButtonSize[buttonHeight] * pixelRatio,
+                  width: SelButtonSize[buttonWidth],
+                  height: SelButtonSize[buttonHeight],
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(selectedItemFrame),
@@ -218,23 +216,23 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       for (int i = 0; i < buttonNumbers; i++)
         Stack(children: [
           Positioned(
-            left: buttonPositionWidth[i] * pixelRatio,
-            top: buttonPositionHeight[i] * pixelRatio,
+            left: buttonPositionWidth[i],
+            top: buttonPositionHeight[i],
             child: FilledButton(
               style: FilledButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(width: 1, color: Colors.redAccent),
                       borderRadius:
-                          BorderRadius.circular(buttonRadius * pixelRatio)),
+                          BorderRadius.circular(buttonRadius)),
                   fixedSize: (widget.screens == 0) || (widget.screens == 1)
                       ? i == (buttonNumbers - 1)
-                          ? Size(buttonSize2[buttonWidth] * pixelRatio,
-                              buttonSize2[buttonHeight] * pixelRatio)
-                          : Size(buttonSize1[buttonWidth] * pixelRatio,
-                              buttonSize1[buttonHeight] * pixelRatio)
-                      : Size(buttonSize[buttonWidth] * pixelRatio,
-                          buttonSize[buttonHeight] * pixelRatio)),
+                          ? Size(buttonSize2[buttonWidth],
+                              buttonSize2[buttonHeight])
+                          : Size(buttonSize1[buttonWidth],
+                              buttonSize1[buttonHeight])
+                      : Size(buttonSize[buttonWidth],
+                          buttonSize[buttonHeight])),
               onPressed: widget.screens == 0
                   ? () {
                       if (i != 4) {
@@ -283,8 +281,8 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         ]),
       if (widget.screens == 0)
         Positioned(
-          left: 220 * pixelRatio,
-          top: 1885 * pixelRatio,
+          left: 139.3,
+          top: 1335.5,
           child: Offstage(
             offstage: checkOutItems!,
             child: Container(

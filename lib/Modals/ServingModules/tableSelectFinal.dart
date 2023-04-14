@@ -123,7 +123,9 @@ class _TableSelectImgFinalState extends State<TableSelectImgFinal> {
 
     return Stack(children: [
       Container(
+        height: 1920*0.8,
         decoration: BoxDecoration(
+          border: Border.fromBorderSide(BorderSide(color: Colors.white)),
           image: DecorationImage(
               image: AssetImage(tableSelectBG), fit: BoxFit.cover),
         ),
@@ -140,7 +142,7 @@ class _TableSelectImgFinalState extends State<TableSelectImgFinal> {
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0),
-                      // side: BorderSide(width: 1, color: Colors.white)
+                      side: BorderSide(width: 1, color: Colors.white)
                   )),
               onPressed: () {
                 Navigator.pop(context);
@@ -156,16 +158,6 @@ class _TableSelectImgFinalState extends State<TableSelectImgFinal> {
             ),
           )),
       ServingModuleButtonsFinal(screens: 2,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '테이블 선택 화면',
-            style: TextStyle(
-                fontSize: 80, color: Colors.blue, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
     ]);
   }
 }

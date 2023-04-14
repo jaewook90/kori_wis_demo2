@@ -29,11 +29,6 @@ class _NavigatorProgressModuleFinalState
 
   String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
 
-  late String forwardArrowIcon1;
-  late String forwardArrowIcon2;
-  late String forwardArrowIcon3;
-
-
   String? startUrl;
   String? stpUrl;
   String? rsmUrl;
@@ -72,10 +67,6 @@ class _NavigatorProgressModuleFinalState
       });
 
     _playVideo();
-
-    forwardArrowIcon1 = 'assets/icons/decoration/ForwardArrow1.png';
-    forwardArrowIcon2 = 'assets/icons/decoration/ForwardArrow2.png';
-    forwardArrowIcon3 = 'assets/icons/decoration/ForwardArrow3.png';
   }
 
   void _playVideo() async {
@@ -229,36 +220,6 @@ class _NavigatorProgressModuleFinalState
             ),
           ),
         ),
-        Positioned(
-            left: 710 * 0.75,
-            top: 530 * 0.75,
-            child: Container(
-              width: 150 * 0.75,
-              height: 150 * 0.75,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(forwardArrowIcon1), fit: BoxFit.cover)),
-            )),
-        Positioned(
-            left: 650 * 0.75,
-            top: 530 * 0.75,
-            child: Container(
-              width: 150 * 0.75,
-              height: 150 * 0.75,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(forwardArrowIcon2), fit: BoxFit.cover)),
-            )),
-        Positioned(
-            left: 590 * 0.75,
-            top: 530 * 0.75,
-            child: Container(
-              width: 150 * 0.75,
-              height: 150 * 0.75,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(forwardArrowIcon3), fit: BoxFit.cover)),
-            )),
         GestureDetector(
           // 스크린 터치시 화면 이동을 위한 위젯
           onTap: () {

@@ -102,13 +102,6 @@ class _ShippingDestinationNewFinalState extends State<ShippingDestinationNewFina
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    double numberButtonWidth = screenWidth * 0.25;
-    double numberButtonHeight = screenWidth * 0.25;
-
-    TextStyle? padFont = Theme.of(context).textTheme.displayMedium;
-    TextStyle? numberFont = Theme.of(context).textTheme.displaySmall;
-
-    // currentGoal = _networkProvider.currentGoal;
     goalPosition = _networkProvider.goalPosition;
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;

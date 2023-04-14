@@ -35,11 +35,13 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
+        padding: EdgeInsets.only(top: 607),
       child:AlertDialog(
+        alignment: Alignment.topCenter,
         content: Stack(
           children: [Container(
-            width: screenWidth * 0.5,
-            height: screenHeight * 0.15,
+            width: 740,
+            height: 362,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(itemSelectBG), fit: BoxFit.fill)),
@@ -47,7 +49,7 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
           ),
             Positioned(
               left: 0,
-              top: 192,
+              top: 242,
               child: FilledButton(
                 style: FilledButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -55,7 +57,7 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
                         // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius:
                         BorderRadius.circular(0)),
-                    fixedSize: Size(362*0.75, 128*0.75)),
+                    fixedSize: Size(370, 120)),
                 onPressed: (){
                   _servingProvider.cancelTraySelection();
                   navPage(context: context, page: TraySelectionFinal(), enablePop: false).navPageToPage();
@@ -64,8 +66,8 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
               ),
             ),
             Positioned(
-              left: 362*0.75,
-              top: 192,
+              left: 370,
+              top: 242,
               child: FilledButton(
                 style: FilledButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -73,7 +75,7 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
                         // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius:
                         BorderRadius.circular(0)),
-                    fixedSize: Size(362*0.75, 128*0.75)),
+                    fixedSize: Size(370, 120)),
                 onPressed: (){
                   showCountDownPopup(context);
                 },

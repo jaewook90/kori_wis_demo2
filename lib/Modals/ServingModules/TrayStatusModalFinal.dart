@@ -28,57 +28,55 @@ class _TrayStatusModalFinalState extends State<TrayStatusModalFinal> {
     TextStyle? tableButtonFont = Theme.of(context).textTheme.headlineMedium;
 
     return Container(
+      padding: EdgeInsets.only(top: 100),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
       child: Dialog(
-        backgroundColor: Color(0xff000000),
-        child: Stack(
-            children: [
-          Container(
-            width: screenWidth,
-            height: screenHeight,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(trayStatusImg), fit: BoxFit.cover),
-            ),
-          ),
-          Positioned(
-              left: 1140 * 0.75,
-              top: 195 * 0.75,
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                        // side: BorderSide(width: 1, color: Colors.white)
-                      )),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _servingProvider.item1 = "";
-                    _servingProvider.item2 = "";
-                    _servingProvider.item3 = "";
-
-                    print(_servingProvider.item1);
-                    print(_servingProvider.item2);
-                    print(_servingProvider.item3);
-                  },
-                  child: null,
-                ),
-              )),
-              ServingModuleButtonsFinal(screens: 4,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '테이블 선택 화면',
-                style: TextStyle(
-                    fontSize: 80, color: Colors.blue, fontWeight: FontWeight.bold),
+        alignment: Alignment.topCenter,
+        backgroundColor: Colors.transparent,
+        child: Container(
+          height: 1514,
+          width: 993,
+          child: Stack(
+              children: [
+            Container(
+              width: screenWidth,
+              height: screenHeight,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(trayStatusImg)),
               ),
-            ],
-          ),
-        ]),
+            ),
+            Positioned(
+                left: 1140,
+                top: 195,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  color: Colors.transparent,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                          // side: BorderSide(width: 1, color: Colors.white)
+                        )),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _servingProvider.item1 = "";
+                      _servingProvider.item2 = "";
+                      _servingProvider.item3 = "";
+
+                      print(_servingProvider.item1);
+                      print(_servingProvider.item2);
+                      print(_servingProvider.item3);
+                    },
+                    child: null,
+                  ),
+                )),
+                ServingModuleButtonsFinal(screens: 4,),
+          ]),
+        ),
       ),
     );
   }
