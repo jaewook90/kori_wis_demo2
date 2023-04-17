@@ -97,7 +97,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('현금 결제 준비 중', style: TextStyle(
+                  Text('서비스를 준비 중 입니다.', style: TextStyle(
                       fontFamily: 'kor',
                       fontSize: 50,
                       color: Color(0xffF0F0F0)
@@ -184,12 +184,12 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       ;
     } else if (widget.screens == 2) {
       // 결제 선택 및 금액 확인
-      buttonPositionWidth = [58.8, 520.3];
-      buttonPositionHeight = [466, 466];
+      buttonPositionWidth = [59, 506, 59, 506, 59, 506];
+      buttonPositionHeight = [550, 550, 750, 750, 950, 950];
 
-      buttonSize = [409.5, 318.8];
+      buttonSize = [425, 179];
 
-      buttonRadius = 50;
+      buttonRadius = 30;
     }
 
     buttonNumbers = buttonPositionHeight.length;
