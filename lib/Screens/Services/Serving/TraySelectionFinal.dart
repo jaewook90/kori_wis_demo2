@@ -91,6 +91,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     downArrowIcon1 = 'assets/icons/decoration/DownArrow1.png';
     downArrowIcon2 = 'assets/icons/decoration/DownArrow2.png';
     downArrowIcon3 = 'assets/icons/decoration/DownArrow3.png';
+
+    table1 = "";
+    table2 = "";
+    table3 = "";
   }
 
   void showTraySetPopup(context) {
@@ -132,11 +136,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     item2 = _servingProvider.item2;
     item3 = _servingProvider.item3;
 
-    // startUrl = _networkProvider.startUrl;
-    // navUrl = _networkProvider.navUrl;
-
-    print(_servingProvider.itemImageList);
-
     if (itemName == '햄버거') {
       itemNumber = 0;
     } else if (itemName == '핫도그') {
@@ -148,14 +147,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     } else {
       itemNumber.isNaN;
     }
-
-    // if((_servingProvider.tray1Select == false && _servingProvider.tray2Select == false)&&_servingProvider.tray3Select == false){
-    //
-    // }
-
-    print('item :: ${itemName}');
-    print(itemNumber);
-    print(tableNumber);
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -440,7 +431,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               offstage: servedItem1!,
                               child: Center(
                                 child: Text(
-                                  '$table1 번',
+                                  // '$table1 번',
+                                  '${table1} 번',
                                   style: buttonFont,
                                 ),
                               )),
@@ -468,8 +460,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         height: 171.8,
                         child: TextButton(
                             onPressed: () {
-                              print("tapped");
                               _servingProvider.tray1Select = true;
+                              _servingProvider.tray2Select = false;
+                              _servingProvider.tray3Select = false;
                               _servingProvider.trayCheckAll = false;
                               showTraySetPopup(context);
                             },
@@ -537,8 +530,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                           height: 171.8,
                           child: TextButton(
                               onPressed: () {
-                                print("tapped");
+                                _servingProvider.tray1Select = false;
                                 _servingProvider.tray2Select = true;
+                                _servingProvider.tray3Select = false;
                                 _servingProvider.trayCheckAll = false;
                                 showTraySetPopup(context);
                               },
@@ -606,7 +600,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                           height: 293 * 0.75,
                           child: TextButton(
                               onPressed: () {
-                                print("tapped");
+                                _servingProvider.tray1Select = false;
+                                _servingProvider.tray2Select = false;
                                 _servingProvider.tray3Select = true;
                                 _servingProvider.trayCheckAll = false;
                                 showTraySetPopup(context);
