@@ -117,8 +117,8 @@ class _TableSelectImgFinalState extends State<TableSelectImgFinal> {
         ),
       ),
       Positioned(
-          left: 1140 * 0.75,
-          top: 195 * 0.75,
+          left: 836,
+          top: 18,
           child: Container(
             width: 48,
             height: 48,
@@ -135,6 +135,13 @@ class _TableSelectImgFinalState extends State<TableSelectImgFinal> {
                 _servingProvider.item1 = "";
                 _servingProvider.item2 = "";
                 _servingProvider.item3 = "";
+                setState(() {
+                  if(_servingProvider.trayCheckAll==true){
+                    _servingProvider.tray1=false;
+                    _servingProvider.tray2=false;
+                    _servingProvider.tray3=false;
+                  }
+                });
               },
               child: null,
             ),

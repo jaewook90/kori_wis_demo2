@@ -140,14 +140,14 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   }
 
   // 다른 트레이 상품 추가 여부
-  void showCheckingPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return TrayCheckingModalFinal();
-        });
-  }
+  // void showCheckingPopup(context) {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) {
+  //         return TrayCheckingModalFinal();
+  //       });
+  // }
 
   void uploadTableNumberNItemImg() {
     if (_servingProvider.tray1Select == true) {
@@ -291,7 +291,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                       if ((_servingProvider.tray1 == true ||
                               _servingProvider.tray2 == true) ||
                           _servingProvider.tray3 == true) {
-                        showCheckingPopup(context);
+                        showCountDownPopup(context);
                       } else {
                         _servingProvider.trayCheckAll = true;
                         // _servingProvider.servingBeginningIsNot=true;
@@ -339,18 +339,20 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                   _servingProvider.tray3 = true;
                                   _servingProvider.table3 = "${i + 1}";
                                 }
-                              } else {
-                                _servingProvider.setTrayAll();
-                                _servingProvider.tableNumber = "${i + 1}";
-                              }
-                            });
-                            uploadTableNumberNItemImg();
-                            // _servingProvider.cancelTraySelection();
-                            navPage(
+                                uploadTableNumberNItemImg();
+                                navPage(
                                     context: context,
                                     page: TraySelectionFinal(),
                                     enablePop: false)
-                                .navPageToPage();
+                                    .navPageToPage();
+                              } else {
+                                _servingProvider.setTrayAll();
+                                _servingProvider.tableNumber = "${i + 1}";
+                                showCountDownPopup(context);
+                              }
+                            });
+                            // _servingProvider.cancelTraySelection();
+
                             // showCheckingPopup(context);
                             // Navigator.pop(context);
                           }
@@ -381,7 +383,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             : widget.screens == 4
                                 ? () {
                                     if (i == 0) {
-                                      showCheckingPopup(context);
+                                      // showCheckingPopup(context);
                                       // Navigator.pop(context);
                                       // Navigator.pop(context);
                                     } else {

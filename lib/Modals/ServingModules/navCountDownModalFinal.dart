@@ -66,7 +66,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     Navigator.pop(context);
                   }else if(_networkProvider.serviceState==1){
                     Navigator.pop(context);
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   }
                 },
                 child: null,
