@@ -3,6 +3,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -91,6 +92,8 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
       backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
     } else if (_networkProvider.serviceState == 2) {
       backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
+    } else if (_networkProvider.serviceState == 3) {
+      backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
     }
 
     offStageAd = _servingProvider.playAd;
@@ -145,6 +148,12 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                           context: context,
                           page: BellboyProgressFinal(),
                           enablePop: false)
+                      .navPageToPage();
+                }else if (_networkProvider.serviceState == 3) {
+                  navPage(
+                      context: context,
+                      page: RoomServiceProgressFinal(),
+                      enablePop: false)
                       .navPageToPage();
                 }
               },
