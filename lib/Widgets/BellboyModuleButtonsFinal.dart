@@ -7,6 +7,7 @@ import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart'
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellboyDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFinal.dart';
@@ -145,13 +146,20 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
       buttonSize2 = [400, 214];
 
       buttonRadius = 50;
-    } else {
+    } else if (widget.screens == 3) {
       // 도착 화면
-      buttonPositionWidth = [552, 132];
-      buttonPositionHeight = [1316, 1521];
+      // buttonPositionWidth = [107];
+      // buttonPositionHeight = [1376];
+      //
+      // buttonSize = [866, 160];
+      //
+      // buttonRadius = 50;
+    }else if (widget.screens == 4) {
+      // 도착 화면
+      buttonPositionWidth = [107];
+      buttonPositionHeight = [1376];
 
-      buttonSize1 = [390, 168];
-      buttonSize2 = [811, 158];
+      buttonSize = [866, 160];
 
       buttonRadius = 50;
     }
@@ -252,7 +260,9 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                         : widget.screens == 3
                             ? () {}
                             : widget.screens == 4
-                                ? () {}
+                                ? () {
+              navPage(context: context, page: BellboyReturnModuleFinal(), enablePop: false).navPageToPage();
+            }
                                 : widget.screens == 5
                                     ? () {}
                                     : null,
