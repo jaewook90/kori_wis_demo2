@@ -5,6 +5,7 @@ import 'package:kori_wis_demo/Modals/HotelModules/hotelBookedRoomWarnModalFinal.
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
@@ -32,7 +33,7 @@ class BellboyModuleButtonsFinal extends StatefulWidget {
 }
 
 class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
-  // late NetworkModel _networkProvider;
+  late NetworkModel _networkProvider;
 
   late ServingModel _servingProvider;
   late OrderModel _orderProvider;
@@ -90,6 +91,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
@@ -154,7 +156,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
       // buttonSize = [866, 160];
       //
       // buttonRadius = 50;
-    }else if (widget.screens == 4) {
+    } else if (widget.screens == 4) {
       // 도착 화면
       buttonPositionWidth = [107];
       buttonPositionHeight = [1376];
@@ -230,11 +232,15 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                             buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    navPage(
-                            context: context,
-                            page: BellboyDestinationScreenFinal(),
-                            enablePop: true)
-                        .navPageToPage();
+                    if (_networkProvider.bellboyTF == true) {
+                      showCountDownPopup(context);
+                    } else {
+                      navPage(
+                              context: context,
+                              page: BellboyDestinationScreenFinal(),
+                              enablePop: true)
+                          .navPageToPage();
+                    }
                   }
                 : widget.screens == 1
                     ? () {
@@ -261,8 +267,12 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                             ? () {}
                             : widget.screens == 4
                                 ? () {
-              navPage(context: context, page: BellboyReturnModuleFinal(), enablePop: false).navPageToPage();
-            }
+                                    navPage(
+                                            context: context,
+                                            page: BellboyReturnModuleFinal(),
+                                            enablePop: false)
+                                        .navPageToPage();
+                                  }
                                 : widget.screens == 5
                                     ? () {}
                                     : null,

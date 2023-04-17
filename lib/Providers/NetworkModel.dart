@@ -13,6 +13,7 @@ class NetworkModel with ChangeNotifier {
   int? serviceState;
   bool? servingDone;
   bool? shippingDone;
+  bool? bellboyTF;
 
   NetworkModel({
     this.serviceState,
