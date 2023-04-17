@@ -90,6 +90,8 @@ class _NavigatorProgressModuleFinalState
       backgroundImageServ = "assets/screens/Nav/koriZFinalShipProgNav.png";
     } else if (_networkProvider.serviceState == 1) {
       backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
+    } else if (_networkProvider.serviceState == 2) {
+      backgroundImageServ = "assets/screens/Nav/koriZFinalBellProgNav.png";
     }
 
     offStageAd = _servingProvider.playAd;

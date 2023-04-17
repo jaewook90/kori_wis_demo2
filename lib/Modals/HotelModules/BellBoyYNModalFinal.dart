@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -72,7 +73,7 @@ class _BellBoyYNModalFinalState extends State<BellBoyYNModalFinal> {
                         BorderRadius.circular(0)),
                     fixedSize: Size(370, 120)),
                 onPressed: (){
-                  navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
+                  navPage(context: context, page: BellBoyServiceMenu(), enablePop: false).navPageToPage();
                 },
                 child: null,
               ),
