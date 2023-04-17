@@ -57,16 +57,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
       buttonSize2 = [268, 200];
 
       buttonRadius = 30;
-    } else if (widget.screens == 2) {
-      // 택배 일시 정지
-      buttonPositionWidth = [107, 107, 406, 705];
-      buttonPositionHeight = [1311, 1501, 1501, 1501];
-
-      buttonSize = [];
-      buttonSize1 = [866, 160];
-      buttonSize2 = [268, 200];
-
-      buttonRadius = 30;
     }
     // else if (widget.screens == 3) {
     //   // 서빙 상품 선택 화면

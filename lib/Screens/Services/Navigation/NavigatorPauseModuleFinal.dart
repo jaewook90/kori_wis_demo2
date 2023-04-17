@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -88,7 +89,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
       backgroundImage = "assets/screens/Nav/koriZFinalShipPauseNav.png";
     } else if (_networkProvider.serviceState == 1) {
       backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
-    }else if (_networkProvider.serviceState == 2) {
+    } else if (_networkProvider.serviceState == 2) {
       backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
     }
 
@@ -105,7 +106,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
 
     return Scaffold(
       appBar: AppBar(
@@ -127,18 +127,24 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
             padding: EdgeInsets.fromLTRB(0, 10, 600, 0),
             child: TextButton(
               onPressed: () {
-                if(_networkProvider.serviceState==0){
+                if (_networkProvider.serviceState == 0) {
                   navPage(
-                      context: context,
-                      page: ShippingDoneFinal(),
-                      enablePop: false)
+                          context: context,
+                          page: ShippingDoneFinal(),
+                          enablePop: false)
                       .navPageToPage();
                   // showShippingDone(context);
-                }else if(_networkProvider.serviceState==1){
+                } else if (_networkProvider.serviceState == 1) {
                   navPage(
-                      context: context,
-                      page: ServingProgressFinal(),
-                      enablePop: false)
+                          context: context,
+                          page: ServingProgressFinal(),
+                          enablePop: false)
+                      .navPageToPage();
+                } else if (_networkProvider.serviceState == 2) {
+                  navPage(
+                          context: context,
+                          page: BellboyProgressFinal(),
+                          enablePop: false)
                       .navPageToPage();
                 }
               },
@@ -164,7 +170,10 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
             onPressed: () {
               _servingProvider.clearAllTray();
               _servingProvider.initServing();
-              navPage(context: context, page: ServiceScreenFinal(), enablePop: false)
+              navPage(
+                      context: context,
+                      page: ServiceScreenFinal(),
+                      enablePop: false)
                   .navPageToPage();
             },
             icon: Icon(
@@ -195,13 +204,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                 Container(
                     margin: EdgeInsets.only(top: screenHeight * 0.04),
                     child: null),
-                _networkProvider.serviceState == 0
-                    ? NavModuleButtonsFinal(
-                        screens: 2,
-                      )
-                    : _networkProvider.serviceState == 1
-                        ? NavModuleButtonsFinal(screens: 1)
-                        : Container(),
+                 NavModuleButtonsFinal(screens: 1),
               ],
             ),
           ),

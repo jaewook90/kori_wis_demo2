@@ -44,6 +44,29 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
           alignment: Alignment.centerRight,
         ),
         actions: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 600, 0),
+            child: TextButton(
+              onPressed: () {
+
+              },
+              child: Text(
+                'RoomS',
+                style: TextStyle(
+                    fontFamily: 'kok',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffffffff)),
+              ),
+              style: TextButton.styleFrom(
+                fixedSize: Size(100, 0),
+                backgroundColor: Colors.transparent,
+                // shape: RoundedRectangleBorder(
+                //     side: BorderSide(width: 1, color: Colors.white)
+                // )
+              ),
+            ),
+          ),
           IconButton(
             padding: EdgeInsets.only(right: screenWidth * 0.05),
             onPressed: () {

@@ -4,6 +4,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -11,18 +12,18 @@ import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class NavigatorProgressModuleFinal extends StatefulWidget {
-  NavigatorProgressModuleFinal({
+class BellboyReturnModuleFinal extends StatefulWidget {
+  BellboyReturnModuleFinal({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<NavigatorProgressModuleFinal> createState() =>
-      _NavigatorProgressModuleFinalState();
+  State<BellboyReturnModuleFinal> createState() =>
+      _BellboyReturnModuleFinalState();
 }
 
-class _NavigatorProgressModuleFinalState
-    extends State<NavigatorProgressModuleFinal> {
+class _BellboyReturnModuleFinalState
+    extends State<BellboyReturnModuleFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
@@ -87,13 +88,8 @@ class _NavigatorProgressModuleFinalState
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
-    if (_networkProvider.serviceState == 0) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalShipProgNav.png";
-    } else if (_networkProvider.serviceState == 1) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
-    } else if (_networkProvider.serviceState == 2) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalBellProgNav.png";
-    }
+    backgroundImageServ = "assets/screens/Nav/koriZFinalBellReturnNav.png";
+
 
     offStageAd = _servingProvider.playAd;
 
@@ -134,26 +130,7 @@ class _NavigatorProgressModuleFinalState
             padding: EdgeInsets.fromLTRB(0, 10, 600, 0),
             child: TextButton(
               onPressed: () {
-                if(_networkProvider.serviceState==0){
-                  navPage(
-                      context: context,
-                      page: ShippingDoneFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-
-                }else if(_networkProvider.serviceState==1){
-                  navPage(
-                      context: context,
-                      page: ServingProgressFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-                }else if(_networkProvider.serviceState==2){
-                  navPage(
-                      context: context,
-                      page: BellboyProgressFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-                }
+                navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
               },
               child: Text(
                 '도착',
@@ -222,9 +199,6 @@ class _NavigatorProgressModuleFinalState
                 Container(
                     margin: EdgeInsets.only(top: screenHeight * 0.04),
                     child: null),
-                NavModuleButtonsFinal(
-                  screens: 0,
-                )
               ],
             ),
           ),
