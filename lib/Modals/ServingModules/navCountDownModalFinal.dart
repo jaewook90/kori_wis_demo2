@@ -33,7 +33,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     }else if(_networkProvider.serviceState==2){
       countDownPopup = 'assets/screens/Hotel/BellBoy/koriZFinalBellCountDown.png';
     }else if(_networkProvider.serviceState==3){
-      countDownPopup = 'assets/screens/Shipping/koriZFinalShipCountdown.png';
+      countDownPopup = 'assets/screens/Hotel/RoomService/koriZFinalRoomCountDown.png';
     }
 
     return Container(
