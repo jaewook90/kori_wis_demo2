@@ -4,7 +4,7 @@ import 'package:kori_wis_demo/Screens/AdminScreen.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
 import 'package:kori_wis_demo/Screens/LinkConnectorScreen.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenu.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';

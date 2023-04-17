@@ -81,6 +81,18 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                       child: null,
                     ),
                   )),
+              Positioned(
+                left: 500,
+                height: 500,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  child: FilledButton(
+                    onPressed: (){},
+                    child: Container(),
+                  ),
+                ),
+              )
       ]),
           ),
     ));
