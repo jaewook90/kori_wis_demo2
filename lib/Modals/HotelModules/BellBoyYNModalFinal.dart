@@ -73,6 +73,9 @@ class _BellBoyYNModalFinalState extends State<BellBoyYNModalFinal> {
                         BorderRadius.circular(0)),
                     fixedSize: Size(370, 120)),
                 onPressed: (){
+                  setState(() {
+                    _networkProvider.bellboyTF = true;
+                  });
                   navPage(context: context, page: BellBoyServiceMenu(), enablePop: false).navPageToPage();
                 },
                 child: null,
