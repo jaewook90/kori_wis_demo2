@@ -41,6 +41,8 @@ class ServingModel with ChangeNotifier {
   List<String>? tableList;
   bool? trayCheckAll;
 
+  bool? setTrayTF;
+
   ServingModel({
     this.tray1,
     this.tray2,
@@ -123,19 +125,19 @@ class ServingModel with ChangeNotifier {
   }
 
   void setItemTray1() {
-    tray1 = true;
+    // tray1 = true;
     item1 = menuItem;
     notifyListeners();
   }
 
   void setItemTray2() {
-    tray2 = true;
+    // tray2 = true;
     item2 = menuItem;
     notifyListeners();
   }
 
   void setItemTray3() {
-    tray3 = true;
+    // tray3 = true;
     item3 = menuItem;
     notifyListeners();
   }
@@ -164,7 +166,7 @@ class ServingModel with ChangeNotifier {
     tray1Select = false;
     item1 = "";
     table1 = "";
-    // itemImageList?[0]='a';
+    itemImageList![0]='';
     notifyListeners();
   }
 
@@ -174,7 +176,7 @@ class ServingModel with ChangeNotifier {
     tray2Select = false;
     item2 = "";
     table2 = "";
-    // itemImageList?[1]='b';
+    itemImageList![1]='';
     notifyListeners();
   }
 
@@ -184,7 +186,7 @@ class ServingModel with ChangeNotifier {
     tray3Select = false;
     item3 = "";
     table3 = "";
-    // itemImageList?[2]='c';
+    itemImageList![2]='';
     notifyListeners();
   }
 

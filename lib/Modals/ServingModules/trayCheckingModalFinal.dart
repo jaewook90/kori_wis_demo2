@@ -31,9 +31,6 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Container(
         padding: EdgeInsets.only(top: 607),
       child:AlertDialog(
@@ -86,7 +83,6 @@ class _TrayCheckingModalFinalState extends State<TrayCheckingModalFinal> {
         ),
         backgroundColor: Colors.transparent,
         contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-        // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
       )
     );
   }

@@ -46,7 +46,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   late String ramyeon;
 
   // 상품 구분 번호
-  // late int itemNumber;
   int itemNumber = 0;
 
   // 상품 목록
@@ -83,15 +82,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
 
   late bool receiptModeOn;
 
-  // void showCheckingPopup(context){
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //     return TrayCheckingModalFinal();
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
@@ -100,12 +90,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     itemName = _servingProvider.menuItem;
     tableNumber = _servingProvider.tableNumber;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     goalPosition = _networkProvider.goalPosition;
-
-    TextStyle? tableButtonFont = Theme.of(context).textTheme.headlineMedium;
 
     if (orderedItems.length == 0) {
       for (int i = 0; i < _networkProvider.goalPosition.length; i++) {
@@ -113,6 +98,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
         print(orderedItems);
       }
     }
+
 
     return Container(
       padding: EdgeInsets.only(top: 90),

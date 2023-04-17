@@ -151,19 +151,19 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
   void uploadTableNumberNItemImg() {
     if (_servingProvider.tray1Select == true) {
-      _servingProvider.setTray1();
+      // _servingProvider.setTray1();
       setState(() {
         _servingProvider.itemImageList![0] = itemImagesList[0][itemNumber];
         _servingProvider.servedItem1 = false;
       });
     } else if (_servingProvider.tray2Select == true) {
-      _servingProvider.setTray1();
+      // _servingProvider.setTray1();
       setState(() {
         _servingProvider.itemImageList![1] = itemImagesList[1][itemNumber];
         _servingProvider.servedItem2 = false;
       });
     } else if (_servingProvider.tray3Select == true) {
-      _servingProvider.setTray1();
+      // _servingProvider.setTray1();
       setState(() {
         _servingProvider.itemImageList![2] = itemImagesList[2][itemNumber];
         _servingProvider.servedItem3 = false;
@@ -197,14 +197,32 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     } else if (widget.screens == 2) {
       // 서빙 테이블 선택 화면
       buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
-      buttonPositionHeight = [245.5, 565.6, 870.7, 1178, 245.5, 565.6, 870.7, 1178];
+      buttonPositionHeight = [
+        245.5,
+        565.6,
+        870.7,
+        1178,
+        245.5,
+        565.6,
+        870.7,
+        1178
+      ];
 
       buttonSize = [207, 120];
 
       buttonRadius = 0;
     } else if (widget.screens == 3) {
       // 주문표 버전 선택 화면
-      buttonPositionWidth = [39.5, 513.3, 39.5, 513.3, 39.5, 513.3, 39.5, 513.3];
+      buttonPositionWidth = [
+        39.5,
+        513.3,
+        39.5,
+        513.3,
+        39.5,
+        513.3,
+        39.5,
+        513.3
+      ];
       buttonPositionHeight = [160.5, 160.5, 488.5, 488.5, 814, 814, 1140, 1140];
 
       buttonSize = [439.5, 291];
@@ -254,22 +272,32 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     side: BorderSide(width: 1, color: Colors.redAccent),
-                    borderRadius:
-                        BorderRadius.circular(buttonRadius)),
-                fixedSize: Size(buttonSize[buttonWidth],
-                    buttonSize[buttonHeight])),
+                    borderRadius: BorderRadius.circular(buttonRadius)),
+                fixedSize:
+                    Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
                     if (i == 0) {
                       setState(() {
-                        _orderProvider.SelectedItemsQT=[false, false, false, false];
+                        _orderProvider.SelectedItemsQT = [
+                          false,
+                          false,
+                          false,
+                          false
+                        ];
                       });
                       showOrderPopup(context);
                     } else {
-                      _servingProvider.trayCheckAll = true;
-                      // _servingProvider.servingBeginningIsNot=true;
-                      showTableSelectPopup(context);
-                      _servingProvider.menuItem = "상품";
+                      if ((_servingProvider.tray1 == true ||
+                              _servingProvider.tray2 == true) ||
+                          _servingProvider.tray3 == true) {
+                        showCheckingPopup(context);
+                      } else {
+                        _servingProvider.trayCheckAll = true;
+                        // _servingProvider.servingBeginningIsNot=true;
+                        showTableSelectPopup(context);
+                        _servingProvider.menuItem = "상품";
+                      }
                     }
                   }
                 : widget.screens == 1
@@ -297,17 +325,18 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                       }
                     : widget.screens == 2
                         ? () {
-                            print(_servingProvider.trayCheckAll);
                             setState(() {
                               _servingProvider.tableNumber = "${i + 1}";
                               if (_servingProvider.trayCheckAll == false) {
                                 if (_servingProvider.tray1Select == true) {
+                                  _servingProvider.tray1 = true;
                                   _servingProvider.table1 = "${i + 1}";
                                 } else if (_servingProvider.tray2Select ==
                                     true) {
+                                  _servingProvider.tray2 = true;
                                   _servingProvider.table2 = "${i + 1}";
-                                } else if (_servingProvider.tray3Select ==
-                                    true) {
+                                } else{
+                                  _servingProvider.tray3 = true;
                                   _servingProvider.table3 = "${i + 1}";
                                 }
                               } else {
@@ -316,7 +345,14 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                               }
                             });
                             uploadTableNumberNItemImg();
-                            showCheckingPopup(context);
+                            // _servingProvider.cancelTraySelection();
+                            navPage(
+                                    context: context,
+                                    page: TraySelectionFinal(),
+                                    enablePop: false)
+                                .navPageToPage();
+                            // showCheckingPopup(context);
+                            // Navigator.pop(context);
                           }
                         : widget.screens == 3
                             ? receiptMenu[i] == '미주문'
@@ -340,11 +376,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                       _servingProvider.setTray3();
                                     }
                                     uploadTableNumberNItemImg();
-                                    print("asdfasdfasdfasdf");
-                                    print(_servingProvider.tray1Select);
-                                    print(_servingProvider.tray2Select);
-                                    print(_servingProvider.tray3Select);
-                                    print("asdfasdfasdfasdf");
                                     showTrayStatusPopup(context);
                                   }
                             : widget.screens == 4
