@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/MenuButtons.dart';
-import 'package:provider/provider.dart';
+import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
 
 // ------------------------------ 보류 ---------------------------------------
 
-class HotelServiceMenu extends StatefulWidget {
-  HotelServiceMenu({Key? key}) : super(key: key);
+class RoomServiceMenu extends StatefulWidget {
+  RoomServiceMenu({Key? key}) : super(key: key);
 
   @override
-  State<HotelServiceMenu> createState() => _HotelServiceMenuState();
+  State<RoomServiceMenu> createState() => _RoomServiceMenuState();
 }
 
-class _HotelServiceMenuState extends State<HotelServiceMenu> {
-  late NetworkModel _networkProvider;
+class _RoomServiceMenuState extends State<RoomServiceMenu> {
 
-  String backgroundImage = "assets/screens/Hotel/koriZFinalHotelMain.png";
+  String backgroundImage = "assets/screens/Hotel/RoomService/koriZFinalRoomBegin.png";
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
-    double textButtonWidth = screenWidth * 0.85;
-    double textButtonHeight = screenHeight * 0.15;
-
-    TextStyle? buttonFont2 = Theme.of(context).textTheme.displaySmall;
 
     return Scaffold(
       appBar: AppBar(
@@ -49,32 +41,6 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
           alignment: Alignment.centerRight,
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 600, 0),
-            child: TextButton(
-              onPressed: () {
-                navPage(context: context, page: RoomServiceMenu(), enablePop: true).navPageToPage();
-                setState(() {
-                  _networkProvider.serviceState = 3;
-                });
-              },
-              child: Text(
-                'RoomS',
-                style: TextStyle(
-                    fontFamily: 'kok',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)),
-              ),
-              style: TextButton.styleFrom(
-                fixedSize: Size(100, 0),
-                backgroundColor: Colors.transparent,
-                // shape: RoundedRectangleBorder(
-                //     side: BorderSide(width: 1, color: Colors.white)
-                // )
-              ),
-            ),
-          ),
           IconButton(
             padding: EdgeInsets.only(right: screenWidth * 0.05),
             onPressed: () {
@@ -102,7 +68,7 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
                 image: AssetImage(backgroundImage), fit: BoxFit.cover)),
         child: Stack(
           children: [
-            HotelModuleButtonsFinal(screens: 0,)
+            RoomServiceModuleButtonsFinal(screens: 0,),
           ],
         ),
       ),
