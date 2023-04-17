@@ -206,33 +206,6 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
         });
   }
 
-  void showCountDownStarting(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return NavCountDownModalFinal();
-        });
-  }
-
-  void showDestinationListPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return ShippingDestinationModalFinal();
-        });
-  }
-
-  void showCountDownPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return NavCountDownModalFinal();
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
@@ -272,7 +245,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
       buttonSize = [873, 160];
 
       buttonRadius = 50;
-    } else if (widget.screens == 3) {
+    } else{
       // 도착 화면
       buttonPositionWidth = [552, 132];
       buttonPositionHeight = [1316, 1521];
@@ -281,67 +254,12 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
       buttonSize2 = [811, 158];
 
       buttonRadius = 50;
-    } else if (widget.screens == 4) {
-      // 팝업 ( 추가 여부 / 카운트다운 )
-      buttonPositionWidth = [70, 695];
-      buttonPositionHeight = [327, 327];
-
-      buttonSize = [565, 194];
-
-      buttonRadius = 50;
-    } else if (widget.screens == 5) {
-      // 완료 화면
-      buttonPositionWidth = [143];
-      buttonPositionHeight = [1308];
-
-      buttonSize = [1155, 230];
-
-      buttonRadius = 50;
     }
 
     buttonNumbers = buttonPositionHeight.length;
 
     return Stack(children: [
-      // (currentNum == null && widget.screens == 1)
-      //     ? Container()
-      //     : Positioned(
-      //         top: 290 * 0.75,
-      //         left: 551 * 0.75,
-      //         width: 270,
-      //         height: 180,
-      //         child: Text(
-      //           '$currentNum',
-      //           style: TextStyle(
-      //               fontFamily: 'kor',
-      //               fontSize: 150,
-      //               fontWeight: FontWeight.bold,
-      //               color: Color(0xffffffff)),
-      //         ),
-      //       ),
-      // widget.screens == 1
-      //     ? Positioned(
-      //         left: 1213 * 0.75,
-      //         top: 451 * 0.75,
-      //         child: Container(
-      //           width: 60,
-      //           height: 60,
-      //           color: Colors.transparent,
-      //           child: FilledButton(
-      //             style: FilledButton.styleFrom(
-      //                 backgroundColor: Colors.transparent,
-      //                 shape: RoundedRectangleBorder(
-      //                   borderRadius: BorderRadius.circular(0),
-      //                   // side: BorderSide(width: 1, color: Colors.white)
-      //                 )),
-      //             onPressed: () {
-      //               setState(() {
-      //                 currentNum = "";
-      //               });
-      //             },
-      //             child: null,
-      //           ),
-      //         ))
-      //     : Container(),
+
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
           left: buttonPositionWidth[i],
