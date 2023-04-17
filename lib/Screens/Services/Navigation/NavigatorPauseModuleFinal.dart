@@ -91,9 +91,9 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     } else if (_networkProvider.serviceState == 1) {
       backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
     } else if (_networkProvider.serviceState == 2) {
-      backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
+      backgroundImage = "assets/screens/Nav/koriZFinalBellPauseNav.png";
     } else if (_networkProvider.serviceState == 3) {
-      backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
+      backgroundImage = "assets/screens/Nav/koriZFinalRoomPauseNav.png";
     }
 
     offStageAd = _servingProvider.playAd;

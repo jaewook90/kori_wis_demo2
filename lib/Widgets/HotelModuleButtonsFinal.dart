@@ -6,9 +6,11 @@ import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart'
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomSelectFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -213,10 +215,10 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
     if (widget.screens == 0) {
       // 택배 메인 화면
-      buttonPositionWidth = [91, 561];
-      buttonPositionHeight = [533, 533];
+      buttonPositionWidth = [91, 91, 91];
+      buttonPositionHeight = [283, 683, 1083];
 
-      buttonSize = [428, 584];
+      buttonSize = [900, 300];
 
       buttonRadius = 50;
     } else if (widget.screens == 1) {
@@ -245,7 +247,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
       buttonSize = [873, 160];
 
       buttonRadius = 50;
-    } else{
+    } else {
       // 도착 화면
       buttonPositionWidth = [552, 132];
       buttonPositionHeight = [1316, 1521];
@@ -259,7 +261,6 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
     buttonNumbers = buttonPositionHeight.length;
 
     return Stack(children: [
-
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
           left: buttonPositionWidth[i],
@@ -284,11 +285,21 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             onPressed: widget.screens == 0
                 ? () {
                     if (i == 0) {
-                      showBookingRoomWarn(context);
-                    } else {
                       navPage(
                               context: context,
                               page: HotelCheckINRoomSelect(),
+                              enablePop: true)
+                          .navPageToPage();
+                    } else if (i == 1) {
+                      navPage(
+                              context: context,
+                              page: BellBoyServiceMenu(),
+                              enablePop: true)
+                          .navPageToPage();
+                    } else {
+                      navPage(
+                              context: context,
+                              page: RoomServiceMenu(),
                               enablePop: true)
                           .navPageToPage();
                     }
@@ -311,18 +322,33 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                           }
                         : widget.screens == 3
                             ? () {
-              if(i==0){
-                showBellBoyYN(context);
-              }else{
-                navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
-              }
-            }
+                                if (i == 0) {
+                                  showBellBoyYN(context);
+                                } else {
+                                  navPage(
+                                          context: context,
+                                          page: HotelServiceMenu(),
+                                          enablePop: false)
+                                      .navPageToPage();
+                                }
+                              }
                             : widget.screens == 4
                                 ? () {}
                                 : widget.screens == 5
                                     ? () {}
                                     : null,
-            child: null,
+            child: widget.screens == 0
+                ? Text(i == 0
+                    ? '체크인'
+                    : i == 1
+                        ? "벨보이"
+                        : "룸서비스", style: TextStyle(
+              fontFamily: 'kor',
+              fontSize: 60,
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+            ),)
+                : null,
           ),
         ),
     ]);

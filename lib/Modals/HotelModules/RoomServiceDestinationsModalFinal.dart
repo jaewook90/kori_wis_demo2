@@ -82,16 +82,7 @@ class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestin
                       child: null,
                     ),
                   )),
-              Center(
-                child: Text(
-                  '배송지 목록 스크린',
-                  style: TextStyle(
-                      fontSize: 80,
-                      color: Color.fromRGBO(200, 80, 0, 200),
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              RoomServiceModuleButtonsFinal(screens: 2,)
+              RoomServiceModuleButtonsFinal(screens: 3,)
             ],
           ),
         )

@@ -71,9 +71,15 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                               side: BorderSide(width: 1, color: Colors.white),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        if(_networkProvider.serviceState == 2){
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        }else{
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        }
+
                       },
                       child: null,
                     ),

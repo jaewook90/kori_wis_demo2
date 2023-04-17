@@ -161,7 +161,7 @@ class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinati
                 padding: EdgeInsets.only(top: screenHeight * 0.07),
                 child: null
             ),
-            RoomServiceModuleButtonsFinal(screens: 1,),
+            RoomServiceModuleButtonsFinal(screens: 2,),
           ],
         ),
       ),

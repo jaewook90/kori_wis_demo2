@@ -74,6 +74,7 @@ flutter:
     - assets/images/serving_img/
     - assets/images/serving_item_imgs/
     - assets/images/serving_menu_img/
+    - assets/images/room_item_imgs/
     - assets/fonts/
     - assets/logos/
     - assets/videos/

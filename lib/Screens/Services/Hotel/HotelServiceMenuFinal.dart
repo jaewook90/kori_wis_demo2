@@ -19,7 +19,7 @@ class HotelServiceMenu extends StatefulWidget {
 class _HotelServiceMenuState extends State<HotelServiceMenu> {
   late NetworkModel _networkProvider;
 
-  String backgroundImage = "assets/screens/Hotel/koriZFinalHotelMain.png";
+  // String backgroundImage = "assets/screens/Hotel/koriZFinalHotelMain.png";
 
   @override
   Widget build(BuildContext context) {
@@ -49,32 +49,6 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
           alignment: Alignment.centerRight,
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 600, 0),
-            child: TextButton(
-              onPressed: () {
-                navPage(context: context, page: RoomServiceMenu(), enablePop: true).navPageToPage();
-                setState(() {
-                  _networkProvider.serviceState = 3;
-                });
-              },
-              child: Text(
-                'RoomS',
-                style: TextStyle(
-                    fontFamily: 'kok',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)),
-              ),
-              style: TextButton.styleFrom(
-                fixedSize: Size(100, 0),
-                backgroundColor: Colors.transparent,
-                // shape: RoundedRectangleBorder(
-                //     side: BorderSide(width: 1, color: Colors.white)
-                // )
-              ),
-            ),
-          ),
           IconButton(
             padding: EdgeInsets.only(right: screenWidth * 0.05),
             onPressed: () {
@@ -97,9 +71,9 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
       extendBodyBehindAppBar: true,
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+        // decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //         image: AssetImage(backgroundImage), fit: BoxFit.cover)),
         child: Stack(
           children: [
             HotelModuleButtonsFinal(screens: 0,)
