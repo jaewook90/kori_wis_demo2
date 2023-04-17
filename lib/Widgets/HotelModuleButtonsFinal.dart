@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Modals/HotelModules/BellBoyYNModalFinal.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/hotelBookedRoomWarnModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomSelectFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
@@ -177,7 +179,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                           side: BorderSide(color: Colors.white, width: 2),
                           top: LinearBorderEdge(size: 1)),
                       minimumSize:
-                      Size(screenWidth * 0.5, screenHeight * 0.05)),
+                          Size(screenWidth * 0.5, screenHeight * 0.05)),
                 ),
               ),
             ],
@@ -192,6 +194,15 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
         context: context,
         builder: (context) {
           return PaymentScreenFinal();
+        });
+  }
+
+  void showBellBoyYN(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return BellBoyYNModalFinal();
         });
   }
 
@@ -263,10 +274,11 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
       buttonRadius = 50;
     } else if (widget.screens == 3) {
       // 도착 화면
-      buttonPositionWidth = [107];
-      buttonPositionHeight = [1372];
+      buttonPositionWidth = [552, 132];
+      buttonPositionHeight = [1316, 1521];
 
-      buttonSize = [866, 172];
+      buttonSize1 = [390, 168];
+      buttonSize2 = [811, 158];
 
       buttonRadius = 50;
     } else if (widget.screens == 4) {
@@ -342,14 +354,15 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                     borderRadius:
                         BorderRadius.circular(buttonRadius * pixelRatio)),
                 fixedSize:
-                    Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
-            // widget.screens == 2
-            //     ? i != 0
-            //         ? Size(buttonSize2[buttonWidth],
-            //             buttonSize2[buttonHeight])
-            //         : Size(buttonSize1[buttonWidth],
-            //             buttonSize1[buttonHeight])
-            //     : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                    // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                    widget.screens == 3
+                        ? i == 0
+                            ? Size(buttonSize1[buttonWidth],
+                                buttonSize1[buttonHeight])
+                            : Size(buttonSize2[buttonWidth],
+                                buttonSize2[buttonHeight])
+                        : Size(
+                            buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
                     if (i == 0) {
@@ -364,18 +377,28 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                   }
                 : widget.screens == 1
                     ? () {
-              if(i==2){
-                navPage(context: context, page: HotelRoomInfoNCart(), enablePop: true).navPageToPage();
-              }else{
-                showBookingNoRoomWarn(context);
-              }
-            }
+                        if (i == 2) {
+                          navPage(
+                                  context: context,
+                                  page: HotelRoomInfoNCart(),
+                                  enablePop: true)
+                              .navPageToPage();
+                        } else {
+                          showBookingNoRoomWarn(context);
+                        }
+                      }
                     : widget.screens == 2
                         ? () {
-              showPaymentPopup(context);
-            }
+                            showPaymentPopup(context);
+                          }
                         : widget.screens == 3
-                            ? () {}
+                            ? () {
+              if(i==0){
+                showBellBoyYN(context);
+              }else{
+                navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
+              }
+            }
                             : widget.screens == 4
                                 ? () {}
                                 : widget.screens == 5
