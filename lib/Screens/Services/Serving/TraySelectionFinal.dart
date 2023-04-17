@@ -149,6 +149,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
       itemNumber.isNaN;
     }
 
+    // if((_servingProvider.tray1Select == false && _servingProvider.tray2Select == false)&&_servingProvider.tray3Select == false){
+    //
+    // }
+
     print('item :: ${itemName}');
     print(itemNumber);
     print(tableNumber);
