@@ -6,6 +6,7 @@ import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/roomItemSelectScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/KoriAppBar.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
@@ -421,23 +422,24 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   child: Stack(
                     children: [
                       Positioned(
-                        left: 32,
+                        left: 24,
                         top: 120,
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
                             border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                           ),
-                          width: 50,
+                          width: 70,
                           height: 30,
                           child: Offstage(
                               offstage: servedItem1!,
-                              child: Center(
-                                child: Text(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [Text(
                                   // '$table1 번',
-                                  '${table1} 번',
+                                  '${table1} 호',
                                   style: buttonFont,
-                                ),
+                                ),]
                               )),
                         ),
                       ),
@@ -467,7 +469,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               _roomServiceProvider.tray2Select = false;
                               _roomServiceProvider.tray3Select = false;
                               _roomServiceProvider.trayCheckAll = false;
-                              showTraySetPopup(context);
+                              navPage(context: context, page: SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
                             },
                             child: Container(),
                             style: TextButton.styleFrom(
@@ -492,10 +494,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   child: Stack(
                     children: [
                       Positioned(
-                        left: 32,
+                        left: 24,
                         top: 120,
                         child: Container(
-                          width: 50,
+                          width: 70,
                           height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
@@ -503,11 +505,13 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                           ),
                           child: Offstage(
                               offstage: servedItem2!,
-                              child: Center(
-                                child: Text(
-                                  '$table2 번',
-                                  style: buttonFont,
-                                ),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [Text(
+                                    // '$table1 번',
+                                    '${table2} 호',
+                                    style: buttonFont,
+                                  ),]
                               )),
                         ),
                       ),
@@ -562,22 +566,24 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   child: Stack(
                     children: [
                       Positioned(
-                        left: 32,
+                        left: 24,
                         top: 145,
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
                             border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                           ),
-                          width: 50,
+                          width: 70,
                           height: 30,
                           child: Offstage(
                               offstage: servedItem3!,
-                              child: Center(
-                                child: Text(
-                                  '$table3 번',
-                                  style: buttonFont,
-                                ),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [Text(
+                                    // '$table1 번',
+                                    '${table3} 호',
+                                    style: buttonFont,
+                                  ),]
                               )),
                         ),
                       ),

@@ -217,9 +217,15 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                 image: AssetImage(shippingKeyPadIMG), fit: BoxFit.cover)),
         child: Stack(
           children: [
-            Container(
-                padding: EdgeInsets.only(top: screenHeight * 0.07),
-                child: null
+            Positioned(
+              top: 278,
+              left: 700,
+              child: Text('호', style: TextStyle(
+                  fontFamily: 'kor',
+                  fontSize: 100,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xffffffff)
+              ),),
             ),
             BellboyModuleButtonsFinal(screens: 1,)
           ],

@@ -218,9 +218,15 @@ class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinati
                 image: AssetImage(shippingKeyPadIMG), fit: BoxFit.cover)),
         child: Stack(
           children: [
-            Container(
-                padding: EdgeInsets.only(top: screenHeight * 0.07),
-                child: null
+            Positioned(
+              top: 278,
+              left: 700,
+              child: Text('호', style: TextStyle(
+                fontFamily: 'kor',
+                fontSize: 100,
+                fontWeight: FontWeight.bold,
+                color: Color(0xffffffff)
+              ),),
             ),
             RoomServiceModuleButtonsFinal(screens: 2,),
           ],

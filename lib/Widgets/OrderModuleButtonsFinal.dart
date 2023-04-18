@@ -3,6 +3,8 @@ import 'package:kori_wis_demo/Modals/OrderModules/CheckOutModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/NFCModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
 class OrderModuleButtonsFinal extends StatefulWidget {
@@ -33,6 +35,9 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
   late List<double> buttonSize1;
   late List<double> buttonSize2;
+
+  late double buttonRadius1;
+  late double buttonRadius2;
 
   late int buttonNumbers;
 
@@ -97,11 +102,13 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('서비스를 준비 중 입니다.', style: TextStyle(
-                      fontFamily: 'kor',
-                      fontSize: 50,
-                      color: Color(0xffF0F0F0)
-                  ),),
+                  Text(
+                    '서비스를 준비 중 입니다.',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 50,
+                        color: Color(0xffF0F0F0)),
+                  ),
                 ],
               ),
             ),
@@ -115,28 +122,26 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                   width: 1,
                 )),
             actions: [
-                  Center(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        '확 인',
-                        style: TextStyle(
-                          fontFamily: 'kor',
-                          fontSize: 30,
-                          color: Color(0xffF0F0F0)
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                          shape: LinearBorder(
-                              side: BorderSide(color: Colors.white, width: 2),
-                              top: LinearBorderEdge(size: 1)),
-                          minimumSize:
-                          Size(screenWidth * 0.5, screenHeight * 0.05)
-                      ),
-                    ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    '확 인',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 30,
+                        color: Color(0xffF0F0F0)),
                   ),
+                  style: TextButton.styleFrom(
+                      shape: LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 1)),
+                      minimumSize:
+                          Size(screenWidth * 0.5, screenHeight * 0.05)),
+                ),
+              ),
             ],
             // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
           );
@@ -155,18 +160,19 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
     if (widget.screens == 0) {
       // 장바구니 담기
-      buttonPositionWidth = [60.3, 515.6, 60.3, 515.6, 256];
-      buttonPositionHeight = [321, 321, 772.5, 772.5, 1310.5];
+      buttonPositionWidth = [60.3, 515.6, 60.3, 515.6, 262];
+      buttonPositionHeight = [321, 321, 772, 772, 1309];
 
-      buttonSize1 = [420, 420];
-      buttonSize2 = [675.8, 142.5];
+      buttonSize1 = [419, 419];
+      buttonSize2 = [674, 142];
 
-      buttonRadius = 40;
+      buttonRadius1 = 43;
+      buttonRadius2 = 40;
 
-      SelButtonPositionWidth = [55, 507, 56, 507, 370];
+      SelButtonPositionWidth = [57.5, 507.5, 57.5, 507.5, 370];
 
-      SelButtonPositionHeight = [316, 316, 768.5, 768.5, 1855];
-      SelButtonSize = [432, 432];
+      SelButtonPositionHeight = [316, 316, 769, 769, 1855];
+      SelButtonSize = [430, 430];
 
       if (selectedQt == 0) {
         _orderProvider.SelectedItemsQT = [true, true, true, true];
@@ -179,17 +185,24 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       buttonSize1 = [53, 80];
       buttonSize2 = [370.5, 142.5];
 
-      buttonRadius = 40;
-
-      ;
+      buttonRadius1 = 37;
+      buttonRadius2 = 40;
     } else if (widget.screens == 2) {
       // 결제 선택 및 금액 확인
-      buttonPositionWidth = [59, 506, 59, 506, 59, 506];
-      buttonPositionHeight = [550, 550, 750, 750, 950, 950];
+      buttonPositionWidth = [62, 506, 62, 506, 62, 506];
+      buttonPositionHeight = [550, 550, 750, 750, 949, 949];
 
-      buttonSize = [425, 179];
+      buttonSize = [425, 178];
 
-      buttonRadius = 30;
+      buttonRadius = 28;
+    }else if (widget.screens == 3) {
+      // 결제 선택 및 금액 확인
+      buttonPositionWidth = [88];
+      buttonPositionHeight = [1305];
+
+      buttonSize = [813.8, 160];
+
+      buttonRadius = 28;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -223,16 +236,19 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(width: 1, color: Colors.redAccent),
-                      borderRadius:
-                          BorderRadius.circular(buttonRadius)),
+                      borderRadius: BorderRadius.circular(widget.screens == 0
+                          ? i == 4
+                              ? buttonRadius2
+                              : buttonRadius1
+                          : widget.screens == 1 ? i == 4 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
                   fixedSize: (widget.screens == 0) || (widget.screens == 1)
                       ? i == (buttonNumbers - 1)
                           ? Size(buttonSize2[buttonWidth],
                               buttonSize2[buttonHeight])
                           : Size(buttonSize1[buttonWidth],
                               buttonSize1[buttonHeight])
-                      : Size(buttonSize[buttonWidth],
-                          buttonSize[buttonHeight])),
+                      : Size(
+                          buttonSize[buttonWidth], buttonSize[buttonHeight])),
               onPressed: widget.screens == 0
                   ? () {
                       if (i != 4) {
@@ -270,11 +286,13 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                           ? () {
                               if (i == 1) {
                                 showNFCPopup(context);
-                              } else{
+                              } else {
                                 showCashServing(context);
                               }
                             }
-                          : null,
+                          : widget.screens == 3 ?(){
+                navPage(context: context, page: TraySelectionFinal(), enablePop: false).navPageToPage();
+              } :null,
               child: null,
             ),
           ),

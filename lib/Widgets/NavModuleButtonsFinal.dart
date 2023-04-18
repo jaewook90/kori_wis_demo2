@@ -30,6 +30,9 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
   late List<double> buttonSize1;
   late List<double> buttonSize2;
 
+  late double buttonRadius1;
+  late double buttonRadius2;
+
   late int buttonNumbers;
 
   int buttonWidth = 0;
@@ -44,7 +47,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
       buttonPositionWidth = [107];
       buttonPositionHeight = [1367];
 
-      buttonSize = [866, 172];
+      buttonSize = [866, 173];
 
       buttonRadius = 40;
     } else if (widget.screens == 1) {
@@ -54,9 +57,10 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
 
       buttonSize = [];
       buttonSize1 = [866, 160];
-      buttonSize2 = [268, 200];
+      buttonSize2 = [268, 205];
 
-      buttonRadius = 30;
+      buttonRadius1 = 40;
+      buttonRadius2 = 32;
     }
     // else if (widget.screens == 3) {
     //   // 서빙 상품 선택 화면
@@ -77,7 +81,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     side: BorderSide(width: 1, color: Colors.tealAccent),
-                    borderRadius: BorderRadius.circular(buttonRadius)),
+                    borderRadius: BorderRadius.circular(widget.screens == 1 ? i == 0 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
                 fixedSize: widget.screens == 1
                     ? i == 0
                         ? Size(
