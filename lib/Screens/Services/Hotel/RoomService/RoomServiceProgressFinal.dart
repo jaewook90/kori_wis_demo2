@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceReturn.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
+import 'package:provider/provider.dart';
 
 
 class RoomServiceProgressFinal extends StatefulWidget {
@@ -18,6 +21,7 @@ class RoomServiceProgressFinal extends StatefulWidget {
 class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
 
   late ServingModel _servingProvider;
+  late RoomServiceModel _roomServiceProvider;
 
   String backgroundImage = "assets/screens/Hotel/RoomService/koriZFinalRoomDone.png";
 
@@ -25,6 +29,8 @@ class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
 
   @override
   Widget build(BuildContext context) {
+    _roomServiceProvider =
+        Provider.of<RoomServiceModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -94,13 +100,7 @@ class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
                                 fit: BoxFit.fill)),
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        "시간",
-                        style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                      ),
-                    )
-                  ],
+                   ],
                 ),
               )
               // SizedBox(width: screenWidth * 0.03)
@@ -114,6 +114,25 @@ class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
                   image: DecorationImage(
                       image: AssetImage(backgroundImage), fit: BoxFit.cover)),
               child: Stack(children: [
+                Positioned(
+                  top: 420,
+                  left: 0,
+                  child: GestureDetector(
+                      onTap: () {
+                        _roomServiceProvider.clearAllTray();
+                        navPage(
+                            context: context,
+                            page: RoomServiceReturnModuleFinal(),
+                            enablePop: false)
+                            .navPageToPage();
+                      },
+                      child: Container(
+                          height: 1200,
+                          width: 1080,
+                          decoration: BoxDecoration(
+                              border: Border.fromBorderSide(
+                                  BorderSide(color: Colors.transparent, width: 1))))),
+                ),
                 Container(
                   child: RoomServiceModuleButtonsFinal(screens: 4),
                 ),

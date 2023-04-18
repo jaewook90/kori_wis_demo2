@@ -99,7 +99,7 @@ class _RoomServiceModuleButtonsFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "";
+    currentNum = "502";
 
     shampoo = "assets/images/room_item_imgs/shampoo.png";
     shower = "assets/images/room_item_imgs/shower.png";
@@ -248,7 +248,7 @@ class _RoomServiceModuleButtonsFinalState
     return Stack(children: [
       (currentNum == null && widget.screens == 2)
           ? Container()
-          : Positioned(
+          : widget.screens == 2 ?Positioned(
         top: 220,
         left: 400,
         width: 270,
@@ -261,7 +261,7 @@ class _RoomServiceModuleButtonsFinalState
               fontWeight: FontWeight.bold,
               color: Color(0xffffffff)),
         ),
-      ),
+      ) : Container(),
       widget.screens == 2
           ? Positioned(
           left: 909,

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
+import 'package:provider/provider.dart';
 
 
 class BellboyProgressFinal extends StatefulWidget {
@@ -15,6 +18,7 @@ class BellboyProgressFinal extends StatefulWidget {
 }
 
 class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
+  late NetworkModel _networkProvider;
 
   late ServingModel _servingProvider;
 
@@ -24,7 +28,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
 
   @override
   Widget build(BuildContext context) {
-
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -69,6 +73,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                       left: 120,
                       top: 18,
                       child: FilledButton(onPressed: () {
+                        _networkProvider.bellboyTF=false;
                         navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
                       }, child: null, style: FilledButton.styleFrom(
                           fixedSize: Size(80, 80),
@@ -93,12 +98,6 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                                 fit: BoxFit.fill)),
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        "시간",
-                        style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                      ),
-                    )
                   ],
                 ),
               )
@@ -113,6 +112,27 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                   image: DecorationImage(
                       image: AssetImage(backgroundImage), fit: BoxFit.cover)),
               child: Stack(children: [
+                Positioned(
+                  top: 420,
+                  left: 0,
+                  child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _networkProvider.bellboyTF = false;
+                        });
+                        navPage(
+                            context: context,
+                            page: BellboyReturnModuleFinal(),
+                            enablePop: false)
+                            .navPageToPage();
+                      },
+                      child: Container(
+                          height: 1200,
+                          width: 1080,
+                          decoration: BoxDecoration(
+                              border: Border.fromBorderSide(
+                                  BorderSide(color: Colors.transparent, width: 1))))),
+                ),
                 Container(
                   child: BellboyModuleButtonsFinal(screens: 4),
                 ),

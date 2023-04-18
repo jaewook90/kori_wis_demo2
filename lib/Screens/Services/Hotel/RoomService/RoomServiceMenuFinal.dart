@@ -242,12 +242,6 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               fit: BoxFit.fill)),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      "시간",
-                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                    ),
-                  )
                 ],
               ),
             )
@@ -269,97 +263,100 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   screens: 0,
                 ),
                 // 디버그 버튼
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // 디버그 버튼 트레이 활성화용
-                    Offstage(
-                      offstage: _debugTray,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (receiptModeOn == true) {
-                                    _roomServiceProvider.receiptModeOn = false;
-                                  } else {
-                                    _roomServiceProvider.receiptModeOn = true;
-                                  }
-                                });
-                              },
-                              child: _roomServiceProvider.receiptModeOn == true
-                                  ? Text(
-                                'Receipt Mode',
-                                style: buttonFont,
-                              )
-                                  : Text('Normal Mode', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.25,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _roomServiceProvider.stickTray1();
-                                });
-                              },
-                              child: Text('Tray1', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.2,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _roomServiceProvider.stickTray2();
-                                });
-                              },
-                              child: Text('Tray2', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.2,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _roomServiceProvider.stickTray3();
-                                });
-                              },
-                              child: Text('Tray3', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.2,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                        ],
+                Opacity(
+                  opacity: 0.02,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // 디버그 버튼 트레이 활성화용
+                      Offstage(
+                        offstage: _debugTray,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (receiptModeOn == true) {
+                                      _roomServiceProvider.receiptModeOn = false;
+                                    } else {
+                                      _roomServiceProvider.receiptModeOn = true;
+                                    }
+                                  });
+                                },
+                                child: _roomServiceProvider.receiptModeOn == true
+                                    ? Text(
+                                  'Receipt Mode',
+                                  style: buttonFont,
+                                )
+                                    : Text('Normal Mode', style: buttonFont),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: Size(textButtonWidth * 0.25,
+                                        textButtonHeight * 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Color(0xFFB7B7B7),
+                                            style: BorderStyle.solid,
+                                            width: 10)))),
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _roomServiceProvider.stickTray1();
+                                  });
+                                },
+                                child: Text('Tray1', style: buttonFont),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: Size(textButtonWidth * 0.2,
+                                        textButtonHeight * 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Color(0xFFB7B7B7),
+                                            style: BorderStyle.solid,
+                                            width: 10)))),
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _roomServiceProvider.stickTray2();
+                                  });
+                                },
+                                child: Text('Tray2', style: buttonFont),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: Size(textButtonWidth * 0.2,
+                                        textButtonHeight * 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Color(0xFFB7B7B7),
+                                            style: BorderStyle.solid,
+                                            width: 10)))),
+                            TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _roomServiceProvider.stickTray3();
+                                  });
+                                },
+                                child: Text('Tray3', style: buttonFont),
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: Size(textButtonWidth * 0.2,
+                                        textButtonHeight * 0.5),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Color(0xFFB7B7B7),
+                                            style: BorderStyle.solid,
+                                            width: 10)))),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 // 초기화 버튼
                 Positioned(
-                    right: 188,
-                    top: 812,
+                    right: 180,
+                    top: 885,
                     child: FilledButton(
                       onPressed: (){
                         setState(() {
@@ -377,8 +374,8 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       ),
                     )),
                 Positioned(
-                    right: 188,
-                    top: 1030,
+                    right: 180,
+                    top: 1090,
                     child: FilledButton(
                       onPressed: (){
                         setState(() {
@@ -396,7 +393,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       ),
                     )),
                 Positioned(
-                    right: 188,
+                    right: 180,
                     top: 1296,
                     child: FilledButton(
                       onPressed: (){

@@ -62,12 +62,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         BorderRadius.circular(0)),
                     fixedSize: Size(370, 120)),
                 onPressed: (){
-                  if(_networkProvider.serviceState==0){
                     Navigator.pop(context);
-                  }else if(_networkProvider.serviceState==1){
-                    Navigator.pop(context);
-                    // Navigator.pop(context);
-                  }
                 },
                 child: null,
               ),

@@ -23,7 +23,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
   }
 
   late NetworkModel _networkProvider;
-  String NFCimg = 'assets/images/koriZFinalNFC.webp';
+  String NFCimg = 'assets/images/koriZFinalNFC.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -51,50 +51,68 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
               height: 1401,
               width: 1072.5,
               decoration: BoxDecoration(
-                border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-              ),
+                  color: Color.fromRGBO(30, 30, 30, 1),
+                  border: Border.fromBorderSide(
+                      BorderSide(color: Colors.transparent, width: 1)),
+              borderRadius: BorderRadius.circular(50)),
               child: Stack(children: [
-                Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(NFCimg)),
+                Positioned(
+                  top: 100,
+                  child: Container(
+                    height: 1301,
+                    width: 1072.5,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(NFCimg), fit: BoxFit.cover),
+                    ),
                   ),
                 ),
                 Positioned(
-                    left: 53,
-                    top: 35,
+                    left: 30,
+                    top: 25,
                     child: Container(
-                      width: 48,
-                      height: 48,
-                      color: Colors.transparent,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: null,
-                      ),
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Backward.png',
+                              ),
+                              fit: BoxFit.fill)),
                     )),
                 Positioned(
-                    left: 890,
-                    top: 35,
+                  left: 20,
+                  top: 18,
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: Size(80, 80),
+                        shape: RoundedRectangleBorder(
+                            // side: BorderSide(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  ),
+                ),
+                Positioned(
+                    left: 885,
+                    top: 2,
                     child: Container(
-                      width: 48,
-                      height: 48,
+                      width: 80,
+                      height: 80,
                       color: Colors.transparent,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                        child: null,
-                      ),
+                      child: IconButton(
+                        color: Colors.white,
+                        iconSize: 90,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.clear)),
                     )),
               ]),
             ),

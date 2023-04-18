@@ -11,7 +11,8 @@ class MainScreenFinal extends StatefulWidget {
   State<MainScreenFinal> createState() => _MainScreenFinalState();
 }
 
-class _MainScreenFinalState extends State<MainScreenFinal> with TickerProviderStateMixin {
+class _MainScreenFinalState extends State<MainScreenFinal>
+    with TickerProviderStateMixin {
   // late NetworkModel _networkProvider;
 
   // dynamic newPoseData;
@@ -22,7 +23,6 @@ class _MainScreenFinalState extends State<MainScreenFinal> with TickerProviderSt
 
   final String _wallpape = "assets/screens/koriZFinalHome.png";
   final String _fingerIcon = "assets/icons/pushIcon.png";
-
 
   // 버튼 디자인 위에 올리기
   double pixelRatio = 0.75;
@@ -123,43 +123,37 @@ class _MainScreenFinalState extends State<MainScreenFinal> with TickerProviderSt
       child: Scaffold(
         appBar: AppBar(
           title: Text(''),
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      automaticallyImplyLeading: false,
-      // leading:
-      actions: [
-        Container(
-          width: screenWidth,
-          height: 108,
-          child: Stack(
-            children: [
-              Positioned(
-                right: 50,
-                top: 25,
-                child: Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/icons/appBar/appBar_Battery.png',
-                          ),
-                          fit: BoxFit.fill)),
-                ),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          // leading:
+          actions: [
+            Container(
+              width: screenWidth,
+              height: 108,
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: 50,
+                    top: 25,
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Battery.png',
+                              ),
+                              fit: BoxFit.fill)),
+                    ),
+                  ),
+                ],
               ),
-              Center(
-                child: Text(
-                  "시간",
-                  style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                ),
-              )
-            ],
-          ),
-        )
-        // SizedBox(width: screenWidth * 0.03)
-      ],
-      toolbarHeight: 110,
-    ),
+            )
+            // SizedBox(width: screenWidth * 0.03)
+          ],
+          toolbarHeight: 110,
+        ),
         extendBodyBehindAppBar: true,
         body: Stack(children: [
           Container(

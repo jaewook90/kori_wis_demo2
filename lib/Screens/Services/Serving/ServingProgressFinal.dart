@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 
@@ -88,12 +89,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      "시간",
-                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                    ),
-                  )
                 ],
               ),
             )
@@ -108,6 +103,24 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 image: DecorationImage(
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(children: [
+              Positioned(
+                top: 450,
+                left: 0,
+                child: GestureDetector(
+                    onTap: () {
+                      navPage(
+                          context: context,
+                          page: TraySelectionFinal(),
+                          enablePop: false)
+                          .navPageToPage();
+                    },
+                    child: Container(
+                        height: 1200,
+                        width: 1080,
+                        decoration: BoxDecoration(
+                            border: Border.fromBorderSide(
+                                BorderSide(color: Colors.transparent, width: 1))))),
+              ),
               Container(
                 child: ServingModuleButtonsFinal(screens: 5),
               ),
