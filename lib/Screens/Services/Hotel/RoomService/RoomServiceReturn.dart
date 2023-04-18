@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/shippingNavDoneFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
@@ -25,7 +27,7 @@ class RoomServiceReturnModuleFinal extends StatefulWidget {
 class _RoomServiceReturnModuleFinalState
     extends State<RoomServiceReturnModuleFinal> {
   late NetworkModel _networkProvider;
-  late ServingModel _servingProvider;
+  late RoomServiceModel _roomServiceProvider;
 
   late VideoPlayerController _controller;
 
@@ -86,12 +88,12 @@ class _RoomServiceReturnModuleFinalState
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _roomServiceProvider = Provider.of<RoomServiceModel>(context, listen: false);
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalRoomReturnNav.png";
 
 
-    offStageAd = _servingProvider.playAd;
+    offStageAd = _roomServiceProvider.playAd;
 
     startUrl = _networkProvider.startUrl;
     stpUrl = _networkProvider.stpUrl;
@@ -152,8 +154,8 @@ class _RoomServiceReturnModuleFinalState
           IconButton(
             padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
             onPressed: () {
-              _servingProvider.clearAllTray();
-              _servingProvider.initServing();
+              _roomServiceProvider.clearAllTray();
+              _roomServiceProvider.initServing();
               navPage(context: context, page: ServiceScreenFinal(), enablePop: false)
                   .navPageToPage();
             },
@@ -168,7 +170,7 @@ class _RoomServiceReturnModuleFinalState
             padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
             onPressed: () {
               setState(() {
-                _servingProvider.playAD();
+                _roomServiceProvider.playAD();
               });
             },
             icon: Icon(
@@ -207,7 +209,7 @@ class _RoomServiceReturnModuleFinalState
           // 스크린 터치시 화면 이동을 위한 위젯
           onTap: () {
             setState(() {
-              _servingProvider.playAD();
+              _roomServiceProvider.playAD();
             });
           },
           child: Center(
@@ -424,7 +426,7 @@ class _RoomServiceReturnModuleFinalState
 //                                       } else if (serviceState == serving) {
 //                                         if (_networkProvider.servingDone ==
 //                                             true) {
-//                                           _servingProvider.clearAllTray();
+//                                           _roomServiceProvider.clearAllTray();
 //                                           _networkProvider.servingDone = false;
 //                                           navPage(
 //                                                   context: context,

@@ -123,16 +123,43 @@ class _MainScreenFinalState extends State<MainScreenFinal> with TickerProviderSt
       child: Scaffold(
         appBar: AppBar(
           title: Text(''),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          automaticallyImplyLeading: false,
-          actions: [
-            Icon(Icons.battery_charging_full,
-                color: Colors.teal, size: screenHeight * 0.03),
-            SizedBox(width: screenWidth * 0.03)
-          ],
-          toolbarHeight: screenHeight * 0.045,
-        ),
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      automaticallyImplyLeading: false,
+      // leading:
+      actions: [
+        Container(
+          width: screenWidth,
+          height: 108,
+          child: Stack(
+            children: [
+              Positioned(
+                right: 50,
+                top: 25,
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                            'assets/icons/appBar/appBar_Battery.png',
+                          ),
+                          fit: BoxFit.fill)),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "시간",
+                  style: TextStyle(fontFamily: 'kor', fontSize: 60),
+                ),
+              )
+            ],
+          ),
+        )
+        // SizedBox(width: screenWidth * 0.03)
+      ],
+      toolbarHeight: 110,
+    ),
         extendBodyBehindAppBar: true,
         body: Stack(children: [
           Container(

@@ -4,7 +4,9 @@ import 'package:kori_wis_demo/Modals/HotelModules/hotelBookedRoomWarnModalFinal.
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
@@ -30,8 +32,8 @@ class HotelModuleButtonsFinal extends StatefulWidget {
 }
 
 class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
-  // late NetworkModel _networkProvider;
-
+  late NetworkModel _networkProvider;
+  late RoomServiceModel _roomServiceProvider;
   late ServingModel _servingProvider;
   late OrderModel _orderProvider;
 
@@ -210,8 +212,10 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
+    _roomServiceProvider = Provider.of<RoomServiceModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 택배 메인 화면
@@ -291,12 +295,19 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                               enablePop: true)
                           .navPageToPage();
                     } else if (i == 1) {
+                      setState(() {
+                        _networkProvider.serviceState=2;
+                      });
                       navPage(
                               context: context,
                               page: BellBoyServiceMenu(),
                               enablePop: true)
                           .navPageToPage();
                     } else {
+                      setState(() {
+                        _roomServiceProvider.clearAllTray();
+                        _networkProvider.serviceState=3;
+                      });
                       navPage(
                               context: context,
                               page: RoomServiceMenu(),

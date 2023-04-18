@@ -123,100 +123,114 @@ class _NavigatorProgressModuleFinalState
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
-          color: Color(0xffB7B7B7),
-          iconSize: screenHeight * 0.03,
-          alignment: Alignment.centerRight,
-        ),
+        // leading:
         actions: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 600, 0),
-            child: TextButton(
-              onPressed: () {
-                if(_networkProvider.serviceState==0){
-                  navPage(
-                      context: context,
-                      page: ShippingDoneFinal(),
-                      enablePop: false)
-                      .navPageToPage();
+          Container(
+            width: screenWidth,
+            height: 108,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 50,
+                  top: 25,
+                  child: Container(
+                    height: 60,
+                    width: 120,
+                    child: TextButton(
+                      onPressed: () {
+                        if (_networkProvider.serviceState == 0) {
+                          navPage(
+                              context: context,
+                              page: ShippingDoneFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                          // showShippingDone(context);
+                        } else if (_networkProvider.serviceState == 1) {
+                          navPage(
+                              context: context,
+                              page: ServingProgressFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        } else if (_networkProvider.serviceState == 2) {
+                          navPage(
+                              context: context,
+                              page: BellboyProgressFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        }else if (_networkProvider.serviceState == 3) {
+                          navPage(
+                              context: context,
+                              page: RoomServiceProgressFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        }
+                      },
+                      child: Text(
+                        '도착',
+                        style: TextStyle(
+                            fontFamily: 'kok',
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffffffff)),
+                      ),
+                      style: TextButton.styleFrom(
+                        fixedSize: Size(100, 0),
+                        backgroundColor: Colors.transparent,
+                        // shape: RoundedRectangleBorder(
+                        //     side: BorderSide(width: 1, color: Colors.white)
+                        // )
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 150,
+                  top: 15,
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    child: IconButton(
+                      padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                      onPressed: () {
+                        setState(() {
+                          _servingProvider.playAD();
+                        });
+                      },
+                      icon: Icon(
+                        Icons.play_circle,
+                      ),
+                      color: Color(0xffB7B7B7),
+                      iconSize: 60,
+                      alignment: Alignment.center,
+                    ),
+                  ),),
 
-                }else if(_networkProvider.serviceState==1){
-                  navPage(
-                      context: context,
-                      page: ServingProgressFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-                }else if(_networkProvider.serviceState==2){
-                  navPage(
-                      context: context,
-                      page: BellboyProgressFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-                }else if(_networkProvider.serviceState==3){
-                  navPage(
-                      context: context,
-                      page: RoomServiceProgressFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-                }
-              },
-              child: Text(
-                '도착',
-                style: TextStyle(
-                    fontFamily: 'kok',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)),
-              ),
-              style: TextButton.styleFrom(
-                fixedSize: Size(100, 0),
-                backgroundColor: Colors.transparent,
-                // shape: RoundedRectangleBorder(
-                //     side: BorderSide(width: 1, color: Colors.white)
-                // )
-              ),
+                Positioned(
+                  right: 50,
+                  top: 25,
+                  child: Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                              'assets/icons/appBar/appBar_Battery.png',
+                            ),
+                            fit: BoxFit.fill)),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    "시간",
+                    style: TextStyle(fontFamily: 'kor', fontSize: 60),
+                  ),
+                )
+              ],
             ),
-          ),
-          IconButton(
-            padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-            onPressed: () {
-              _servingProvider.clearAllTray();
-              _servingProvider.initServing();
-              navPage(context: context, page: ServiceScreenFinal(), enablePop: false)
-                  .navPageToPage();
-            },
-            icon: Icon(
-              Icons.home_outlined,
-            ),
-            color: Color(0xffB7B7B7),
-            iconSize: screenHeight * 0.03,
-            alignment: Alignment.center,
-          ),
-          IconButton(
-            padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-            onPressed: () {
-              setState(() {
-                _servingProvider.playAD();
-              });
-            },
-            icon: Icon(
-              Icons.play_circle,
-            ),
-            color: Color(0xffB7B7B7),
-            iconSize: screenHeight * 0.03,
-            alignment: Alignment.center,
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-            child: Icon(Icons.battery_charging_full,
-                color: Colors.teal, size: screenHeight * 0.03),
-          ),
+          )
+          // SizedBox(width: screenWidth * 0.03)
         ],
-        toolbarHeight: screenHeight * 0.045,
+        toolbarHeight: 110,
       ),
       extendBodyBehindAppBar: true,
       body: Stack(children: [
