@@ -84,7 +84,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         BorderRadius.circular(0)),
                     fixedSize: Size(370, 120)),
                 onPressed: (){
-                  _servingProvider.playAd = false;
                   navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: false).navPageToPage();
                 },
                 child: null,

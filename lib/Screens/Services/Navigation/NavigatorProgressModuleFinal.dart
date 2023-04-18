@@ -27,17 +27,11 @@ class _NavigatorProgressModuleFinalState
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
-  late VideoPlayerController _controller;
-
-  String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
-
   String? startUrl;
   String? stpUrl;
   String? rsmUrl;
   String? navUrl;
   String? chgUrl;
-
-  bool? offStageAd;
 
   int? shipping;
   int? serving;
@@ -60,28 +54,9 @@ class _NavigatorProgressModuleFinalState
     serving = 1;
     bellboy = 2;
     roomService = 3;
-
-    _controller = VideoPlayerController.asset(introVideo)
-      ..initialize().then((_) {
-        _controller.setLooping(true);
-        // setLooping -> true 무한반복 false 1회 재생
-        setState(() {});
-      });
-
-    _playVideo();
-  }
-
-  void _playVideo() async {
-    _controller.play();
   }
 
   late String backgroundImageServ;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +73,6 @@ class _NavigatorProgressModuleFinalState
       backgroundImageServ = "assets/screens/Nav/koriZFinalRoomProgNav.png";
     }
 
-    offStageAd = _servingProvider.playAd;
-
     startUrl = _networkProvider.startUrl;
     stpUrl = _networkProvider.stpUrl;
     rsmUrl = _networkProvider.rsmUrl;
@@ -113,9 +86,6 @@ class _NavigatorProgressModuleFinalState
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
-    double videoWidth = _controller.value.size.width;
-    double videoHeight = _controller.value.size.height;
 
     return WillPopScope(
       onWillPop: (){
@@ -187,27 +157,6 @@ class _NavigatorProgressModuleFinalState
                       ),
                     ),
                   ),
-                  Positioned(
-                    right: 150,
-                    top: 15,
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      child: IconButton(
-                        padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                        onPressed: () {
-                          setState(() {
-                            _servingProvider.playAD();
-                          });
-                        },
-                        icon: Icon(
-                          Icons.play_circle,
-                        ),
-                        color: Color(0xffB7B7B7),
-                        iconSize: 60,
-                        alignment: Alignment.center,
-                      ),
-                    ),),
 
                   Positioned(
                     right: 50,
@@ -223,12 +172,6 @@ class _NavigatorProgressModuleFinalState
                               fit: BoxFit.fill)),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      "시간",
-                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                    ),
-                  )
                 ],
               ),
             )
@@ -243,64 +186,54 @@ class _NavigatorProgressModuleFinalState
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(backgroundImageServ), fit: BoxFit.cover)),
-            child: Container(
-              child: Stack(
-                children: [
-                  Container(
-                      margin: EdgeInsets.only(top: screenHeight * 0.04),
-                      child: null),
-                  NavModuleButtonsFinal(
-                    screens: 0,
-                  )
-                ],
-              ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 500,
+                  left: 0,
+                  child: GestureDetector(
+                      onTap: () {
+                        print('tapped');
+                        if (_networkProvider.serviceState == 0) {
+                          navPage(
+                              context: context,
+                              page: ShippingDoneFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                          // showShippingDone(context);
+                        } else if (_networkProvider.serviceState == 1) {
+                          navPage(
+                              context: context,
+                              page: ServingProgressFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        } else if (_networkProvider.serviceState == 2) {
+                          navPage(
+                              context: context,
+                              page: BellboyProgressFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        }else if (_networkProvider.serviceState == 3) {
+                          navPage(
+                              context: context,
+                              page: RoomServiceProgressFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        }
+                      },
+                      child: Container(
+                          height: 800,
+                          width: 1080,
+                          decoration: BoxDecoration(
+                              border: Border.fromBorderSide(
+                                  BorderSide(color: Colors.transparent, width: 1))))),
+                ),
+                NavModuleButtonsFinal(
+                  screens: 0,
+                )
+              ],
             ),
           ),
-          GestureDetector(
-            // 스크린 터치시 화면 이동을 위한 위젯
-            onTap: () {
-              setState(() {
-                _servingProvider.playAD();
-              });
-            },
-            child: Center(
-              child: Offstage(
-                offstage: offStageAd!,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: screenWidth,
-                            height: screenHeight * 0.8,
-                            child: FittedBox(
-                              fit: BoxFit.cover,
-                              child: SizedBox(
-                                width: videoWidth,
-                                height: videoHeight,
-                                child: _controller.value.isInitialized
-                                    ? AspectRatio(
-                                        aspectRatio:
-                                            _controller.value.aspectRatio,
-                                        child: VideoPlayer(
-                                          _controller,
-                                        ),
-                                      )
-                                    : Container(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
         ]),
       ),
     );

@@ -71,12 +71,10 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/serving_img/
     - assets/images/serving_item_imgs/
-    - assets/images/serving_menu_img/
     - assets/images/room_item_imgs/
+    - assets/images/Service_menu_img/
     - assets/fonts/
-    - assets/logos/
     - assets/videos/
     - assets/voices/
     - assets/icons/

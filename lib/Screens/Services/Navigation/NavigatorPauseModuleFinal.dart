@@ -26,17 +26,11 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
-  late VideoPlayerController _controller;
-
-  String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
-
   String? startUrl;
   String? stpUrl;
   String? rsmUrl;
   String? navUrl;
   String? chgUrl;
-
-  bool? offStageAd;
 
   int? shipping;
   int? serving;
@@ -59,28 +53,9 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     serving = 1;
     bellboy = 2;
     roomService = 3;
-
-    _controller = VideoPlayerController.asset(introVideo)
-      ..initialize().then((_) {
-        _controller.setLooping(true);
-        // setLooping -> true 무한반복 false 1회 재생
-        setState(() {});
-      });
-
-    _playVideo();
-  }
-
-  void _playVideo() async {
-    _controller.play();
   }
 
   late String backgroundImage;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +71,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     } else if (_networkProvider.serviceState == 3) {
       backgroundImage = "assets/screens/Nav/koriZFinalRoomPauseNav.png";
     }
-
-    offStageAd = _servingProvider.playAd;
 
     startUrl = _networkProvider.startUrl;
     stpUrl = _networkProvider.stpUrl;
@@ -218,9 +191,46 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
             child: Container(
               child: Stack(
                 children: [
-                  Container(
-                      margin: EdgeInsets.only(top: screenHeight * 0.04),
-                      child: null),
+                  Positioned(
+                    top: 500,
+                    left: 0,
+                    child: GestureDetector(
+                        onTap: () {
+                          print('tapped');
+                          if (_networkProvider.serviceState == 0) {
+                            navPage(
+                                context: context,
+                                page: ShippingDoneFinal(),
+                                enablePop: false)
+                                .navPageToPage();
+                            // showShippingDone(context);
+                          } else if (_networkProvider.serviceState == 1) {
+                            navPage(
+                                context: context,
+                                page: ServingProgressFinal(),
+                                enablePop: false)
+                                .navPageToPage();
+                          } else if (_networkProvider.serviceState == 2) {
+                            navPage(
+                                context: context,
+                                page: BellboyProgressFinal(),
+                                enablePop: false)
+                                .navPageToPage();
+                          }else if (_networkProvider.serviceState == 3) {
+                            navPage(
+                                context: context,
+                                page: RoomServiceProgressFinal(),
+                                enablePop: false)
+                                .navPageToPage();
+                          }
+                        },
+                        child: Container(
+                            height: 800,
+                            width: 1080,
+                            decoration: BoxDecoration(
+                                border: Border.fromBorderSide(
+                                    BorderSide(color: Colors.transparent, width: 1))))),
+                  ),
                    NavModuleButtonsFinal(screens: 1),
                 ],
               ),

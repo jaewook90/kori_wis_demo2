@@ -84,11 +84,3 @@ class KoriAppBar extends StatelessWidget implements PreferredSizeWidget{
   // TODO: implement preferredSize
   Size get preferredSize => throw UnimplementedError();
 }
-
-//  late String downArrowIcon1;
-//   late String downArrowIcon2;
-//   late String downArrowIcon3;
-
-//    downArrowIcon1 = 'assets/icons/decoration/DownArrow1.png';
-//     downArrowIcon2 = 'assets/icons/decoration/DownArrow2.png';
-//     downArrowIcon3 = 'assets/icons/decoration/DownArrow3.png';
