@@ -267,6 +267,9 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                             ? () {}
                             : widget.screens == 4
                                 ? () {
+                                    setState(() {
+                                      _networkProvider.bellboyTF = false;
+                                    });
                                     navPage(
                                             context: context,
                                             page: BellboyReturnModuleFinal(),

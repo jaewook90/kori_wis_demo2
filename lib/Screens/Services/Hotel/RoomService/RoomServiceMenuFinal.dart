@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/roomItemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/receiptModalFinal.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
@@ -22,7 +22,7 @@ class RoomServiceMenu extends StatefulWidget {
 }
 
 class _RoomServiceMenuState extends State<RoomServiceMenu> {
-  late ServingModel _servingProvider;
+  late RoomServiceModel _roomServiceProvider;
 
   String? tableNumber;
   String? itemName;
@@ -116,28 +116,28 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
   @override
   Widget build(BuildContext context) {
     // _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _roomServiceProvider = Provider.of<RoomServiceModel>(context, listen: false);
 
-    itemName = _servingProvider.menuItem;
-    tableNumber = _servingProvider.tableNumber;
+    itemName = _roomServiceProvider.menuItem;
+    tableNumber = _roomServiceProvider.tableNumber;
 
-    offStageTray1 = _servingProvider.attachedTray1;
-    offStageTray2 = _servingProvider.attachedTray2;
-    offStageTray3 = _servingProvider.attachedTray3;
+    offStageTray1 = _roomServiceProvider.attachedTray1;
+    offStageTray2 = _roomServiceProvider.attachedTray2;
+    offStageTray3 = _roomServiceProvider.attachedTray3;
 
-    servedItem1 = _servingProvider.servedItem1;
-    servedItem2 = _servingProvider.servedItem2;
-    servedItem3 = _servingProvider.servedItem3;
+    servedItem1 = _roomServiceProvider.servedItem1;
+    servedItem2 = _roomServiceProvider.servedItem2;
+    servedItem3 = _roomServiceProvider.servedItem3;
 
-    receiptModeOn = _servingProvider.receiptModeOn!;
+    receiptModeOn = _roomServiceProvider.receiptModeOn!;
 
-    table1 = _servingProvider.table1;
-    table2 = _servingProvider.table2;
-    table3 = _servingProvider.table3;
+    table1 = _roomServiceProvider.table1;
+    table2 = _roomServiceProvider.table2;
+    table3 = _roomServiceProvider.table3;
 
-    item1 = _servingProvider.item1;
-    item2 = _servingProvider.item2;
-    item3 = _servingProvider.item3;
+    item1 = _roomServiceProvider.item1;
+    item2 = _roomServiceProvider.item2;
+    item3 = _roomServiceProvider.item3;
 
     if (itemName == '수건') {
       itemNumber = 0;
@@ -280,13 +280,13 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                             onPressed: () {
                               setState(() {
                                 if (receiptModeOn == true) {
-                                  _servingProvider.receiptModeOn = false;
+                                  _roomServiceProvider.receiptModeOn = false;
                                 } else {
-                                  _servingProvider.receiptModeOn = true;
+                                  _roomServiceProvider.receiptModeOn = true;
                                 }
                               });
                             },
-                            child: _servingProvider.receiptModeOn == true
+                            child: _roomServiceProvider.receiptModeOn == true
                                 ? Text(
                               'Receipt Mode',
                               style: buttonFont,
@@ -304,7 +304,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                         TextButton(
                             onPressed: () {
                               setState(() {
-                                _servingProvider.stickTray1();
+                                _roomServiceProvider.stickTray1();
                               });
                             },
                             child: Text('Tray1', style: buttonFont),
@@ -320,7 +320,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                         TextButton(
                             onPressed: () {
                               setState(() {
-                                _servingProvider.stickTray2();
+                                _roomServiceProvider.stickTray2();
                               });
                             },
                             child: Text('Tray2', style: buttonFont),
@@ -336,7 +336,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                         TextButton(
                             onPressed: () {
                               setState(() {
-                                _servingProvider.stickTray3();
+                                _roomServiceProvider.stickTray3();
                               });
                             },
                             child: Text('Tray3', style: buttonFont),
@@ -361,7 +361,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   child: FilledButton(
                     onPressed: (){
                       setState(() {
-                        _servingProvider.clearTray1();
+                        _roomServiceProvider.clearTray1();
                       });
                     },
                     child: null,
@@ -380,7 +380,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   child: FilledButton(
                     onPressed: (){
                       setState(() {
-                        _servingProvider.clearTray2();
+                        _roomServiceProvider.clearTray2();
                       });
                     },
                     child: null,
@@ -399,7 +399,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                   child: FilledButton(
                     onPressed: (){
                       setState(() {
-                        _servingProvider.clearTray3();
+                        _roomServiceProvider.clearTray3();
                       });
                     },
                     child: null,
@@ -452,7 +452,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage(
-                                      _servingProvider.itemImageList![0]),),
+                                      _roomServiceProvider.itemImageList![0]),),
                                 borderRadius: BorderRadius.circular(0),
                                 border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               )),
@@ -463,10 +463,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                         height: 180,
                         child: TextButton(
                             onPressed: () {
-                              _servingProvider.tray1Select = true;
-                              _servingProvider.tray2Select = false;
-                              _servingProvider.tray3Select = false;
-                              _servingProvider.trayCheckAll = false;
+                              _roomServiceProvider.tray1Select = true;
+                              _roomServiceProvider.tray2Select = false;
+                              _roomServiceProvider.tray3Select = false;
+                              _roomServiceProvider.trayCheckAll = false;
                               showTraySetPopup(context);
                             },
                             child: Container(),
@@ -522,7 +522,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        _servingProvider.itemImageList![1])),
+                                        _roomServiceProvider.itemImageList![1])),
                                 borderRadius: BorderRadius.circular(0),
                                 border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               )),
@@ -533,10 +533,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                           height: 180,
                           child: TextButton(
                               onPressed: () {
-                                _servingProvider.tray1Select = false;
-                                _servingProvider.tray2Select = true;
-                                _servingProvider.tray3Select = false;
-                                _servingProvider.trayCheckAll = false;
+                                _roomServiceProvider.tray1Select = false;
+                                _roomServiceProvider.tray2Select = true;
+                                _roomServiceProvider.tray3Select = false;
+                                _roomServiceProvider.trayCheckAll = false;
                                 showTraySetPopup(context);
                               },
                               child: Container(),
@@ -592,7 +592,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
-                                        _servingProvider.itemImageList![2])),
+                                        _roomServiceProvider.itemImageList![2])),
                                 borderRadius: BorderRadius.circular(0),
                                 border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               )),
@@ -603,10 +603,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                           height: 180,
                           child: TextButton(
                               onPressed: () {
-                                _servingProvider.tray1Select = false;
-                                _servingProvider.tray2Select = false;
-                                _servingProvider.tray3Select = true;
-                                _servingProvider.trayCheckAll = false;
+                                _roomServiceProvider.tray1Select = false;
+                                _roomServiceProvider.tray2Select = false;
+                                _roomServiceProvider.tray3Select = true;
+                                _roomServiceProvider.trayCheckAll = false;
                                 showTraySetPopup(context);
                               },
                               child: Container(),

@@ -56,7 +56,7 @@ class _BellBoyYNModalFinalState extends State<BellBoyYNModalFinal> {
                         BorderRadius.circular(0)),
                     fixedSize: Size(370, 120)),
                 onPressed: (){
-                  navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
+                  Navigator.pop(context);
                 },
                 child: null,
               ),

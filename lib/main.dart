@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +65,33 @@ class MyApp extends StatelessWidget {
                 tableNumber: "10")),
         ChangeNotifierProvider(create: (context) => OrderModel(
           orderedItems: [],
+        )),
+        ChangeNotifierProvider(create: (context)=>RoomServiceModel(
+            tray1: false,
+            tray2: false,
+            tray3: false,
+            receiptModeOn: false,
+            attachedTray1: true,
+            attachedTray2: true,
+            attachedTray3: true,
+            playAd: false,
+            servedItem1: true,
+            servedItem2: true,
+            servedItem3: true,
+            tray1Select: false,
+            tray2Select: false,
+            tray3Select: false,
+            servingBeginningIsNot: true,
+            item1: '',
+            item2: '',
+            item3: '',
+            table1: "",
+            table2: "",
+            table3: "",
+            tableList: [],
+            itemImageList: ['a', 'b', 'c'],
+            menuItem: "미지정",
+            tableNumber: "10"
         ))
       ],
       child: MaterialApp(

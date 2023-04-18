@@ -7,7 +7,7 @@ import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellboyDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
@@ -15,6 +15,7 @@ import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFi
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomSelectFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceReturn.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
@@ -38,7 +39,7 @@ class _RoomServiceModuleButtonsFinalState
     extends State<RoomServiceModuleButtonsFinal> {
   // late NetworkModel _networkProvider;
 
-  late ServingModel _servingProvider;
+  late RoomServiceModel _roomServiceProvider;
   late OrderModel _orderProvider;
 
   late var screenList = List<Widget>.empty();
@@ -128,36 +129,37 @@ class _RoomServiceModuleButtonsFinalState
   }
 
   void uploadRoomNumberNItemImg() {
-    if (_servingProvider.tray1Select == true) {
-      // _servingProvider.setTray1();
+    if (_roomServiceProvider.tray1Select == true) {
+      // _roomServiceProvider.setTray1();
       setState(() {
-        _servingProvider.itemImageList![0] = itemImagesList[0][itemNumber];
-        _servingProvider.servedItem1 = false;
+        _roomServiceProvider.itemImageList![0] = itemImagesList[0][itemNumber];
+        _roomServiceProvider.servedItem1 = false;
       });
-    } else if (_servingProvider.tray2Select == true) {
-      // _servingProvider.setTray1();
+    } else if (_roomServiceProvider.tray2Select == true) {
+      // _roomServiceProvider.setTray1();
       setState(() {
-        _servingProvider.itemImageList![1] = itemImagesList[1][itemNumber];
-        _servingProvider.servedItem2 = false;
+        _roomServiceProvider.itemImageList![1] = itemImagesList[1][itemNumber];
+        _roomServiceProvider.servedItem2 = false;
       });
-    } else if (_servingProvider.tray3Select == true) {
-      // _servingProvider.setTray1();
+    } else if (_roomServiceProvider.tray3Select == true) {
+      // _roomServiceProvider.setTray1();
       setState(() {
-        _servingProvider.itemImageList![2] = itemImagesList[2][itemNumber];
-        _servingProvider.servedItem3 = false;
+        _roomServiceProvider.itemImageList![2] = itemImagesList[2][itemNumber];
+        _roomServiceProvider.servedItem3 = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _roomServiceProvider =
+        Provider.of<RoomServiceModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
-    tableNumber = _servingProvider.tableNumber;
-    itemName = _servingProvider.menuItem;
+    tableNumber = _roomServiceProvider.tableNumber;
+    itemName = _roomServiceProvider.menuItem;
 
-    if (_servingProvider.trayCheckAll == false) {
+    if (_roomServiceProvider.trayCheckAll == false) {
       if (itemName == '수건') {
         itemNumber = 0;
       } else if (itemName == '헤어') {
@@ -306,19 +308,19 @@ class _RoomServiceModuleButtonsFinalState
                             buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    if ((_servingProvider.tray1 == true ||
-                            _servingProvider.tray2 == true) ||
-                        _servingProvider.tray3 == true) {
+                    if ((_roomServiceProvider.tray1 == true ||
+                            _roomServiceProvider.tray2 == true) ||
+                        _roomServiceProvider.tray3 == true) {
                       showCountDownPopup(context);
                     } else {
-                      _servingProvider.trayCheckAll = true;
-                      // _servingProvider.servingBeginningIsNot=true;
+                      _roomServiceProvider.trayCheckAll = true;
+                      // _roomServiceProvider.servingBeginningIsNot=true;
                       navPage(
                               context: context,
                               page: RoomServiceDestinationScreenFinal(),
                               enablePop: true)
                           .navPageToPage();
-                      _servingProvider.menuItem = "상품";
+                      _roomServiceProvider.menuItem = "상품";
                     }
                     // navPage(
                     //         context: context,
@@ -330,21 +332,21 @@ class _RoomServiceModuleButtonsFinalState
                     ? () {
                         setState(() {
                           if (i == 0) {
-                            _servingProvider.menuItem = menuItems[i];
+                            _roomServiceProvider.menuItem = menuItems[i];
                           } else if (i == 1) {
-                            _servingProvider.menuItem = menuItems[i];
+                            _roomServiceProvider.menuItem = menuItems[i];
                           } else if (i == 2) {
-                            _servingProvider.menuItem = menuItems[i];
+                            _roomServiceProvider.menuItem = menuItems[i];
                           } else {
-                            _servingProvider.menuItem = menuItems[i];
+                            _roomServiceProvider.menuItem = menuItems[i];
                           }
                         });
-                        if (_servingProvider.tray1Select == true) {
-                          _servingProvider.setItemTray1();
-                        } else if (_servingProvider.tray2Select == true) {
-                          _servingProvider.setItemTray2();
-                        } else if (_servingProvider.tray3Select == true) {
-                          _servingProvider.setItemTray3();
+                        if (_roomServiceProvider.tray1Select == true) {
+                          _roomServiceProvider.setItemTray1();
+                        } else if (_roomServiceProvider.tray2Select == true) {
+                          _roomServiceProvider.setItemTray2();
+                        } else if (_roomServiceProvider.tray3Select == true) {
+                          _roomServiceProvider.setItemTray3();
                         }
                         navPage(
                                 context: context,
@@ -367,18 +369,21 @@ class _RoomServiceModuleButtonsFinalState
                               currentNum = '${currentNum}0';
                             } else if (i == 11) {
                               setState(() {
-                                _servingProvider.tableNumber = '$currentNum';
-                                if (_servingProvider.trayCheckAll == false) {
-                                  if (_servingProvider.tray1Select == true) {
-                                    _servingProvider.tray1 = true;
-                                    _servingProvider.table1 = "$currentNum";
-                                  } else if (_servingProvider.tray2Select ==
+                                _roomServiceProvider.tableNumber =
+                                    '$currentNum';
+                                if (_roomServiceProvider.trayCheckAll ==
+                                    false) {
+                                  if (_roomServiceProvider.tray1Select ==
                                       true) {
-                                    _servingProvider.tray2 = true;
-                                    _servingProvider.table2 = "$currentNum";
+                                    _roomServiceProvider.tray1 = true;
+                                    _roomServiceProvider.table1 = "$currentNum";
+                                  } else if (_roomServiceProvider.tray2Select ==
+                                      true) {
+                                    _roomServiceProvider.tray2 = true;
+                                    _roomServiceProvider.table2 = "$currentNum";
                                   } else {
-                                    _servingProvider.tray3 = true;
-                                    _servingProvider.table3 = "$currentNum";
+                                    _roomServiceProvider.tray3 = true;
+                                    _roomServiceProvider.table3 = "$currentNum";
                                   }
                                   uploadRoomNumberNItemImg();
                                   navPage(
@@ -387,8 +392,9 @@ class _RoomServiceModuleButtonsFinalState
                                           enablePop: false)
                                       .navPageToPage();
                                 } else {
-                                  _servingProvider.setTrayAll();
-                                  _servingProvider.tableNumber = "$currentNum";
+                                  _roomServiceProvider.setTrayAll();
+                                  _roomServiceProvider.tableNumber =
+                                      "$currentNum";
                                   showCountDownPopup(context);
                                 }
                               });
@@ -407,21 +413,28 @@ class _RoomServiceModuleButtonsFinalState
                                     currentNum = '201';
                                   } else if (i == 5) {
                                     currentNum = '302';
-                                  }else if (i == 6) {
+                                  } else if (i == 6) {
                                     currentNum = '301';
                                   }
-                                  _servingProvider.tableNumber = '$currentNum';
-                                  if (_servingProvider.trayCheckAll == false) {
-                                    if (_servingProvider.tray1Select == true) {
-                                      _servingProvider.tray1 = true;
-                                      _servingProvider.table1 = "$currentNum";
-                                    } else if (_servingProvider.tray2Select ==
+                                  _roomServiceProvider.tableNumber =
+                                      '$currentNum';
+                                  if (_roomServiceProvider.trayCheckAll ==
+                                      false) {
+                                    if (_roomServiceProvider.tray1Select ==
                                         true) {
-                                      _servingProvider.tray2 = true;
-                                      _servingProvider.table2 = "$currentNum";
+                                      _roomServiceProvider.tray1 = true;
+                                      _roomServiceProvider.table1 =
+                                          "$currentNum";
+                                    } else if (_roomServiceProvider
+                                            .tray2Select ==
+                                        true) {
+                                      _roomServiceProvider.tray2 = true;
+                                      _roomServiceProvider.table2 =
+                                          "$currentNum";
                                     } else {
-                                      _servingProvider.tray3 = true;
-                                      _servingProvider.table3 = "$currentNum";
+                                      _roomServiceProvider.tray3 = true;
+                                      _roomServiceProvider.table3 =
+                                          "$currentNum";
                                     }
                                     uploadRoomNumberNItemImg();
                                     navPage(
@@ -430,8 +443,8 @@ class _RoomServiceModuleButtonsFinalState
                                             enablePop: false)
                                         .navPageToPage();
                                   } else {
-                                    _servingProvider.setTrayAll();
-                                    _servingProvider.tableNumber =
+                                    _roomServiceProvider.setTrayAll();
+                                    _roomServiceProvider.tableNumber =
                                         "$currentNum";
                                     showCountDownPopup(context);
                                   }
@@ -439,9 +452,10 @@ class _RoomServiceModuleButtonsFinalState
                               }
                             : widget.screens == 4
                                 ? () {
+                                    _roomServiceProvider.clearAllTray();
                                     navPage(
                                             context: context,
-                                            page: BellboyReturnModuleFinal(),
+                                            page: RoomServiceReturnModuleFinal(),
                                             enablePop: false)
                                         .navPageToPage();
                                   }

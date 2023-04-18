@@ -33,8 +33,6 @@ class _ShippingModuleButtonsFinalState
 
   late var homeButtonName = List<String>.empty();
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -137,13 +135,13 @@ class _ShippingModuleButtonsFinalState
       buttonRadius = 50;
     } else if (widget.screens == 2) {
       // 목적지 리스트
-      buttonPositionWidth = [75, 100, 75, 100, 75, 100, 75];
-      buttonPositionHeight = [423, 691, 691, 1020, 1020, 1345, 1345];
+      buttonPositionWidth = [79, 525, 79, 525, 79, 525, 79];
+      buttonPositionHeight = [1287, 303, 303, 550, 550, 797, 797];
 
       buttonSize = [];
 
-      buttonSize1 = [1129, 211];
-      buttonSize2 = [534, 278];
+      buttonSize1 = [847, 157];
+      buttonSize2 = [400, 214];
 
       buttonRadius = 50;
     } else if (widget.screens == 3) {
@@ -246,7 +244,7 @@ class _ShippingModuleButtonsFinalState
                 shape: RoundedRectangleBorder(
                     side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
-                        BorderRadius.circular(buttonRadius * pixelRatio)),
+                        BorderRadius.circular(buttonRadius)),
                 fixedSize: widget.screens == 2
                     ? i != 0
                         ? Size(buttonSize2[buttonWidth],
