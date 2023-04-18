@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Videos/ServiceScreenVideoFinal.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
+import 'package:video_player/video_player.dart';
 
 class ServiceScreenFinal extends StatefulWidget {
   const ServiceScreenFinal({
@@ -12,7 +14,8 @@ class ServiceScreenFinal extends StatefulWidget {
   State<ServiceScreenFinal> createState() => _ServiceScreenFinalState();
 }
 
-class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProviderStateMixin {
+class _ServiceScreenFinalState extends State<ServiceScreenFinal>
+    with TickerProviderStateMixin {
   // late NetworkModel _networkProvider;
 
   String? currentGoal;
@@ -22,7 +25,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
   final String _wallpape = "assets/screens/koriZFinalService.png";
   final String _fingerIcon = "assets/icons/pushIcon.png";
 
-  double pixelRatio = 0.75;
+  final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.jpg";
+  final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.jpg";
+  final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.jpg";
 
   late var shippingPose = List<String>.empty();
 
@@ -36,12 +41,6 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
     curve: Curves.easeOut,
   );
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _textAniCon.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +53,8 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
 
     return WillPopScope(
       onWillPop: () async {
-        navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+        navPage(context: context, page: MainScreenFinal(), enablePop: false)
+            .navPageToPage();
         return Future.value(false);
       },
       child: Scaffold(
@@ -86,16 +86,22 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
                   Positioned(
                     left: 20,
                     top: 18,
-                    child: FilledButton(onPressed: () {
-                      navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
-                    }, child: null, style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
-                        shape: RoundedRectangleBorder(
-                          // side: BorderSide(color: Colors.white, width: 1),
-                            borderRadius: BorderRadius.circular(0)
-                        ),
-                        backgroundColor: Colors.transparent
-                    ),),
+                    child: FilledButton(
+                      onPressed: () {
+                        navPage(
+                                context: context,
+                                page: MainScreenFinal(),
+                                enablePop: false)
+                            .navPageToPage();
+                      },
+                      child: null,
+                      style: FilledButton.styleFrom(
+                          fixedSize: Size(80, 80),
+                          shape: RoundedRectangleBorder(
+                              // side: BorderSide(color: Colors.white, width: 1),
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
+                    ),
                   ),
                   Positioned(
                     left: 130,
@@ -114,16 +120,22 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
                   Positioned(
                     left: 120,
                     top: 18,
-                    child: FilledButton(onPressed: () {
-                      navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
-                    }, child: null, style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
-                        shape: RoundedRectangleBorder(
-                          // side: BorderSide(color: Colors.white, width: 1),
-                            borderRadius: BorderRadius.circular(0)
-                        ),
-                        backgroundColor: Colors.transparent
-                    ),),
+                    child: FilledButton(
+                      onPressed: () {
+                        navPage(
+                                context: context,
+                                page: MainScreenFinal(),
+                                enablePop: false)
+                            .navPageToPage();
+                      },
+                      child: null,
+                      style: FilledButton.styleFrom(
+                          fixedSize: Size(80, 80),
+                          shape: RoundedRectangleBorder(
+                              // side: BorderSide(color: Colors.white, width: 1),
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
+                    ),
                   ),
                   Positioned(
                     right: 50,
@@ -153,44 +165,49 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
-        body: Stack(
-          children: [
-            Container(
-              constraints: BoxConstraints.expand(),
-              decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage(_wallpape))),
-              child: Container(),
-            ),
-            MainScreenButtonsFinal(screens: 1),
-            Positioned(
-                left: 670 * pixelRatio,
-                top: 1829 * pixelRatio,
-                child: FadeTransition(
-                  opacity: _animation,
-                  child: SizedBox(
-                    child: ImageIcon(
-                      AssetImage(_fingerIcon),
-                      color: Color(0xffB7B7B7),
-                      size: 100,
-                    ),
-                  ),
-                )),
-            Container(
-              margin: EdgeInsets.only(top: 1970 * pixelRatio),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '서비스를 선택해주세요.',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        color: Color(0xfff0f0f0)),
-                  )
-                ],
+        body: Container(
+          margin: EdgeInsets.only(top: 110),
+          height: 1810,
+          decoration: BoxDecoration(
+              color: Colors.transparent,),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 15,
+                child: Container(
+                  height: 580,
+                  width: 1080,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage(_shipping)),
+                      color: Colors.transparent,),
+                  // child: ServiceScreenVideoFinal(videoName: _shipping)
+                ),
               ),
-            )
-          ],
+              Positioned(
+                top: 610,
+                width: 1080,
+                child: Container(
+                  height: 580,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage(_serving)),
+                      color: Colors.transparent,),
+                  // child:ServiceScreenVideoFinal(videoName: _serving)
+                ),
+              ),
+              Positioned(
+                top: 1205,
+                width: 1080,
+                child: Container(
+                    height: 580,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage(_hotel)),
+                        color: Colors.transparent,),
+                  // child:ServiceScreenVideoFinal(videoName: _hotel)
+                ),
+              ),
+              MainScreenButtonsFinal(screens: 1),
+            ],
+          ),
         ),
       ),
     );

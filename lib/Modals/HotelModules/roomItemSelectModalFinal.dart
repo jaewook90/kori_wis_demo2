@@ -29,10 +29,6 @@ class _SelectRoomItemModalFinalState extends State<SelectRoomItemModalFinal> {
 
   String itemSelectBG = 'assets/screens/Hotel/RoomService/koriZFinalRoomItemSelect.png';
 
-  String downArrowIcon1 = 'assets/icons/decoration/DownArrow1.png';
-  String downArrowIcon2 = 'assets/icons/decoration/DownArrow2.png';
-  String downArrowIcon3 = 'assets/icons/decoration/DownArrow3.png';
-
   late List<String> menuImgItems;
 
   // 배경 화면

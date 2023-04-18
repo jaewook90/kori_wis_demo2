@@ -87,10 +87,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     super.initState();
 
     backgroundImage = "assets/screens/Serving/koriZFinalServing.png";
-    resetIcon = "assets/icons/trayReset.png";
-    downArrowIcon1 = 'assets/icons/decoration/DownArrow1.png';
-    downArrowIcon2 = 'assets/icons/decoration/DownArrow2.png';
-    downArrowIcon3 = 'assets/icons/decoration/DownArrow3.png';
 
     table1 = "";
     table2 = "";
@@ -269,376 +265,385 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
-        body: Container(
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-          child: Stack(
-            children: [
-              //기능적 부분
-              Stack(children: [
-                ServingModuleButtonsFinal(
-                  screens: 0,
-                ),
-                // 디버그 버튼
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // 디버그 버튼 트레이 활성화용
-                    Offstage(
-                      offstage: _debugTray,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+        body: WillPopScope(
+          onWillPop: (){
+            navPage(context: context, page: ServiceScreenFinal(), enablePop: false).navPageToPage();
+            return Future.value(false);
+          },
+          child: Container(
+            constraints: BoxConstraints.expand(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+            child: Stack(
+              children: [
+                //기능적 부분
+                Stack(children: [
+                  ServingModuleButtonsFinal(
+                    screens: 0,
+                  ),
+                  // 디버그 버튼
+                  Opacity(
+                    opacity: 0.02,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // 디버그 버튼 트레이 활성화용
+                        Offstage(
+                          offstage: _debugTray,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (receiptModeOn == true) {
+                                        _servingProvider.receiptModeOn = false;
+                                      } else {
+                                        _servingProvider.receiptModeOn = true;
+                                      }
+                                    });
+                                  },
+                                  child: _servingProvider.receiptModeOn == true
+                                      ? Text(
+                                          'Receipt Mode',
+                                          style: buttonFont,
+                                        )
+                                      : Text('Normal Mode', style: buttonFont),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.25,
+                                          textButtonHeight * 0.5),
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10)))),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _servingProvider.stickTray1();
+                                    });
+                                  },
+                                  child: Text('Tray1', style: buttonFont),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.2,
+                                          textButtonHeight * 0.5),
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10)))),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _servingProvider.stickTray2();
+                                    });
+                                  },
+                                  child: Text('Tray2', style: buttonFont),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.2,
+                                          textButtonHeight * 0.5),
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10)))),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _servingProvider.stickTray3();
+                                    });
+                                  },
+                                  child: Text('Tray3', style: buttonFont),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.2,
+                                          textButtonHeight * 0.5),
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10)))),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // 초기화 버튼
+                  Positioned(
+                      right: 188,
+                      top: 812,
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _servingProvider.clearTray1();
+                          });
+                        },
+                        child: null,
+                        style: FilledButton.styleFrom(
+                            fixedSize: Size(64, 64),
+                            shape: RoundedRectangleBorder(
+                                // side: BorderSide(color: Colors.white, width: 1),
+                                borderRadius: BorderRadius.circular(0)),
+                            backgroundColor: Colors.transparent),
+                      )),
+                  Positioned(
+                      right: 188,
+                      top: 1030,
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _servingProvider.clearTray2();
+                          });
+                        },
+                        child: null,
+                        style: FilledButton.styleFrom(
+                            fixedSize: Size(64, 64),
+                            shape: RoundedRectangleBorder(
+                                // side: BorderSide(color: Colors.white, width: 1),
+                                borderRadius: BorderRadius.circular(0)),
+                            backgroundColor: Colors.transparent),
+                      )),
+                  Positioned(
+                      right: 188,
+                      top: 1296,
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _servingProvider.clearTray3();
+                          });
+                        },
+                        child: null,
+                        style: FilledButton.styleFrom(
+                            fixedSize: Size(64, 64),
+                            shape: RoundedRectangleBorder(
+                                // side: BorderSide(color: Colors.white, width: 1),
+                                borderRadius: BorderRadius.circular(0)),
+                            backgroundColor: Colors.transparent),
+                      )),
+                  //트레이1
+                  Positioned(
+                    top: 757,
+                    left: 394,
+                    child: Offstage(
+                      offstage: offStageTray1!,
+                      child: Stack(
                         children: [
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (receiptModeOn == true) {
-                                    _servingProvider.receiptModeOn = false;
-                                  } else {
-                                    _servingProvider.receiptModeOn = true;
-                                  }
-                                });
-                              },
-                              child: _servingProvider.receiptModeOn == true
-                                  ? Text(
-                                      'Receipt Mode',
+                          Positioned(
+                            left: 32,
+                            top: 120,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              width: 50,
+                              height: 30,
+                              child: Offstage(
+                                  offstage: servedItem1!,
+                                  child: Center(
+                                    child: Text(
+                                      // '$table1 번',
+                                      '${table1} 번',
                                       style: buttonFont,
-                                    )
-                                  : Text('Normal Mode', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.25,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _servingProvider.stickTray1();
-                                });
-                              },
-                              child: Text('Tray1', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.2,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _servingProvider.stickTray2();
-                                });
-                              },
-                              child: Text('Tray2', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.2,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
-                          TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  _servingProvider.stickTray3();
-                                });
-                              },
-                              child: Text('Tray3', style: buttonFont),
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize: Size(textButtonWidth * 0.2,
-                                      textButtonHeight * 0.5),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Color(0xFFB7B7B7),
-                                          style: BorderStyle.solid,
-                                          width: 10)))),
+                                    ),
+                                  )),
+                            ),
+                          ),
+                          Positioned(
+                            left: 145.5,
+                            top: 25.9,
+                            child: Offstage(
+                              offstage: servedItem1!,
+                              child: Container(
+                                  width: 146,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          _servingProvider.itemImageList![0]),
+                                    ),
+                                    borderRadius: BorderRadius.circular(0),
+                                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            width: 388.5,
+                            height: 171.8,
+                            child: TextButton(
+                                onPressed: () {
+                                  _servingProvider.tray1Select = true;
+                                  _servingProvider.tray2Select = false;
+                                  _servingProvider.tray3Select = false;
+                                  _servingProvider.trayCheckAll = false;
+                                  showTraySetPopup(context);
+                                },
+                                child: Container(),
+                                style: TextButton.styleFrom(
+                                    foregroundColor: Colors.tealAccent,
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize:
+                                        Size(textButtonWidth, textButtonHeight),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.green, width: 1),
+                                        borderRadius: BorderRadius.circular(20)))),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-                // 초기화 버튼
-                Positioned(
-                    right: 188,
-                    top: 812,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          _servingProvider.clearTray1();
-                        });
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: Size(64, 64),
-                          shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    )),
-                Positioned(
-                    right: 188,
-                    top: 1030,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          _servingProvider.clearTray2();
-                        });
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: Size(64, 64),
-                          shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    )),
-                Positioned(
-                    right: 188,
-                    top: 1296,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          _servingProvider.clearTray3();
-                        });
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: Size(64, 64),
-                          shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    )),
-                //트레이1
-                Positioned(
-                  top: 757,
-                  left: 394,
-                  child: Offstage(
-                    offstage: offStageTray1!,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 32,
-                          top: 120,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            width: 50,
-                            height: 30,
-                            child: Offstage(
-                                offstage: servedItem1!,
-                                child: Center(
-                                  child: Text(
-                                    // '$table1 번',
-                                    '${table1} 번',
-                                    style: buttonFont,
-                                  ),
-                                )),
-                          ),
-                        ),
-                        Positioned(
-                          left: 145.5,
-                          top: 25.9,
-                          child: Offstage(
-                            offstage: servedItem1!,
+                  ),
+                  //트레이2
+                  Positioned(
+                    top: 975.8,
+                    left: 394,
+                    child: Offstage(
+                      offstage: offStageTray2!,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 32,
+                            top: 120,
                             child: Container(
-                                width: 146,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        _servingProvider.itemImageList![0]),
-                                  ),
-                                  borderRadius: BorderRadius.circular(0),
-                                  // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                                )),
+                              width: 50,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(0),
+                                // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                              ),
+                              child: Offstage(
+                                  offstage: servedItem2!,
+                                  child: Center(
+                                    child: Text(
+                                      '$table2 번',
+                                      style: buttonFont,
+                                    ),
+                                  )),
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 388.5,
-                          height: 171.8,
-                          child: TextButton(
-                              onPressed: () {
-                                _servingProvider.tray1Select = true;
-                                _servingProvider.tray2Select = false;
-                                _servingProvider.tray3Select = false;
-                                _servingProvider.trayCheckAll = false;
-                                showTraySetPopup(context);
-                              },
-                              child: Container(),
-                              style: TextButton.styleFrom(
-                                  foregroundColor: Colors.tealAccent,
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize:
-                                      Size(textButtonWidth, textButtonHeight),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.green, width: 1),
-                                      borderRadius: BorderRadius.circular(20)))),
-                        ),
-                      ],
+                          Positioned(
+                            left: 145.5,
+                            top: 25.9,
+                            child: Offstage(
+                              offstage: servedItem2!,
+                              child: Container(
+                                  width: 146,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            _servingProvider.itemImageList![1])),
+                                    borderRadius: BorderRadius.circular(0),
+                                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            width: 388.5,
+                            height: 171.8,
+                            child: TextButton(
+                                onPressed: () {
+                                  _servingProvider.tray1Select = false;
+                                  _servingProvider.tray2Select = true;
+                                  _servingProvider.tray3Select = false;
+                                  _servingProvider.trayCheckAll = false;
+                                  showTraySetPopup(context);
+                                },
+                                child: Container(),
+                                style: TextButton.styleFrom(
+                                    foregroundColor: Colors.tealAccent,
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize:
+                                        Size(textButtonWidth, textButtonHeight),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.green, width: 1),
+                                        borderRadius: BorderRadius.circular(20)))),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                //트레이2
-                Positioned(
-                  top: 975.8,
-                  left: 394,
-                  child: Offstage(
-                    offstage: offStageTray2!,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 32,
-                          top: 120,
-                          child: Container(
-                            width: 50,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                            ),
-                            child: Offstage(
-                                offstage: servedItem2!,
-                                child: Center(
-                                  child: Text(
-                                    '$table2 번',
-                                    style: buttonFont,
-                                  ),
-                                )),
-                          ),
-                        ),
-                        Positioned(
-                          left: 145.5,
-                          top: 25.9,
-                          child: Offstage(
-                            offstage: servedItem2!,
+                  //트레이3
+                  Positioned(
+                    top: 1217.6,
+                    left: 394,
+                    child: Offstage(
+                      offstage: offStageTray3!,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 32,
+                            top: 145,
                             child: Container(
-                                width: 146,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          _servingProvider.itemImageList![1])),
-                                  borderRadius: BorderRadius.circular(0),
-                                  // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                                )),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(0),
+                                // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                              ),
+                              width: 50,
+                              height: 30,
+                              child: Offstage(
+                                  offstage: servedItem3!,
+                                  child: Center(
+                                    child: Text(
+                                      '$table3 번',
+                                      style: buttonFont,
+                                    ),
+                                  )),
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: 388.5,
-                          height: 171.8,
-                          child: TextButton(
-                              onPressed: () {
-                                _servingProvider.tray1Select = false;
-                                _servingProvider.tray2Select = true;
-                                _servingProvider.tray3Select = false;
-                                _servingProvider.trayCheckAll = false;
-                                showTraySetPopup(context);
-                              },
-                              child: Container(),
-                              style: TextButton.styleFrom(
-                                  foregroundColor: Colors.tealAccent,
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize:
-                                      Size(textButtonWidth, textButtonHeight),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.green, width: 1),
-                                      borderRadius: BorderRadius.circular(20)))),
-                        ),
-                      ],
+                          Positioned(
+                            left: 145.5,
+                            top: 51,
+                            child: Offstage(
+                              offstage: servedItem3!,
+                              child: Container(
+                                  width: 146,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            _servingProvider.itemImageList![2])),
+                                    borderRadius: BorderRadius.circular(0),
+                                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                                  )),
+                            ),
+                          ),
+                          Container(
+                            width: 518 * 0.75,
+                            height: 293 * 0.75,
+                            child: TextButton(
+                                onPressed: () {
+                                  _servingProvider.tray1Select = false;
+                                  _servingProvider.tray2Select = false;
+                                  _servingProvider.tray3Select = true;
+                                  _servingProvider.trayCheckAll = false;
+                                  showTraySetPopup(context);
+                                },
+                                child: Container(),
+                                style: TextButton.styleFrom(
+                                    foregroundColor: Colors.tealAccent,
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize:
+                                        Size(textButtonWidth, textButtonHeight),
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.green, width: 1),
+                                        borderRadius: BorderRadius.circular(20)))),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                //트레이3
-                Positioned(
-                  top: 1217.6,
-                  left: 394,
-                  child: Offstage(
-                    offstage: offStageTray3!,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 32,
-                          top: 145,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(0),
-                              // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                            ),
-                            width: 50,
-                            height: 30,
-                            child: Offstage(
-                                offstage: servedItem3!,
-                                child: Center(
-                                  child: Text(
-                                    '$table3 번',
-                                    style: buttonFont,
-                                  ),
-                                )),
-                          ),
-                        ),
-                        Positioned(
-                          left: 145.5,
-                          top: 51,
-                          child: Offstage(
-                            offstage: servedItem3!,
-                            child: Container(
-                                width: 146,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          _servingProvider.itemImageList![2])),
-                                  borderRadius: BorderRadius.circular(0),
-                                  // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                                )),
-                          ),
-                        ),
-                        Container(
-                          width: 518 * 0.75,
-                          height: 293 * 0.75,
-                          child: TextButton(
-                              onPressed: () {
-                                _servingProvider.tray1Select = false;
-                                _servingProvider.tray2Select = false;
-                                _servingProvider.tray3Select = true;
-                                _servingProvider.trayCheckAll = false;
-                                showTraySetPopup(context);
-                              },
-                              child: Container(),
-                              style: TextButton.styleFrom(
-                                  foregroundColor: Colors.tealAccent,
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize:
-                                      Size(textButtonWidth, textButtonHeight),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.green, width: 1),
-                                      borderRadius: BorderRadius.circular(20)))),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-            ],
+                ]),
+              ],
+            ),
+            // ),
           ),
-          // ),
         ),
       ),
     );

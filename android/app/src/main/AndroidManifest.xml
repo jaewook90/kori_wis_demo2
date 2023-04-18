@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kori_wis_demo">
     <application
+        android:usesCleartextTraffic="true"
         android:label="kori_wis_demo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

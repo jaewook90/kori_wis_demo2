@@ -72,12 +72,12 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
       buttonRadius = 30;
     } else if (widget.screens == 1) {
       // 서비스 선택화면
-      buttonPositionWidth = [90, 90, 90];
-      buttonPositionHeight = [300, 542, 784];
+      buttonPositionWidth = [0, 0, 0];
+      buttonPositionHeight = [15, 610, 1205];
 
-      buttonSize = [900, 190];
+      buttonSize = [1080, 580];
 
-      buttonRadius = 20;
+      buttonRadius = 0;
     }
 
     buttonNumbers = buttonPositionHeight.length;

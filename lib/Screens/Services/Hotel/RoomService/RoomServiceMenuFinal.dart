@@ -91,10 +91,6 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
     super.initState();
 
     backgroundImage = "assets/screens/Hotel/RoomService/koriZFinalRoomBegin.png";
-    resetIcon = "assets/icons/trayReset.png";
-    downArrowIcon1 = 'assets/icons/decoration/DownArrow1.png';
-    downArrowIcon2 = 'assets/icons/decoration/DownArrow2.png';
-    downArrowIcon3 = 'assets/icons/decoration/DownArrow3.png';
 
     table1 = "";
     table2 = "";

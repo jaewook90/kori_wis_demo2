@@ -56,7 +56,7 @@ class _ShippingModuleButtonsFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "";
+    currentNum = "102";
   }
 
   void showCountDownStarting(context) {
@@ -187,7 +187,7 @@ class _ShippingModuleButtonsFinalState
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
-          : Positioned(
+          : widget.screens == 1 ? Positioned(
               top: 290 * 0.75,
               left: 551 * 0.75,
               width: 270,
@@ -200,7 +200,7 @@ class _ShippingModuleButtonsFinalState
                     fontWeight: FontWeight.bold,
                     color: Color(0xffffffff)),
               ),
-            ),
+            ) : Container(),
       widget.screens == 1
           ? Positioned(
               left: 1213 * 0.75,

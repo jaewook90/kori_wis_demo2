@@ -3,6 +3,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ShippingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -103,15 +104,38 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
-        body: Container(
-            constraints: BoxConstraints.expand(),
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-            child: Stack(
-                children: [
-                  ShippingModuleButtonsFinal(screens: 3,)
-                ])));
+        body: WillPopScope(
+          onWillPop: (){
+            return Future.value(false);
+          },
+          child: Container(
+              constraints: BoxConstraints.expand(),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+              child: Stack(
+                  children: [
+                    Positioned(
+                      top: 450,
+                      left: 0,
+                      child: GestureDetector(
+                          onTap: () {
+                            navPage(
+                                context: context,
+                                page: ShippingMenuFinal(),
+                                enablePop: false)
+                                .navPageToPage();
+                          },
+                          child: Container(
+                              height: 1200,
+                              width: 1080,
+                              decoration: BoxDecoration(
+                                  border: Border.fromBorderSide(
+                                      BorderSide(color: Colors.transparent, width: 1))))),
+                    ),
+                    ShippingModuleButtonsFinal(screens: 3,)
+                  ])),
+        ));
   }
 }
 
