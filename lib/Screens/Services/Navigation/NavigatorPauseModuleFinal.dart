@@ -111,118 +111,123 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        automaticallyImplyLeading: false,
-        // leading:
-        actions: [
-          Container(
-            width: screenWidth,
-            height: 108,
-            child: Stack(
-              children: [
-                  Positioned(
-                    left: 50,
-                    top: 25,
-                    child: Container(
-                      height: 60,
-                      width: 120,
-                      child: TextButton(
-                        onPressed: () {
-                          if (_networkProvider.serviceState == 0) {
-                            navPage(
-                                context: context,
-                                page: ShippingDoneFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                            // showShippingDone(context);
-                          } else if (_networkProvider.serviceState == 1) {
-                            navPage(
-                                context: context,
-                                page: ServingProgressFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                          } else if (_networkProvider.serviceState == 2) {
-                            navPage(
-                                context: context,
-                                page: BellboyProgressFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                          }else if (_networkProvider.serviceState == 3) {
-                            navPage(
-                                context: context,
-                                page: RoomServiceProgressFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                          }
-                        },
-                        child: Text(
-                          '도착',
-                          style: TextStyle(
-                              fontFamily: 'kok',
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xffffffff)),
-                        ),
-                        style: TextButton.styleFrom(
-                          fixedSize: Size(100, 0),
-                          backgroundColor: Colors.transparent,
-                          // shape: RoundedRectangleBorder(
-                          //     side: BorderSide(width: 1, color: Colors.white)
-                          // )
+    return WillPopScope(
+      onWillPop: (){
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(''),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          // leading:
+          actions: [
+            Container(
+              width: screenWidth,
+              height: 108,
+              child: Stack(
+                children: [
+                    Positioned(
+                      left: 50,
+                      top: 25,
+                      child: Container(
+                        height: 60,
+                        width: 120,
+                        child: TextButton(
+                          onPressed: () {
+                            if (_networkProvider.serviceState == 0) {
+                              navPage(
+                                  context: context,
+                                  page: ShippingDoneFinal(),
+                                  enablePop: false)
+                                  .navPageToPage();
+                              // showShippingDone(context);
+                            } else if (_networkProvider.serviceState == 1) {
+                              navPage(
+                                  context: context,
+                                  page: ServingProgressFinal(),
+                                  enablePop: false)
+                                  .navPageToPage();
+                            } else if (_networkProvider.serviceState == 2) {
+                              navPage(
+                                  context: context,
+                                  page: BellboyProgressFinal(),
+                                  enablePop: false)
+                                  .navPageToPage();
+                            }else if (_networkProvider.serviceState == 3) {
+                              navPage(
+                                  context: context,
+                                  page: RoomServiceProgressFinal(),
+                                  enablePop: false)
+                                  .navPageToPage();
+                            }
+                          },
+                          child: Text(
+                            '도착',
+                            style: TextStyle(
+                                fontFamily: 'kok',
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xffffffff)),
+                          ),
+                          style: TextButton.styleFrom(
+                            fixedSize: Size(100, 0),
+                            backgroundColor: Colors.transparent,
+                            // shape: RoundedRectangleBorder(
+                            //     side: BorderSide(width: 1, color: Colors.white)
+                            // )
+                          ),
                         ),
                       ),
                     ),
+                  Positioned(
+                    right: 50,
+                    top: 25,
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Battery.png',
+                              ),
+                              fit: BoxFit.fill)),
+                    ),
                   ),
-                Positioned(
-                  right: 50,
-                  top: 25,
-                  child: Container(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Battery.png',
-                            ),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    "시간",
-                    style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                  ),
-                )
-              ],
-            ),
-          )
-          // SizedBox(width: screenWidth * 0.03)
-        ],
-        toolbarHeight: 110,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(children: [
-        Container(
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-          child: Container(
-            child: Stack(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: screenHeight * 0.04),
-                    child: null),
-                 NavModuleButtonsFinal(screens: 1),
-              ],
+                  Center(
+                    child: Text(
+                      "시간",
+                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
+                    ),
+                  )
+                ],
+              ),
+            )
+            // SizedBox(width: screenWidth * 0.03)
+          ],
+          toolbarHeight: 110,
+        ),
+        extendBodyBehindAppBar: true,
+        body: Stack(children: [
+          Container(
+            constraints: BoxConstraints.expand(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+            child: Container(
+              child: Stack(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: screenHeight * 0.04),
+                      child: null),
+                   NavModuleButtonsFinal(screens: 1),
+                ],
+              ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

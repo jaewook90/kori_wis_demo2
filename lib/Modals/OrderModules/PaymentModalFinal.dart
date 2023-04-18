@@ -47,10 +47,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                     color: Colors.transparent,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(width: 1, color: Colors.white),
-                              borderRadius: BorderRadius.circular(0))),
+                          backgroundColor: Colors.transparent),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -66,10 +63,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                     color: Colors.transparent,
                     child: FilledButton(
                       style: FilledButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(width: 1, color: Colors.white),
-                              borderRadius: BorderRadius.circular(0))),
+                          backgroundColor: Colors.transparent),
                       onPressed: () {
                         if(_networkProvider.serviceState == 2){
                           Navigator.pop(context);

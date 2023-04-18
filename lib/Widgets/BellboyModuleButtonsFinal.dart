@@ -43,8 +43,6 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
 
   late var homeButtonName = List<String>.empty();
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -102,7 +100,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
 
       buttonSize = [870, 160];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 1) {
       // 키패드 화면
       buttonPositionWidth = [
@@ -126,28 +124,28 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
         810,
         810,
         810,
-        1100,
-        1100,
-        1100,
+        1101,
+        1101,
+        1101,
         1394,
         1394,
         1394
       ];
 
-      buttonSize = [261, 258];
+      buttonSize = [263, 260];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 2) {
       // 목적지 리스트
-      buttonPositionWidth = [79, 525, 79, 525, 79, 525, 79];
-      buttonPositionHeight = [1287, 303, 303, 550, 550, 797, 797];
+      buttonPositionWidth = [77, 525, 79, 525, 79, 525, 79];
+      buttonPositionHeight = [1286, 303, 303, 550, 550, 797, 797];
 
       buttonSize = [];
 
-      buttonSize1 = [847, 157];
-      buttonSize2 = [400, 214];
+      buttonSize1 = [847, 158];
+      buttonSize2 = [400, 210];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 3) {
       // 도착 화면
       // buttonPositionWidth = [107];
@@ -172,8 +170,8 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
       (currentNum == null && widget.screens == 1)
           ? Container()
           : Positioned(
-              top: 290 * 0.75,
-              left: 551 * 0.75,
+              top: 220,
+              left: 400,
               width: 270,
               height: 180,
               child: Text(
@@ -187,8 +185,8 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
             ),
       widget.screens == 1
           ? Positioned(
-              left: 1213 * 0.75,
-              top: 451 * 0.75,
+              left: 909,
+              top: 338,
               child: Container(
                 width: 60,
                 height: 60,
@@ -217,9 +215,9 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
-                        BorderRadius.circular(buttonRadius * pixelRatio)),
+                        BorderRadius.circular(buttonRadius)),
                 fixedSize:
                     // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
                     widget.screens == 2

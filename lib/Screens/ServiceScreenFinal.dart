@@ -54,7 +54,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal> with TickerProv
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
         return Future.value(false);
       },
       child: Scaffold(

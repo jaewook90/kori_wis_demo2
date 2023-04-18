@@ -80,7 +80,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.tealAccent),
+                    // side: BorderSide(width: 1, color: Colors.tealAccent),
                     borderRadius: BorderRadius.circular(widget.screens == 1 ? i == 0 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
                 fixedSize: widget.screens == 1
                     ? i == 0

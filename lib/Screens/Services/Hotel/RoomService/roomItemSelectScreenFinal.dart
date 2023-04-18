@@ -14,7 +14,8 @@ class SelectRoomItemScreenFinal extends StatefulWidget {
   const SelectRoomItemScreenFinal({Key? key}) : super(key: key);
 
   @override
-  State<SelectRoomItemScreenFinal> createState() => _SelectRoomItemScreenFinalState();
+  State<SelectRoomItemScreenFinal> createState() =>
+      _SelectRoomItemScreenFinalState();
 }
 
 class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
@@ -29,7 +30,8 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
 
   List<String> menuItems = ['수건', '헤어', '가운', '스킨'];
 
-  String itemSelectBG = 'assets/screens/Hotel/RoomService/koriZFinalRoomItemSelect.png';
+  String itemSelectBG =
+      'assets/screens/Hotel/RoomService/koriZFinalRoomItemSelect.png';
 
   String downArrowIcon1 = 'assets/icons/decoration/DownArrow1.png';
   String downArrowIcon2 = 'assets/icons/decoration/DownArrow2.png';
@@ -131,16 +133,18 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                 Positioned(
                   left: 20,
                   top: 18,
-                  child: FilledButton(onPressed: () {
-                    navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
-                  }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: Size(80, 80),
-                      shape: RoundedRectangleBorder(
-                        // side: BorderSide(color: Colors.white, width: 1),
-                          borderRadius: BorderRadius.circular(0)
-                      ),
-                      backgroundColor: Colors.transparent
-                  ),),
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: Size(80, 80),
+                        shape: RoundedRectangleBorder(
+                            // side: BorderSide(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  ),
                 ),
                 Positioned(
                   left: 130,
@@ -159,16 +163,22 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                 Positioned(
                   left: 120,
                   top: 18,
-                  child: FilledButton(onPressed: () {
-                    navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
-                  }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: Size(80, 80),
-                      shape: RoundedRectangleBorder(
-                        // side: BorderSide(color: Colors.white, width: 1),
-                          borderRadius: BorderRadius.circular(0)
-                      ),
-                      backgroundColor: Colors.transparent
-                  ),),
+                  child: FilledButton(
+                    onPressed: () {
+                      navPage(
+                              context: context,
+                              page: MainScreenFinal(),
+                              enablePop: false)
+                          .navPageToPage();
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: Size(80, 80),
+                        shape: RoundedRectangleBorder(
+                            // side: BorderSide(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  ),
                 ),
                 Positioned(
                   right: 50,
@@ -199,49 +209,47 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        decoration: BoxDecoration(
-          border: Border.fromBorderSide(BorderSide(color: Colors.white))
-        ),
-        child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(BorderSide(color: Colors.white)),
-                      image: DecorationImage(
-                          image: AssetImage(itemSelectBG))),
-                ),
-                Positioned(
-                    left: 925.3,
-                    top: 159.8,
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      color: Colors.transparent,
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(width: 1, color: Colors.white),
-                                borderRadius: BorderRadius.circular(0))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _servingProvider.item1 = "";
-                          _servingProvider.item2 = "";
-                          _servingProvider.item3 = "";
+          decoration: BoxDecoration(
+              // border: Border.fromBorderSide(BorderSide(color: Colors.white))
+              ),
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
+                    image: DecorationImage(image: AssetImage(itemSelectBG))),
+              ),
+              Positioned(
+                  left: 925.3,
+                  top: 159.8,
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.transparent,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              // side: BorderSide(width: 1, color: Colors.white),
+                              borderRadius: BorderRadius.circular(0))),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _servingProvider.item1 = "";
+                        _servingProvider.item2 = "";
+                        _servingProvider.item3 = "";
 
-                          print(_servingProvider.item1);
-                          print(_servingProvider.item2);
-                          print(_servingProvider.item3);
-                        },
-                        child: null,
-                      ),
-                    )),
-                RoomServiceModuleButtonsFinal(
-                  screens: 1,
-                ),
-              ],
-            )
-      ),
+                        print(_servingProvider.item1);
+                        print(_servingProvider.item2);
+                        print(_servingProvider.item3);
+                      },
+                      child: null,
+                    ),
+                  )),
+              RoomServiceModuleButtonsFinal(
+                screens: 1,
+              ),
+            ],
+          )),
     );
   }
 }

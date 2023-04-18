@@ -29,8 +29,6 @@ class _TrayStatusModalFinalState extends State<TrayStatusModalFinal> {
 
     return Container(
       padding: EdgeInsets.only(top: 100),
-      decoration: BoxDecoration(
-        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
       child: Dialog(
         alignment: Alignment.topCenter,
         backgroundColor: Colors.transparent,
@@ -48,8 +46,8 @@ class _TrayStatusModalFinalState extends State<TrayStatusModalFinal> {
               ),
             ),
             Positioned(
-                left: 1140,
-                top: 195,
+                left: 875,
+                top: 29,
                 child: Container(
                   width: 48,
                   height: 48,

@@ -39,15 +39,9 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
+      padding: EdgeInsets.only(top: 100),
       child: Dialog(
-        backgroundColor: Color(0xff000000),
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(0),
-            borderSide: BorderSide(
-              color: Color(0xFFB7B7B7),
-              style: BorderStyle.solid,
-              width: 1,
-            )),
+        backgroundColor: Colors.transparent,
         alignment: Alignment.topCenter,
         child: Container(
           width: screenWidth,
@@ -80,15 +74,6 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
                       child: null,
                     ),
                   )),
-              Center(
-                child: Text(
-                  '배송지 목록 스크린',
-                  style: TextStyle(
-                      fontSize: 80,
-                      color: Color.fromRGBO(200, 80, 0, 200),
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
               ShippingModuleButtonsFinal(screens: 2,)
             ],
           ),
