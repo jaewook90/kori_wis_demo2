@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
+import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Widgets/OrderModuleButtonsFinal.dart';
+import 'package:provider/provider.dart';
 
 class CheckOutScreenFinal extends StatefulWidget {
   const CheckOutScreenFinal({Key? key}) : super(key: key);
@@ -9,27 +12,31 @@ class CheckOutScreenFinal extends StatefulWidget {
 }
 
 class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
-
+  late OrderModel _orderProvider;
   String shoppingCartImg = 'assets/screens/Serving/koriZFinalShoppingCart.png';
+
+  void showOrderPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return ItemOrderModalFinal();
+        });
+  }
 
 
   @override
   Widget build(BuildContext context) {
+    _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     return Container(
       padding: EdgeInsets.only(top: 100),
       decoration: BoxDecoration(
-        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
+        color: Colors.transparent,
+        ),
       child: Dialog(
         alignment: Alignment.topCenter,
         backgroundColor: Colors.transparent,
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(0),
-            borderSide: BorderSide(
-              color: Color(0xFFB7B7B7),
-              style: BorderStyle.solid,
-              width: 1,
-            )),
         child: Container(
           height: 1401,
           width: 998,
@@ -37,6 +44,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
             Container(
               constraints: BoxConstraints.expand(),
               decoration: BoxDecoration(
+                  color: Colors.transparent,
                   image: DecorationImage(image: AssetImage(shoppingCartImg))),
               child: Container(),
             ),
@@ -50,12 +58,16 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                   child: FilledButton(
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 1, color: Colors.white),
-                            borderRadius: BorderRadius.circular(0))
                     ),
                     onPressed: () {
+                      // setState(() {
+                      //   _orderProvider.SelectedQT = 0;
+                      // });
+                      print("aaaaaaaaaaaaaaaaaaaaaaaaa");
+                      print(_orderProvider.SelectedQT);
                       Navigator.pop(context);
+                      // Navigator.pop(context);
+                      // showOrderPopup(context);
                     },
                     child: null,
                   ),
@@ -70,9 +82,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                   child: FilledButton(
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 1, color: Colors.white),
-                            borderRadius: BorderRadius.circular(0))
                     ),
                     onPressed: () {
                       Navigator.pop(context);

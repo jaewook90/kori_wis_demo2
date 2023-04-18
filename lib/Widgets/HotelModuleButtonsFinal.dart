@@ -42,8 +42,6 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
   late var homeButtonName = List<String>.empty();
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -52,6 +50,9 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
   late List<double> buttonSize1;
   late List<double> buttonSize2;
+
+  late double buttonRadius1;
+  late double buttonRadius2;
 
   late int buttonNumbers = 0;
 
@@ -220,11 +221,11 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
     if (widget.screens == 0) {
       // 택배 메인 화면
       buttonPositionWidth = [91, 91, 91];
-      buttonPositionHeight = [283, 683, 1083];
+      buttonPositionHeight = [300, 540, 783];
 
-      buttonSize = [900, 300];
+      buttonSize = [900, 193];
 
-      buttonRadius = 50;
+      buttonRadius = 25;
     } else if (widget.screens == 1) {
       // 키패드 화면
       buttonPositionWidth = [
@@ -242,7 +243,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
       buttonSize = [828, 275];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 2) {
       // 목적지 리스트
       buttonPositionWidth = [104];
@@ -250,16 +251,17 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
       buttonSize = [873, 160];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else {
       // 도착 화면
       buttonPositionWidth = [552, 132];
-      buttonPositionHeight = [1316, 1521];
+      buttonPositionHeight = [1316, 1519];
 
-      buttonSize1 = [390, 168];
-      buttonSize2 = [811, 158];
+      buttonSize1 = [395, 168];
+      buttonSize2 = [815, 158];
 
-      buttonRadius = 50;
+      buttonRadius1 = 35;
+      buttonRadius2 = 30;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -273,9 +275,10 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
-                        BorderRadius.circular(buttonRadius * pixelRatio)),
+                        BorderRadius.circular(
+                            widget.screens==3 ? i==0 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
                 fixedSize:
                     // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
                     widget.screens == 3
@@ -348,18 +351,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                                 : widget.screens == 5
                                     ? () {}
                                     : null,
-            child: widget.screens == 0
-                ? Text(i == 0
-                    ? '체크인'
-                    : i == 1
-                        ? "벨보이"
-                        : "룸서비스", style: TextStyle(
-              fontFamily: 'kor',
-              fontSize: 60,
-              color: Colors.white,
-              fontWeight: FontWeight.bold
-            ),)
-                : null,
+            child: null,
           ),
         ),
     ]);

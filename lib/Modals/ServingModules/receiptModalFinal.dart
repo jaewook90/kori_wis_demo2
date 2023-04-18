@@ -114,10 +114,6 @@ class _SelectReceiptModalFinalState extends State<SelectReceiptModalFinal> {
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(
-                border: Border.fromBorderSide((BorderSide(
-                  color: Colors.white,
-                  width: 1
-                ))),
                   image: DecorationImage(
                       image: AssetImage(receiptSelectBG))),
             ),
@@ -131,7 +127,7 @@ class _SelectReceiptModalFinalState extends State<SelectReceiptModalFinal> {
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 1, color: Colors.white),
+                            // side: BorderSide(width: 1, color: Colors.white),
                             borderRadius: BorderRadius.circular(0))),
                     onPressed: () {
                       Navigator.pop(context);

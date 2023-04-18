@@ -271,7 +271,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
                     Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
@@ -320,7 +320,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                         } else if (_servingProvider.tray3Select == true) {
                           _servingProvider.setItemTray3();
                         }
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
                         showTableSelectPopup(context);
                       }
                     : widget.screens == 2

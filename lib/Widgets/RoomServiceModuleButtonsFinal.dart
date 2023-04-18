@@ -249,42 +249,42 @@ class _RoomServiceModuleButtonsFinalState
       (currentNum == null && widget.screens == 2)
           ? Container()
           : Positioned(
-              top: 290 * 0.75,
-              left: 551 * 0.75,
-              width: 270,
-              height: 180,
-              child: Text(
-                '$currentNum',
-                style: TextStyle(
-                    fontFamily: 'kor',
-                    fontSize: 150,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)),
-              ),
-            ),
+        top: 220,
+        left: 400,
+        width: 270,
+        height: 180,
+        child: Text(
+          '$currentNum',
+          style: TextStyle(
+              fontFamily: 'kor',
+              fontSize: 150,
+              fontWeight: FontWeight.bold,
+              color: Color(0xffffffff)),
+        ),
+      ),
       widget.screens == 2
           ? Positioned(
-              left: 1213 * 0.75,
-              top: 451 * 0.75,
-              child: Container(
-                width: 60,
-                height: 60,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                        // side: BorderSide(width: 1, color: Colors.white)
-                      )),
-                  onPressed: () {
-                    setState(() {
-                      currentNum = "";
-                    });
-                  },
-                  child: null,
-                ),
-              ))
+          left: 909,
+          top: 338,
+          child: Container(
+            width: 60,
+            height: 60,
+            color: Colors.transparent,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    // side: BorderSide(width: 1, color: Colors.white)
+                  )),
+              onPressed: () {
+                setState(() {
+                  currentNum = "";
+                });
+              },
+              child: null,
+            ),
+          ))
           : Container(),
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
@@ -294,7 +294,7 @@ class _RoomServiceModuleButtonsFinalState
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
                     // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),

@@ -30,8 +30,6 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
 
   late var homeButtonName = List<String>.empty();
 
-  double pixelRatio = 0.75;
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -66,20 +64,20 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
 
     if (widget.screens == 0) {
       // 메인 화면
-      buttonPositionWidth = [121, 747, 121, 747];
-      buttonPositionHeight = [400, 400, 1021, 1021];
+      buttonPositionWidth = [90, 560, 90, 560];
+      buttonPositionHeight = [300, 300, 770, 770];
 
-      buttonSize = [570, 565];
+      buttonSize = [430, 425];
 
       buttonRadius = 30;
     } else if (widget.screens == 1) {
       // 서비스 선택화면
-      buttonPositionWidth = [121, 121, 121];
-      buttonPositionHeight = [400, 723, 1046];
+      buttonPositionWidth = [90, 90, 90];
+      buttonPositionHeight = [300, 542, 784];
 
-      buttonSize = [1198, 256];
+      buttonSize = [900, 190];
 
-      buttonRadius = 30;
+      buttonRadius = 20;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -87,17 +85,17 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     return Stack(children: [
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
-          left: buttonPositionWidth[i] * pixelRatio,
-          top: buttonPositionHeight[i] * pixelRatio,
+          left: buttonPositionWidth[i],
+          top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
-                        BorderRadius.circular(buttonRadius * pixelRatio)),
-                fixedSize: Size(buttonSize[buttonWidth] * pixelRatio,
-                    buttonSize[buttonHeight] * pixelRatio)),
+                        BorderRadius.circular(buttonRadius)),
+                fixedSize: Size(buttonSize[buttonWidth],
+                    buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
                     navPage(

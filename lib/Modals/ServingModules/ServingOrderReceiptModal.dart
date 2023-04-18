@@ -27,18 +27,9 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
 
     return Container(
       padding: EdgeInsets.only(top: 100),
-      decoration: BoxDecoration(
-        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
       child: Dialog(
         alignment: Alignment.topCenter,
         backgroundColor: Colors.transparent,
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(0),
-            borderSide: BorderSide(
-              color: Color(0xFFB7B7B7),
-              style: BorderStyle.solid,
-              width: 1,
-            )),
         child: Container(
           height: 1561,
           width: 992,

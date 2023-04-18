@@ -77,15 +77,6 @@ class _ShippingModuleButtonsFinalState
         });
   }
 
-  void showCountDownPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return NavCountDownModalFinal();
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);

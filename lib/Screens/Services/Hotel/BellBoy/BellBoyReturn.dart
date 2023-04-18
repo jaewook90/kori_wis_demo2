@@ -104,141 +104,146 @@ class _BellboyReturnModuleFinalState
     double videoWidth = _controller.value.size.width;
     double videoHeight = _controller.value.size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        automaticallyImplyLeading: false,
-        // leading:
-        actions: [
-          Container(
-            width: screenWidth,
-            height: 108,
-            child: Stack(
-              children: [
-                Positioned(
-                  right: 50,
-                  top: 25,
-                  child: Container(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Battery.png',
-                            ),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    "시간",
-                    style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                  ),
-                ),
-                Positioned(
-                  left: 50,
-                  top: 25,
-                  child: Container(
-                    height: 60,
-                    width: 120,
-                    child: TextButton(
-                      onPressed: () {
-                          navPage(
-                              context: context,
-                              page: HotelServiceMenu(),
-                              enablePop: false)
-                              .navPageToPage();
-                      },
-                      child: Text(
-                        '도착',
-                        style: TextStyle(
-                            fontFamily: 'kok',
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xffffffff)),
-                      ),
-                      style: TextButton.styleFrom(
-                        fixedSize: Size(100, 0),
-                        backgroundColor: Colors.transparent,
-                        // shape: RoundedRectangleBorder(
-                        //     side: BorderSide(width: 1, color: Colors.white)
-                        // )
-                      ),
+    return WillPopScope(
+      onWillPop: (){
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(''),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          // leading:
+          actions: [
+            Container(
+              width: screenWidth,
+              height: 108,
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: 50,
+                    top: 25,
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Battery.png',
+                              ),
+                              fit: BoxFit.fill)),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-          // SizedBox(width: screenWidth * 0.03)
-        ],
-        toolbarHeight: 110,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(children: [
-        Container(
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(backgroundImageServ), fit: BoxFit.cover)),
-          child: Container(
-            child: Stack(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: screenHeight * 0.04),
-                    child: null),
-              ],
-            ),
-          ),
-        ),
-        GestureDetector(
-          // 스크린 터치시 화면 이동을 위한 위젯
-          onTap: () {
-            setState(() {
-              _servingProvider.playAD();
-            });
-          },
-          child: Center(
-            child: Offstage(
-              offstage: offStageAd!,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: screenWidth,
-                          height: screenHeight * 0.8,
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: SizedBox(
-                              width: videoWidth,
-                              height: videoHeight,
-                              child: _controller.value.isInitialized
-                                  ? AspectRatio(
-                                      aspectRatio:
-                                          _controller.value.aspectRatio,
-                                      child: VideoPlayer(
-                                        _controller,
-                                      ),
-                                    )
-                                  : Container(),
-                            ),
-                          ),
+                  Center(
+                    child: Text(
+                      "시간",
+                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
+                    ),
+                  ),
+                  Positioned(
+                    left: 50,
+                    top: 25,
+                    child: Container(
+                      height: 60,
+                      width: 120,
+                      child: TextButton(
+                        onPressed: () {
+                            navPage(
+                                context: context,
+                                page: HotelServiceMenu(),
+                                enablePop: false)
+                                .navPageToPage();
+                        },
+                        child: Text(
+                          '도착',
+                          style: TextStyle(
+                              fontFamily: 'kok',
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffffffff)),
                         ),
-                      ],
+                        style: TextButton.styleFrom(
+                          fixedSize: Size(100, 0),
+                          backgroundColor: Colors.transparent,
+                          // shape: RoundedRectangleBorder(
+                          //     side: BorderSide(width: 1, color: Colors.white)
+                          // )
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+            )
+            // SizedBox(width: screenWidth * 0.03)
+          ],
+          toolbarHeight: 110,
+        ),
+        extendBodyBehindAppBar: true,
+        body: Stack(children: [
+          Container(
+            constraints: BoxConstraints.expand(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(backgroundImageServ), fit: BoxFit.cover)),
+            child: Container(
+              child: Stack(
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: screenHeight * 0.04),
+                      child: null),
+                ],
               ),
             ),
           ),
-        )
-      ]),
+          GestureDetector(
+            // 스크린 터치시 화면 이동을 위한 위젯
+            onTap: () {
+              setState(() {
+                _servingProvider.playAD();
+              });
+            },
+            child: Center(
+              child: Offstage(
+                offstage: offStageAd!,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: screenWidth,
+                            height: screenHeight * 0.8,
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: videoWidth,
+                                height: videoHeight,
+                                child: _controller.value.isInitialized
+                                    ? AspectRatio(
+                                        aspectRatio:
+                                            _controller.value.aspectRatio,
+                                        child: VideoPlayer(
+                                          _controller,
+                                        ),
+                                      )
+                                    : Container(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+        ]),
+      ),
     );
   }
 }

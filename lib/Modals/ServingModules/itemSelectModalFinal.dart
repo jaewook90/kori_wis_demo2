@@ -97,21 +97,21 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
     goalPosition = _networkProvider.goalPosition;
 
     return Container(
-      padding: EdgeInsets.only(top: 90),
-      // height: 1536,
+      padding: EdgeInsets.fromLTRB(0, 90, 0, 180),
+      height: 1536,
       decoration: BoxDecoration(
-        border: Border.fromBorderSide(BorderSide(color: Colors.white))
+        color: Colors.transparent,
       ),
       child: Dialog(
         // shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
-          backgroundColor: Color(0xff000000),
+          backgroundColor: Colors.transparent,
           child: Stack(
             children: [
               Container(
-                // width: screenWidth,
                 height: 1536,
                 decoration: BoxDecoration(
-                    border: Border.fromBorderSide(BorderSide(color: Colors.white)),
+                  color: Colors.transparent,
+                    // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                     image: DecorationImage(
                         image: AssetImage(itemSelectBG))),
               ),
@@ -126,7 +126,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 1, color: Colors.white),
+                            // side: BorderSide(width: 1, color: Colors.white),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);

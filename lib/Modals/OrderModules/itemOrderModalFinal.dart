@@ -60,6 +60,9 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
       orderedItems = _orderProvider.orderedItems;
     }
 
+    setState(() {
+      _orderProvider.SelectedQT = 0;
+    });
 
     print('asdfsadf');
     print(_orderProvider.orderedItems);
@@ -68,20 +71,15 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
     print(menuLength);
     print(menuLength.runtimeType);
 
+    print('vbbbbbbbbbbbbbbbbbbbbbbbbbv');
+    print(_orderProvider.SelectedQT);
+
     return Container(
       padding: EdgeInsets.only(top: 100),
-        decoration: BoxDecoration(
-        border: Border.fromBorderSide(BorderSide(color: Colors.white)),),
+      color: Colors.transparent,
       child: Dialog(
         alignment: Alignment.topCenter,
         backgroundColor: Colors.transparent,
-        shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(0),
-            borderSide: BorderSide(
-              color: Color(0xFFB7B7B7),
-              style: BorderStyle.solid,
-              width: 1,
-            )),
         child: Container(
           height: 1561,
           width: 992,
@@ -89,6 +87,7 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
             Container(
               constraints: BoxConstraints.expand(),
               decoration: BoxDecoration(
+                color: Colors.transparent,
                   // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                   image: DecorationImage(image: AssetImage(orderBookImg))),
               child: Container(),
@@ -103,9 +102,6 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
                   child: FilledButton(
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1, color: Colors.white),
-                            borderRadius: BorderRadius.circular(0))
                     ),
                     onPressed: () {
                       Navigator.pop(context);

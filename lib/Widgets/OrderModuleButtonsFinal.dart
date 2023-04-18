@@ -152,6 +152,10 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   Widget build(BuildContext context) {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
+    setState(() {
+      selectedQt = _orderProvider.SelectedQT;
+    });
+
     if (selectedQt == 0) {
       checkOutItems = true;
     } else {
@@ -235,7 +239,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               style: FilledButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Colors.redAccent),
+                      // side: BorderSide(width: 1, color: Colors.redAccent),
                       borderRadius: BorderRadius.circular(widget.screens == 0
                           ? i == 4
                               ? buttonRadius2
@@ -264,12 +268,6 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                           }
                         });
                       } else {
-                        setState(() {
-                          _orderProvider.SelectedItemsQT![0] = true;
-                          _orderProvider.SelectedItemsQT![1] = true;
-                          _orderProvider.SelectedItemsQT![2] = true;
-                          _orderProvider.SelectedItemsQT![3] = true;
-                        });
                         showCheckingPopup(context);
                       }
                       print(_orderProvider.SelectedItemsQT);

@@ -103,13 +103,13 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     return Container(
       padding: EdgeInsets.only(top: 90),
       child: Dialog(
-        backgroundColor: Color.fromRGBO(45, 45, 45, 45),
+        backgroundColor: Colors.transparent,
         shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(0),
             borderSide: BorderSide(
-              color: Color(0xFFB7B7B7),
-              style: BorderStyle.solid,
-              width: 1,
+              // color: Color(0xFFB7B7B7),
+              // style: BorderStyle.solid,
+              // width: 1,
             )),
         child: TableSelectImgFinal()
       ),
