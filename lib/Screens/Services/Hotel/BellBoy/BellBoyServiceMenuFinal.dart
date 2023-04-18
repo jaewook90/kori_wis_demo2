@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellboyDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/MenuButtons.dart';
+import 'package:provider/provider.dart';
 
 // ------------------------------ 보류 ---------------------------------------
 
@@ -16,12 +20,22 @@ class BellBoyServiceMenu extends StatefulWidget {
 }
 
 class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
+  late NetworkModel _networkProvider;
 
   String backgroundImage = "assets/screens/Hotel/BellBoy/koriZFinalBellBoyBegin.png";
 
+  void showCountDownPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return NavCountDownModalFinal();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -107,12 +121,6 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
                             fit: BoxFit.fill)),
                   ),
                 ),
-                Center(
-                  child: Text(
-                    "시간",
-                    style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                  ),
-                )
               ],
             ),
           )
@@ -128,6 +136,28 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
                 image: AssetImage(backgroundImage), fit: BoxFit.cover)),
         child: Stack(
           children: [
+            Positioned(
+              top: 420,
+              left: 0,
+              child: GestureDetector(
+                  onTap: () {
+                    if (_networkProvider.bellboyTF == true) {
+                      showCountDownPopup(context);
+                    } else {
+                      navPage(
+                          context: context,
+                          page: BellboyDestinationScreenFinal(),
+                          enablePop: true)
+                          .navPageToPage();
+                    }
+                  },
+                  child: Container(
+                      height: 1200,
+                      width: 1080,
+                      decoration: BoxDecoration(
+                          border: Border.fromBorderSide(
+                              BorderSide(color: Colors.transparent, width: 1))))),
+            ),
             BellboyModuleButtonsFinal(screens: 0,)
           ],
         ),

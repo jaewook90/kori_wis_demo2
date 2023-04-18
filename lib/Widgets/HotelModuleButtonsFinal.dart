@@ -132,66 +132,66 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
         });
   }
 
-  void showBookingNoRoomWarn(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          double screenHeight = MediaQuery.of(context).size.height;
-
-          return AlertDialog(
-            content: SizedBox(
-              width: screenWidth * 0.5,
-              height: screenHeight * 0.1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '모든 객실이 예약 되었습니다.',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 30,
-                        color: Color(0xffF0F0F0)),
-                  ),
-                ],
-              ),
-            ),
-            backgroundColor: Color(0xff2C2C2C),
-            contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-            shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(
-                  color: Color(0xFFB7B7B7),
-                  style: BorderStyle.solid,
-                  width: 1,
-                )),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    '확 인',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 30,
-                        color: Color(0xffF0F0F0)),
-                  ),
-                  style: TextButton.styleFrom(
-                      shape: LinearBorder(
-                          side: BorderSide(color: Colors.white, width: 2),
-                          top: LinearBorderEdge(size: 1)),
-                      minimumSize:
-                          Size(screenWidth * 0.5, screenHeight * 0.05)),
-                ),
-              ),
-            ],
-            // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
-          );
-        });
-  }
+  // void showBookingNoRoomWarn(context) {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) {
+  //         double screenWidth = MediaQuery.of(context).size.width;
+  //         double screenHeight = MediaQuery.of(context).size.height;
+  //
+  //         return AlertDialog(
+  //           content: SizedBox(
+  //             width: screenWidth * 0.5,
+  //             height: screenHeight * 0.1,
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 Text(
+  //                   '모든 객실이 예약 되었습니다.',
+  //                   style: TextStyle(
+  //                       fontFamily: 'kor',
+  //                       fontSize: 30,
+  //                       color: Color(0xffF0F0F0)),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           backgroundColor: Color(0xff2C2C2C),
+  //           contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+  //           shape: OutlineInputBorder(
+  //               borderRadius: BorderRadius.circular(40),
+  //               borderSide: BorderSide(
+  //                 color: Color(0xFFB7B7B7),
+  //                 style: BorderStyle.solid,
+  //                 width: 1,
+  //               )),
+  //           actions: [
+  //             Center(
+  //               child: TextButton(
+  //                 onPressed: () {
+  //                   Navigator.pop(context);
+  //                 },
+  //                 child: Text(
+  //                   '확 인',
+  //                   style: TextStyle(
+  //                       fontFamily: 'kor',
+  //                       fontSize: 30,
+  //                       color: Color(0xffF0F0F0)),
+  //                 ),
+  //                 style: TextButton.styleFrom(
+  //                     shape: LinearBorder(
+  //                         side: BorderSide(color: Colors.white, width: 2),
+  //                         top: LinearBorderEdge(size: 1)),
+  //                     minimumSize:
+  //                         Size(screenWidth * 0.5, screenHeight * 0.05)),
+  //               ),
+  //             ),
+  //           ],
+  //           // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
+  //         );
+  //       });
+  // }
 
   void showPaymentPopup(context) {
     showDialog(
@@ -320,15 +320,15 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                   }
                 : widget.screens == 1
                     ? () {
-                        if (i == 2) {
+                        // if (i == 2) {
                           navPage(
                                   context: context,
                                   page: HotelRoomInfoNCart(),
                                   enablePop: true)
                               .navPageToPage();
-                        } else {
-                          showBookingNoRoomWarn(context);
-                        }
+                        // } else {
+                        //   showBookingNoRoomWarn(context);
+                        // }
                       }
                     : widget.screens == 2
                         ? () {

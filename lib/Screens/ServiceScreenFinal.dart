@@ -25,9 +25,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
   final String _wallpape = "assets/screens/koriZFinalService.png";
   final String _fingerIcon = "assets/icons/pushIcon.png";
 
-  final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.jpg";
-  final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.jpg";
-  final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.jpg";
+  final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.gif";
+  final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.gif";
+  final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.gif";
 
   late var shippingPose = List<String>.empty();
 
@@ -151,12 +151,6 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                               fit: BoxFit.fill)),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      "시간",
-                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                    ),
-                  )
                 ],
               ),
             )

@@ -66,7 +66,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "";
+    currentNum = "502";
   }
 
   void showDestinationListPopup(context) {
@@ -169,7 +169,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
-          : Positioned(
+          : widget.screens == 1 ?Positioned(
               top: 220,
               left: 400,
               width: 270,
@@ -182,7 +182,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                     fontWeight: FontWeight.bold,
                     color: Color(0xffffffff)),
               ),
-            ),
+            ) : Container(),
       widget.screens == 1
           ? Positioned(
               left: 909,

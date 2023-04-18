@@ -105,60 +105,6 @@ class _NavigatorProgressModuleFinalState
               child: Stack(
                 children: [
                   Positioned(
-                    left: 50,
-                    top: 25,
-                    child: Container(
-                      height: 60,
-                      width: 120,
-                      child: TextButton(
-                        onPressed: () {
-                          if (_networkProvider.serviceState == 0) {
-                            navPage(
-                                context: context,
-                                page: ShippingDoneFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                            // showShippingDone(context);
-                          } else if (_networkProvider.serviceState == 1) {
-                            navPage(
-                                context: context,
-                                page: ServingProgressFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                          } else if (_networkProvider.serviceState == 2) {
-                            navPage(
-                                context: context,
-                                page: BellboyProgressFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                          }else if (_networkProvider.serviceState == 3) {
-                            navPage(
-                                context: context,
-                                page: RoomServiceProgressFinal(),
-                                enablePop: false)
-                                .navPageToPage();
-                          }
-                        },
-                        child: Text(
-                          '도착',
-                          style: TextStyle(
-                              fontFamily: 'kok',
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xffffffff)),
-                        ),
-                        style: TextButton.styleFrom(
-                          fixedSize: Size(100, 0),
-                          backgroundColor: Colors.transparent,
-                          // shape: RoundedRectangleBorder(
-                          //     side: BorderSide(width: 1, color: Colors.white)
-                          // )
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
                     right: 50,
                     top: 25,
                     child: Container(
@@ -169,9 +115,8 @@ class _NavigatorProgressModuleFinalState
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
                               ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
+                              fit: BoxFit.fill)),)
+                    )
                 ],
               ),
             )

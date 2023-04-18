@@ -85,7 +85,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         return Future.value(false);
       },
       child: Scaffold(
@@ -101,59 +101,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
               height: 108,
               child: Stack(
                 children: [
-                    Positioned(
-                      left: 50,
-                      top: 25,
-                      child: Container(
-                        height: 60,
-                        width: 120,
-                        child: TextButton(
-                          onPressed: () {
-                            if (_networkProvider.serviceState == 0) {
-                              navPage(
-                                  context: context,
-                                  page: ShippingDoneFinal(),
-                                  enablePop: false)
-                                  .navPageToPage();
-                              // showShippingDone(context);
-                            } else if (_networkProvider.serviceState == 1) {
-                              navPage(
-                                  context: context,
-                                  page: ServingProgressFinal(),
-                                  enablePop: false)
-                                  .navPageToPage();
-                            } else if (_networkProvider.serviceState == 2) {
-                              navPage(
-                                  context: context,
-                                  page: BellboyProgressFinal(),
-                                  enablePop: false)
-                                  .navPageToPage();
-                            }else if (_networkProvider.serviceState == 3) {
-                              navPage(
-                                  context: context,
-                                  page: RoomServiceProgressFinal(),
-                                  enablePop: false)
-                                  .navPageToPage();
-                            }
-                          },
-                          child: Text(
-                            '도착',
-                            style: TextStyle(
-                                fontFamily: 'kok',
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffffffff)),
-                          ),
-                          style: TextButton.styleFrom(
-                            fixedSize: Size(100, 0),
-                            backgroundColor: Colors.transparent,
-                            // shape: RoundedRectangleBorder(
-                            //     side: BorderSide(width: 1, color: Colors.white)
-                            // )
-                          ),
-                        ),
-                      ),
-                    ),
                   Positioned(
                     right: 50,
                     top: 25,
@@ -168,12 +115,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      "시간",
-                      style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                    ),
-                  )
                 ],
               ),
             )
@@ -199,28 +140,28 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                           print('tapped');
                           if (_networkProvider.serviceState == 0) {
                             navPage(
-                                context: context,
-                                page: ShippingDoneFinal(),
-                                enablePop: false)
+                                    context: context,
+                                    page: ShippingDoneFinal(),
+                                    enablePop: false)
                                 .navPageToPage();
                             // showShippingDone(context);
                           } else if (_networkProvider.serviceState == 1) {
                             navPage(
-                                context: context,
-                                page: ServingProgressFinal(),
-                                enablePop: false)
+                                    context: context,
+                                    page: ServingProgressFinal(),
+                                    enablePop: false)
                                 .navPageToPage();
                           } else if (_networkProvider.serviceState == 2) {
                             navPage(
-                                context: context,
-                                page: BellboyProgressFinal(),
-                                enablePop: false)
+                                    context: context,
+                                    page: BellboyProgressFinal(),
+                                    enablePop: false)
                                 .navPageToPage();
-                          }else if (_networkProvider.serviceState == 3) {
+                          } else if (_networkProvider.serviceState == 3) {
                             navPage(
-                                context: context,
-                                page: RoomServiceProgressFinal(),
-                                enablePop: false)
+                                    context: context,
+                                    page: RoomServiceProgressFinal(),
+                                    enablePop: false)
                                 .navPageToPage();
                           }
                         },
@@ -228,10 +169,10 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                             height: 800,
                             width: 1080,
                             decoration: BoxDecoration(
-                                border: Border.fromBorderSide(
-                                    BorderSide(color: Colors.transparent, width: 1))))),
+                                border: Border.fromBorderSide(BorderSide(
+                                    color: Colors.transparent, width: 1))))),
                   ),
-                   NavModuleButtonsFinal(screens: 1),
+                  NavModuleButtonsFinal(screens: 1),
                 ],
               ),
             ),

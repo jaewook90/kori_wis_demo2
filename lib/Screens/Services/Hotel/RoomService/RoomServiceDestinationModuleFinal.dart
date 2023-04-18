@@ -197,13 +197,7 @@ class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinati
                             fit: BoxFit.fill)),
                   ),
                 ),
-                Center(
-                  child: Text(
-                    "시간",
-                    style: TextStyle(fontFamily: 'kor', fontSize: 60),
-                  ),
-                )
-              ],
+                ],
             ),
           )
           // SizedBox(width: screenWidth * 0.03)
