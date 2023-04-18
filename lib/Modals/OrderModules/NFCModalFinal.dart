@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/ServingOrderReceiptModal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomReceipt.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +13,16 @@ class NFCModuleScreenFinal extends StatefulWidget {
 }
 
 class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
+
+  void showServingReceiptPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+      return ServingOrderReceipt();
+    });
+  }
+
   late NetworkModel _networkProvider;
   String NFCimg = 'assets/screens/Serving/koriZFinalNFC.png';
 
@@ -22,7 +32,10 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
 
     return GestureDetector(
       onTap: (){
-        if(_networkProvider.serviceState == 2){
+        if(_networkProvider.serviceState == 1){
+          Navigator.pop(context);
+          showServingReceiptPopup(context);
+        }else if(_networkProvider.serviceState == 2){
           navPage(context: context, page: HotelRoomReceipt(), enablePop: false).navPageToPage();
         }
       },

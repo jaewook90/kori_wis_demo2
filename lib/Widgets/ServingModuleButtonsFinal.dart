@@ -185,15 +185,15 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
       buttonSize = [428.3, 160];
 
-      buttonRadius = 30;
+      buttonRadius = 25;
     } else if (widget.screens == 1) {
       // 서빙 상품 선택 화면
       buttonPositionWidth = [70.3, 517.3, 70.3, 517.3];
-      buttonPositionHeight = [315.8, 315.8, 757.5, 757.5];
+      buttonPositionHeight = [315.8, 315.8, 759, 759];
 
       buttonSize = [412, 412];
 
-      buttonRadius = 35;
+      buttonRadius = 34;
     } else if (widget.screens == 2) {
       // 서빙 테이블 선택 화면
       buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
@@ -208,7 +208,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         1178
       ];
 
-      buttonSize = [207, 120];
+      buttonSize = [208, 118];
 
       buttonRadius = 0;
     } else if (widget.screens == 3) {

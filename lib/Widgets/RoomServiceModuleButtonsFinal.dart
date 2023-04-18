@@ -182,12 +182,12 @@ class _RoomServiceModuleButtonsFinalState
 
       buttonRadius = 30;
     } else if (widget.screens == 1) {
-      buttonPositionWidth = [70.3, 517.3, 70.3, 517.3];
-      buttonPositionHeight = [315.8, 315.8, 757.5, 757.5];
+      buttonPositionWidth = [104.3, 559.6, 104.3, 559.6];
+      buttonPositionHeight = [459, 459, 910.5, 910.5];
 
-      buttonSize = [412, 412];
+      buttonSize = [420, 420];
 
-      buttonRadius = 35;
+      buttonRadius = 40;
     } else if (widget.screens == 2) {
       // 키패드 화면
       buttonPositionWidth = [
@@ -314,7 +314,6 @@ class _RoomServiceModuleButtonsFinalState
                       showCountDownPopup(context);
                     } else {
                       _roomServiceProvider.trayCheckAll = true;
-                      // _roomServiceProvider.servingBeginningIsNot=true;
                       navPage(
                               context: context,
                               page: RoomServiceDestinationScreenFinal(),

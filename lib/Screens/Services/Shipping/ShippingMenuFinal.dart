@@ -64,7 +64,7 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
                   left: 20,
                   top: 18,
                   child: FilledButton(onPressed: () {
-                    Navigator.pop(context);
+                    navPage(context: context, page: ServiceScreenFinal(), enablePop: false).navPageToPage();
                   }, child: null, style: FilledButton.styleFrom(
                       fixedSize: Size(80, 80),
                       shape: RoundedRectangleBorder(

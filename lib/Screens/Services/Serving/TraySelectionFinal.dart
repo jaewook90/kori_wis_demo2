@@ -423,7 +423,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
-                            // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                           ),
                           width: 50,
                           height: 30,
@@ -468,6 +467,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                             },
                             child: Container(),
                             style: TextButton.styleFrom(
+                              foregroundColor: Colors.tealAccent,
                                 backgroundColor: Colors.transparent,
                                 fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
@@ -475,6 +475,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     side: BorderSide(
                                         color: Colors.green, width: 1),
                                     borderRadius: BorderRadius.circular(20)))),
+                        color: _servingProvider.tray1==true?Color.fromRGBO(0, 255, 0, 230):null,
                       ),
                     ],
                   ),
@@ -538,6 +539,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               },
                               child: Container(),
                               style: TextButton.styleFrom(
+                                  foregroundColor: Colors.tealAccent,
                                   backgroundColor: Colors.transparent,
                                   fixedSize:
                                       Size(textButtonWidth, textButtonHeight),
@@ -545,7 +547,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                       side: BorderSide(
                                           color: Colors.green, width: 1),
                                       borderRadius:
-                                          BorderRadius.circular(20))))),
+                                          BorderRadius.circular(20)))),
+                        color: _servingProvider.tray2==true?Color.fromRGBO(0, 255, 0, 230):null,),
                     ],
                   ),
                 ),
@@ -608,6 +611,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               },
                               child: Container(),
                               style: TextButton.styleFrom(
+                                  foregroundColor: Colors.tealAccent,
                                   backgroundColor: Colors.transparent,
                                   fixedSize:
                                       Size(textButtonWidth, textButtonHeight),
@@ -615,7 +619,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                       side: BorderSide(
                                           color: Colors.green, width: 1),
                                       borderRadius:
-                                          BorderRadius.circular(20))))),
+                                          BorderRadius.circular(20)))),
+                        color: _servingProvider.tray3==true?Color.fromRGBO(0, 255, 0, 230):null,),
                     ],
                   ),
                 ),

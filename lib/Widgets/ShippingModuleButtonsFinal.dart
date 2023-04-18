@@ -98,7 +98,7 @@ class _ShippingModuleButtonsFinalState
 
       buttonSize = [870, 160];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 1) {
       // 키패드 화면
       buttonPositionWidth = [
@@ -116,15 +116,15 @@ class _ShippingModuleButtonsFinalState
         703
       ];
       buttonPositionHeight = [
-        520.5,
-        520.5,
-        520.5,
-        810,
-        810,
-        810,
-        1100,
-        1100,
-        1100,
+        521,
+        521,
+        521,
+        813,
+        813,
+        813,
+        1104,
+        1104,
+        1104,
         1394,
         1394,
         1394
@@ -132,7 +132,7 @@ class _ShippingModuleButtonsFinalState
 
       buttonSize = [261, 258];
 
-      buttonRadius = 50;
+      buttonRadius = 37;
     } else if (widget.screens == 2) {
       // 목적지 리스트
       buttonPositionWidth = [79, 525, 79, 525, 79, 525, 79];
@@ -149,9 +149,9 @@ class _ShippingModuleButtonsFinalState
       buttonPositionWidth = [107];
       buttonPositionHeight = [1372];
 
-      buttonSize = [866, 172];
+      buttonSize = [866, 174];
 
-      buttonRadius = 50;
+      buttonRadius = 40;
     } else if (widget.screens == 4) {
       // 팝업 ( 추가 여부 / 카운트다운 )
       buttonPositionWidth = [70, 695];
@@ -240,17 +240,17 @@ class _ShippingModuleButtonsFinalState
           top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
+                foregroundColor: widget.screens==1 ? i!=9 ? i!=11 ? Colors.tealAccent : null : null : null,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.redAccent),
-                    borderRadius:
-                        BorderRadius.circular(buttonRadius)),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
+                    borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize: widget.screens == 2
                     ? i != 0
-                        ? Size(buttonSize2[buttonWidth],
-                            buttonSize2[buttonHeight])
-                        : Size(buttonSize1[buttonWidth],
-                            buttonSize1[buttonHeight])
+                        ? Size(
+                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                        : Size(
+                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
                     : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
