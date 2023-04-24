@@ -25,9 +25,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
   final String _wallpape = "assets/screens/koriZFinalService.png";
   final String _fingerIcon = "assets/icons/pushIcon.png";
 
-  final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.gif";
-  final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.gif";
-  final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.gif";
+  final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.png";
+  final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.png";
+  final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.png";
 
   late var shippingPose = List<String>.empty();
 
