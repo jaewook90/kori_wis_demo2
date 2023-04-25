@@ -19,8 +19,8 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
   String? tableNumber;
 
   List<String>? orderedItems;
-
   List<String> menuItems = ['햄버거', '라면', '치킨', '핫도그'];
+
   int? menuLength;
 
   String orderBookImg = 'assets/screens/Serving/koriZFinalOrderBook.png';

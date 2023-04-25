@@ -52,6 +52,8 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
   List<bool>? selectedItem;
 
+  List<String> selectedItemList = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -183,14 +185,12 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       }
     } else if (widget.screens == 1) {
       // 장바구니 확인
-      buttonPositionWidth = [683.5, 817, 683.5, 817, 563.5];
-      buttonPositionHeight = [154, 154, 400, 400, 1188.3];
+      buttonPositionWidth = [563.5];
+      buttonPositionHeight = [1188.3];
 
-      buttonSize1 = [53, 80];
-      buttonSize2 = [370.5, 142.5];
+      buttonSize = [370.5, 142.5];
 
-      buttonRadius1 = 37;
-      buttonRadius2 = 40;
+      buttonRadius = 40;
     } else if (widget.screens == 2) {
       // 결제 선택 및 금액 확인
       buttonPositionWidth = [62, 506, 62, 506, 62, 506];
@@ -244,8 +244,8 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                           ? i == 4
                               ? buttonRadius2
                               : buttonRadius1
-                          : widget.screens == 1 ? i == 4 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
-                  fixedSize: (widget.screens == 0) || (widget.screens == 1)
+                          : buttonRadius)),
+                  fixedSize: (widget.screens == 0)
                       ? i == (buttonNumbers - 1)
                           ? Size(buttonSize2[buttonWidth],
                               buttonSize2[buttonHeight])
@@ -261,11 +261,30 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                             _orderProvider.SelectedItemsQT![i] = true;
                             selectedQt = selectedQt! - 1;
                             _orderProvider.SelectedQT = selectedQt;
+                            if(i==0){
+                              selectedItemList.remove('햄버거');
+                            }else if(i==1){
+                              selectedItemList.remove('라면');
+                            }else if(i==2){
+                              selectedItemList.remove('치킨');
+                            }else if(i==3){
+                              selectedItemList.remove('핫도그');
+                            }
                           } else {
                             _orderProvider.SelectedItemsQT![i] = false;
                             selectedQt = selectedQt! + 1;
                             _orderProvider.SelectedQT = selectedQt;
+                            if(i==0){
+                              selectedItemList.add('햄버거');
+                            }else if(i==1){
+                              selectedItemList.add('라면');
+                            }else if(i==2){
+                              selectedItemList.add('치킨');
+                            }else if(i==3){
+                              selectedItemList.add('핫도그');
+                            }
                           }
+                          _orderProvider.selectedItemsList = selectedItemList;
                         });
                       } else {
                         showCheckingPopup(context);
@@ -276,9 +295,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                     }
                   : widget.screens == 1
                       ? () {
-                          if (i == 4) {
                             showPaymentPopup(context);
-                          }
                         }
                       : widget.screens == 2
                           ? () {
