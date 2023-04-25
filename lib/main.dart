@@ -65,6 +65,15 @@ class MyApp extends StatelessWidget {
                 tableNumber: "10")),
         ChangeNotifierProvider(create: (context) => OrderModel(
           orderedItems: [],
+          orderedChickenPrice: 0,
+          orderedChickenQT: 0,
+          orderedHamburgerPrice: 0,
+          orderedHamburgerQT: 0,
+          orderedHotdogPrice: 0,
+          orderedHotdogQT: 0,
+          orderedRamyeonPrice: 0,
+          orderedRamyeonQT: 0,
+          orderedTotalPrice: 0
         )),
         ChangeNotifierProvider(create: (context)=>RoomServiceModel(
             tray1: false,

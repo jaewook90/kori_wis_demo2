@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Widgets/OrderModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -12,12 +13,15 @@ class PaymentScreenFinal extends StatefulWidget {
 
 class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
   late NetworkModel _networkProvider;
+  late OrderModel _orderProvider;
+
   String paymentBackground =
       'assets/screens/Serving/koriZFinalSelectPayment.png';
 
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _orderProvider = Provider.of<OrderModel>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -65,37 +69,65 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent),
                       onPressed: () {
-                        if(_networkProvider.serviceState == 2){
+                        if (_networkProvider.serviceState == 2) {
                           Navigator.pop(context);
                           Navigator.pop(context);
-                        }else{
+                        } else {
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
                         }
-
                       },
                       child: null,
                     ),
                   )),
               _networkProvider.serviceState == 1
-                  ? Positioned(
-                      left: 395,
-                      top: 315.5,
-                      child: Container(
-                        width: 300,
-                        height: 65,
-                        color: Colors.transparent,
-                        child: Text(
-                          '11,500 원',
-                          style: TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 53,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xffffffff),
-                          ),
-                        ),
-                      ))
+                  ? Stack(children: [
+                      Positioned(
+                          left: 370,
+                          top: 315.5,
+                          child: Container(
+                            width: 230,
+                            height: 65,
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${_orderProvider.orderedTotalPrice}',
+                                  style: TextStyle(
+                                    fontFamily: 'kor',
+                                    fontSize: 53,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xffffffff),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                      Positioned(
+                          left: 600,
+                          top: 315.5,
+                          child: Container(
+                            width: 55,
+                            height: 65,
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '원',
+                                  style: TextStyle(
+                                    fontFamily: 'kor',
+                                    fontSize: 53,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xffffffff),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
+                    ])
                   : _networkProvider.serviceState == 2
                       ? Positioned(
                           left: 375,
@@ -103,7 +135,10 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                           child: Container(
                             width: 300,
                             height: 65,
-                            color: Colors.transparent,
+                            // color: Colors.transparent,
+                            decoration: BoxDecoration(
+                                border: Border.fromBorderSide(
+                                    BorderSide(color: Colors.white, width: 1))),
                             child: Text(
                               '172,500 원',
                               style: TextStyle(

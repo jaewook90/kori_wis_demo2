@@ -295,9 +295,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                     }
                   : widget.screens == 1
                       ? () {
-                          if (i == 4) {
                             showPaymentPopup(context);
-                          }
                         }
                       : widget.screens == 2
                           ? () {
