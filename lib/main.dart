@@ -63,36 +63,45 @@ class MyApp extends StatelessWidget {
                 itemImageList: ['a', 'b', 'c'],
                 menuItem: "미지정",
                 tableNumber: "10")),
-        ChangeNotifierProvider(create: (context) => OrderModel(
-          orderedItems: [],
-        )),
-        ChangeNotifierProvider(create: (context)=>RoomServiceModel(
-            tray1: false,
-            tray2: false,
-            tray3: false,
-            receiptModeOn: false,
-            attachedTray1: false,
-            attachedTray2: false,
-            attachedTray3: false,
-            playAd: false,
-            servedItem1: true,
-            servedItem2: true,
-            servedItem3: true,
-            tray1Select: false,
-            tray2Select: false,
-            tray3Select: false,
-            servingBeginningIsNot: true,
-            item1: '',
-            item2: '',
-            item3: '',
-            table1: "",
-            table2: "",
-            table3: "",
-            tableList: [],
-            itemImageList: ['a', 'b', 'c'],
-            menuItem: "미지정",
-            tableNumber: "10"
-        ))
+        ChangeNotifierProvider(
+            create: (context) => OrderModel(
+                orderedItems: [],
+                orderedChickenPrice: 0,
+                orderedChickenQT: 0,
+                orderedHamburgerPrice: 0,
+                orderedHamburgerQT: 0,
+                orderedHotdogPrice: 0,
+                orderedHotdogQT: 0,
+                orderedRamyeonPrice: 0,
+                orderedRamyeonQT: 0,
+                orderedTotalPrice: 0)),
+        ChangeNotifierProvider(
+            create: (context) => RoomServiceModel(
+                tray1: false,
+                tray2: false,
+                tray3: false,
+                receiptModeOn: false,
+                attachedTray1: false,
+                attachedTray2: false,
+                attachedTray3: false,
+                playAd: false,
+                servedItem1: true,
+                servedItem2: true,
+                servedItem3: true,
+                tray1Select: false,
+                tray2Select: false,
+                tray3Select: false,
+                servingBeginningIsNot: true,
+                item1: '',
+                item2: '',
+                item3: '',
+                table1: "",
+                table2: "",
+                table3: "",
+                tableList: [],
+                itemImageList: ['a', 'b', 'c'],
+                menuItem: "미지정",
+                tableNumber: "10"))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -103,15 +112,15 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             //영어폰트용
             titleLarge:
-            GoogleFonts.roboto(color: Color(0xffF0F0F0), fontSize: 45),
+                GoogleFonts.roboto(color: Color(0xffF0F0F0), fontSize: 45),
             titleMedium:
-            GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 32),
+                GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 32),
             bodyLarge:
-            GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 28),
+                GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 28),
             bodyMedium:
-            GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 24),
+                GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 24),
             bodySmall:
-            GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 20),
+                GoogleFonts.roboto(color: Color(0xffB7B7B7), fontSize: 20),
 
             //한글폰트용
             displayLarge: TextStyle(
