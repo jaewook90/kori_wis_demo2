@@ -168,9 +168,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                         width: 400,
                         decoration: BoxDecoration(
                             color: Color(0xff292929),
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.fromBorderSide(
-                                BorderSide(color: Colors.white, width: 1))),
+                            borderRadius: BorderRadius.circular(50)),
                         child: Stack(
                           children: [
                             Positioned(
