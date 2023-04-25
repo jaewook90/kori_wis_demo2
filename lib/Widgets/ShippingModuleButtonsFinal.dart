@@ -56,7 +56,7 @@ class _ShippingModuleButtonsFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "102";
+    currentNum = "";
   }
 
   void showCountDownStarting(context) {
