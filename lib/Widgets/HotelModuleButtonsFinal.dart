@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellBoyYNModalFinal.dart';
-import 'package:kori_wis_demo/Modals/HotelModules/hotelBookedRoomWarnModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
@@ -13,8 +10,6 @@ import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart'
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomSelectFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +53,8 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
   int buttonWidth = 0;
   int buttonHeight = 1;
+
+  late String? roomKind;
 
   String? currentNum;
 
@@ -127,71 +124,9 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                 ),
               ),
             ],
-            // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
           );
         });
   }
-
-  // void showBookingNoRoomWarn(context) {
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //         double screenWidth = MediaQuery.of(context).size.width;
-  //         double screenHeight = MediaQuery.of(context).size.height;
-  //
-  //         return AlertDialog(
-  //           content: SizedBox(
-  //             width: screenWidth * 0.5,
-  //             height: screenHeight * 0.1,
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 Text(
-  //                   '모든 객실이 예약 되었습니다.',
-  //                   style: TextStyle(
-  //                       fontFamily: 'kor',
-  //                       fontSize: 30,
-  //                       color: Color(0xffF0F0F0)),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           backgroundColor: Color(0xff2C2C2C),
-  //           contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-  //           shape: OutlineInputBorder(
-  //               borderRadius: BorderRadius.circular(40),
-  //               borderSide: BorderSide(
-  //                 color: Color(0xFFB7B7B7),
-  //                 style: BorderStyle.solid,
-  //                 width: 1,
-  //               )),
-  //           actions: [
-  //             Center(
-  //               child: TextButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Text(
-  //                   '확 인',
-  //                   style: TextStyle(
-  //                       fontFamily: 'kor',
-  //                       fontSize: 30,
-  //                       color: Color(0xffF0F0F0)),
-  //                 ),
-  //                 style: TextButton.styleFrom(
-  //                     shape: LinearBorder(
-  //                         side: BorderSide(color: Colors.white, width: 2),
-  //                         top: LinearBorderEdge(size: 1)),
-  //                     minimumSize:
-  //                         Size(screenWidth * 0.5, screenHeight * 0.05)),
-  //               ),
-  //             ),
-  //           ],
-  //           // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
-  //         );
-  //       });
-  // }
 
   void showPaymentPopup(context) {
     showDialog(
@@ -216,7 +151,8 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
-    _roomServiceProvider = Provider.of<RoomServiceModel>(context, listen: false);
+    _roomServiceProvider =
+        Provider.of<RoomServiceModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 택배 메인 화면
@@ -275,20 +211,18 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
-                    borderRadius:
-                        BorderRadius.circular(
-                            widget.screens==3 ? i==0 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
-                fixedSize:
-                    // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
-                    widget.screens == 3
+                    borderRadius: BorderRadius.circular(widget.screens == 3
                         ? i == 0
-                            ? Size(buttonSize1[buttonWidth],
-                                buttonSize1[buttonHeight])
-                            : Size(buttonSize2[buttonWidth],
-                                buttonSize2[buttonHeight])
+                            ? buttonRadius1
+                            : buttonRadius2
+                        : buttonRadius)),
+                fixedSize: widget.screens == 3
+                    ? i == 0
+                        ? Size(
+                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
                         : Size(
-                            buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                    : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
                     if (i == 0) {
@@ -299,7 +233,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                           .navPageToPage();
                     } else if (i == 1) {
                       setState(() {
-                        _networkProvider.serviceState=2;
+                        _networkProvider.serviceState = 2;
                       });
                       navPage(
                               context: context,
@@ -309,7 +243,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                     } else {
                       setState(() {
                         _roomServiceProvider.clearAllTray();
-                        _networkProvider.serviceState=3;
+                        _networkProvider.serviceState = 3;
                       });
                       navPage(
                               context: context,
@@ -320,15 +254,20 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                   }
                 : widget.screens == 1
                     ? () {
-                        // if (i == 2) {
-                          navPage(
-                                  context: context,
-                                  page: HotelRoomInfoNCart(),
-                                  enablePop: true)
-                              .navPageToPage();
-                        // } else {
-                        //   showBookingNoRoomWarn(context);
-                        // }
+                        if (i == 0) {
+                          roomKind = "스탠다드 더블";
+                        } else if (i == 1) {
+                          roomKind = "스탠다드 트윈";
+                        } else if (i == 2) {
+                          roomKind = "디럭스 더블";
+                        } else if (i == 3) {
+                          roomKind = "디럭스 트윈";
+                        }
+                        navPage(
+                                context: context,
+                                page: HotelRoomInfoNCart(kindOfRoom: roomKind),
+                                enablePop: true)
+                            .navPageToPage();
                       }
                     : widget.screens == 2
                         ? () {
