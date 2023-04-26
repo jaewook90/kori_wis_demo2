@@ -190,14 +190,14 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
       buttonRadius = 40;
     } else {
       // 도착 화면
-      buttonPositionWidth = [552, 132];
-      buttonPositionHeight = [1316, 1519];
+      buttonPositionWidth = [560, 63];
+      buttonPositionHeight = [1363, 1600];
 
-      buttonSize1 = [395, 168];
-      buttonSize2 = [815, 158];
+      buttonSize1 = [455, 195];
+      buttonSize2 = [953, 185];
 
       buttonRadius1 = 35;
-      buttonRadius2 = 30;
+      buttonRadius2 = 35;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -211,6 +211,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
+                  // side: BorderSide(color: Colors.red, width: 1),
                     borderRadius: BorderRadius.circular(widget.screens == 3
                         ? i == 0
                             ? buttonRadius1
