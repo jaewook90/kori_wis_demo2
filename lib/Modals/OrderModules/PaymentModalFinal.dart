@@ -81,75 +81,54 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                       child: null,
                     ),
                   )),
-              _networkProvider.serviceState == 1
-                  ? Stack(children: [
-                      Positioned(
-                          left: 370,
-                          top: 315.5,
-                          child: Container(
-                            width: 230,
-                            height: 65,
-                            color: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${_orderProvider.orderedTotalPrice}',
-                                  style: TextStyle(
-                                    fontFamily: 'kor',
-                                    fontSize: 53,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xffffffff),
-                                  ),
-                                ),
-                              ],
+              Stack(children: [
+                Positioned(
+                    left: 370,
+                    top: 315.5,
+                    child: Container(
+                      width: 230,
+                      height: 65,
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _networkProvider.serviceState == 1
+                                ? '${_orderProvider.orderedTotalPrice}'
+                                : '${_orderProvider.orderedRoomPrice}',
+                            style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 53,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffffffff),
                             ),
-                          )),
-                      Positioned(
-                          left: 600,
-                          top: 315.5,
-                          child: Container(
-                            width: 55,
-                            height: 65,
-                            color: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '원',
-                                  style: TextStyle(
-                                    fontFamily: 'kor',
-                                    fontSize: 53,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xffffffff),
-                                  ),
-                                ),
-                              ],
+                          ),
+                        ],
+                      ),
+                    )),
+                Positioned(
+                    left: 600,
+                    top: 315.5,
+                    child: Container(
+                      width: 55,
+                      height: 65,
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            '원',
+                            style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 53,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffffffff),
                             ),
-                          )),
-                    ])
-                  : _networkProvider.serviceState == 2
-                      ? Positioned(
-                          left: 375,
-                          top: 315.5,
-                          child: Container(
-                            width: 300,
-                            height: 65,
-                            // color: Colors.transparent,
-                            decoration: BoxDecoration(
-                                border: Border.fromBorderSide(
-                                    BorderSide(color: Colors.white, width: 1))),
-                            child: Text(
-                              '172,500 원',
-                              style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 53,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ))
-                      : Container(),
+                          ),
+                        ],
+                      ),
+                    )),
+              ]),
               OrderModuleButtonsFinal(
                 screens: 2,
               )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/ServingOrderReceiptModal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomReceipt.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class NFCModuleScreenFinal extends StatefulWidget {
 }
 
 class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
+  late OrderModel _orderProvider;
   void showServingReceiptPopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -28,6 +30,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     return GestureDetector(
       onTap: () {
@@ -40,6 +43,10 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
         } else if (_networkProvider.serviceState == 2) {
           navPage(context: context, page: HotelRoomReceipt(), enablePop: false)
               .navPageToPage();
+          _orderProvider.roomReserveNum = '22042030001KORI';
+          _orderProvider.roomReserveContact = '010-0000-0000';
+          _orderProvider.roomReserveName = '이정근';
+          _orderProvider.roomReserveDiscount = '0';
         }
       },
       child: Container(

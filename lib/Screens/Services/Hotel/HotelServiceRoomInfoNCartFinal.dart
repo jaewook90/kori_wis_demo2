@@ -1,9 +1,11 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // ------------------------------ 보류 ---------------------------------------
@@ -17,6 +19,7 @@ class HotelRoomInfoNCart extends StatefulWidget {
 }
 
 class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
+  late OrderModel _orderProvider;
   static const String backgroundImage =
       "assets/screens/Hotel/koriZFinalCart.png";
 
@@ -125,7 +128,10 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
 
   @override
   Widget build(BuildContext context) {
+    _orderProvider = Provider.of<OrderModel>(context, listen: false);
     print(roomInfo);
+
+    _orderProvider.orderedRoomPrice = roomInfo[1];
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
