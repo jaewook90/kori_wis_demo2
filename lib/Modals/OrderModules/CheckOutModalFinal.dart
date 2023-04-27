@@ -181,18 +181,18 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(selectedItemList[
-                                                    index] ==
-                                                "햄버거"
+                                        index] ==
+                                            "햄버거"
                                             ? hamburger
                                             : selectedItemList[index] == "라면"
-                                                ? ramyeon
-                                                : selectedItemList[index] ==
-                                                        "치킨"
-                                                    ? chicken
-                                                    : selectedItemList[index] ==
-                                                            "핫도그"
-                                                        ? hotDog
-                                                        : "")),
+                                            ? ramyeon
+                                            : selectedItemList[index] ==
+                                            "치킨"
+                                            ? chicken
+                                            : selectedItemList[index] ==
+                                            "핫도그"
+                                            ? hotDog
+                                            : "")),
                                   ),
                                 )),
                             Positioned(
@@ -231,14 +231,14 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                         selectedItemList[index] == "햄버거"
                                             ? hamburgerEng
                                             : selectedItemList[index] == "라면"
-                                                ? ramyeonEng
-                                                : selectedItemList[index] ==
-                                                        "치킨"
-                                                    ? chickenEng
-                                                    : selectedItemList[index] ==
-                                                            "핫도그"
-                                                        ? hotDogEng
-                                                        : "",
+                                            ? ramyeonEng
+                                            : selectedItemList[index] ==
+                                            "치킨"
+                                            ? chickenEng
+                                            : selectedItemList[index] ==
+                                            "핫도그"
+                                            ? hotDogEng
+                                            : "",
                                         style: TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 20,
@@ -263,14 +263,14 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                         selectedItemList[index] == "햄버거"
                                             ? '$hamburgerPrice 원'
                                             : selectedItemList[index] == "라면"
-                                                ? '$ramyeonPrice 원'
-                                                : selectedItemList[index] ==
-                                                        "치킨"
-                                                    ? '$chickenPrice 원'
-                                                    : selectedItemList[index] ==
-                                                            "핫도그"
-                                                        ? '$hotDogPrice 원'
-                                                        : "",
+                                            ? '$ramyeonPrice 원'
+                                            : selectedItemList[index] ==
+                                            "치킨"
+                                            ? '$chickenPrice 원'
+                                            : selectedItemList[index] ==
+                                            "핫도그"
+                                            ? '$hotDogPrice 원'
+                                            : "",
                                         style: TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 25,
@@ -295,13 +295,13 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                         selectedItemList[index] == "햄버거"
                                             ? '$hamburgerQT'
                                             : selectedItemList[index] == "라면"
-                                                ? '$ramyeonQT'
-                                                : selectedItemList[index] == "치킨"
-                                                    ? '$chickenQT'
-                                                    : selectedItemList[index] ==
-                                                            "핫도그"
-                                                        ? '$hotDogQT'
-                                                        : "",
+                                            ? '$ramyeonQT'
+                                            : selectedItemList[index] == "치킨"
+                                            ? '$chickenQT'
+                                            : selectedItemList[index] ==
+                                            "핫도그"
+                                            ? '$hotDogQT'
+                                            : "",
                                         style: TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
@@ -321,7 +321,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 1))),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         IconButton(
                                             style: IconButton.styleFrom(
@@ -404,10 +404,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                                 _orderProvider.orderedRamyeonPrice = ramyeonTotalPrice;
                                                 _orderProvider.orderedChickenPrice = chickenTotalPrice;
                                                 _orderProvider.orderedHotdogPrice = hotDogTotalPrice;
-                                                _orderProvider.orderedHamburgerQT = hamburgerQT;
-                                                _orderProvider.orderedRamyeonQT = ramyeonQT;
-                                                _orderProvider.orderedChickenQT = chickenQT;
-                                                _orderProvider.orderedHotdogQT = hotDogQT;
                                                 _orderProvider.orderedTotalPrice = totalPrice;
                                               });
                                             },
@@ -450,16 +446,16 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                  selectedItemList[index] == "햄버거"
-                                  ? '$hamburgerTotalPrice'
-                                      : selectedItemList[index] == "라면"
-                                  ? '$ramyeonTotalPrice'
-                                          : selectedItemList[index] == "치킨"
-                                      ? '$chickenTotalPrice'
-                                      : selectedItemList[index] ==
-                                      "핫도그"
-                                      ? '$hotDogTotalPrice'
-                                          : "",
+                                        selectedItemList[index] == "햄버거"
+                                            ? '$hamburgerTotalPrice'
+                                            : selectedItemList[index] == "라면"
+                                            ? '$ramyeonTotalPrice'
+                                            : selectedItemList[index] == "치킨"
+                                            ? '$chickenTotalPrice'
+                                            : selectedItemList[index] ==
+                                            "핫도그"
+                                            ? '$hotDogTotalPrice'
+                                            : "",
                                         style: TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
