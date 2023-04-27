@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/MenuButtons.dart';
 import 'package:provider/provider.dart';
 
 // ------------------------------ 보류 ---------------------------------------
@@ -28,11 +26,6 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
-    double textButtonWidth = screenWidth * 0.85;
-    double textButtonHeight = screenHeight * 0.15;
-
-    TextStyle? buttonFont2 = Theme.of(context).textTheme.displaySmall;
 
     return WillPopScope(
       onWillPop: (){
@@ -121,10 +114,9 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
                               fit: BoxFit.fill)),
                     ),
                   ),
-                   ],
+                ],
               ),
             )
-            // SizedBox(width: screenWidth * 0.03)
           ],
           toolbarHeight: 110,
         ),
