@@ -161,69 +161,48 @@ class _ShippingModuleButtonsFinalState
       buttonRadius = 50;
     }
 
-    // if (widget.screens != 3) {
-    //   for (int i = 0; i < buttonPositionHeight.length; i++) {
-    //     buttonPositionHeight[i] = buttonPositionHeight[i] * pixelRatio;
-    //   }
-    //   for (int i = 0; i < buttonPositionWidth.length; i++) {
-    //     buttonPositionWidth[i] = buttonPositionWidth[i] * pixelRatio;
-    //   }
-    //   if (buttonSize.isNotEmpty) {
-    //     for (int i = 0; i < buttonSize.length; i++) {
-    //       buttonSize[i] = buttonSize[i] * pixelRatio;
-    //     }
-    //   }else if (buttonSize.isEmpty) {
-    //     for (int i = 0; i < buttonSize1.length; i++) {
-    //       buttonSize1[i] = buttonSize1[i] * pixelRatio;
-    //     }
-    //     for (int i = 0; i < buttonSize2.length; i++) {
-    //       buttonSize2[i] = buttonSize2[i] * pixelRatio;
-    //     }
-    //   }
-    // }
-
     buttonNumbers = buttonPositionHeight.length;
 
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
           : widget.screens == 1 ? Positioned(
-              top: 290 * 0.75,
-              left: 551 * 0.75,
-              width: 270,
-              height: 180,
-              child: Text(
-                '$currentNum',
-                style: TextStyle(
-                    fontFamily: 'kor',
-                    fontSize: 150,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)),
-              ),
-            ) : Container(),
+        top: 290 * 0.75,
+        left: 551 * 0.75,
+        width: 270,
+        height: 180,
+        child: Text(
+          '$currentNum',
+          style: TextStyle(
+              fontFamily: 'kor',
+              fontSize: 150,
+              fontWeight: FontWeight.bold,
+              color: Color(0xffffffff)),
+        ),
+      ) : Container(),
       widget.screens == 1
           ? Positioned(
-              left: 1213 * 0.75,
-              top: 451 * 0.75,
-              child: Container(
-                width: 60,
-                height: 60,
-                color: Colors.transparent,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                        // side: BorderSide(width: 1, color: Colors.white)
-                      )),
-                  onPressed: () {
-                    setState(() {
-                      currentNum = "";
-                    });
-                  },
-                  child: null,
-                ),
-              ))
+          left: 1213 * 0.75,
+          top: 451 * 0.75,
+          child: Container(
+            width: 60,
+            height: 60,
+            color: Colors.transparent,
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    // side: BorderSide(width: 1, color: Colors.white)
+                  )),
+              onPressed: () {
+                setState(() {
+                  currentNum = "";
+                });
+              },
+              child: null,
+            ),
+          ))
           : Container(),
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
@@ -234,57 +213,57 @@ class _ShippingModuleButtonsFinalState
                 foregroundColor: widget.screens==1 ? i!=9 ? i!=11 ? Colors.tealAccent : null : null : null,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
+                  // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize: widget.screens == 2
                     ? i != 0
-                        ? Size(
-                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
-                        : Size(
-                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
+                    ? Size(
+                    buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                    : Size(
+                    buttonSize1[buttonWidth], buttonSize1[buttonHeight])
                     : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    navPage(
-                            context: context,
-                            page: ShippingDestinationNewFinal(),
-                            enablePop: true)
-                        .navPageToPage();
-                  }
+              navPage(
+                  context: context,
+                  page: ShippingDestinationNewFinal(),
+                  enablePop: true)
+                  .navPageToPage();
+            }
                 : widget.screens == 1
-                    ? () {
-                        setState(() {
-                          if (currentNum!.length < 3) {
-                            if (i < 9) {
-                              currentNum = '${currentNum}${i + 1}';
-                            }
-                          }
-                        });
-                        if (i == 9) {
-                          showDestinationListPopup(context);
-                        } else if (i == 10) {
-                          currentNum = '${currentNum}0';
-                        } else if (i == 11) {
-                          showCountDownStarting(context);
-                        }
-                      }
-                    : widget.screens == 2
-                        ? () {
-                            showCountDownStarting(context);
-                          }
-                        : widget.screens == 3
-                            ? () {
-                                navPage(
-                                        context: context,
-                                        page: ShippingMenuFinal(),
-                                        enablePop: false)
-                                    .navPageToPage();
-                              }
-                            : widget.screens == 4
-                                ? () {}
-                                : widget.screens == 5
-                                    ? () {}
-                                    : null,
+                ? () {
+              setState(() {
+                if (currentNum!.length < 3) {
+                  if (i < 9) {
+                    currentNum = '${currentNum}${i + 1}';
+                  }
+                }
+              });
+              if (i == 9) {
+                showDestinationListPopup(context);
+              } else if (i == 10) {
+                currentNum = '${currentNum}0';
+              } else if (i == 11) {
+                showCountDownStarting(context);
+              }
+            }
+                : widget.screens == 2
+                ? () {
+              showCountDownStarting(context);
+            }
+                : widget.screens == 3
+                ? () {
+              navPage(
+                  context: context,
+                  page: ShippingMenuFinal(),
+                  enablePop: false)
+                  .navPageToPage();
+            }
+                : widget.screens == 4
+                ? () {}
+                : widget.screens == 5
+                ? () {}
+                : null,
             child: null,
           ),
         ),

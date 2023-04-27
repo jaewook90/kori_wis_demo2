@@ -99,7 +99,7 @@ class _RoomServiceModuleButtonsFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "502";
+    currentNum = "";
 
     shampoo = "assets/images/room_item_imgs/shampoo.png";
     shower = "assets/images/room_item_imgs/shower.png";
@@ -125,6 +125,66 @@ class _RoomServiceModuleButtonsFinalState
         context: context,
         builder: (context) {
           return NavCountDownModalFinal();
+        });
+  }
+
+  void showNoDestinationWarn(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          double screenHeight = MediaQuery.of(context).size.height;
+
+          return AlertDialog(
+            content: SizedBox(
+              width: 650,
+              height: 192,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '목적지가 입력되지 않았습니다.',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 45,
+                        color: Color(0xffF0F0F0)),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Color(0xff2C2C2C),
+            contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+            shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: BorderSide(
+                  color: Color(0xFFB7B7B7),
+                  style: BorderStyle.solid,
+                  width: 1,
+                )),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    '확 인',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 30,
+                        color: Color(0xffF0F0F0)),
+                  ),
+                  style: TextButton.styleFrom(
+                      shape: LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 0.8)),
+                      minimumSize:
+                      Size(680, 81)),
+                ),
+              ),
+            ],
+          );
         });
   }
 
@@ -294,173 +354,181 @@ class _RoomServiceModuleButtonsFinalState
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
+                  // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
-                    // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
-                    widget.screens == 3
-                        ? i == 0
-                            ? Size(buttonSize1[buttonWidth],
-                                buttonSize1[buttonHeight])
-                            : Size(buttonSize2[buttonWidth],
-                                buttonSize2[buttonHeight])
-                        : Size(
-                            buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                widget.screens == 3
+                    ? i == 0
+                    ? Size(buttonSize1[buttonWidth],
+                    buttonSize1[buttonHeight])
+                    : Size(buttonSize2[buttonWidth],
+                    buttonSize2[buttonHeight])
+                    : Size(
+                    buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    if ((_roomServiceProvider.tray1 == true ||
-                            _roomServiceProvider.tray2 == true) ||
-                        _roomServiceProvider.tray3 == true) {
-                      showCountDownPopup(context);
-                    } else {
-                      _roomServiceProvider.trayCheckAll = true;
-                      navPage(
-                              context: context,
-                              page: RoomServiceDestinationScreenFinal(),
-                              enablePop: true)
-                          .navPageToPage();
-                      _roomServiceProvider.menuItem = "상품";
-                    }
-                    // navPage(
-                    //         context: context,
-                    //         page: RoomServiceDestinationScreenFinal(),
-                    //         enablePop: true)
-                    //     .navPageToPage();
-                  }
+              if ((_roomServiceProvider.tray1 == true ||
+                  _roomServiceProvider.tray2 == true) ||
+                  _roomServiceProvider.tray3 == true) {
+                showCountDownPopup(context);
+              } else {
+                _roomServiceProvider.trayCheckAll = true;
+                navPage(
+                    context: context,
+                    page: RoomServiceDestinationScreenFinal(),
+                    enablePop: true)
+                    .navPageToPage();
+                _roomServiceProvider.menuItem = "상품";
+              }
+              // navPage(
+              //         context: context,
+              //         page: RoomServiceDestinationScreenFinal(),
+              //         enablePop: true)
+              //     .navPageToPage();
+            }
                 : widget.screens == 1
-                    ? () {
-                        setState(() {
-                          if (i == 0) {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          } else if (i == 1) {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          } else if (i == 2) {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          } else {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          }
-                        });
-                        if (_roomServiceProvider.tray1Select == true) {
-                          _roomServiceProvider.setItemTray1();
-                        } else if (_roomServiceProvider.tray2Select == true) {
-                          _roomServiceProvider.setItemTray2();
-                        } else if (_roomServiceProvider.tray3Select == true) {
-                          _roomServiceProvider.setItemTray3();
-                        }
-                        navPage(
-                                context: context,
-                                page: RoomServiceDestinationScreenFinal(),
-                                enablePop: true)
-                            .navPageToPage();
+                ? () {
+              setState(() {
+                if (i == 0) {
+                  _roomServiceProvider.menuItem = menuItems[i];
+                } else if (i == 1) {
+                  _roomServiceProvider.menuItem = menuItems[i];
+                } else if (i == 2) {
+                  _roomServiceProvider.menuItem = menuItems[i];
+                } else {
+                  _roomServiceProvider.menuItem = menuItems[i];
+                }
+              });
+              if (_roomServiceProvider.tray1Select == true) {
+                _roomServiceProvider.setItemTray1();
+              } else if (_roomServiceProvider.tray2Select == true) {
+                _roomServiceProvider.setItemTray2();
+              } else if (_roomServiceProvider.tray3Select == true) {
+                _roomServiceProvider.setItemTray3();
+              }
+              navPage(
+                  context: context,
+                  page: RoomServiceDestinationScreenFinal(),
+                  enablePop: true)
+                  .navPageToPage();
+            }
+                : widget.screens == 2
+                ? () {
+              setState(() {
+                if (currentNum!.length < 3) {
+                  if (i < 9) {
+                    currentNum = '${currentNum}${i + 1}';
+                  }
+                }
+              });
+              if (i == 9) {
+                showDestinationListPopup(context);
+              } else if (i == 10) {
+                currentNum = '${currentNum}0';
+              } else if (i == 11) {
+                setState(() {
+                  if(currentNum==""){
+                    showNoDestinationWarn(context);
+                  }else {
+                    _roomServiceProvider.tableNumber =
+                    '$currentNum';
+                    if (_roomServiceProvider.trayCheckAll ==
+                        false) {
+                      if (_roomServiceProvider.tray1Select ==
+                          true) {
+                        _roomServiceProvider.tray1 = true;
+                        _roomServiceProvider.table1 =
+                        "$currentNum";
+                      } else if (_roomServiceProvider
+                          .tray2Select ==
+                          true) {
+                        _roomServiceProvider.tray2 = true;
+                        _roomServiceProvider.table2 =
+                        "$currentNum";
+                      } else {
+                        _roomServiceProvider.tray3 = true;
+                        _roomServiceProvider.table3 =
+                        "$currentNum";
                       }
-                    : widget.screens == 2
-                        ? () {
-                            setState(() {
-                              if (currentNum!.length < 3) {
-                                if (i < 9) {
-                                  currentNum = '${currentNum}${i + 1}';
-                                }
-                              }
-                            });
-                            if (i == 9) {
-                              showDestinationListPopup(context);
-                            } else if (i == 10) {
-                              currentNum = '${currentNum}0';
-                            } else if (i == 11) {
-                              setState(() {
-                                _roomServiceProvider.tableNumber =
-                                    '$currentNum';
-                                if (_roomServiceProvider.trayCheckAll ==
-                                    false) {
-                                  if (_roomServiceProvider.tray1Select ==
-                                      true) {
-                                    _roomServiceProvider.tray1 = true;
-                                    _roomServiceProvider.table1 = "$currentNum";
-                                  } else if (_roomServiceProvider.tray2Select ==
-                                      true) {
-                                    _roomServiceProvider.tray2 = true;
-                                    _roomServiceProvider.table2 = "$currentNum";
-                                  } else {
-                                    _roomServiceProvider.tray3 = true;
-                                    _roomServiceProvider.table3 = "$currentNum";
-                                  }
-                                  uploadRoomNumberNItemImg();
-                                  navPage(
-                                          context: context,
-                                          page: RoomServiceMenu(),
-                                          enablePop: false)
-                                      .navPageToPage();
-                                } else {
-                                  _roomServiceProvider.setTrayAll();
-                                  _roomServiceProvider.tableNumber =
-                                      "$currentNum";
-                                  showCountDownPopup(context);
-                                }
-                              });
-                            }
-                          }
-                        : widget.screens == 3
-                            ? () {
-                                setState(() {
-                                  if (i == 1) {
-                                    currentNum = '102';
-                                  } else if (i == 2) {
-                                    currentNum = '101';
-                                  } else if (i == 3) {
-                                    currentNum = '202';
-                                  } else if (i == 4) {
-                                    currentNum = '201';
-                                  } else if (i == 5) {
-                                    currentNum = '302';
-                                  } else if (i == 6) {
-                                    currentNum = '301';
-                                  }
-                                  _roomServiceProvider.tableNumber =
-                                      '$currentNum';
-                                  if (_roomServiceProvider.trayCheckAll ==
-                                      false) {
-                                    if (_roomServiceProvider.tray1Select ==
-                                        true) {
-                                      _roomServiceProvider.tray1 = true;
-                                      _roomServiceProvider.table1 =
-                                          "$currentNum";
-                                    } else if (_roomServiceProvider
-                                            .tray2Select ==
-                                        true) {
-                                      _roomServiceProvider.tray2 = true;
-                                      _roomServiceProvider.table2 =
-                                          "$currentNum";
-                                    } else {
-                                      _roomServiceProvider.tray3 = true;
-                                      _roomServiceProvider.table3 =
-                                          "$currentNum";
-                                    }
-                                    uploadRoomNumberNItemImg();
-                                    navPage(
-                                            context: context,
-                                            page: RoomServiceMenu(),
-                                            enablePop: false)
-                                        .navPageToPage();
-                                  } else {
-                                    _roomServiceProvider.setTrayAll();
-                                    _roomServiceProvider.tableNumber =
-                                        "$currentNum";
-                                    showCountDownPopup(context);
-                                  }
-                                });
-                              }
-                            : widget.screens == 4
-                                ? () {
-                                    _roomServiceProvider.clearAllTray();
-                                    navPage(
-                                            context: context,
-                                            page: RoomServiceReturnModuleFinal(),
-                                            enablePop: false)
-                                        .navPageToPage();
-                                  }
-                                : widget.screens == 5
-                                    ? () {}
-                                    : null,
+                      uploadRoomNumberNItemImg();
+                      navPage(
+                          context: context,
+                          page: RoomServiceMenu(),
+                          enablePop: false)
+                          .navPageToPage();
+                    } else {
+                      _roomServiceProvider.setTrayAll();
+                      _roomServiceProvider.tableNumber =
+                      "$currentNum";
+                      showCountDownPopup(context);
+                    }
+                  }
+                });
+              }
+            }
+                : widget.screens == 3
+                ? () {
+              setState(() {
+                if (i == 1) {
+                  currentNum = '102';
+                } else if (i == 2) {
+                  currentNum = '101';
+                } else if (i == 3) {
+                  currentNum = '202';
+                } else if (i == 4) {
+                  currentNum = '201';
+                } else if (i == 5) {
+                  currentNum = '302';
+                } else if (i == 6) {
+                  currentNum = '301';
+                }
+                _roomServiceProvider.tableNumber =
+                '$currentNum';
+                if (_roomServiceProvider.trayCheckAll ==
+                    false) {
+                  if (_roomServiceProvider.tray1Select ==
+                      true) {
+                    _roomServiceProvider.tray1 = true;
+                    _roomServiceProvider.table1 =
+                    "$currentNum";
+                  } else if (_roomServiceProvider
+                      .tray2Select ==
+                      true) {
+                    _roomServiceProvider.tray2 = true;
+                    _roomServiceProvider.table2 =
+                    "$currentNum";
+                  } else {
+                    _roomServiceProvider.tray3 = true;
+                    _roomServiceProvider.table3 =
+                    "$currentNum";
+                  }
+                  uploadRoomNumberNItemImg();
+                  navPage(
+                      context: context,
+                      page: RoomServiceMenu(),
+                      enablePop: false)
+                      .navPageToPage();
+                } else {
+                  _roomServiceProvider.setTrayAll();
+                  _roomServiceProvider.tableNumber =
+                  "$currentNum";
+                  showCountDownPopup(context);
+                }
+              });
+            }
+                : widget.screens == 4
+                ? () {
+              _roomServiceProvider.clearAllTray();
+              navPage(
+                  context: context,
+                  page: RoomServiceReturnModuleFinal(),
+                  enablePop: false)
+                  .navPageToPage();
+            }
+                : widget.screens == 5
+                ? () {}
+                : null,
             child: null,
           ),
         ),
