@@ -56,7 +56,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "502";
+    currentNum = "";
   }
 
   void showDestinationListPopup(context) {

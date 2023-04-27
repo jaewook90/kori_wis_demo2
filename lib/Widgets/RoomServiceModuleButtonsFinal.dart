@@ -99,7 +99,7 @@ class _RoomServiceModuleButtonsFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentNum = "502";
+    currentNum = "";
 
     shampoo = "assets/images/room_item_imgs/shampoo.png";
     shower = "assets/images/room_item_imgs/shower.png";
@@ -125,6 +125,66 @@ class _RoomServiceModuleButtonsFinalState
         context: context,
         builder: (context) {
           return NavCountDownModalFinal();
+        });
+  }
+
+  void showNoDestinationWarn(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          double screenHeight = MediaQuery.of(context).size.height;
+
+          return AlertDialog(
+            content: SizedBox(
+              width: 650,
+              height: 192,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '목적지가 입력되지 않았습니다.',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 45,
+                        color: Color(0xffF0F0F0)),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Color(0xff2C2C2C),
+            contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+            shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(40),
+                borderSide: BorderSide(
+                  color: Color(0xFFB7B7B7),
+                  style: BorderStyle.solid,
+                  width: 1,
+                )),
+            actions: [
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    '확 인',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 30,
+                        color: Color(0xffF0F0F0)),
+                  ),
+                  style: TextButton.styleFrom(
+                      shape: LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 0.8)),
+                      minimumSize:
+                      Size(680, 81)),
+                ),
+              ),
+            ],
+          );
         });
   }
 
@@ -368,33 +428,41 @@ class _RoomServiceModuleButtonsFinalState
                               currentNum = '${currentNum}0';
                             } else if (i == 11) {
                               setState(() {
-                                _roomServiceProvider.tableNumber =
-                                    '$currentNum';
-                                if (_roomServiceProvider.trayCheckAll ==
-                                    false) {
-                                  if (_roomServiceProvider.tray1Select ==
-                                      true) {
-                                    _roomServiceProvider.tray1 = true;
-                                    _roomServiceProvider.table1 = "$currentNum";
-                                  } else if (_roomServiceProvider.tray2Select ==
-                                      true) {
-                                    _roomServiceProvider.tray2 = true;
-                                    _roomServiceProvider.table2 = "$currentNum";
-                                  } else {
-                                    _roomServiceProvider.tray3 = true;
-                                    _roomServiceProvider.table3 = "$currentNum";
-                                  }
-                                  uploadRoomNumberNItemImg();
-                                  navPage(
-                                          context: context,
-                                          page: RoomServiceMenu(),
-                                          enablePop: false)
-                                      .navPageToPage();
-                                } else {
-                                  _roomServiceProvider.setTrayAll();
+                                if(currentNum==""){
+                                  showNoDestinationWarn(context);
+                                }else {
                                   _roomServiceProvider.tableNumber =
+                                  '$currentNum';
+                                  if (_roomServiceProvider.trayCheckAll ==
+                                      false) {
+                                    if (_roomServiceProvider.tray1Select ==
+                                        true) {
+                                      _roomServiceProvider.tray1 = true;
+                                      _roomServiceProvider.table1 =
                                       "$currentNum";
-                                  showCountDownPopup(context);
+                                    } else if (_roomServiceProvider
+                                        .tray2Select ==
+                                        true) {
+                                      _roomServiceProvider.tray2 = true;
+                                      _roomServiceProvider.table2 =
+                                      "$currentNum";
+                                    } else {
+                                      _roomServiceProvider.tray3 = true;
+                                      _roomServiceProvider.table3 =
+                                      "$currentNum";
+                                    }
+                                    uploadRoomNumberNItemImg();
+                                    navPage(
+                                        context: context,
+                                        page: RoomServiceMenu(),
+                                        enablePop: false)
+                                        .navPageToPage();
+                                  } else {
+                                    _roomServiceProvider.setTrayAll();
+                                    _roomServiceProvider.tableNumber =
+                                    "$currentNum";
+                                    showCountDownPopup(context);
+                                  }
                                 }
                               });
                             }

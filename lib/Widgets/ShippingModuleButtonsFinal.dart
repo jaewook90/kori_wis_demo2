@@ -161,27 +161,6 @@ class _ShippingModuleButtonsFinalState
       buttonRadius = 50;
     }
 
-    // if (widget.screens != 3) {
-    //   for (int i = 0; i < buttonPositionHeight.length; i++) {
-    //     buttonPositionHeight[i] = buttonPositionHeight[i] * pixelRatio;
-    //   }
-    //   for (int i = 0; i < buttonPositionWidth.length; i++) {
-    //     buttonPositionWidth[i] = buttonPositionWidth[i] * pixelRatio;
-    //   }
-    //   if (buttonSize.isNotEmpty) {
-    //     for (int i = 0; i < buttonSize.length; i++) {
-    //       buttonSize[i] = buttonSize[i] * pixelRatio;
-    //     }
-    //   }else if (buttonSize.isEmpty) {
-    //     for (int i = 0; i < buttonSize1.length; i++) {
-    //       buttonSize1[i] = buttonSize1[i] * pixelRatio;
-    //     }
-    //     for (int i = 0; i < buttonSize2.length; i++) {
-    //       buttonSize2[i] = buttonSize2[i] * pixelRatio;
-    //     }
-    //   }
-    // }
-
     buttonNumbers = buttonPositionHeight.length;
 
     return Stack(children: [
