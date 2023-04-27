@@ -12,6 +12,11 @@ class OrderModel with ChangeNotifier {
   int? orderedChickenPrice;
 
   int? orderedTotalPrice;
+  String? orderedRoomPrice;
+  String? roomReserveNum;
+  String? roomReserveName;
+  String? roomReserveContact;
+  String? roomReserveDiscount;
 
   int? orderedHamburgerQT;
   int? orderedRamyeonQT;
