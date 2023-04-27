@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/TrayStatusModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/trayCheckingModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/AdminScreen.dart';
-import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
-import 'package:kori_wis_demo/Screens/LinkConnectorScreen.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
@@ -30,12 +23,10 @@ class ServingModuleButtonsFinal extends StatefulWidget {
 }
 
 class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
-  // late NetworkModel _networkProvider;
-
   late ServingModel _servingProvider;
   late OrderModel _orderProvider;
 
-  late var homeButtonName = List<String>.empty();
+  // late var homeButtonName = List<String>.empty();
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -43,8 +34,8 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
   late double buttonRadius;
 
-  late List<double> buttonSize1;
-  late List<double> buttonSize2;
+  // late List<double> buttonSize1;
+  // late List<double> buttonSize2;
 
   late int buttonNumbers;
 
@@ -63,14 +54,14 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     '핫도그'
   ];
 
-  String? table1;
-  String? table2;
-  String? table3;
-  String? tableAll;
+  // String? table1;
+  // String? table2;
+  // String? table3;
+  // String? tableAll;
 
-  String? item1;
-  String? item2;
-  String? item3;
+  // String? item1;
+  // String? item2;
+  // String? item3;
 
   int itemNumber = 0;
   String? itemName;
@@ -83,16 +74,10 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late List<List> itemImagesList;
   late List<String> itemImages;
 
-  String? startUrl;
-  String? navUrl;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // poseDataUpdate(widget.parsePoseData);
-
-    homeButtonName = ["택배", "서빙", "호텔"];
 
     hamburger = "assets/images/serving_item_imgs/hamburger.png";
     hotDog = "assets/images/serving_item_imgs/hotDog.png";
@@ -108,7 +93,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return ItemOrderModalFinal();
+          return const ItemOrderModalFinal();
         });
   }
 
@@ -117,7 +102,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return NavCountDownModalFinal();
+          return const NavCountDownModalFinal();
         });
   }
 
@@ -126,7 +111,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return SelectTableModalFinal();
+          return const SelectTableModalFinal();
         });
   }
 
@@ -135,35 +120,22 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return TrayStatusModalFinal();
+          return const TrayStatusModalFinal();
         });
   }
 
-  // 다른 트레이 상품 추가 여부
-  // void showCheckingPopup(context) {
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //         return TrayCheckingModalFinal();
-  //       });
-  // }
-
   void uploadTableNumberNItemImg() {
     if (_servingProvider.tray1Select == true) {
-      // _servingProvider.setTray1();
       setState(() {
         _servingProvider.itemImageList![0] = itemImagesList[0][itemNumber];
         _servingProvider.servedItem1 = false;
       });
     } else if (_servingProvider.tray2Select == true) {
-      // _servingProvider.setTray1();
       setState(() {
         _servingProvider.itemImageList![1] = itemImagesList[1][itemNumber];
         _servingProvider.servedItem2 = false;
       });
     } else if (_servingProvider.tray3Select == true) {
-      // _servingProvider.setTray1();
       setState(() {
         _servingProvider.itemImageList![2] = itemImagesList[2][itemNumber];
         _servingProvider.servedItem3 = false;
@@ -176,6 +148,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
+    // 트레이 상품 정의
     itemName = _servingProvider.menuItem;
 
     if (widget.screens == 0) {
@@ -271,7 +244,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
                     Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
@@ -294,7 +266,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                         showCountDownPopup(context);
                       } else {
                         _servingProvider.trayCheckAll = true;
-                        // _servingProvider.servingBeginningIsNot=true;
                         showTableSelectPopup(context);
                         _servingProvider.menuItem = "상품";
                       }
@@ -320,13 +291,12 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                         } else if (_servingProvider.tray3Select == true) {
                           _servingProvider.setItemTray3();
                         }
-                        // Navigator.pop(context);
                         showTableSelectPopup(context);
                       }
                     : widget.screens == 2
                         ? () {
                             setState(() {
-                              _servingProvider.tableNumber = "${i + 1}";
+                              // _servingProvider.tableNumber = "${i + 1}";
                               if (_servingProvider.trayCheckAll == false) {
                                 if (_servingProvider.tray1Select == true) {
                                   _servingProvider.tray1 = true;
@@ -335,26 +305,22 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                     true) {
                                   _servingProvider.tray2 = true;
                                   _servingProvider.table2 = "${i + 1}";
-                                } else{
+                                } else {
                                   _servingProvider.tray3 = true;
                                   _servingProvider.table3 = "${i + 1}";
                                 }
                                 uploadTableNumberNItemImg();
                                 navPage(
-                                    context: context,
-                                    page: TraySelectionFinal(),
-                                    enablePop: false)
+                                        context: context,
+                                        page: const TraySelectionFinal(),
+                                        enablePop: false)
                                     .navPageToPage();
                               } else {
                                 _servingProvider.setTrayAll();
-                                _servingProvider.tableNumber = "${i + 1}";
+                                // _servingProvider.tableNumber = "${i + 1}";
                                 showCountDownPopup(context);
                               }
                             });
-                            // _servingProvider.cancelTraySelection();
-
-                            // showCheckingPopup(context);
-                            // Navigator.pop(context);
                           }
                         : widget.screens == 3
                             ? receiptMenu[i] == '미주문'
@@ -364,8 +330,8 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                       setState(() {
                                         _servingProvider.menuItem =
                                             receiptMenu[i];
-                                        _servingProvider.tableNumber =
-                                            "${i + 1}";
+                                        // _servingProvider.tableNumber =
+                                        //     "${i + 1}";
                                       });
                                     }
                                     if (_servingProvider.tray1Select == true) {
@@ -382,20 +348,14 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                   }
                             : widget.screens == 4
                                 ? () {
-                                    if (i == 0) {
-                                      // showCheckingPopup(context);
-                                      // Navigator.pop(context);
-                                      // Navigator.pop(context);
-                                    } else {
-                                      showCountDownPopup(context);
-                                    }
+                                    showCountDownPopup(context);
                                   }
                                 : widget.screens == 5
                                     ? () {
                                         _servingProvider.clearAllTray();
                                         navPage(
                                                 context: context,
-                                                page: TraySelectionFinal(),
+                                                page: const TraySelectionFinal(),
                                                 enablePop: false)
                                             .navPageToPage();
                                       }
