@@ -22,11 +22,9 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-        padding: EdgeInsets.only(top: 100),
+        padding: const EdgeInsets.only(top: 100),
         child: Dialog(
           alignment: Alignment.topCenter,
           backgroundColor: Colors.transparent,
@@ -35,8 +33,8 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
             width: 992,
             child: Stack(children: [
               Container(
-                width: screenWidth,
-                height: screenHeight,
+                width: 1080,
+                height: 1920,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(paymentBackground),
@@ -96,7 +94,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                             _networkProvider.serviceState == 1
                                 ? '${_orderProvider.orderedTotalPrice}'
                                 : '${_orderProvider.orderedRoomPrice}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'kor',
                               fontSize: 53,
                               fontWeight: FontWeight.bold,
@@ -113,7 +111,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                       width: 55,
                       height: 65,
                       color: Colors.transparent,
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
@@ -129,7 +127,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                       ),
                     )),
               ]),
-              OrderModuleButtonsFinal(
+              const OrderModuleButtonsFinal(
                 screens: 2,
               )
             ]),

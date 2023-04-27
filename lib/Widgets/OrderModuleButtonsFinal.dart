@@ -27,9 +27,9 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
 
-  late List<double> SelButtonPositionWidth;
-  late List<double> SelButtonPositionHeight;
-  late List<double> SelButtonSize;
+  late List<double> selButtonPositionWidth;
+  late List<double> selButtonPositionHeight;
+  late List<double> selButtonSize;
 
   late double buttonRadius;
 
@@ -50,7 +50,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
   bool? checkOutItems;
 
-  List<bool>? selectedItem;
+  // List<bool>? selectedItem;
 
   List<String> selectedItemList = [];
 
@@ -67,7 +67,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return CheckOutScreenFinal();
+          return const CheckOutScreenFinal();
         });
   }
 
@@ -76,7 +76,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return PaymentScreenFinal();
+          return const PaymentScreenFinal();
         });
   }
 
@@ -85,7 +85,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return NFCModuleScreenFinal();
+          return const NFCModuleScreenFinal();
         });
   }
 
@@ -101,7 +101,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
             content: SizedBox(
               width: screenWidth * 0.5,
               height: screenHeight * 0.1,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -114,11 +114,11 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                 ],
               ),
             ),
-            backgroundColor: Color(0xff2C2C2C),
+            backgroundColor: const Color(0xff2C2C2C),
             contentTextStyle: Theme.of(context).textTheme.headlineLarge,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFFB7B7B7),
                   style: BorderStyle.solid,
                   width: 1,
@@ -129,19 +129,19 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  style: TextButton.styleFrom(
+                      shape: const LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 1)),
+                      minimumSize:
+                          Size(screenWidth * 0.5, screenHeight * 0.05)),
+                  child: const Text(
                     '확 인',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontSize: 30,
                         color: Color(0xffF0F0F0)),
                   ),
-                  style: TextButton.styleFrom(
-                      shape: LinearBorder(
-                          side: BorderSide(color: Colors.white, width: 2),
-                          top: LinearBorderEdge(size: 1)),
-                      minimumSize:
-                          Size(screenWidth * 0.5, screenHeight * 0.05)),
                 ),
               ),
             ],
@@ -175,10 +175,10 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       buttonRadius1 = 43;
       buttonRadius2 = 40;
 
-      SelButtonPositionWidth = [57.5, 507.5, 57.5, 507.5, 370];
+      selButtonPositionWidth = [57.5, 507.5, 57.5, 507.5, 370];
 
-      SelButtonPositionHeight = [316, 316, 769, 769, 1855];
-      SelButtonSize = [430, 430];
+      selButtonPositionHeight = [316, 316, 769, 769, 1855];
+      selButtonSize = [430, 430];
 
       if (selectedQt == 0) {
         _orderProvider.SelectedItemsQT = [true, true, true, true];
@@ -210,19 +210,19 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
     }
 
     buttonNumbers = buttonPositionHeight.length;
-    selectedItem = List<bool>.filled(buttonNumbers - 1, true, growable: true);
+    // selectedItem = List<bool>.filled(buttonNumbers - 1, true, growable: true);
 
     return Stack(children: [
       if (widget.screens == 0)
         for (int i = 0; i < buttonNumbers - 1; i++)
           Positioned(
-            left: SelButtonPositionWidth[i],
-            top: SelButtonPositionHeight[i],
+            left: selButtonPositionWidth[i],
+            top: selButtonPositionHeight[i],
             child: Offstage(
               offstage: _orderProvider.SelectedItemsQT![i],
               child: Container(
-                  width: SelButtonSize[buttonWidth],
-                  height: SelButtonSize[buttonHeight],
+                  width: selButtonSize[buttonWidth],
+                  height: selButtonSize[buttonHeight],
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(selectedItemFrame),
@@ -289,9 +289,6 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                       } else {
                         showCheckingPopup(context);
                       }
-                      print(_orderProvider.SelectedItemsQT);
-                      print(selectedQt);
-                      print(_orderProvider.SelectedQT);
                     }
                   : widget.screens == 1
                       ? () {
@@ -306,7 +303,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                               }
                             }
                           : widget.screens == 3 ?(){
-                navPage(context: context, page: TraySelectionFinal(), enablePop: false).navPageToPage();
+                navPage(context: context, page: const TraySelectionFinal(), enablePop: false).navPageToPage();
               } :null,
               child: null,
             ),
@@ -322,12 +319,12 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 0, 0, 30),
+                  color: const Color.fromRGBO(255, 0, 0, 30),
                   borderRadius: BorderRadius.circular(40)),
               child: Center(
                   child: Text(
                 '$selectedQt',
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'kor',
                     color: Colors.white,
                     fontSize: 25,

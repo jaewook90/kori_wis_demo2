@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Videos/ServiceScreenVideoFinal.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
-import 'package:video_player/video_player.dart';
 
 class ServiceScreenFinal extends StatefulWidget {
   const ServiceScreenFinal({
@@ -16,14 +14,8 @@ class ServiceScreenFinal extends StatefulWidget {
 
 class _ServiceScreenFinalState extends State<ServiceScreenFinal>
     with TickerProviderStateMixin {
-  // late NetworkModel _networkProvider;
 
   String? currentGoal;
-
-  // dynamic poseData;
-
-  final String _wallpape = "assets/screens/koriZFinalService.png";
-  final String _fingerIcon = "assets/icons/pushIcon.png";
 
   final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.png";
   final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.png";
