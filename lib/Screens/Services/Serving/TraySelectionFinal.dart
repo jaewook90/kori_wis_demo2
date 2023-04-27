@@ -5,7 +5,6 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Widgets/KoriAppBar.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 

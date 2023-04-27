@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:provider/provider.dart';
 
 class ShippingModuleButtonsFinal extends StatefulWidget {
   final int? screens;
@@ -23,10 +20,6 @@ class ShippingModuleButtonsFinal extends StatefulWidget {
 
 class _ShippingModuleButtonsFinalState
     extends State<ShippingModuleButtonsFinal> {
-  // late NetworkModel _networkProvider;
-
-  late ServingModel _servingProvider;
-  late OrderModel _orderProvider;
 
   late var screenList = List<Widget>.empty();
   late var serviceList = List<Widget>.empty();
@@ -64,7 +57,7 @@ class _ShippingModuleButtonsFinalState
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return NavCountDownModalFinal();
+          return const NavCountDownModalFinal();
         });
   }
 
@@ -73,14 +66,12 @@ class _ShippingModuleButtonsFinalState
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return ShippingDestinationModalFinal();
+          return const ShippingDestinationModalFinal();
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 택배 메인 화면
@@ -173,7 +164,7 @@ class _ShippingModuleButtonsFinalState
               height: 180,
               child: Text(
                 '$currentNum',
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'kor',
                     fontSize: 150,
                     fontWeight: FontWeight.bold,
@@ -226,7 +217,7 @@ class _ShippingModuleButtonsFinalState
                 ? () {
                     navPage(
                             context: context,
-                            page: ShippingDestinationNewFinal(),
+                            page: const ShippingDestinationNewFinal(),
                             enablePop: true)
                         .navPageToPage();
                   }
@@ -235,7 +226,7 @@ class _ShippingModuleButtonsFinalState
                         setState(() {
                           if (currentNum!.length < 3) {
                             if (i < 9) {
-                              currentNum = '${currentNum}${i + 1}';
+                              currentNum = '$currentNum${i + 1}';
                             }
                           }
                         });
@@ -255,7 +246,7 @@ class _ShippingModuleButtonsFinalState
                             ? () {
                                 navPage(
                                         context: context,
-                                        page: ShippingMenuFinal(),
+                                        page: const ShippingMenuFinal(),
                                         enablePop: false)
                                     .navPageToPage();
                               }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ShippingModuleButtonsFinal.dart';
@@ -17,7 +15,6 @@ class ShippingDoneFinal extends StatefulWidget {
 
 class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
   late NetworkModel _networkProvider;
-  late ServingModel _servingProvider;
 
   String? startUrl;
   String? navUrl;
@@ -37,11 +34,9 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading:
           actions: [
             Container(
               width: screenWidth,
@@ -49,32 +44,19 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
               child: Stack(
                 children: [
                   Positioned(
-                    left: 130,
-                    top: 25,
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Home.png',
-                              ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                  Positioned(
-                    left: 120,
-                    top: 18,
-                    child: FilledButton(onPressed: () {
-                      navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
-                    }, child: null, style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
-                        shape: RoundedRectangleBorder(
-                          // side: BorderSide(color: Colors.white, width: 1),
-                            borderRadius: BorderRadius.circular(0)
-                        ),
-                        backgroundColor: Colors.transparent
-                    ),),
+                    left: 122,
+                    top: 17,
+                    child: IconButton(
+                        onPressed: () {
+                          navPage(
+                                  context: context,
+                                  page: const MainScreenFinal(),
+                                  enablePop: false)
+                              .navPageToPage();
+                        },
+                        icon:
+                            Image.asset('assets/icons/appBar/appBar_Home.png'),
+                        iconSize: 60),
                   ),
                   Positioned(
                     right: 50,
@@ -82,7 +64,7 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
@@ -90,96 +72,45 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
-               ],
+                ],
               ),
             )
-            // SizedBox(width: screenWidth * 0.03)
           ],
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
         body: WillPopScope(
-          onWillPop: (){
+          onWillPop: () {
             return Future.value(false);
           },
           child: Container(
-              constraints: BoxConstraints.expand(),
+              constraints: const BoxConstraints.expand(),
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-              child: Stack(
-                  children: [
-                    Positioned(
-                      top: 450,
-                      left: 0,
-                      child: GestureDetector(
-                          onTap: () {
-                            navPage(
+              child: Stack(children: [
+                Positioned(
+                  top: 450,
+                  left: 0,
+                  child: GestureDetector(
+                      onTap: () {
+                        navPage(
                                 context: context,
-                                page: ShippingMenuFinal(),
+                                page: const ShippingMenuFinal(),
                                 enablePop: false)
-                                .navPageToPage();
-                          },
-                          child: Container(
-                              height: 1200,
-                              width: 1080,
-                              decoration: BoxDecoration(
-                                  border: Border.fromBorderSide(
-                                      BorderSide(color: Colors.transparent, width: 1))))),
-                    ),
-                    ShippingModuleButtonsFinal(screens: 3,)
-                  ])),
+                            .navPageToPage();
+                      },
+                      child: Container(
+                          height: 1200,
+                          width: 1080,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  color: Colors.transparent, width: 1))))),
+                ),
+                const ShippingModuleButtonsFinal(
+                  screens: 3,
+                )
+              ])),
         ));
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 복귀 버튼
-//Positioned(
-//                 left: screenWidth * 0.325,
-//                 top: screenHeight * 0.55,
-//                 child: ServingButtons(
-//                   onPressed: () {
-//                     PostApi(
-//                             url: startUrl,
-//                             endadr: chgUrl,
-//                             keyBody: 'charging_pile')
-//                         .Posting();
-//                     _networkProvider.currentGoal = '충전스테이션';
-//                     navPage(
-//                             context: context,
-//                             page: NavigatorModule(),
-//                             enablePop: true)
-//                         .navPageToPage();
-//                     // navPage(context: context, page: ServingMenu(), enablePop: true).navPageToPage();
-//                     _networkProvider.shippingDone = true;
-//                   },
-//                   buttonWidth: buttonWidth,
-//                   buttonHeight: buttonHeight,
-//                   buttonText: '확인',
-//                   buttonFont: buttonFont,
-//                   buttonColor: Color.fromRGBO(45, 45, 45, 45),
-//                   screenWidth: screenWidth,
-//                   screenHeight: screenHeight,
-//                 ),
-//               )
-

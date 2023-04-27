@@ -55,7 +55,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
       const AdminScreen(),
       const ConfigScreen()
     ];
-    serviceList = [ShippingMenuFinal(), TraySelectionFinal(), HotelServiceMenu()];
+    serviceList = [const ShippingMenuFinal(), const TraySelectionFinal(), HotelServiceMenu()];
   }
 
   @override
@@ -103,7 +103,6 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                             page: screenList[i],
                             enablePop: true)
                         .navPageToPage();
-                    // _networkProvider.serviceState = i;
                   }
                 : widget.screens == 1
                     ? () {

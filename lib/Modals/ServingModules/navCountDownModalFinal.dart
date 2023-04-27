@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -16,21 +14,16 @@ class NavCountDownModalFinal extends StatefulWidget {
 }
 
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
-  late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
 
   late String countDownPopup;
 
   @override
   Widget build(BuildContext context) {
-    final CountdownController _controller =
-        new CountdownController(autoStart: true);
+    final CountdownController controller =
+        CountdownController(autoStart: true);
 
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     if (_networkProvider.serviceState == 0) {
       countDownPopup = 'assets/screens/Shipping/koriZFinalShipCountdown.png';
@@ -45,7 +38,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     }
 
     return Container(
-        padding: EdgeInsets.only(top: 607),
+        padding: const EdgeInsets.only(top: 607),
         child: AlertDialog(
           alignment: Alignment.topCenter,
           content: Stack(children: [
@@ -56,17 +49,19 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   image: DecorationImage(
                       image: AssetImage(countDownPopup), fit: BoxFit.fill)),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(130, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(130, 10, 0, 0),
                 child: Countdown(
-                  controller: _controller,
+                  controller: controller,
                   seconds: 5,
                   build: (_, double time) => Text(
                     time.toInt().toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
+                      fontFamily: 'kor',
                       fontSize: 80,
+                      fontWeight: FontWeight.bold
                     ),
                   ),
-                  interval: Duration(seconds: 1),
+                  interval: const Duration(seconds: 1),
                   onFinished: () {
                     navPage(
                         context: context,
@@ -86,7 +81,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     shape: RoundedRectangleBorder(
                         // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius: BorderRadius.circular(0)),
-                    fixedSize: Size(370, 120)),
+                    fixedSize: const Size(370, 120)),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -102,7 +97,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     shape: RoundedRectangleBorder(
                         // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius: BorderRadius.circular(0)),
-                    fixedSize: Size(370, 120)),
+                    fixedSize: const Size(370, 120)),
                 onPressed: () {
                   navPage(
                           context: context,

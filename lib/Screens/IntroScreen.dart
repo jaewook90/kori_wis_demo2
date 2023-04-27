@@ -5,6 +5,8 @@ import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 
 import 'package:video_player/video_player.dart';
+
+// ignore: depend_on_referenced_packages
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class IntroScreen extends StatefulWidget {
@@ -35,15 +37,14 @@ class _IntroScreenState extends State<IntroScreen>
   );
 
   DateTime? currentBackPressTime;
-  String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
-  String _audioFile = 'assets/voices/welcome.mp3';
+  final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
+  final String _audioFile = 'assets/voices/welcome.mp3';
 
   FToast? fToast;
 
   @override
   void initState() {
     super.initState();
-    // Duration mediaDuration = _controller.value.duration;
     _controller = VideoPlayerController.asset(introVideo)
       ..initialize().then((_) {
         _controller.setLooping(false);
@@ -60,11 +61,11 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   void _playVideo() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
     // 디버그 모드 + KORI 메인 디스플레이에서 비디오 실행시 필요
     // 빌드시 주석 처리 해도 됨
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     _controller.play();
     _updateData();
   }
@@ -79,12 +80,11 @@ class _IntroScreenState extends State<IntroScreen>
   void _updateData() async {
     // print('-------------VIDEO START-------------');
     Duration mediaDuration = _controller.value.duration;
-    Duration introDuration = mediaDuration + Duration(milliseconds: 2000);
+    Duration introDuration = mediaDuration + const Duration(milliseconds: 2000);
     await Future.delayed(introDuration);
     // print('-------------VIDEO END-------------');
     _playAudio();
-    await Future.delayed(Duration(milliseconds: 500));
-    // _networkProvider.hostIP();
+    await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       updateComplete = true;
     });
@@ -100,10 +100,6 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   Widget build(BuildContext context) {
-    // _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
-    // hostAdr = _networkProvider.startUrl;
-    // positionURL = _networkProvider.positionURL;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -120,7 +116,7 @@ class _IntroScreenState extends State<IntroScreen>
                   const Duration(milliseconds: 1300)) {
             currentBackPressTime = now;
             fToast?.showToast(
-                toastDuration: Duration(milliseconds: 1300),
+                toastDuration: const Duration(milliseconds: 1300),
                 child: Material(
                   color: Colors.transparent,
                   child: Column(
@@ -128,7 +124,7 @@ class _IntroScreenState extends State<IntroScreen>
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ImageIcon(
+                          const ImageIcon(
                             AssetImage('assets/logos/ExaIcon.png'),
                             size: 25,
                             color: Color(0xffB7B7B7),
@@ -159,12 +155,9 @@ class _IntroScreenState extends State<IntroScreen>
           updateComplete == true
               ? navPage(
                       context: context,
-                      page: MainScreenFinal(
-                          // parsePoseData: getApiData,
-                          ),
+                      page: const MainScreenFinal(),
                       enablePop: true)
                   .navPageToPage()
-              // getting(hostAdr, positionURL)
               : null;
         },
         child: Center(
@@ -212,10 +205,9 @@ class _IntroScreenState extends State<IntroScreen>
                               style: Theme.of(context).textTheme.titleLarge),
                         )
                       else
-                        SizedBox(),
+                        const SizedBox(),
                       SizedBox(
                         height: screenHeight * 0.4,
-                        // height: screenHeight*0.16,
                       )
                     ],
                   ),
