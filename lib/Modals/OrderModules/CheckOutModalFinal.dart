@@ -404,6 +404,10 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                                 _orderProvider.orderedRamyeonPrice = ramyeonTotalPrice;
                                                 _orderProvider.orderedChickenPrice = chickenTotalPrice;
                                                 _orderProvider.orderedHotdogPrice = hotDogTotalPrice;
+                                                _orderProvider.orderedHamburgerQT = hamburgerQT;
+                                                _orderProvider.orderedRamyeonQT = ramyeonQT;
+                                                _orderProvider.orderedChickenQT = chickenQT;
+                                                _orderProvider.orderedHotdogQT = hotDogQT;
                                                 _orderProvider.orderedTotalPrice = totalPrice;
                                               });
                                             },

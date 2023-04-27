@@ -416,7 +416,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   height: 48,
                   // color: Colors.transparent,
                   decoration: BoxDecoration(
-                      // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
+                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
