@@ -15,47 +15,28 @@ class ServiceScreenFinal extends StatefulWidget {
 class _ServiceScreenFinalState extends State<ServiceScreenFinal>
     with TickerProviderStateMixin {
 
-  String? currentGoal;
-
   final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.png";
   final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.png";
   final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.png";
 
-  late var shippingPose = List<String>.empty();
-
-  late final AnimationController _textAniCon = AnimationController(
-    duration: const Duration(milliseconds: 1000),
-    vsync: this,
-  )..repeat(reverse: true);
-
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _textAniCon,
-    curve: Curves.easeOut,
-  );
-
-
   @override
   Widget build(BuildContext context) {
-    // _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    // poseData = _networkProvider.getPoseData;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       onWillPop: () async {
-        navPage(context: context, page: MainScreenFinal(), enablePop: false)
+        navPage(context: context, page: const MainScreenFinal(), enablePop: false)
             .navPageToPage();
         return Future.value(false);
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(''),
+          title: const Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading:
           actions: [
             Container(
               width: screenWidth,
@@ -68,7 +49,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                       child: Container(
                         height: 60,
                         width: 60,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
                                   'assets/icons/appBar/appBar_Backward.png',
@@ -82,13 +63,13 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                       onPressed: () {
                         navPage(
                                 context: context,
-                                page: MainScreenFinal(),
+                                page: const MainScreenFinal(),
                                 enablePop: false)
                             .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
-                          fixedSize: Size(80, 80),
+                          fixedSize: const Size(80, 80),
                           shape: RoundedRectangleBorder(
                               // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
@@ -101,7 +82,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Home.png',
@@ -116,13 +97,13 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                       onPressed: () {
                         navPage(
                                 context: context,
-                                page: MainScreenFinal(),
+                                page: const MainScreenFinal(),
                                 enablePop: false)
                             .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
-                          fixedSize: Size(80, 80),
+                          fixedSize: const Size(80, 80),
                           shape: RoundedRectangleBorder(
                               // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
@@ -135,7 +116,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
@@ -152,12 +133,13 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
         ),
         extendBodyBehindAppBar: true,
         body: Container(
-          margin: EdgeInsets.only(top: 110),
+          margin: const EdgeInsets.only(top: 110),
           height: 1810,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.transparent,),
           child: Stack(
             children: [
+              //택배
               Positioned(
                 top: 15,
                 child: Container(
@@ -166,9 +148,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                   decoration: BoxDecoration(
                       image: DecorationImage(image: AssetImage(_shipping)),
                       color: Colors.transparent,),
-                  // child: ServiceScreenVideoFinal(videoName: _shipping)
                 ),
               ),
+              //서빙
               Positioned(
                 top: 610,
                 width: 1080,
@@ -177,9 +159,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                   decoration: BoxDecoration(
                       image: DecorationImage(image: AssetImage(_serving)),
                       color: Colors.transparent,),
-                  // child:ServiceScreenVideoFinal(videoName: _serving)
                 ),
               ),
+              //호텔
               Positioned(
                 top: 1205,
                 width: 1080,
@@ -188,10 +170,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     decoration: BoxDecoration(
                         image: DecorationImage(image: AssetImage(_hotel)),
                         color: Colors.transparent,),
-                  // child:ServiceScreenVideoFinal(videoName: _hotel)
                 ),
               ),
-              MainScreenButtonsFinal(screens: 1),
+              const MainScreenButtonsFinal(screens: 1),
             ],
           ),
         ),

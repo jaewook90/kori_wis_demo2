@@ -125,15 +125,20 @@ class _IntroScreenState extends State<IntroScreen>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const ImageIcon(
-                            AssetImage('assets/logos/ExaIcon.png'),
-                            size: 25,
+                            AssetImage('assets/icons/ExaIcon.png'),
+                            size: 35,
                             color: Color(0xffB7B7B7),
                           ),
                           SizedBox(
                             width: screenWidth * 0.01,
                           ),
-                          Text(_text,
-                              style: Theme.of(context).textTheme.headlineLarge)
+                          Text(
+                            _text,
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 35
+                            ),
+                          )
                         ],
                       ),
                       SizedBox(

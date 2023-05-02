@@ -65,21 +65,24 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                 child: Column(
                   children: [
                     Container(
-                      color: Color(0xff191919),
+                      color: Colors.transparent,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const ImageIcon(
-                            AssetImage('assets/logos/ExaIcon.png'),
-                            size: 25,
+                            AssetImage('assets/icons/ExaIcon.png'),
+                            size: 35,
                             color: Color(0xffB7B7B7),
                           ),
                           SizedBox(
-                            width: screenWidth * 0.01,
+                            width: screenWidth * 0.02,
                           ),
                           Text(
                             _text,
-                            style: Theme.of(context).textTheme.headlineLarge,
+                            style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 35
+                            ),
                           )
                         ],
                       ),
