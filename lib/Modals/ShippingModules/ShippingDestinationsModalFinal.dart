@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Widgets/ShippingModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 
 class ShippingDestinationModalFinal extends StatefulWidget {
   const ShippingDestinationModalFinal({Key? key}) : super(key: key);
@@ -12,34 +10,17 @@ class ShippingDestinationModalFinal extends StatefulWidget {
 }
 
 class _ShippingDestinationModalFinalState extends State<ShippingDestinationModalFinal> {
-  late NetworkModel _networkProvider;
-
-  String? startUrl;
-  String? navUrl;
-  String? chgUrl;
-  String? stpUrl;
-  String? rsmUrl;
-
-  late var goalPosition = List<String>.empty();
 
   String itemSelectBG = 'assets/screens/Shipping/koriZFinalShippingList.png';
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
-    goalPosition = _networkProvider.goalPosition;
-    startUrl = _networkProvider.startUrl;
-    navUrl = _networkProvider.navUrl;
-    chgUrl = _networkProvider.chgUrl;
-    stpUrl = _networkProvider.stpUrl;
-    rsmUrl = _networkProvider.rsmUrl;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 100),
       child: Dialog(
         backgroundColor: Colors.transparent,
         alignment: Alignment.topCenter,
@@ -56,8 +37,8 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
                         image: AssetImage(itemSelectBG), fit: BoxFit.fill)),
               ),
               Positioned(
-                  left: 1189 * 0.75,
-                  top: 34 * 0.75,
+                  left: 891.75,
+                  top: 25.5,
                   child: Container(
                     width: 55,
                     height: 55,
@@ -66,7 +47,6 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);
@@ -74,7 +54,7 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
                       child: null,
                     ),
                   )),
-              ShippingModuleButtonsFinal(screens: 2,)
+              const ShippingModuleButtonsFinal(screens: 2,)
             ],
           ),
         )

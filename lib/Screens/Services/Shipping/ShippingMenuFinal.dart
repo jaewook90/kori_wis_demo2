@@ -20,7 +20,7 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -100,6 +100,7 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
                   image: AssetImage(backgroundImage), fit: BoxFit.cover)),
           child: Stack(
             children: [
+              // 로봇 화면 터치
               Positioned(
                 top: 420,
                 left: 0,
@@ -115,9 +116,13 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
                         height: 1200,
                         width: 1080,
                         decoration: const BoxDecoration(
-                            border: Border.fromBorderSide(BorderSide(
-                                color: Colors.transparent, width: 1))))),
+                          border: Border.fromBorderSide(BorderSide.none)
+                            // border: Border.fromBorderSide(BorderSide(
+                            //     color: Colors.transparent, width: 1))
+                        )
+                    )),
               ),
+              // 버튼 푸쉬
               const ShippingModuleButtonsFinal(
                 screens: 0,
               )

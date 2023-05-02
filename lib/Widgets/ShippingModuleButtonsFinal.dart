@@ -21,11 +21,6 @@ class ShippingModuleButtonsFinal extends StatefulWidget {
 class _ShippingModuleButtonsFinalState
     extends State<ShippingModuleButtonsFinal> {
 
-  late var screenList = List<Widget>.empty();
-  late var serviceList = List<Widget>.empty();
-
-  late var homeButtonName = List<String>.empty();
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -40,10 +35,8 @@ class _ShippingModuleButtonsFinalState
   int buttonWidth = 0;
   int buttonHeight = 1;
 
+  // 키패드 호실 설정
   String? currentNum;
-
-  String? startUrl;
-  String? navUrl;
 
   @override
   void initState() {
@@ -67,6 +60,64 @@ class _ShippingModuleButtonsFinalState
         context: context,
         builder: (context) {
           return const ShippingDestinationModalFinal();
+        });
+  }
+
+
+  // 목적지 미입력 시 알람
+  void showGoalFalsePopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+
+          return Container(
+            padding: EdgeInsets.only(bottom: 270),
+            child: AlertDialog(
+              content: SizedBox(
+                width: 670,
+                height: 210,
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('목적지를 입력 해 주세요.'),
+                  ],
+                ),
+              ),
+              backgroundColor: const Color(0xff191919),
+              contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+              shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFB7B7B7),
+                    style: BorderStyle.solid,
+                    width: 1,
+                  )),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Color(0xff797979),
+                          shape: const LinearBorder(
+                              side: BorderSide(color: Colors.white, width: 2),
+                              top: LinearBorderEdge(size: 1)),
+                          minimumSize:
+                          Size(670, 120)),
+                      child: Text(
+                        '확인',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
         });
   }
 
@@ -134,22 +185,6 @@ class _ShippingModuleButtonsFinalState
       buttonSize = [866, 174];
 
       buttonRadius = 40;
-    } else if (widget.screens == 4) {
-      // 팝업 ( 추가 여부 / 카운트다운 )
-      buttonPositionWidth = [70, 695];
-      buttonPositionHeight = [327, 327];
-
-      buttonSize = [565, 194];
-
-      buttonRadius = 50;
-    } else if (widget.screens == 5) {
-      // 완료 화면
-      buttonPositionWidth = [143];
-      buttonPositionHeight = [1308];
-
-      buttonSize = [1155, 230];
-
-      buttonRadius = 50;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -157,20 +192,27 @@ class _ShippingModuleButtonsFinalState
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
+      // 키패드 입력 호수 표시
           : widget.screens == 1 ? Positioned(
-              top: 290 * 0.75,
-              left: 551 * 0.75,
-              width: 270,
+              top: 217.5,
+              left: 323.25,
+              width: 355,
               height: 180,
-              child: Text(
-                '$currentNum',
-                style: const TextStyle(
-                    fontFamily: 'kor',
-                    fontSize: 150,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '$currentNum',
+                    style: const TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 150,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xffffffff)),
+                  ),
+                ],
               ),
             ) : Container(),
+      // 키패드 입력 호수 초기화 버튼
       widget.screens == 1
           ? Positioned(
               left: 1213 * 0.75,
@@ -202,6 +244,7 @@ class _ShippingModuleButtonsFinalState
           child: FilledButton(
             style: FilledButton.styleFrom(
                 foregroundColor: widget.screens==1 ? i!=9 ? i!=11 ? Colors.tealAccent : null : null : null,
+                splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     // side: BorderSide(width: 1, color: Colors.redAccent),
@@ -224,7 +267,8 @@ class _ShippingModuleButtonsFinalState
                 : widget.screens == 1
                     ? () {
                         setState(() {
-                          if (currentNum!.length < 3) {
+                          // 호실 자릿수
+                          if (currentNum!.length < 4) {
                             if (i < 9) {
                               currentNum = '$currentNum${i + 1}';
                             }
@@ -235,7 +279,11 @@ class _ShippingModuleButtonsFinalState
                         } else if (i == 10) {
                           currentNum = '${currentNum}0';
                         } else if (i == 11) {
-                          showCountDownStarting(context);
+                          if(currentNum==""){
+                            showGoalFalsePopup(context);
+                          }else{
+                            showCountDownStarting(context);
+                          }
                         }
                       }
                     : widget.screens == 2
@@ -250,11 +298,7 @@ class _ShippingModuleButtonsFinalState
                                         enablePop: false)
                                     .navPageToPage();
                               }
-                            : widget.screens == 4
-                                ? () {}
-                                : widget.screens == 5
-                                    ? () {}
-                                    : null,
+                            : null,
             child: null,
           ),
         ),
