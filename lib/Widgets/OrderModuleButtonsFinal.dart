@@ -50,8 +50,6 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
   bool? checkOutItems;
 
-  // List<bool>? selectedItem;
-
   List<String> selectedItemList = [];
 
   @override

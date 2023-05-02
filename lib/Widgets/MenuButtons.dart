@@ -36,6 +36,11 @@ class _MenuButtonsState extends State<MenuButtons> {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed:widget.onPressed,
+        style: TextButton.styleFrom(
+            backgroundColor: widget.buttonColor,
+            fixedSize: Size(widget.buttonWidth!, widget.buttonHeight!),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -47,11 +52,11 @@ class _MenuButtonsState extends State<MenuButtons> {
               child: widget.assetsBool==true ? ImageIcon(
                 AssetImage(widget.iconAsset!),
                 size: widget.buttonIconSize,
-                color: Color(0xffB7B7B7),
+                color: const Color(0xffB7B7B7),
               )
                   :Icon(
                 widget.appIcon,
-                color: Color(0xffB7B7B7),
+                color: const Color(0xffB7B7B7),
                 size: widget.buttonIconSize,
               ),
             ),
@@ -60,16 +65,6 @@ class _MenuButtonsState extends State<MenuButtons> {
               style: widget.buttonFont,
             ),
           ],
-        ),
-        style: TextButton.styleFrom(
-            backgroundColor: widget.buttonColor,
-            // backgroundColor: Color(0xFF2D2D2D),
-            fixedSize: Size(widget.buttonWidth!, widget.buttonHeight!),
-            shape: RoundedRectangleBorder(
-              // side: BorderSide(
-              //     color: Color(0xFFB7B7B7),
-              //     style: BorderStyle.solid,
-              //     width: 1),
-                borderRadius: BorderRadius.circular(40))));
+        ));
   }
 }

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellboyDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellboyDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -25,13 +23,7 @@ class BellboyModuleButtonsFinal extends StatefulWidget {
 class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
   late NetworkModel _networkProvider;
 
-  late ServingModel _servingProvider;
-  late OrderModel _orderProvider;
-
   late var screenList = List<Widget>.empty();
-  late var serviceList = List<Widget>.empty();
-
-  late var homeButtonName = List<String>.empty();
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -49,9 +41,6 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
 
   String? currentNum;
 
-  String? startUrl;
-  String? navUrl;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -64,7 +53,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return BellboyDestinationListModalFinal();
+          return const BellboyDestinationListModalFinal();
         });
   }
 
@@ -73,15 +62,13 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return NavCountDownModalFinal();
+          return const NavCountDownModalFinal();
         });
   }
 
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 택배 메인 화면
@@ -166,7 +153,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
               height: 180,
               child: Text(
                 '$currentNum',
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'kor',
                     fontSize: 150,
                     fontWeight: FontWeight.bold,
@@ -186,7 +173,6 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                       backgroundColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
-                        // side: BorderSide(width: 1, color: Colors.white)
                       )),
                   onPressed: () {
                     setState(() {
@@ -205,11 +191,9 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
                         BorderRadius.circular(buttonRadius)),
                 fixedSize:
-                    // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
                     widget.screens == 2
                         ? i == 0
                             ? Size(buttonSize1[buttonWidth],
@@ -225,7 +209,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                     } else {
                       navPage(
                               context: context,
-                              page: BellboyDestinationScreenFinal(),
+                              page: const BellboyDestinationScreenFinal(),
                               enablePop: true)
                           .navPageToPage();
                     }
@@ -235,7 +219,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                         setState(() {
                           if (currentNum!.length < 3) {
                             if (i < 9) {
-                              currentNum = '${currentNum}${i + 1}';
+                              currentNum = '$currentNum${i + 1}';
                             }
                           }
                         });
@@ -260,7 +244,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                                     });
                                     navPage(
                                             context: context,
-                                            page: BellboyReturnModuleFinal(),
+                                            page: const BellboyReturnModuleFinal(),
                                             enablePop: false)
                                         .navPageToPage();
                                   }

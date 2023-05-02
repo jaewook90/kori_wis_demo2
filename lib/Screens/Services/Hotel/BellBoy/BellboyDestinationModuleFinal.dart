@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/ShippingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class BellboyDestinationScreenFinal extends StatefulWidget {
-  BellboyDestinationScreenFinal({
+  const BellboyDestinationScreenFinal({
     Key? key,
   }) : super(key: key);
 
@@ -19,12 +17,6 @@ class BellboyDestinationScreenFinal extends StatefulWidget {
 class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreenFinal> {
   late NetworkModel _networkProvider;
   String? currentGoal;
-
-  String? startUrl;
-  String? navUrl;
-  String? chgUrl;
-  String? stpUrl;
-  String? rsmUrl;
 
   bool? goalChecker;
 
@@ -54,18 +46,18 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
             content: SizedBox(
               width: screenWidth * 0.5,
               height: screenHeight * 0.1,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('목적지를 잘못 입력하였습니다.'),
                 ],
               ),
             ),
-            backgroundColor: Color(0xff2C2C2C),
+            backgroundColor: const Color(0xff2C2C2C),
             contentTextStyle: Theme.of(context).textTheme.headlineLarge,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFFB7B7B7),
                   style: BorderStyle.solid,
                   width: 1,
@@ -78,16 +70,16 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text(
-                      '확인',
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
                     style: TextButton.styleFrom(
-                        shape: LinearBorder(
+                        shape: const LinearBorder(
                             side: BorderSide(color: Colors.white, width: 2),
                             top: LinearBorderEdge(size: 0.9)),
                         minimumSize:
                         Size(screenWidth * 0.5, screenHeight * 0.04)),
+                    child: Text(
+                      '확인',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
                   ),
                 ],
               )
@@ -102,21 +94,14 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     goalPosition = _networkProvider.goalPosition;
-    startUrl = _networkProvider.startUrl;
-    navUrl = _networkProvider.navUrl;
-    chgUrl = _networkProvider.chgUrl;
-    stpUrl = _networkProvider.stpUrl;
-    rsmUrl = _networkProvider.rsmUrl;
 
-    print('checker');
-    print(goalChecker);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -133,7 +118,7 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Backward.png',
@@ -146,7 +131,7 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                   child: FilledButton(onPressed: () {
                     Navigator.pop(context);
                   }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: Size(80, 80),
+                      fixedSize: const Size(80, 80),
                       shape: RoundedRectangleBorder(
                         // side: BorderSide(color: Colors.white, width: 1),
                           borderRadius: BorderRadius.circular(0)
@@ -160,7 +145,7 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                               'assets/icons/appBar/appBar_Home.png',
@@ -172,11 +157,10 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                   left: 120,
                   top: 18,
                   child: FilledButton(onPressed: () {
-                    navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+                    navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
                   }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: Size(80, 80),
+                      fixedSize: const Size(80, 80),
                       shape: RoundedRectangleBorder(
-                        // side: BorderSide(color: Colors.white, width: 1),
                           borderRadius: BorderRadius.circular(0)
                       ),
                       backgroundColor: Colors.transparent
@@ -188,7 +172,7 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                               'assets/icons/appBar/appBar_Battery.png',
@@ -199,17 +183,16 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                 ],
             ),
           )
-          // SizedBox(width: screenWidth * 0.03)
         ],
         toolbarHeight: 110,
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(shippingKeyPadIMG), fit: BoxFit.cover)),
-        child: Stack(
+        child: const Stack(
           children: [
             Positioned(
               top: 278,

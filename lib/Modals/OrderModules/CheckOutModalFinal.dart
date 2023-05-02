@@ -15,8 +15,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   late OrderModel _orderProvider;
   String shoppingCartImg = 'assets/screens/Serving/koriZFinalShoppingCart.png';
 
-  // late String selectedItemImg;
-
   late String hamburger;
   late String hotDog;
   late String chicken;

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
 
 class RoomServiceReturnModuleFinal extends StatefulWidget {
-  RoomServiceReturnModuleFinal({
+  const RoomServiceReturnModuleFinal({
     Key? key,
   }) : super(key: key);
 
@@ -20,14 +17,6 @@ class RoomServiceReturnModuleFinal extends StatefulWidget {
 class _RoomServiceReturnModuleFinalState
     extends State<RoomServiceReturnModuleFinal> {
   late NetworkModel _networkProvider;
-  late RoomServiceModel _roomServiceProvider;
-  late ServingModel _servingProvider;
-
-  String? startUrl;
-  String? stpUrl;
-  String? rsmUrl;
-  String? navUrl;
-  String? chgUrl;
 
   int? shipping;
   int? serving;
@@ -58,24 +47,15 @@ class _RoomServiceReturnModuleFinalState
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _roomServiceProvider = Provider.of<RoomServiceModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalRoomReturnNav.png";
 
-    startUrl = _networkProvider.startUrl;
-    stpUrl = _networkProvider.stpUrl;
-    rsmUrl = _networkProvider.rsmUrl;
-    navUrl = _networkProvider.navUrl;
-    chgUrl = _networkProvider.chgUrl;
     currentGoal = _networkProvider.currentGoal;
-
     serviceState = _networkProvider.serviceState;
 
-    print(serviceState);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       onWillPop: () {
@@ -83,11 +63,10 @@ class _RoomServiceReturnModuleFinalState
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(''),
+          title: const Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading:
           actions: [
             Container(
               width: screenWidth,
@@ -100,7 +79,7 @@ class _RoomServiceReturnModuleFinalState
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
@@ -108,18 +87,16 @@ class _RoomServiceReturnModuleFinalState
                               fit: BoxFit.fill)),
                     ),
                   ),
-
                 ],
               ),
             )
-            // SizedBox(width: screenWidth * 0.03)
           ],
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
         body: Stack(children: [
           Container(
-            constraints: BoxConstraints.expand(),
+            constraints: const BoxConstraints.expand(),
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(backgroundImageServ), fit: BoxFit.cover)),
@@ -133,14 +110,14 @@ class _RoomServiceReturnModuleFinalState
                         onTap: () {
                           navPage(
                               context: context,
-                              page: HotelServiceMenu(),
+                              page: const HotelServiceMenu(),
                               enablePop: false)
                               .navPageToPage();
                         },
                         child: Container(
                             height: 1000,
                             width: 1080,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 border: Border.fromBorderSide(
                                     BorderSide(color: Colors.transparent, width: 1))))),
                   ),

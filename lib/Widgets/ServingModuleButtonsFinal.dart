@@ -26,16 +26,11 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late ServingModel _servingProvider;
   late OrderModel _orderProvider;
 
-  // late var homeButtonName = List<String>.empty();
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
 
   late double buttonRadius;
-
-  // late List<double> buttonSize1;
-  // late List<double> buttonSize2;
 
   late int buttonNumbers;
 
@@ -53,15 +48,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     '핫도그',
     '핫도그'
   ];
-
-  // String? table1;
-  // String? table2;
-  // String? table3;
-  // String? tableAll;
-
-  // String? item1;
-  // String? item2;
-  // String? item3;
 
   int itemNumber = 0;
   String? itemName;

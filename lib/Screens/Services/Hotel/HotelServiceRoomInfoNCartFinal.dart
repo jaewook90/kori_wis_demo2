@@ -61,7 +61,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
           return Dialog(
             backgroundColor: Colors.transparent,
             child: Container(
-              margin: EdgeInsets.only(left: 500),
+              margin: const EdgeInsets.only(left: 500),
               height: 600,
               width: 420,
               child: Stack(children: [
@@ -134,7 +134,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
     _orderProvider.orderedRoomPrice = roomInfo[1];
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -171,7 +171,6 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                     style: FilledButton.styleFrom(
                         fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(0)),
                         backgroundColor: Colors.transparent),
                   ),
@@ -205,7 +204,6 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                     style: FilledButton.styleFrom(
                         fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(0)),
                         backgroundColor: Colors.transparent),
                   ),
@@ -227,7 +225,6 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
               ],
             ),
           )
-          // SizedBox(width: screenWidth * 0.03)
         ],
         toolbarHeight: 110,
       ),
@@ -260,6 +257,8 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                           fit: BoxFit.cover,
                         ));
                   },
+                  // autoplay: true,
+                  // autoplayDelay: 3000,
                   itemCount: roomImages.length,
                   pagination: const SwiperPagination(
                       alignment: Alignment.bottomRight,
@@ -278,7 +277,6 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 style: FilledButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
-                        // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(140, 50)),
                 onPressed: () {
@@ -293,12 +291,9 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 child: Container(
                   height: 60,
                   width: 400,
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //         BorderSide(color: Colors.red, width: 1))),
                   child: Text(
                     roomInfo[0],
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'kor',
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
@@ -310,10 +305,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 child: Container(
                   height: 60,
                   width: 300,
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //         BorderSide(color: Colors.red, width: 1))),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -333,16 +325,13 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 child: Container(
                   height: 60,
                   width: 300,
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //         BorderSide(color: Colors.red, width: 1))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         roomInfo[1],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'kor',
                             fontSize: 35,
                             fontWeight: FontWeight.bold),
@@ -356,10 +345,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 child: Container(
                   height: 60,
                   width: 300,
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //         BorderSide(color: Colors.red, width: 1))),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -380,10 +366,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 child: Container(
                   height: 60,
                   width: 300,
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(
-                  //         BorderSide(color: Colors.red, width: 1))),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

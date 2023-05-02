@@ -62,12 +62,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
       buttonRadius1 = 40;
       buttonRadius2 = 32;
     }
-    // else if (widget.screens == 3) {
-    //   // 서빙 상품 선택 화면
-    // } else if (widget.screens == 4) {
-    //   // 서빙 테이블 선택 화면
-    // } else if (widget.screens == 5) {
-    // } else if (widget.screens == 6) {}
 
     buttonNumbers = buttonPositionHeight.length;
 
@@ -80,7 +74,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.tealAccent),
                     borderRadius: BorderRadius.circular(widget.screens == 1 ? i == 0 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
                 fixedSize: widget.screens == 1
                     ? i == 0
@@ -155,7 +148,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                             } else if (i == 1) {
                               navPage(
                                       context: context,
-                                      page: ShippingDestinationNewFinal(),
+                                      page: const ShippingDestinationNewFinal(),
                                       enablePop: false)
                                   .navPageToPage();
                             } else if (i == 2) {

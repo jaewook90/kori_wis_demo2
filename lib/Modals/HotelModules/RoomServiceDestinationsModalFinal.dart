@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/ShippingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class RoomServiceDestinationListModalFinal extends StatefulWidget {
@@ -16,12 +14,6 @@ class RoomServiceDestinationListModalFinal extends StatefulWidget {
 class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestinationListModalFinal> {
   late NetworkModel _networkProvider;
 
-  String? startUrl;
-  String? navUrl;
-  String? chgUrl;
-  String? stpUrl;
-  String? rsmUrl;
-
   late var goalPosition = List<String>.empty();
 
   String itemSelectBG = 'assets/screens/Hotel/BellBoy/koriZFinalBellBoyRoomSelectList.png';
@@ -31,17 +23,12 @@ class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestin
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     goalPosition = _networkProvider.goalPosition;
-    startUrl = _networkProvider.startUrl;
-    navUrl = _networkProvider.navUrl;
-    chgUrl = _networkProvider.chgUrl;
-    stpUrl = _networkProvider.stpUrl;
-    rsmUrl = _networkProvider.rsmUrl;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 100),
       child: Dialog(
         backgroundColor: Colors.transparent,
         alignment: Alignment.topCenter,
@@ -58,8 +45,8 @@ class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestin
                         image: AssetImage(itemSelectBG), fit: BoxFit.fill)),
               ),
               Positioned(
-                  left: 1189 * 0.75,
-                  top: 34 * 0.75,
+                  left: 891.75,
+                  top: 25.5,
                   child: Container(
                     width: 55,
                     height: 55,
@@ -68,7 +55,6 @@ class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestin
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);
@@ -76,7 +62,7 @@ class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestin
                       child: null,
                     ),
                   )),
-              RoomServiceModuleButtonsFinal(screens: 3,)
+              const RoomServiceModuleButtonsFinal(screens: 3,)
             ],
           ),
         )

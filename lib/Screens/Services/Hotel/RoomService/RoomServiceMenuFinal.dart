@@ -99,9 +99,9 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
         context: context,
         builder: (context) {
           if (receiptModeOn == true) {
-            return SelectReceiptModalFinal();
+            return const SelectReceiptModalFinal();
           } else {
-            return SelectRoomItemModalFinal();
+            return const SelectRoomItemModalFinal();
           }
         });
   }
@@ -153,16 +153,15 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
 
     return WillPopScope(
       onWillPop: () {
-        navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
+        navPage(context: context, page: const HotelServiceMenu(), enablePop: false).navPageToPage();
         return Future.value(false);
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(''),
+          title: const Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading:
           actions: [
             Container(
               width: screenWidth,
@@ -175,7 +174,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       child: Container(
                         height: 60,
                         width: 60,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
                                   'assets/icons/appBar/appBar_Backward.png',
@@ -186,11 +185,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                     left: 20,
                     top: 18,
                     child: FilledButton(onPressed: () {
-                      navPage(context: context, page: HotelServiceMenu(), enablePop: false).navPageToPage();
+                      navPage(context: context, page: const HotelServiceMenu(), enablePop: false).navPageToPage();
                     }, child: null, style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
+                        fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                          // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(0)
                         ),
                         backgroundColor: Colors.transparent
@@ -202,7 +200,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Home.png',
@@ -214,11 +212,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                     left: 120,
                     top: 18,
                     child: FilledButton(onPressed: () {
-                      navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+                      navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
                     }, child: null, style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
+                        fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                          // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(0)
                         ),
                         backgroundColor: Colors.transparent
@@ -230,7 +227,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
@@ -241,13 +238,12 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                 ],
               ),
             )
-            // SizedBox(width: screenWidth * 0.03)
           ],
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
         body: Container(
-          constraints: BoxConstraints.expand(),
+          constraints: const BoxConstraints.expand(),
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(backgroundImage), fit: BoxFit.cover)),
@@ -255,7 +251,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
             children: [
               //기능적 부분
               Stack(children: [
-                RoomServiceModuleButtonsFinal(
+                const RoomServiceModuleButtonsFinal(
                   screens: 0,
                 ),
                 // 디버그 버튼
@@ -280,69 +276,69 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                     }
                                   });
                                 },
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: Size(textButtonWidth * 0.25,
+                                        textButtonHeight * 0.5),
+                                    shape: const RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Color(0xFFB7B7B7),
+                                            style: BorderStyle.solid,
+                                            width: 10))),
                                 child: _roomServiceProvider.receiptModeOn == true
                                     ? Text(
                                   'Receipt Mode',
                                   style: buttonFont,
                                 )
-                                    : Text('Normal Mode', style: buttonFont),
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize: Size(textButtonWidth * 0.25,
-                                        textButtonHeight * 0.5),
-                                    shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Color(0xFFB7B7B7),
-                                            style: BorderStyle.solid,
-                                            width: 10)))),
+                                    : Text('Normal Mode', style: buttonFont)),
                             TextButton(
                                 onPressed: () {
                                   setState(() {
                                     _roomServiceProvider.stickTray1();
                                   });
                                 },
-                                child: Text('Tray1', style: buttonFont),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     fixedSize: Size(textButtonWidth * 0.2,
                                         textButtonHeight * 0.5),
-                                    shape: RoundedRectangleBorder(
+                                    shape: const RoundedRectangleBorder(
                                         side: BorderSide(
                                             color: Color(0xFFB7B7B7),
                                             style: BorderStyle.solid,
-                                            width: 10)))),
+                                            width: 10))),
+                                child: Text('Tray1', style: buttonFont)),
                             TextButton(
                                 onPressed: () {
                                   setState(() {
                                     _roomServiceProvider.stickTray2();
                                   });
                                 },
-                                child: Text('Tray2', style: buttonFont),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     fixedSize: Size(textButtonWidth * 0.2,
                                         textButtonHeight * 0.5),
-                                    shape: RoundedRectangleBorder(
+                                    shape: const RoundedRectangleBorder(
                                         side: BorderSide(
                                             color: Color(0xFFB7B7B7),
                                             style: BorderStyle.solid,
-                                            width: 10)))),
+                                            width: 10))),
+                                child: Text('Tray2', style: buttonFont)),
                             TextButton(
                                 onPressed: () {
                                   setState(() {
                                     _roomServiceProvider.stickTray3();
                                   });
                                 },
-                                child: Text('Tray3', style: buttonFont),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     fixedSize: Size(textButtonWidth * 0.2,
                                         textButtonHeight * 0.5),
-                                    shape: RoundedRectangleBorder(
+                                    shape: const RoundedRectangleBorder(
                                         side: BorderSide(
                                             color: Color(0xFFB7B7B7),
                                             style: BorderStyle.solid,
-                                            width: 10)))),
+                                            width: 10))),
+                                child: Text('Tray3', style: buttonFont)),
                           ],
                         ),
                       ),
@@ -361,9 +357,8 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       },
                       child: null,
                       style: FilledButton.styleFrom(
-                          fixedSize: Size(64, 64),
+                          fixedSize: const Size(64, 64),
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)
                           ),
                           backgroundColor: Colors.transparent
@@ -380,9 +375,8 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       },
                       child: null,
                       style: FilledButton.styleFrom(
-                          fixedSize: Size(64, 64),
+                          fixedSize: const Size(64, 64),
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)
                           ),
                           backgroundColor: Colors.transparent
@@ -399,9 +393,8 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       },
                       child: null,
                       style: FilledButton.styleFrom(
-                          fixedSize: Size(64, 64),
+                          fixedSize: const Size(64, 64),
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)
                           ),
                           backgroundColor: Colors.transparent
@@ -426,8 +419,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [Text(
-                                    // '$table1 번',
-                                    '${table1} 호',
+                                    '$table1 호',
                                     style: buttonFont,
                                   ),]
                                 )),
@@ -457,17 +449,17 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                 _roomServiceProvider.tray2Select = false;
                                 _roomServiceProvider.tray3Select = false;
                                 _roomServiceProvider.trayCheckAll = false;
-                                navPage(context: context, page: SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
+                                navPage(context: context, page: const SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
                               },
-                              child: Container(),
                               style: TextButton.styleFrom(
                                   backgroundColor: Colors.transparent,
                                   fixedSize:
                                   Size(textButtonWidth, textButtonHeight),
                                   shape: RoundedRectangleBorder(
-                                      side: BorderSide(
+                                      side: const BorderSide(
                                           color: Colors.green, width: 1),
-                                      borderRadius: BorderRadius.circular(20)))),
+                                      borderRadius: BorderRadius.circular(20))),
+                              child: Container()),
                         ),
                       ],
                     ),
@@ -492,8 +484,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [Text(
-                                      // '$table1 번',
-                                      '${table2} 호',
+                                      '$table2 호',
                                       style: buttonFont,
                                     ),]
                                 )),
@@ -523,18 +514,18 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                   _roomServiceProvider.tray2Select = true;
                                   _roomServiceProvider.tray3Select = false;
                                   _roomServiceProvider.trayCheckAll = false;
-                                  navPage(context: context, page: SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
+                                  navPage(context: context, page: const SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
                                 },
-                                child: Container(),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.green, width: 1),
                                         borderRadius:
-                                        BorderRadius.circular(20))))),
+                                        BorderRadius.circular(20))),
+                                child: Container())),
                       ],
                     ),
                   ),
@@ -558,8 +549,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [Text(
-                                      // '$table1 번',
-                                      '${table3} 호',
+                                      '$table3 호',
                                       style: buttonFont,
                                     ),]
                                 )),
@@ -589,18 +579,18 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                   _roomServiceProvider.tray2Select = false;
                                   _roomServiceProvider.tray3Select = true;
                                   _roomServiceProvider.trayCheckAll = false;
-                                  navPage(context: context, page: SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
+                                  navPage(context: context, page: const SelectRoomItemScreenFinal(), enablePop: true).navPageToPage();
                                 },
-                                child: Container(),
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.green, width: 1),
                                         borderRadius:
-                                        BorderRadius.circular(20))))),
+                                        BorderRadius.circular(20))),
+                                child: Container())),
                       ],
                     ),
                   ),
