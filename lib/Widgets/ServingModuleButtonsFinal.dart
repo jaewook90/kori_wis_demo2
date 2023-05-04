@@ -37,16 +37,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   int buttonHeight = 1;
 
   List<String> menuItems = ['햄버거', '라면', '치킨', '핫도그'];
-  List<String> receiptMenu = [
-    '햄버거',
-    '핫도그',
-    '미주문',
-    '핫도그',
-    '라면',
-    '미주문',
-    '핫도그',
-    '핫도그'
-  ];
 
   int itemNumber = 0;
   String? itemName;

@@ -23,13 +23,10 @@ class RoomServiceModuleButtonsFinal extends StatefulWidget {
 
 class _RoomServiceModuleButtonsFinalState
     extends State<RoomServiceModuleButtonsFinal> {
-
   late RoomServiceModel _roomServiceProvider;
 
   // 메뉴 및 호실 선택 요소
   List<String> menuItems = ['수건', '헤어', '가운', '스킨'];
-
-  String? tableNumber;
 
   String? itemName;
 
@@ -60,9 +57,6 @@ class _RoomServiceModuleButtonsFinalState
   int buttonHeight = 1;
 
   String? currentNum;
-
-  String? startUrl;
-  String? navUrl;
 
   @override
   void initState() {
@@ -141,8 +135,7 @@ class _RoomServiceModuleButtonsFinalState
                       shape: const LinearBorder(
                           side: BorderSide(color: Colors.white, width: 2),
                           top: LinearBorderEdge(size: 0.8)),
-                      minimumSize:
-                      const Size(680, 81)),
+                      minimumSize: const Size(680, 81)),
                   child: const Text(
                     '확 인',
                     style: TextStyle(
@@ -159,19 +152,16 @@ class _RoomServiceModuleButtonsFinalState
 
   void uploadRoomNumberNItemImg() {
     if (_roomServiceProvider.tray1Select == true) {
-      // _roomServiceProvider.setTray1();
       setState(() {
         _roomServiceProvider.itemImageList![0] = itemImagesList[0][itemNumber];
         _roomServiceProvider.servedItem1 = false;
       });
     } else if (_roomServiceProvider.tray2Select == true) {
-      // _roomServiceProvider.setTray1();
       setState(() {
         _roomServiceProvider.itemImageList![1] = itemImagesList[1][itemNumber];
         _roomServiceProvider.servedItem2 = false;
       });
     } else if (_roomServiceProvider.tray3Select == true) {
-      // _roomServiceProvider.setTray1();
       setState(() {
         _roomServiceProvider.itemImageList![2] = itemImagesList[2][itemNumber];
         _roomServiceProvider.servedItem3 = false;
@@ -184,7 +174,6 @@ class _RoomServiceModuleButtonsFinalState
     _roomServiceProvider =
         Provider.of<RoomServiceModel>(context, listen: false);
 
-    tableNumber = _roomServiceProvider.tableNumber;
     itemName = _roomServiceProvider.menuItem;
 
     if (_roomServiceProvider.trayCheckAll == false) {
@@ -202,7 +191,7 @@ class _RoomServiceModuleButtonsFinalState
     }
 
     if (widget.screens == 0) {
-      // 택배 메인 화면
+      // 룸서비스 메인 화면
       buttonPositionWidth = [84];
       buttonPositionHeight = [155];
 
@@ -210,6 +199,7 @@ class _RoomServiceModuleButtonsFinalState
 
       buttonRadius = 30;
     } else if (widget.screens == 1) {
+      // 룸서비스 상품 선택
       buttonPositionWidth = [104.3, 559.6, 104.3, 559.6];
       buttonPositionHeight = [459, 459, 910.5, 910.5];
 
@@ -217,7 +207,7 @@ class _RoomServiceModuleButtonsFinalState
 
       buttonRadius = 40;
     } else if (widget.screens == 2) {
-      // 키패드 화면
+      // 룸서비스 키패드 화면
       buttonPositionWidth = [
         115,
         409,
@@ -233,15 +223,15 @@ class _RoomServiceModuleButtonsFinalState
         703
       ];
       buttonPositionHeight = [
-        520.5,
-        520.5,
-        520.5,
-        810,
-        810,
-        810,
-        1100,
-        1100,
-        1100,
+        521,
+        521,
+        521,
+        813,
+        813,
+        813,
+        1104,
+        1104,
+        1104,
         1394,
         1394,
         1394
@@ -251,7 +241,7 @@ class _RoomServiceModuleButtonsFinalState
 
       buttonRadius = 50;
     } else if (widget.screens == 3) {
-      // 목적지 리스트
+      // 룸 서비스 목적지 리스트
       buttonPositionWidth = [79, 525, 79, 525, 79, 525, 79];
       buttonPositionHeight = [1287, 303, 303, 550, 550, 797, 797];
 
@@ -276,43 +266,45 @@ class _RoomServiceModuleButtonsFinalState
     return Stack(children: [
       (currentNum == null && widget.screens == 2)
           ? Container()
-          : widget.screens == 2 ?Positioned(
-        top: 220,
-        left: 400,
-        width: 270,
-        height: 180,
-        child: Text(
-          '$currentNum',
-          style: const TextStyle(
-              fontFamily: 'kor',
-              fontSize: 150,
-              fontWeight: FontWeight.bold,
-              color: Color(0xffffffff)),
-        ),
-      ) : Container(),
+          : widget.screens == 2
+              ? Positioned(
+                  top: 220,
+                  left: 400,
+                  width: 270,
+                  height: 180,
+                  child: Text(
+                    '$currentNum',
+                    style: const TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 150,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xffffffff)),
+                  ),
+                )
+              : Container(),
       widget.screens == 2
           ? Positioned(
-          left: 909,
-          top: 338,
-          child: Container(
-            width: 60,
-            height: 60,
-            color: Colors.transparent,
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0),
-                    // side: BorderSide(width: 1, color: Colors.white)
-                  )),
-              onPressed: () {
-                setState(() {
-                  currentNum = "";
-                });
-              },
-              child: null,
-            ),
-          ))
+              left: 909,
+              top: 338,
+              child: Container(
+                width: 60,
+                height: 60,
+                color: Colors.transparent,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        // side: BorderSide(width: 1, color: Colors.white)
+                      )),
+                  onPressed: () {
+                    setState(() {
+                      currentNum = "";
+                    });
+                  },
+                  child: null,
+                ),
+              ))
           : Container(),
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
@@ -320,9 +312,16 @@ class _RoomServiceModuleButtonsFinalState
           top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
+                foregroundColor: widget.screens == 2
+                    ? i != 9
+                        ? i != 11
+                            ? Colors.tealAccent
+                            : null
+                        : null
+                    : null,
+                splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
                     // Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
@@ -349,32 +348,12 @@ class _RoomServiceModuleButtonsFinalState
                           .navPageToPage();
                       _roomServiceProvider.menuItem = "상품";
                     }
-                    // navPage(
-                    //         context: context,
-                    //         page: RoomServiceDestinationScreenFinal(),
-                    //         enablePop: true)
-                    //     .navPageToPage();
                   }
                 : widget.screens == 1
                     ? () {
                         setState(() {
-                          if (i == 0) {
                             _roomServiceProvider.menuItem = menuItems[i];
-                          } else if (i == 1) {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          } else if (i == 2) {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          } else {
-                            _roomServiceProvider.menuItem = menuItems[i];
-                          }
                         });
-                        if (_roomServiceProvider.tray1Select == true) {
-                          _roomServiceProvider.setItemTray1();
-                        } else if (_roomServiceProvider.tray2Select == true) {
-                          _roomServiceProvider.setItemTray2();
-                        } else if (_roomServiceProvider.tray3Select == true) {
-                          _roomServiceProvider.setItemTray3();
-                        }
                         navPage(
                                 context: context,
                                 page: const RoomServiceDestinationScreenFinal(),
@@ -396,62 +375,10 @@ class _RoomServiceModuleButtonsFinalState
                               currentNum = '${currentNum}0';
                             } else if (i == 11) {
                               setState(() {
-                                if(currentNum==""){
+                                if (currentNum == "") {
                                   showNoDestinationWarn(context);
-                                }else {
-                                  _roomServiceProvider.tableNumber =
-                                  '$currentNum';
-                                  if (_roomServiceProvider.trayCheckAll ==
-                                      false) {
-                                    if (_roomServiceProvider.tray1Select ==
-                                        true) {
-                                      _roomServiceProvider.tray1 = true;
-                                      _roomServiceProvider.table1 =
-                                      "$currentNum";
-                                    } else if (_roomServiceProvider
-                                        .tray2Select ==
-                                        true) {
-                                      _roomServiceProvider.tray2 = true;
-                                      _roomServiceProvider.table2 =
-                                      "$currentNum";
-                                    } else {
-                                      _roomServiceProvider.tray3 = true;
-                                      _roomServiceProvider.table3 =
-                                      "$currentNum";
-                                    }
-                                    uploadRoomNumberNItemImg();
-                                    navPage(
-                                        context: context,
-                                        page: const RoomServiceMenu(),
-                                        enablePop: false)
-                                        .navPageToPage();
-                                  } else {
-                                    _roomServiceProvider.setTrayAll();
-                                    _roomServiceProvider.tableNumber =
-                                    "$currentNum";
-                                    showCountDownPopup(context);
-                                  }
-                                }
-                              });
-                            }
-                          }
-                        : widget.screens == 3
-                            ? () {
-                                setState(() {
-                                  if (i == 1) {
-                                    currentNum = '102';
-                                  } else if (i == 2) {
-                                    currentNum = '101';
-                                  } else if (i == 3) {
-                                    currentNum = '202';
-                                  } else if (i == 4) {
-                                    currentNum = '201';
-                                  } else if (i == 5) {
-                                    currentNum = '302';
-                                  } else if (i == 6) {
-                                    currentNum = '301';
-                                  }
-                                  _roomServiceProvider.tableNumber =
+                                } else {
+                                  _roomServiceProvider.roomNumber =
                                       '$currentNum';
                                   if (_roomServiceProvider.trayCheckAll ==
                                       false) {
@@ -479,7 +406,59 @@ class _RoomServiceModuleButtonsFinalState
                                         .navPageToPage();
                                   } else {
                                     _roomServiceProvider.setTrayAll();
-                                    _roomServiceProvider.tableNumber =
+                                    _roomServiceProvider.roomNumber =
+                                        "$currentNum";
+                                    showCountDownPopup(context);
+                                  }
+                                }
+                              });
+                            }
+                          }
+                        : widget.screens == 3
+                            ? () {
+                                setState(() {
+                                  if (i == 1) {
+                                    currentNum = '102';
+                                  } else if (i == 2) {
+                                    currentNum = '101';
+                                  } else if (i == 3) {
+                                    currentNum = '202';
+                                  } else if (i == 4) {
+                                    currentNum = '201';
+                                  } else if (i == 5) {
+                                    currentNum = '302';
+                                  } else if (i == 6) {
+                                    currentNum = '301';
+                                  }
+                                  _roomServiceProvider.roomNumber =
+                                      '$currentNum';
+                                  if (_roomServiceProvider.trayCheckAll ==
+                                      false) {
+                                    if (_roomServiceProvider.tray1Select ==
+                                        true) {
+                                      _roomServiceProvider.tray1 = true;
+                                      _roomServiceProvider.table1 =
+                                          "$currentNum";
+                                    } else if (_roomServiceProvider
+                                            .tray2Select ==
+                                        true) {
+                                      _roomServiceProvider.tray2 = true;
+                                      _roomServiceProvider.table2 =
+                                          "$currentNum";
+                                    } else {
+                                      _roomServiceProvider.tray3 = true;
+                                      _roomServiceProvider.table3 =
+                                          "$currentNum";
+                                    }
+                                    uploadRoomNumberNItemImg();
+                                    navPage(
+                                            context: context,
+                                            page: const RoomServiceMenu(),
+                                            enablePop: false)
+                                        .navPageToPage();
+                                  } else {
+                                    _roomServiceProvider.setTrayAll();
+                                    _roomServiceProvider.roomNumber =
                                         "$currentNum";
                                     showCountDownPopup(context);
                                   }
@@ -490,13 +469,12 @@ class _RoomServiceModuleButtonsFinalState
                                     _roomServiceProvider.clearAllTray();
                                     navPage(
                                             context: context,
-                                            page: const RoomServiceReturnModuleFinal(),
+                                            page:
+                                                const RoomServiceReturnModuleFinal(),
                                             enablePop: false)
                                         .navPageToPage();
                                   }
-                                : widget.screens == 5
-                                    ? () {}
-                                    : null,
+                                :null,
             child: null,
           ),
         ),

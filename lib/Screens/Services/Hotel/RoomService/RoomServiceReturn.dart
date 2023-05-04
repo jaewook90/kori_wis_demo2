@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:provider/provider.dart';
 
 class RoomServiceReturnModuleFinal extends StatefulWidget {
   const RoomServiceReturnModuleFinal({
@@ -16,43 +14,13 @@ class RoomServiceReturnModuleFinal extends StatefulWidget {
 
 class _RoomServiceReturnModuleFinalState
     extends State<RoomServiceReturnModuleFinal> {
-  late NetworkModel _networkProvider;
-
-  int? shipping;
-  int? serving;
-  int? bellboy;
-  int? roomService;
-
-  String? currentGoal;
-
-  bool? pauseCheck;
-
-  int? serviceState;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    pauseCheck = false;
-
-    shipping = 0;
-    serving = 1;
-    bellboy = 2;
-    roomService = 3;
-
-  }
 
   late String backgroundImageServ;
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalRoomReturnNav.png";
-
-    currentGoal = _networkProvider.currentGoal;
-    serviceState = _networkProvider.serviceState;
-
 
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;

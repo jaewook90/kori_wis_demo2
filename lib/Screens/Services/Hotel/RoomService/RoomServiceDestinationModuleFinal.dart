@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 
 class RoomServiceDestinationScreenFinal extends StatefulWidget {
   const RoomServiceDestinationScreenFinal({
@@ -15,14 +13,7 @@ class RoomServiceDestinationScreenFinal extends StatefulWidget {
 }
 
 class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinationScreenFinal> {
-  late NetworkModel _networkProvider;
   String? currentGoal;
-
-  bool? goalChecker;
-
-  late dynamic responsePostMSG;
-
-  late var goalPosition = List<String>.empty();
 
   String shippingKeyPadIMG = "assets/screens/Hotel/RoomService/koriZFinalRoomSelect.png";
 
@@ -31,7 +22,6 @@ class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinati
     // TODO: implement initState
     super.initState();
     currentGoal = "";
-    goalChecker = false;
   }
 
   void showGoalFalsePopup(context) {
@@ -91,12 +81,9 @@ class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinati
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
-
-    goalPosition = _networkProvider.goalPosition;
 
     return Scaffold(
       appBar: AppBar(

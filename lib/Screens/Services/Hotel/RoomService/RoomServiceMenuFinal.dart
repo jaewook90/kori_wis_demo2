@@ -20,36 +20,9 @@ class RoomServiceMenu extends StatefulWidget {
 class _RoomServiceMenuState extends State<RoomServiceMenu> {
   late RoomServiceModel _roomServiceProvider;
 
-  String? tableNumber;
-  String? itemName;
-
-  late var goalPosition = List<String>.empty();
-  List<String> orderedItems = [];
-
-  List<String> testItems = ['수건', '헤어', '가운', '스킨', '미주문'];
-
   // 배경 화면
   late String backgroundImage;
   late String resetIcon;
-
-  late String downArrowIcon1;
-  late String downArrowIcon2;
-  late String downArrowIcon3;
-
-  // 상품 사진
-  late String hamburger;
-  late String hotDog;
-  late String chicken;
-  late String ramyeon;
-
-  // 상품 구분 번호
-  // late int itemNumber;
-  int itemNumber = 0;
-
-  // 상품 목록
-  late List<List> itemImagesList; // 트레이 1, 2, 3 다발 리스트
-  late List<String> itemImages;
-  late int trayNumber;
 
   // 트레이 하이드 앤 쇼
   bool? offStageTray1;
@@ -66,17 +39,8 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
   String? table2;
   String? table3;
 
-  //트레이별 선택 메뉴
-  String? item1;
-  String? item2;
-  String? item3;
-
-  //restAPI url
-  String? startUrl;
-  String? navUrl;
-
   //디버그
-  bool _debugTray = false;
+  late bool _debugTray;
 
   @override
   void initState() {
@@ -97,22 +61,15 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
         context: context,
         builder: (context) {
           return const SelectRoomItemModalFinal();
-          // if (receiptModeOn == true) {
-          //   return const SelectReceiptModalFinal();
-          // } else {
-          //   return const SelectRoomItemModalFinal();
-          // }
         });
   }
 
   @override
   Widget build(BuildContext context) {
-    // _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _roomServiceProvider =
         Provider.of<RoomServiceModel>(context, listen: false);
 
-    itemName = _roomServiceProvider.menuItem;
-    tableNumber = _roomServiceProvider.tableNumber;
+    _debugTray = _roomServiceProvider.trayDebug!;
 
     offStageTray1 = _roomServiceProvider.attachedTray1;
     offStageTray2 = _roomServiceProvider.attachedTray2;
@@ -125,22 +82,6 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
     table1 = _roomServiceProvider.table1;
     table2 = _roomServiceProvider.table2;
     table3 = _roomServiceProvider.table3;
-
-    item1 = _roomServiceProvider.item1;
-    item2 = _roomServiceProvider.item2;
-    item3 = _roomServiceProvider.item3;
-
-    if (itemName == '수건') {
-      itemNumber = 0;
-    } else if (itemName == '헤어') {
-      itemNumber = 1;
-    } else if (itemName == '가운') {
-      itemNumber = 2;
-    } else if (itemName == '스킨') {
-      itemNumber = 3;
-    } else {
-      itemNumber.isNaN;
-    }
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -256,285 +197,196 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
-        body: Container(
-          constraints: const BoxConstraints.expand(),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-          child: Stack(
-            children: [
-              //기능적 부분
-              Stack(children: [
-                const RoomServiceModuleButtonsFinal(
-                  screens: 0,
-                ),
-                // 디버그 버튼
-                Opacity(
-                  opacity: 0.02,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      // 디버그 버튼 트레이 활성화용
-                      Offstage(
-                        offstage: _debugTray,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            // TextButton(
-                            //     onPressed: () {
-                            //       setState(() {
-                            //         if (receiptModeOn == true) {
-                            //           _roomServiceProvider.receiptModeOn =
-                            //               false;
-                            //         } else {
-                            //           _roomServiceProvider.receiptModeOn = true;
-                            //         }
-                            //       });
-                            //     },
-                            //     style: TextButton.styleFrom(
-                            //         backgroundColor: Colors.transparent,
-                            //         fixedSize: Size(textButtonWidth * 0.25,
-                            //             textButtonHeight * 0.5),
-                            //         shape: const RoundedRectangleBorder(
-                            //             side: BorderSide(
-                            //                 color: Color(0xFFB7B7B7),
-                            //                 style: BorderStyle.solid,
-                            //                 width: 10))),
-                            //     child: _roomServiceProvider.receiptModeOn ==
-                            //             true
-                            //         ? Text(
-                            //             'Receipt Mode',
-                            //             style: buttonFont,
-                            //           )
-                            //         : Text('Normal Mode', style: buttonFont)),
-                            TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _roomServiceProvider.stickTray1();
-                                  });
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize: Size(textButtonWidth * 0.2,
-                                        textButtonHeight * 0.5),
-                                    shape: const RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Color(0xFFB7B7B7),
-                                            style: BorderStyle.solid,
-                                            width: 10))),
-                                child: Text('Tray1', style: buttonFont)),
-                            TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _roomServiceProvider.stickTray2();
-                                  });
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize: Size(textButtonWidth * 0.2,
-                                        textButtonHeight * 0.5),
-                                    shape: const RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Color(0xFFB7B7B7),
-                                            style: BorderStyle.solid,
-                                            width: 10))),
-                                child: Text('Tray2', style: buttonFont)),
-                            TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _roomServiceProvider.stickTray3();
-                                  });
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize: Size(textButtonWidth * 0.2,
-                                        textButtonHeight * 0.5),
-                                    shape: const RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Color(0xFFB7B7B7),
-                                            style: BorderStyle.solid,
-                                            width: 10))),
-                                child: Text('Tray3', style: buttonFont)),
-                          ],
-                        ),
-                      ),
-                    ],
+        body: WillPopScope(
+          onWillPop: () {
+            navPage(
+                context: context,
+                page: const HotelServiceMenu(),
+                enablePop: false)
+                .navPageToPage();
+            return Future.value(false);
+          },
+          child: Container(
+            constraints: const BoxConstraints.expand(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+            child: Stack(
+              children: [
+                //기능적 부분
+                Stack(children: [
+                  const RoomServiceModuleButtonsFinal(
+                    screens: 0,
                   ),
-                ),
-                // 초기화 버튼
-                Positioned(
-                    right: 180,
-                    top: 885,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          _roomServiceProvider.clearTray1();
-                        });
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(64, 64),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    )),
-                Positioned(
-                    right: 180,
-                    top: 1090,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          _roomServiceProvider.clearTray2();
-                        });
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(64, 64),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    )),
-                Positioned(
-                    right: 180,
-                    top: 1296,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          _roomServiceProvider.clearTray3();
-                        });
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(64, 64),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    )),
-                //트레이1
-                Positioned(
-                  top: 827,
-                  left: 409,
-                  child: Offstage(
-                    offstage: offStageTray1!,
-                    child: Stack(
+                  // 디버그 버튼
+                  Opacity(
+                    opacity: 0.02,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Positioned(
-                          left: 24,
-                          top: 120,
-                          child: Container(
-                            width: 70,
-                            height: 30,
-                            child: Offstage(
-                                offstage: servedItem1!,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '$table1 호',
-                                        style: buttonFont,
-                                      ),
-                                    ])),
+                        // 디버그 버튼 트레이 활성화용
+                        Offstage(
+                          offstage: _debugTray,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _roomServiceProvider.stickTray1();
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.2,
+                                          textButtonHeight * 0.5),
+                                      shape: const RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10))),
+                                  child: Text('Tray1', style: buttonFont)),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _roomServiceProvider.stickTray2();
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.2,
+                                          textButtonHeight * 0.5),
+                                      shape: const RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10))),
+                                  child: Text('Tray2', style: buttonFont)),
+                              TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _roomServiceProvider.stickTray3();
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.2,
+                                          textButtonHeight * 0.5),
+                                      shape: const RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10))),
+                                  child: Text('Tray3', style: buttonFont)),
+                            ],
                           ),
-                        ),
-                        Positioned(
-                          left: 145.5,
-                          top: 32,
-                          child: Offstage(
-                            offstage: servedItem1!,
-                            child: Container(
-                                width: 146,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        _roomServiceProvider.itemImageList![0]),
-                                  ),
-                                )),
-                          ),
-                        ),
-                        Container(
-                          width: 388.5,
-                          height: 180,
-                          child: TextButton(
-                              onPressed: () {
-                                _roomServiceProvider.tray1Select = true;
-                                _roomServiceProvider.tray2Select = false;
-                                _roomServiceProvider.tray3Select = false;
-                                _roomServiceProvider.trayCheckAll = false;
-                                navPage(
-                                        context: context,
-                                        page: const SelectRoomItemScreenFinal(),
-                                        enablePop: true)
-                                    .navPageToPage();
-                              },
-                              style: TextButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  fixedSize:
-                                      Size(textButtonWidth, textButtonHeight),
-                                  shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: Colors.green, width: 1),
-                                      borderRadius: BorderRadius.circular(20))),
-                              child: Container()),
                         ),
                       ],
                     ),
                   ),
-                ),
-                //트레이2
-                Positioned(
-                  top: 1030.8,
-                  left: 409,
-                  child: Offstage(
-                    offstage: offStageTray2!,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 24,
-                          top: 120,
-                          child: Container(
-                            width: 70,
-                            height: 30,
-                            child: Offstage(
-                                offstage: servedItem2!,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '$table2 호',
-                                        style: buttonFont,
-                                      ),
-                                    ])),
-                          ),
-                        ),
-                        Positioned(
-                          left: 145.5,
-                          top: 32,
-                          child: Offstage(
-                            offstage: servedItem2!,
+                  // 초기화 버튼
+                  Positioned(
+                      right: 180,
+                      top: 885,
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _roomServiceProvider.clearTray1();
+                          });
+                        },
+                        child: null,
+                        style: FilledButton.styleFrom(
+                            fixedSize: const Size(64, 64),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            backgroundColor: Colors.transparent),
+                      )),
+                  Positioned(
+                      right: 180,
+                      top: 1090,
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _roomServiceProvider.clearTray2();
+                          });
+                        },
+                        child: null,
+                        style: FilledButton.styleFrom(
+                            fixedSize: const Size(64, 64),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            backgroundColor: Colors.transparent),
+                      )),
+                  Positioned(
+                      right: 180,
+                      top: 1296,
+                      child: FilledButton(
+                        onPressed: () {
+                          setState(() {
+                            _roomServiceProvider.clearTray3();
+                          });
+                        },
+                        child: null,
+                        style: FilledButton.styleFrom(
+                            fixedSize: const Size(64, 64),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            backgroundColor: Colors.transparent),
+                      )),
+                  //트레이1
+                  Positioned(
+                    top: 827,
+                    left: 409,
+                    child: Offstage(
+                      offstage: offStageTray1!,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 24,
+                            top: 120,
                             child: Container(
-                                width: 146,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(_roomServiceProvider
-                                          .itemImageList![1])),
-                                )),
+                              width: 70,
+                              height: 30,
+                              child: Offstage(
+                                  offstage: servedItem1!,
+                                  child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '$table1 호',
+                                          style: buttonFont,
+                                        ),
+                                      ])),
+                            ),
                           ),
-                        ),
-                        Container(
+                          Positioned(
+                            left: 145.5,
+                            top: 32,
+                            child: Offstage(
+                              offstage: servedItem1!,
+                              child: Container(
+                                  width: 146,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          _roomServiceProvider.itemImageList![0]),
+                                    ),
+                                  )),
+                            ),
+                          ),
+                          Container(
                             width: 388.5,
                             height: 180,
                             child: TextButton(
                                 onPressed: () {
-                                  _roomServiceProvider.tray1Select = false;
-                                  _roomServiceProvider.tray2Select = true;
+                                  _roomServiceProvider.tray1Select = true;
+                                  _roomServiceProvider.tray2Select = false;
                                   _roomServiceProvider.tray3Select = false;
                                   _roomServiceProvider.trayCheckAll = false;
                                   navPage(
                                           context: context,
-                                          page:
-                                              const SelectRoomItemScreenFinal(),
+                                          page: const SelectRoomItemScreenFinal(),
                                           enablePop: true)
                                       .navPageToPage();
                                 },
@@ -545,88 +397,160 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
                                             color: Colors.green, width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                child: Container())),
-                      ],
+                                        borderRadius: BorderRadius.circular(20))),
+                                child: Container()),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                //트레이3
-                Positioned(
-                  top: 1237.6,
-                  left: 409,
-                  child: Offstage(
-                    offstage: offStageTray3!,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 24,
-                          top: 120,
-                          child: Container(
-                            width: 70,
-                            height: 30,
-                            child: Offstage(
-                                offstage: servedItem3!,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '$table3 호',
-                                        style: buttonFont,
-                                      ),
-                                    ])),
-                          ),
-                        ),
-                        Positioned(
-                          left: 145.5,
-                          top: 35,
-                          child: Offstage(
-                            offstage: servedItem3!,
+                  //트레이2
+                  Positioned(
+                    top: 1030.8,
+                    left: 409,
+                    child: Offstage(
+                      offstage: offStageTray2!,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 24,
+                            top: 120,
                             child: Container(
-                                width: 146,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage(_roomServiceProvider
-                                          .itemImageList![2])),
-                                )),
+                              width: 70,
+                              height: 30,
+                              child: Offstage(
+                                  offstage: servedItem2!,
+                                  child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '$table2 호',
+                                          style: buttonFont,
+                                        ),
+                                      ])),
+                            ),
                           ),
-                        ),
-                        Container(
-                            width: 388.5,
-                            height: 180,
-                            child: TextButton(
-                                onPressed: () {
-                                  _roomServiceProvider.tray1Select = false;
-                                  _roomServiceProvider.tray2Select = false;
-                                  _roomServiceProvider.tray3Select = true;
-                                  _roomServiceProvider.trayCheckAll = false;
-                                  navPage(
-                                          context: context,
-                                          page:
-                                              const SelectRoomItemScreenFinal(),
-                                          enablePop: true)
-                                      .navPageToPage();
-                                },
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            color: Colors.green, width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                child: Container())),
-                      ],
+                          Positioned(
+                            left: 145.5,
+                            top: 32,
+                            child: Offstage(
+                              offstage: servedItem2!,
+                              child: Container(
+                                  width: 146,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(_roomServiceProvider
+                                            .itemImageList![1])),
+                                  )),
+                            ),
+                          ),
+                          Container(
+                              width: 388.5,
+                              height: 180,
+                              child: TextButton(
+                                  onPressed: () {
+                                    _roomServiceProvider.tray1Select = false;
+                                    _roomServiceProvider.tray2Select = true;
+                                    _roomServiceProvider.tray3Select = false;
+                                    _roomServiceProvider.trayCheckAll = false;
+                                    navPage(
+                                            context: context,
+                                            page:
+                                                const SelectRoomItemScreenFinal(),
+                                            enablePop: true)
+                                        .navPageToPage();
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize:
+                                          Size(textButtonWidth, textButtonHeight),
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color: Colors.green, width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(20))),
+                                  child: Container())),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ]),
-            ],
+                  //트레이3
+                  Positioned(
+                    top: 1237.6,
+                    left: 409,
+                    child: Offstage(
+                      offstage: offStageTray3!,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 24,
+                            top: 120,
+                            child: Container(
+                              width: 70,
+                              height: 30,
+                              child: Offstage(
+                                  offstage: servedItem3!,
+                                  child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '$table3 호',
+                                          style: buttonFont,
+                                        ),
+                                      ])),
+                            ),
+                          ),
+                          Positioned(
+                            left: 145.5,
+                            top: 35,
+                            child: Offstage(
+                              offstage: servedItem3!,
+                              child: Container(
+                                  width: 146,
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(_roomServiceProvider
+                                            .itemImageList![2])),
+                                  )),
+                            ),
+                          ),
+                          Container(
+                              width: 388.5,
+                              height: 180,
+                              child: TextButton(
+                                  onPressed: () {
+                                    _roomServiceProvider.tray1Select = false;
+                                    _roomServiceProvider.tray2Select = false;
+                                    _roomServiceProvider.tray3Select = true;
+                                    _roomServiceProvider.trayCheckAll = false;
+                                    navPage(
+                                            context: context,
+                                            page:
+                                                const SelectRoomItemScreenFinal(),
+                                            enablePop: true)
+                                        .navPageToPage();
+                                  },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize:
+                                          Size(textButtonWidth, textButtonHeight),
+                                      shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                              color: Colors.green, width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(20))),
+                                  child: Container())),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+              ],
+            ),
+            // ),
           ),
-          // ),
         ),
       ),
     );

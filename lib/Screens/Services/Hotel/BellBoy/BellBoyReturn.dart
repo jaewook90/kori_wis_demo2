@@ -19,14 +19,13 @@ class _BellboyReturnModuleFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
+    backgroundImageServ = "assets/screens/Nav/koriZFinalBellReturnNav.png";
   }
 
   late String backgroundImageServ;
 
   @override
   Widget build(BuildContext context) {
-
-    backgroundImageServ = "assets/screens/Nav/koriZFinalBellReturnNav.png";
 
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;

@@ -92,7 +92,9 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                         children: [
                           Text(
                             _networkProvider.serviceState == 1
+                            // 서빙 주문 총액
                                 ? '${_orderProvider.orderedTotalPrice}'
+                            // 체크인 방 금액
                                 : '${_orderProvider.orderedRoomPrice}',
                             style: const TextStyle(
                               fontFamily: 'kor',

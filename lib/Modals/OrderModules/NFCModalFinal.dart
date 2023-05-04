@@ -35,12 +35,14 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
     return GestureDetector( // 추후 제스쳐 터치가 아닌 NFC 신호 수신시로 변경
       onTap: () {
         if (_networkProvider.serviceState == 1) {
+          // 서빙 상품 주문 영수증
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
           showServingReceiptPopup(context);
         } else if (_networkProvider.serviceState == 2) {
+          // 호텔 체크인 영수증
           navPage(context: context, page: HotelRoomReceipt(), enablePop: false)
               .navPageToPage();
           _orderProvider.roomReserveNum = '22042030001KORI';

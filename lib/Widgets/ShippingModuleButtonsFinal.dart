@@ -20,7 +20,6 @@ class ShippingModuleButtonsFinal extends StatefulWidget {
 
 class _ShippingModuleButtonsFinalState
     extends State<ShippingModuleButtonsFinal> {
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -63,14 +62,12 @@ class _ShippingModuleButtonsFinalState
         });
   }
 
-
   // 목적지 미입력 시 알람
   void showGoalFalsePopup(context) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
-
           return Container(
             padding: const EdgeInsets.only(bottom: 270),
             child: AlertDialog(
@@ -102,12 +99,11 @@ class _ShippingModuleButtonsFinalState
                         Navigator.pop(context);
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xff797979),
+                          foregroundColor: const Color(0xff797979),
                           shape: const LinearBorder(
                               side: BorderSide(color: Colors.white, width: 2),
                               top: LinearBorderEdge(size: 1)),
-                          minimumSize:
-                          const Size(670, 120)),
+                          minimumSize: const Size(670, 120)),
                       child: Text(
                         '확인',
                         style: Theme.of(context).textTheme.headlineLarge,
@@ -123,7 +119,6 @@ class _ShippingModuleButtonsFinalState
 
   @override
   Widget build(BuildContext context) {
-
     if (widget.screens == 0) {
       // 택배 메인 화면
       buttonPositionWidth = [104];
@@ -192,26 +187,28 @@ class _ShippingModuleButtonsFinalState
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
-      // 키패드 입력 호수 표시
-          : widget.screens == 1 ? Positioned(
-              top: 217.5,
-              left: 323.25,
-              width: 355,
-              height: 180,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    '$currentNum',
-                    style: const TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 150,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xffffffff)),
+          // 키패드 입력 호수 표시
+          : widget.screens == 1
+              ? Positioned(
+                  top: 217.5,
+                  left: 323.25,
+                  width: 355,
+                  height: 180,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '$currentNum',
+                        style: const TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 150,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffffffff)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ) : Container(),
+                )
+              : Container(),
       // 키패드 입력 호수 초기화 버튼
       widget.screens == 1
           ? Positioned(
@@ -243,7 +240,13 @@ class _ShippingModuleButtonsFinalState
           top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
-                foregroundColor: widget.screens==1 ? i!=9 ? i!=11 ? Colors.tealAccent : null : null : null,
+                foregroundColor: widget.screens == 1
+                    ? i != 9
+                        ? i != 11
+                            ? Colors.tealAccent
+                            : null
+                        : null
+                    : null,
                 splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
@@ -279,9 +282,9 @@ class _ShippingModuleButtonsFinalState
                         } else if (i == 10) {
                           currentNum = '${currentNum}0';
                         } else if (i == 11) {
-                          if(currentNum==""){
+                          if (currentNum == "") {
                             showGoalFalsePopup(context);
-                          }else{
+                          } else {
                             showCountDownStarting(context);
                           }
                         }
