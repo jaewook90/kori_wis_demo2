@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
                 shippingDone: false)),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
+              trayDebug: false,
                 tray1: false,
                 tray2: false,
                 tray3: false,

@@ -54,17 +54,24 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                           // side: BorderSide(width: 1, color: Colors.white)
                         )),
                     onPressed: () {
-                      Navigator.pop(context);
+                      if(_servingProvider.trayCheckAll == true){
+                        Navigator.pop(context);
+                      }else{
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
                       _servingProvider.item1 = "";
                       _servingProvider.item2 = "";
                       _servingProvider.item3 = "";
-                      setState(() {
-                        if (_servingProvider.trayCheckAll == true) {
-                          _servingProvider.tray1 = false;
-                          _servingProvider.tray2 = false;
-                          _servingProvider.tray3 = false;
-                        }
-                      });
+                      // // setState(() {
+                      //   if (_servingProvider.trayCheckAll == true) {
+                      //     // setState(() {
+                      //     //   _servingProvider.tray1 = false;
+                      //     //   _servingProvider.tray2 = false;
+                      //     //   _servingProvider.tray3 = false;
+                      //     // });
+                      //   }
+                      // // });
                     },
                     child: null,
                   ),

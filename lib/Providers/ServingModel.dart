@@ -43,6 +43,8 @@ class ServingModel with ChangeNotifier {
 
   bool? setTrayTF;
 
+  bool? trayDebug;
+
   ServingModel({
     this.tray1,
     this.tray2,
@@ -78,7 +80,8 @@ class ServingModel with ChangeNotifier {
     this.itemList,
     this.trayList,
     this.trayCheckAll,
-    this.receiptModeOn
+    this.receiptModeOn,
+    this.trayDebug
   });
 
   void initServing() {
@@ -100,6 +103,7 @@ class ServingModel with ChangeNotifier {
     notifyListeners();
   }
 
+  // 주문서 선택 ( 상품, 테이블 일괄 지정 )
   void setTray1() {
     tray1 = true;
     item1 = menuItem;
@@ -124,29 +128,10 @@ class ServingModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setItemTray1() {
-    // tray1 = true;
-    item1 = menuItem;
-    notifyListeners();
-  }
-
-  void setItemTray2() {
-    // tray2 = true;
-    item2 = menuItem;
-    notifyListeners();
-  }
-
-  void setItemTray3() {
-    // tray3 = true;
-    item3 = menuItem;
-    notifyListeners();
-  }
-
-
   void setTrayAll() {
-    tray1 = true;
-    tray2 = true;
-    tray3 = true;
+    // tray1 = true;
+    // tray2 = true;
+    // tray3 = true;
     item1 = menuItem;
     item2 = menuItem;
     item3 = menuItem;

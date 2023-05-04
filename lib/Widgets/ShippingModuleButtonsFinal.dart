@@ -72,12 +72,12 @@ class _ShippingModuleButtonsFinalState
         builder: (context) {
 
           return Container(
-            padding: EdgeInsets.only(bottom: 270),
+            padding: const EdgeInsets.only(bottom: 270),
             child: AlertDialog(
-              content: SizedBox(
+              content: const SizedBox(
                 width: 670,
                 height: 210,
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text('목적지를 입력 해 주세요.'),
@@ -102,12 +102,12 @@ class _ShippingModuleButtonsFinalState
                         Navigator.pop(context);
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: Color(0xff797979),
+                        foregroundColor: const Color(0xff797979),
                           shape: const LinearBorder(
                               side: BorderSide(color: Colors.white, width: 2),
                               top: LinearBorderEdge(size: 1)),
                           minimumSize:
-                          Size(670, 120)),
+                          const Size(670, 120)),
                       child: Text(
                         '확인',
                         style: Theme.of(context).textTheme.headlineLarge,

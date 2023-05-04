@@ -107,7 +107,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
             Container(
               constraints: const BoxConstraints.expand(),
               decoration: BoxDecoration(
-                // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                   image: DecorationImage(image: AssetImage(backgroundImage))),
               child: Container(),
             ),
@@ -136,7 +135,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                 child: Container(
                                   width: 180,
                                   height: 180,
-                                  // color: Colors.transparent,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(selectedItemList[
@@ -183,8 +181,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                 child: Container(
                                   width: 120,
                                   height: 28,
-                                  // color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -216,8 +212,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                 child: Container(
                                   width: 120,
                                   height: 40,
-                                  // color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -250,7 +244,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                   width: 155,
                                   height: 50,
                                   color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -281,7 +274,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                   width: 45,
                                   height: 48,
                                   color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 1))),
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -384,7 +376,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   height: 48,
                   // color: Colors.transparent,
                   decoration: const BoxDecoration(
-                    // border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 3))
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -406,9 +397,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                 child: Container(
                   width: 45,
                   height: 48,
-                  // color: Colors.transparent,
                   decoration: const BoxDecoration(
-                      // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -431,9 +420,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                 child: Container(
                   width: 250,
                   height: 48,
-                  // color: Colors.transparent,
                   decoration: const BoxDecoration(
-                    // border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 3))
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -455,9 +442,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                 child: Container(
                   width: 45,
                   height: 48,
-                  // color: Colors.transparent,
                   decoration: const BoxDecoration(
-                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -480,9 +465,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                 child: Container(
                   width: 250,
                   height: 48,
-                  // color: Colors.transparent,
                   decoration: const BoxDecoration(
-                    // border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 3))
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -504,9 +487,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                 child: Container(
                   width: 45,
                   height: 48,
-                  // color: Colors.transparent,
                   decoration: const BoxDecoration(
-                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,

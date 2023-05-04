@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/receiptModalFinal.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
@@ -40,9 +39,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   String? table3;
 
   //디버그
-  bool _debugTray = false;
+  late bool _debugTray;
 
-  late bool receiptModeOn;
+  // late bool receiptModeOn;
 
   @override
   void initState() {
@@ -61,17 +60,20 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          if (receiptModeOn == true) {
-            return const SelectReceiptModalFinal();
-          } else {
-            return SelectItemModalFinal();
-          }
+          return const SelectItemModalFinal();
+          // if (receiptModeOn == true) {
+          //   return const SelectReceiptModalFinal();
+          // } else {
+          //   return const SelectItemModalFinal();
+          // }
         });
   }
 
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+
+    _debugTray = _servingProvider.trayDebug!;
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -81,7 +83,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     servedItem2 = _servingProvider.servedItem2;
     servedItem3 = _servingProvider.servedItem3;
 
-    receiptModeOn = _servingProvider.receiptModeOn!;
+    // receiptModeOn = _servingProvider.receiptModeOn!;
 
     table1 = _servingProvider.table1;
     table2 = _servingProvider.table2;
@@ -185,6 +187,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               children: [
                 //기능적 부분
                 Stack(children: [
+                  // 상단 2버튼
                   const ServingModuleButtonsFinal(
                     screens: 0,
                   ),
@@ -200,31 +203,33 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      if (receiptModeOn == true) {
-                                        _servingProvider.receiptModeOn = false;
-                                      } else {
-                                        _servingProvider.receiptModeOn = true;
-                                      }
-                                    });
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      fixedSize: Size(textButtonWidth * 0.25,
-                                          textButtonHeight * 0.5),
-                                      shape: const RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color(0xFFB7B7B7),
-                                              style: BorderStyle.solid,
-                                              width: 10))),
-                                  child: _servingProvider.receiptModeOn == true
-                                      ? Text(
-                                          'Receipt Mode',
-                                          style: buttonFont,
-                                        )
-                                      : Text('Normal Mode', style: buttonFont)),
+                              // TextButton(
+                              //     onPressed: () {
+                              //       setState(() {
+                              //         if (receiptModeOn == true) {
+                              //           _servingProvider.receiptModeOn = false;
+                              //         } else {
+                              //           _servingProvider.receiptModeOn = true;
+                              //         }
+                              //       });
+                              //     },
+                              //     style: TextButton.styleFrom(
+                              //         backgroundColor: Colors.transparent,
+                              //         fixedSize: Size(textButtonWidth * 0.25,
+                              //             textButtonHeight * 0.5),
+                              //         shape: const RoundedRectangleBorder(
+                              //             side: BorderSide(
+                              //                 color: Color(0xFFB7B7B7),
+                              //                 style: BorderStyle.solid,
+                              //                 width: 10))),
+                              //     child:
+                              //         Text('Normal Mode', style: buttonFont)),
+                              // _servingProvider.receiptModeOn == true
+                              //                   ? Text(
+                              //                       'Receipt Mode',
+                              //                       style: buttonFont,
+                              //                     )
+                              //                   : Text('Normal Mode', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
                                     setState(() {
@@ -293,7 +298,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         style: FilledButton.styleFrom(
                             fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
-                                // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
                             backgroundColor: Colors.transparent),
                       )),
@@ -310,7 +314,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         style: FilledButton.styleFrom(
                             fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
-                                // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
                             backgroundColor: Colors.transparent),
                       )),
@@ -325,9 +328,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
-                            fixedSize: Size(64, 64),
+                            fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
-                                // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
                             backgroundColor: Colors.transparent),
                       )),
@@ -352,7 +354,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   offstage: servedItem1!,
                                   child: Center(
                                     child: Text(
-                          '$table1 번',
+                                      '$table1 번',
                                       style: buttonFont,
                                     ),
                                   )),
@@ -372,7 +374,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                           _servingProvider.itemImageList![0]),
                                     ),
                                     borderRadius: BorderRadius.circular(0),
-                                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                                   )),
                             ),
                           ),
@@ -419,7 +420,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               height: 30,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(0),
-                                // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               ),
                               child: Offstage(
                                   offstage: servedItem2!,
@@ -444,7 +444,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                         image: AssetImage(_servingProvider
                                             .itemImageList![1])),
                                     borderRadius: BorderRadius.circular(0),
-                                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                                   )),
                             ),
                           ),
@@ -489,7 +488,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(0),
-                                // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                               ),
                               width: 50,
                               height: 30,
@@ -516,7 +514,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                         image: AssetImage(_servingProvider
                                             .itemImageList![2])),
                                     borderRadius: BorderRadius.circular(0),
-                                    // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                                   )),
                             ),
                           ),
@@ -550,7 +547,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                 ]),
               ],
             ),
-            // ),
           ),
         ),
       ),

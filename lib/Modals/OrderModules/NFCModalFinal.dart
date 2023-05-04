@@ -75,8 +75,17 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                   ),
                 ),
                 Positioned(
-                    left: 30,
-                    top: 25,
+                  left: 20,
+                  top: 18,
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size(80, 80),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
                     child: Container(
                       height: 60,
                       width: 60,
@@ -86,21 +95,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                                 'assets/icons/appBar/appBar_Backward.png',
                               ),
                               fit: BoxFit.fill)),
-                    )),
-                Positioned(
-                  left: 20,
-                  top: 18,
-                  child: FilledButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: null,
-                    style: FilledButton.styleFrom(
-                        fixedSize: const Size(80, 80),
-                        shape: RoundedRectangleBorder(
-
-                            borderRadius: BorderRadius.circular(0)),
-                        backgroundColor: Colors.transparent),
+                    ),
                   ),
                 ),
                 Positioned(
