@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/RoomServiceDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
@@ -24,32 +23,15 @@ class RoomServiceModuleButtonsFinal extends StatefulWidget {
 
 class _RoomServiceModuleButtonsFinalState
     extends State<RoomServiceModuleButtonsFinal> {
-  // late NetworkModel _networkProvider;
 
   late RoomServiceModel _roomServiceProvider;
-  late OrderModel _orderProvider;
-
-  late var screenList = List<Widget>.empty();
-  late var serviceList = List<Widget>.empty();
-
-  late var homeButtonName = List<String>.empty();
 
   // 메뉴 및 호실 선택 요소
   List<String> menuItems = ['수건', '헤어', '가운', '스킨'];
 
   String? tableNumber;
 
-  String? table1;
-  String? table2;
-  String? table3;
-
-  String? tableAll;
-
   String? itemName;
-
-  String? item1;
-  String? item2;
-  String? item3;
 
   int itemNumber = 0;
 
@@ -102,7 +84,7 @@ class _RoomServiceModuleButtonsFinalState
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return RoomServiceDestinationListModalFinal();
+          return const RoomServiceDestinationListModalFinal();
         });
   }
 
@@ -111,7 +93,7 @@ class _RoomServiceModuleButtonsFinalState
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return NavCountDownModalFinal();
+          return const NavCountDownModalFinal();
         });
   }
 
@@ -120,11 +102,11 @@ class _RoomServiceModuleButtonsFinalState
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          double screenHeight = MediaQuery.of(context).size.height;
+          // double screenWidth = MediaQuery.of(context).size.width;
+          // double screenHeight = MediaQuery.of(context).size.height;
 
           return AlertDialog(
-            content: SizedBox(
+            content: const SizedBox(
               width: 650,
               height: 192,
               child: Column(
@@ -140,11 +122,11 @@ class _RoomServiceModuleButtonsFinalState
                 ],
               ),
             ),
-            backgroundColor: Color(0xff2C2C2C),
+            backgroundColor: const Color(0xff2C2C2C),
             contentTextStyle: Theme.of(context).textTheme.headlineLarge,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFFB7B7B7),
                   style: BorderStyle.solid,
                   width: 1,
@@ -155,19 +137,19 @@ class _RoomServiceModuleButtonsFinalState
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  style: TextButton.styleFrom(
+                      shape: const LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 0.8)),
+                      minimumSize:
+                      const Size(680, 81)),
+                  child: const Text(
                     '확 인',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontSize: 30,
                         color: Color(0xffF0F0F0)),
                   ),
-                  style: TextButton.styleFrom(
-                      shape: LinearBorder(
-                          side: BorderSide(color: Colors.white, width: 2),
-                          top: LinearBorderEdge(size: 0.8)),
-                      minimumSize:
-                      Size(680, 81)),
                 ),
               ),
             ],
@@ -201,7 +183,6 @@ class _RoomServiceModuleButtonsFinalState
   Widget build(BuildContext context) {
     _roomServiceProvider =
         Provider.of<RoomServiceModel>(context, listen: false);
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     tableNumber = _roomServiceProvider.tableNumber;
     itemName = _roomServiceProvider.menuItem;
@@ -302,7 +283,7 @@ class _RoomServiceModuleButtonsFinalState
         height: 180,
         child: Text(
           '$currentNum',
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'kor',
               fontSize: 150,
               fontWeight: FontWeight.bold,
@@ -363,7 +344,7 @@ class _RoomServiceModuleButtonsFinalState
                 _roomServiceProvider.trayCheckAll = true;
                 navPage(
                     context: context,
-                    page: RoomServiceDestinationScreenFinal(),
+                    page: const RoomServiceDestinationScreenFinal(),
                     enablePop: true)
                     .navPageToPage();
                 _roomServiceProvider.menuItem = "상품";
@@ -396,7 +377,7 @@ class _RoomServiceModuleButtonsFinalState
               }
               navPage(
                   context: context,
-                  page: RoomServiceDestinationScreenFinal(),
+                  page: const RoomServiceDestinationScreenFinal(),
                   enablePop: true)
                   .navPageToPage();
             }
@@ -405,7 +386,7 @@ class _RoomServiceModuleButtonsFinalState
               setState(() {
                 if (currentNum!.length < 3) {
                   if (i < 9) {
-                    currentNum = '${currentNum}${i + 1}';
+                    currentNum = '$currentNum${i + 1}';
                   }
                 }
               });
@@ -441,7 +422,7 @@ class _RoomServiceModuleButtonsFinalState
                       uploadRoomNumberNItemImg();
                       navPage(
                           context: context,
-                          page: RoomServiceMenu(),
+                          page: const RoomServiceMenu(),
                           enablePop: false)
                           .navPageToPage();
                     } else {
@@ -493,7 +474,7 @@ class _RoomServiceModuleButtonsFinalState
                   uploadRoomNumberNItemImg();
                   navPage(
                       context: context,
-                      page: RoomServiceMenu(),
+                      page: const RoomServiceMenu(),
                       enablePop: false)
                       .navPageToPage();
                 } else {
@@ -509,7 +490,7 @@ class _RoomServiceModuleButtonsFinalState
               _roomServiceProvider.clearAllTray();
               navPage(
                   context: context,
-                  page: RoomServiceReturnModuleFinal(),
+                  page: const RoomServiceReturnModuleFinal(),
                   enablePop: false)
                   .navPageToPage();
             }

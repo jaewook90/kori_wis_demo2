@@ -62,12 +62,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
       buttonRadius1 = 40;
       buttonRadius2 = 32;
     }
-    // else if (widget.screens == 3) {
-    //   // 서빙 상품 선택 화면
-    // } else if (widget.screens == 4) {
-    //   // 서빙 테이블 선택 화면
-    // } else if (widget.screens == 5) {
-    // } else if (widget.screens == 6) {}
 
     buttonNumbers = buttonPositionHeight.length;
 
@@ -80,113 +74,112 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Colors.tealAccent),
                     borderRadius: BorderRadius.circular(widget.screens == 1 ? i == 0 ? buttonRadius1 : buttonRadius2 : buttonRadius)),
                 fixedSize: widget.screens == 1
                     ? i == 0
-                        ? Size(
-                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
-                        : Size(
-                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                    ? Size(
+                    buttonSize1[buttonWidth], buttonSize1[buttonHeight])
+                    : Size(
+                    buttonSize2[buttonWidth], buttonSize2[buttonHeight])
                     : widget.screens == 2
-                        ? i == 0
-                            ? Size(buttonSize1[buttonWidth],
-                                buttonSize1[buttonHeight])
-                            : Size(buttonSize2[buttonWidth],
-                                buttonSize2[buttonHeight])
-                        : Size(
-                            buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                    ? i == 0
+                    ? Size(buttonSize1[buttonWidth],
+                    buttonSize1[buttonHeight])
+                    : Size(buttonSize2[buttonWidth],
+                    buttonSize2[buttonHeight])
+                    : Size(
+                    buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    navPage(
-                            context: context,
-                            page: NavigatorPauseModuleFinal(),
-                            enablePop: false)
-                        .navPageToPage();
-                    // 일시정지 명령 추가 필요
-                  }
+              navPage(
+                  context: context,
+                  page: NavigatorPauseModuleFinal(),
+                  enablePop: false)
+                  .navPageToPage();
+              // 일시정지 명령 추가 필요
+            }
                 : widget.screens == 1
-                    ? () {
-                        if (i == 0) {
-                          // 재시작 추가 필요
-                          navPage(
-                                  context: context,
-                                  page: NavigatorProgressModuleFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                          _servingProvider.playAd = false;
-                        } else if (i == 1) {
-                          // 추후에는 API 통신을 이용한 충전하러가기 기능 추가
-                          navPage(
-                                  context: context,
-                                  page: NavigatorProgressModuleFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                          _servingProvider.playAd = false;
-                        } else if (i == 0) {
-                          // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                          navPage(
-                                  context: context,
-                                  page: NavigatorProgressModuleFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                          _servingProvider.playAd = false;
-                        } else {
-                          // 추후에는 거점으로 복귀
-                          navPage(
-                                  context: context,
-                                  page: NavigatorProgressModuleFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                          _servingProvider.playAd = false;
-                        }
-                      }
-                    : widget.screens == 2
-                        ? () {
-                            if (i == 0) {
-                              //
-                              // 재시작 API 추가
-                              navPage(
-                                      context: context,
-                                      page: NavigatorProgressModuleFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                              _servingProvider.playAd = false;
-                            } else if (i == 1) {
-                              navPage(
-                                      context: context,
-                                      page: ShippingDestinationNewFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                            } else if (i == 2) {
-                              //
-                              // 충전기 이동 API 및 목적지 명 변경 추가
-                              navPage(
-                                      context: context,
-                                      page: NavigatorProgressModuleFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                              _servingProvider.playAd = false;
-                            } else {
-                              //
-                              // 지정 대기 장소로 이동 API 추가
-                              navPage(
-                                      context: context,
-                                      page: NavigatorProgressModuleFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                              _servingProvider.playAd = false;
-                            }
-                          }
-                        : widget.screens == 3
-                            ? () {}
-                            : widget.screens == 4
-                                ? () {}
-                                : widget.screens == 5
-                                    ? () {}
-                                    : widget.screens == 6
-                                        ? () {}
-                                        : null,
+                ? () {
+              if (i == 0) {
+                // 재시작 추가 필요
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              } else if (i == 1) {
+                // 추후에는 API 통신을 이용한 충전하러가기 기능 추가
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              } else if (i == 0) {
+                // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              } else {
+                // 추후에는 거점으로 복귀
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              }
+            }
+                : widget.screens == 2
+                ? () {
+              if (i == 0) {
+                //
+                // 재시작 API 추가
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              } else if (i == 1) {
+                navPage(
+                    context: context,
+                    page: const ShippingDestinationNewFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+              } else if (i == 2) {
+                //
+                // 충전기 이동 API 및 목적지 명 변경 추가
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              } else {
+                //
+                // 지정 대기 장소로 이동 API 추가
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: false)
+                    .navPageToPage();
+                _servingProvider.playAd = false;
+              }
+            }
+                : widget.screens == 3
+                ? () {}
+                : widget.screens == 4
+                ? () {}
+                : widget.screens == 5
+                ? () {}
+                : widget.screens == 6
+                ? () {}
+                : null,
             child: null,
           ),
         ),

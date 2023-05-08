@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class SelectRoomItemScreenFinal extends StatefulWidget {
@@ -90,7 +86,7 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
@@ -102,7 +98,7 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -119,7 +115,7 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Backward.png',
@@ -135,9 +131,9 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                     },
                     child: null,
                     style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
+                        fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
+                          // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(0)),
                         backgroundColor: Colors.transparent),
                   ),
@@ -148,7 +144,7 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                               'assets/icons/appBar/appBar_Home.png',
@@ -162,16 +158,16 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                   child: FilledButton(
                     onPressed: () {
                       navPage(
-                              context: context,
-                              page: MainScreenFinal(),
-                              enablePop: false)
+                          context: context,
+                          page: const MainScreenFinal(),
+                          enablePop: false)
                           .navPageToPage();
                     },
                     child: null,
                     style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
+                        fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
+                          // side: BorderSide(color: Colors.white, width: 1),
                             borderRadius: BorderRadius.circular(0)),
                         backgroundColor: Colors.transparent),
                   ),
@@ -182,7 +178,7 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                               'assets/icons/appBar/appBar_Battery.png',
@@ -190,23 +186,20 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                             fit: BoxFit.fill)),
                   ),
                 ),
-                ],
+              ],
             ),
           )
-          // SizedBox(width: screenWidth * 0.03)
         ],
         toolbarHeight: 110,
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-          decoration: BoxDecoration(
-              // border: Border.fromBorderSide(BorderSide(color: Colors.white))
-              ),
+          decoration: const BoxDecoration(
+          ),
           child: Stack(
             children: [
               Container(
                 decoration: BoxDecoration(
-                    // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                     image: DecorationImage(image: AssetImage(itemSelectBG))),
               ),
               Positioned(
@@ -220,22 +213,17 @@ class _SelectRoomItemScreenFinalState extends State<SelectRoomItemScreenFinal> {
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                              // side: BorderSide(width: 1, color: Colors.white),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);
                         _servingProvider.item1 = "";
                         _servingProvider.item2 = "";
                         _servingProvider.item3 = "";
-
-                        print(_servingProvider.item1);
-                        print(_servingProvider.item2);
-                        print(_servingProvider.item3);
                       },
                       child: null,
                     ),
                   )),
-              RoomServiceModuleButtonsFinal(
+              const RoomServiceModuleButtonsFinal(
                 screens: 1,
               ),
             ],

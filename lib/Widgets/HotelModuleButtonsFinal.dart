@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellBoyYNModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFinal.dart';
@@ -29,11 +27,6 @@ class HotelModuleButtonsFinal extends StatefulWidget {
 class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
   late NetworkModel _networkProvider;
   late RoomServiceModel _roomServiceProvider;
-  late ServingModel _servingProvider;
-  late OrderModel _orderProvider;
-
-  late var screenList = List<Widget>.empty();
-  late var serviceList = List<Widget>.empty();
 
   late var homeButtonName = List<String>.empty();
 
@@ -58,9 +51,6 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
   String? currentNum;
 
-  String? startUrl;
-  String? navUrl;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -80,7 +70,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             content: SizedBox(
               width: screenWidth * 0.5,
               height: screenHeight * 0.1,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -93,11 +83,11 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                 ],
               ),
             ),
-            backgroundColor: Color(0xff2C2C2C),
+            backgroundColor: const Color(0xff2C2C2C),
             contentTextStyle: Theme.of(context).textTheme.headlineLarge,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFFB7B7B7),
                   style: BorderStyle.solid,
                   width: 1,
@@ -108,19 +98,19 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  style: TextButton.styleFrom(
+                      shape: const LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 1)),
+                      minimumSize:
+                      Size(screenWidth * 0.5, screenHeight * 0.05)),
+                  child: const Text(
                     '확 인',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontSize: 30,
                         color: Color(0xffF0F0F0)),
                   ),
-                  style: TextButton.styleFrom(
-                      shape: LinearBorder(
-                          side: BorderSide(color: Colors.white, width: 2),
-                          top: LinearBorderEdge(size: 1)),
-                      minimumSize:
-                      Size(screenWidth * 0.5, screenHeight * 0.05)),
                 ),
               ),
             ],
@@ -133,7 +123,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return PaymentScreenFinal();
+          return const PaymentScreenFinal();
         });
   }
 
@@ -142,15 +132,13 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return BellBoyYNModalFinal();
+          return const BellBoyYNModalFinal();
         });
   }
 
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _roomServiceProvider =
         Provider.of<RoomServiceModel>(context, listen: false);
 
@@ -229,7 +217,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
               if (i == 0) {
                 navPage(
                     context: context,
-                    page: HotelCheckINRoomSelect(),
+                    page: const HotelCheckINRoomSelect(),
                     enablePop: true)
                     .navPageToPage();
               } else if (i == 1) {
@@ -238,7 +226,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                 });
                 navPage(
                     context: context,
-                    page: BellBoyServiceMenu(),
+                    page: const BellBoyServiceMenu(),
                     enablePop: true)
                     .navPageToPage();
               } else {
@@ -248,7 +236,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                 });
                 navPage(
                     context: context,
-                    page: RoomServiceMenu(),
+                    page: const RoomServiceMenu(),
                     enablePop: true)
                     .navPageToPage();
               }
@@ -281,7 +269,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
               } else {
                 navPage(
                     context: context,
-                    page: HotelServiceMenu(),
+                    page: const HotelServiceMenu(),
                     enablePop: false)
                     .navPageToPage();
               }

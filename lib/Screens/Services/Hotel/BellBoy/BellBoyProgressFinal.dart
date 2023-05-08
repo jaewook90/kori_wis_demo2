@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 
@@ -20,8 +17,6 @@ class BellboyProgressFinal extends StatefulWidget {
 class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
   late NetworkModel _networkProvider;
 
-  late ServingModel _servingProvider;
-
   String backgroundImage = "assets/screens/Hotel/BellBoy/koriZFinalBellBoyDone.png";
 
 
@@ -30,13 +25,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
-    double buttonWidth = screenWidth * 0.35;
-    double buttonHeight = screenHeight * 0.12;
-
-    TextStyle? textFont1 = Theme.of(context).textTheme.displayMedium;
-    TextStyle? buttonFont = Theme.of(context).textTheme.displaySmall;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       onWillPop: (){
@@ -44,11 +33,10 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(''),
+            title: const Text(''),
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             automaticallyImplyLeading: false,
-            // leading:
             actions: [
               Container(
                 width: screenWidth,
@@ -61,7 +49,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                       child: Container(
                         height: 60,
                         width: 60,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
                                   'assets/icons/appBar/appBar_Home.png',
@@ -74,11 +62,10 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                       top: 18,
                       child: FilledButton(onPressed: () {
                         _networkProvider.bellboyTF=false;
-                        navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+                        navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
                       }, child: null, style: FilledButton.styleFrom(
-                          fixedSize: Size(80, 80),
+                          fixedSize: const Size(80, 80),
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)
                           ),
                           backgroundColor: Colors.transparent
@@ -90,7 +77,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                       child: Container(
                         height: 60,
                         width: 60,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
                                   'assets/icons/appBar/appBar_Battery.png',
@@ -101,13 +88,12 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                   ],
                 ),
               )
-              // SizedBox(width: screenWidth * 0.03)
             ],
             toolbarHeight: 110,
           ),
           extendBodyBehindAppBar: true,
           body: Container(
-              constraints: BoxConstraints.expand(),
+              constraints: const BoxConstraints.expand(),
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(backgroundImage), fit: BoxFit.cover)),
@@ -122,19 +108,19 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                         });
                         navPage(
                             context: context,
-                            page: BellboyReturnModuleFinal(),
+                            page: const BellboyReturnModuleFinal(),
                             enablePop: false)
                             .navPageToPage();
                       },
                       child: Container(
                           height: 1200,
                           width: 1080,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               border: Border.fromBorderSide(
                                   BorderSide(color: Colors.transparent, width: 1))))),
                 ),
                 Container(
-                  child: BellboyModuleButtonsFinal(screens: 4),
+                  child: const BellboyModuleButtonsFinal(screens: 4),
                 ),
               ]))),
     );

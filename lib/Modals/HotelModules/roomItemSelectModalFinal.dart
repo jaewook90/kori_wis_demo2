@@ -1,12 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
-
-import '../../Providers/ServingModel.dart';
 
 class SelectRoomItemModalFinal extends StatefulWidget {
   const SelectRoomItemModalFinal({Key? key}) : super(key: key);
@@ -47,7 +43,6 @@ class _SelectRoomItemModalFinalState extends State<SelectRoomItemModalFinal> {
   late String ramyeon;
 
   // 상품 구분 번호
-  // late int itemNumber;
   int itemNumber = 0;
 
   // 상품 목록
@@ -94,21 +89,18 @@ class _SelectRoomItemModalFinalState extends State<SelectRoomItemModalFinal> {
     goalPosition = _networkProvider.goalPosition;
 
     return Container(
-      padding: EdgeInsets.only(top: 90),
-      // height: 1536,
-      decoration: BoxDecoration(
-        border: Border.fromBorderSide(BorderSide(color: Colors.white))
+      padding: const EdgeInsets.only(top: 90),
+      decoration: const BoxDecoration(
+          border: Border.fromBorderSide(BorderSide(color: Colors.white))
       ),
       child: Dialog(
-        // shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
-          backgroundColor: Color(0xff000000),
+          backgroundColor: const Color(0xff000000),
           child: Stack(
             children: [
               Container(
-                // width: screenWidth,
                 height: 1536,
                 decoration: BoxDecoration(
-                    border: Border.fromBorderSide(BorderSide(color: Colors.white)),
+                    border: const Border.fromBorderSide(BorderSide(color: Colors.white)),
                     image: DecorationImage(
                         image: AssetImage(itemSelectBG))),
               ),
@@ -123,22 +115,18 @@ class _SelectRoomItemModalFinalState extends State<SelectRoomItemModalFinal> {
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 1, color: Colors.white),
+                              side: const BorderSide(width: 1, color: Colors.white),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);
                         _servingProvider.item1 = "";
                         _servingProvider.item2 = "";
                         _servingProvider.item3 = "";
-
-                        print(_servingProvider.item1);
-                        print(_servingProvider.item2);
-                        print(_servingProvider.item3);
                       },
                       child: null,
                     ),
                   )),
-              RoomServiceModuleButtonsFinal(
+              const RoomServiceModuleButtonsFinal(
                 screens: 1,
               ),
             ],

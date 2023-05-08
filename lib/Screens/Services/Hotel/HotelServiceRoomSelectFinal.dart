@@ -6,7 +6,7 @@ import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
 // ------------------------------ 보류 ---------------------------------------
 
 class HotelCheckINRoomSelect extends StatefulWidget {
-  HotelCheckINRoomSelect({Key? key}) : super(key: key);
+  const HotelCheckINRoomSelect({Key? key}) : super(key: key);
 
   @override
   State<HotelCheckINRoomSelect> createState() => _HotelCheckINRoomSelectState();
@@ -23,7 +23,7 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -39,7 +39,7 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Backward.png',
@@ -52,9 +52,8 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
                   child: FilledButton(onPressed: () {
                     Navigator.pop(context);
                   }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: Size(80, 80),
+                      fixedSize: const Size(80, 80),
                       shape: RoundedRectangleBorder(
-                        // side: BorderSide(color: Colors.white, width: 1),
                           borderRadius: BorderRadius.circular(0)
                       ),
                       backgroundColor: Colors.transparent
@@ -66,7 +65,7 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                               'assets/icons/appBar/appBar_Home.png',
@@ -78,11 +77,10 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
                   left: 120,
                   top: 18,
                   child: FilledButton(onPressed: () {
-                    navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+                    navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
                   }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: Size(80, 80),
+                      fixedSize: const Size(80, 80),
                       shape: RoundedRectangleBorder(
-                        // side: BorderSide(color: Colors.white, width: 1),
                           borderRadius: BorderRadius.circular(0)
                       ),
                       backgroundColor: Colors.transparent
@@ -94,7 +92,7 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
                   child: Container(
                     height: 60,
                     width: 60,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
                               'assets/icons/appBar/appBar_Battery.png',
@@ -105,17 +103,16 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
               ],
             ),
           )
-          // SizedBox(width: screenWidth * 0.03)
         ],
         toolbarHeight: 110,
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-        child: Stack(
+        child: const Stack(
           children: [
             HotelModuleButtonsFinal(screens: 1,)
           ],
