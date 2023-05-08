@@ -42,6 +42,8 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   late int chickenQT;
   late int ramyeonQT;
 
+  late bool qtChecker;
+
   List<String> selectedItemList = [];
 
   void showOrderPopup(context) {
@@ -83,6 +85,8 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
     ramyeonTotalPrice = 0;
 
     totalPrice = 0;
+
+    qtChecker = true;
   }
 
   @override
@@ -90,6 +94,44 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     selectedItemList = _orderProvider.selectedItemsList!;
+
+    if (qtChecker == true) {
+      setState(() {
+        if (selectedItemList.contains('햄버거') == true) {
+          hamburgerQT = 1;
+          hamburgerTotalPrice = hamburgerPrice;
+        }
+        if (selectedItemList.contains('라면') == true) {
+          ramyeonQT = 1;
+          ramyeonTotalPrice = ramyeonPrice;
+        }
+        if (selectedItemList.contains('핫도그') == true) {
+          hotDogQT = 1;
+          hotDogTotalPrice = hotDogPrice;
+        }
+        if (selectedItemList.contains('치킨') == true) {
+          chickenQT = 1;
+          chickenTotalPrice = chickenPrice;
+        }
+        totalPrice = hamburgerTotalPrice +
+            ramyeonTotalPrice +
+            hotDogTotalPrice +
+            chickenTotalPrice;
+        _orderProvider.orderedTotalPrice = totalPrice;
+
+        _orderProvider.orderedHamburgerPrice = hamburgerTotalPrice;
+        _orderProvider.orderedRamyeonPrice = ramyeonTotalPrice;
+        _orderProvider.orderedChickenPrice = chickenTotalPrice;
+        _orderProvider.orderedHotdogPrice = hotDogTotalPrice;
+
+        _orderProvider.orderedHamburgerQT = hamburgerQT;
+        _orderProvider.orderedRamyeonQT = ramyeonQT;
+        _orderProvider.orderedChickenQT = chickenQT;
+        _orderProvider.orderedHotdogQT = hotDogQT;
+        _orderProvider.orderedTotalPrice = totalPrice;
+      });
+      qtChecker = false;
+    }
 
     return Container(
       padding: const EdgeInsets.only(top: 100),
@@ -123,8 +165,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                      // Navigator.pop(context);
-                      // showOrderPopup(context);
                     },
                     child: null,
                   ),
@@ -151,8 +191,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
             Container(
               padding: const EdgeInsets.fromLTRB(0, 85, 0, 280),
               child: Scrollbar(
-                thickness: 4.0,
-                radius: const Radius.circular(8.0),
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: selectedItemList.length,
@@ -166,13 +204,13 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                             borderRadius: BorderRadius.circular(50)),
                         child: Stack(
                           children: [
+                            // 주문서 상품 그림
                             Positioned(
                                 left: 60,
                                 top: 30,
                                 child: Container(
                                   width: 180,
                                   height: 180,
-                                  // color: Colors.transparent,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(selectedItemList[
@@ -190,6 +228,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             : "")),
                                   ),
                                 )),
+                            // 상품 이름
                             Positioned(
                                 left: 300,
                                 top: 40,
@@ -211,14 +250,13 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     ],
                                   ),
                                 )),
+                            //상품 영문 이름
                             Positioned(
                                 left: 300,
                                 top: 100,
                                 child: Container(
                                   width: 120,
                                   height: 28,
-                                  // color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -243,14 +281,13 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     ],
                                   ),
                                 )),
+                            //상품 개별 가격
                             Positioned(
                                 left: 300,
                                 top: 155,
                                 child: Container(
                                   width: 120,
                                   height: 40,
-                                  // color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -275,6 +312,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     ],
                                   ),
                                 )),
+                            // 상품 갯수
                             Positioned(
                                 left: 653,
                                 top: 43,
@@ -282,7 +320,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                   width: 155,
                                   height: 50,
                                   color: Colors.transparent,
-                                  // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -307,6 +344,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     ],
                                   ),
                                 )),
+                            // 상품 갯수 조정 및 토탈 가격
                             Positioned(
                                 left: 650,
                                 top: 47,
@@ -314,7 +352,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     width: 155,
                                     height: 50,
                                     color: Colors.transparent,
-                                    // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 1))),
                                     child: Row(
                                       mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -326,7 +363,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                               setState(() {
                                                 if (selectedItemList[index] ==
                                                     "햄버거") {
-                                                  if (hamburgerQT > 0) {
+                                                  if (hamburgerQT > 1) {
                                                     hamburgerQT--;
                                                   }
                                                   hamburgerTotalPrice =
@@ -335,7 +372,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "라면") {
-                                                  if (ramyeonQT > 0) {
+                                                  if (ramyeonQT > 1) {
                                                     ramyeonQT--;
                                                   }
                                                   ramyeonTotalPrice =
@@ -343,7 +380,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "치킨") {
-                                                  if (chickenQT > 0) {
+                                                  if (chickenQT > 1) {
                                                     chickenQT--;
                                                   }
                                                   chickenTotalPrice =
@@ -351,7 +388,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "핫도그") {
-                                                  if (hotDogQT > 0) {
+                                                  if (hotDogQT > 1) {
                                                     hotDogQT--;
                                                   }
                                                   hotDogTotalPrice =
@@ -466,6 +503,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             ))
                                       ],
                                     ))),
+                            // 상품 별 총 가격 심볼
                             Positioned(
                                 left: 555,
                                 top: 140,
@@ -487,6 +525,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     ],
                                   ),
                                 )),
+                            // 상품 별 총 가격
                             Positioned(
                                 left: 555,
                                 top: 140,
@@ -525,6 +564,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
               ),
             ),
 
+            // 주문 총 가격
             Positioned(
                 left: 200,
                 top: 1213,

@@ -44,6 +44,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                     image: DecorationImage(
                         image: AssetImage(itemSelectBG))),
               ),
+              // 아이템 선택 종료 X버튼
               Positioned(
                   left: 880,
                   top: 23,
@@ -55,7 +56,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            // side: BorderSide(width: 1, color: Colors.white),
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         Navigator.pop(context);

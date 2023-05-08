@@ -43,7 +43,6 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
               constraints: const BoxConstraints.expand(),
               decoration: BoxDecoration(
                   color: Colors.transparent,
-                  // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                   image: DecorationImage(image: AssetImage(orderBookImg))),
               child: Container(),
             ),

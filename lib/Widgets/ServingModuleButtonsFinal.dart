@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/TrayStatusModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
@@ -101,15 +100,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         });
   }
 
-  void showTrayStatusPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return const TrayStatusModalFinal();
-        });
-  }
-
   void uploadTableNumberNItemImg() {
     if (_servingProvider.tray1Select == true) {
       setState(() {
@@ -171,31 +161,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
       buttonRadius = 0;
     } else if (widget.screens == 3) {
-      // 주문표 버전 선택 화면
-      buttonPositionWidth = [
-        39.5,
-        513.3,
-        39.5,
-        513.3,
-        39.5,
-        513.3,
-        39.5,
-        513.3
-      ];
-      buttonPositionHeight = [160.5, 160.5, 488.5, 488.5, 814, 814, 1140, 1140];
-
-      buttonSize = [439.5, 291];
-
-      buttonRadius = 40;
-    } else if (widget.screens == 4) {
-      // 팝업 ( 추가 여부 / 카운트다운 )
-      buttonPositionWidth = [55, 516];
-      buttonPositionHeight = [115, 115];
-
-      buttonSize = [420, 142];
-
-      buttonRadius = 40;
-    } else if (widget.screens == 5) {
       // 완료 화면
       buttonPositionWidth = [107.3];
       buttonPositionHeight = [1372.5];
@@ -260,39 +225,23 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                 : widget.screens == 1
                 ? () {
               setState(() {
-                if (i == 0) {
-                  _servingProvider.menuItem = menuItems[i];
-                } else if (i == 1) {
-                  _servingProvider.menuItem = menuItems[i];
-                } else if (i == 2) {
-                  _servingProvider.menuItem = menuItems[i];
-                } else {
-                  _servingProvider.menuItem = menuItems[i];
-                }
+                _servingProvider.menuItem = menuItems[i];
               });
-              if (_servingProvider.tray1Select == true) {
-                _servingProvider.setItemTray1();
-              } else if (_servingProvider.tray2Select == true) {
-                _servingProvider.setItemTray2();
-              } else if (_servingProvider.tray3Select == true) {
-                _servingProvider.setItemTray3();
-              }
               showTableSelectPopup(context);
             }
                 : widget.screens == 2
                 ? () {
               setState(() {
-                // _servingProvider.tableNumber = "${i + 1}";
                 if (_servingProvider.trayCheckAll == false) {
                   if (_servingProvider.tray1Select == true) {
-                    _servingProvider.tray1 = true;
+                    _servingProvider.tray1 = true; // 트레이 물건 적재 여부
                     _servingProvider.table1 = "${i + 1}";
                   } else if (_servingProvider.tray2Select ==
                       true) {
-                    _servingProvider.tray2 = true;
+                    _servingProvider.tray2 = true; // 트레이 물건 적재 여부
                     _servingProvider.table2 = "${i + 1}";
                   } else {
-                    _servingProvider.tray3 = true;
+                    _servingProvider.tray3 = true; // 트레이 물건 적재 여부
                     _servingProvider.table3 = "${i + 1}";
                   }
                   uploadTableNumberNItemImg();
@@ -303,40 +252,11 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                       .navPageToPage();
                 } else {
                   _servingProvider.setTrayAll();
-                  // _servingProvider.tableNumber = "${i + 1}";
                   showCountDownPopup(context);
                 }
               });
             }
                 : widget.screens == 3
-                ? receiptMenu[i] == '미주문'
-                ? null
-                : () {
-              if (receiptMenu[i] != '미주문') {
-                setState(() {
-                  _servingProvider.menuItem =
-                  receiptMenu[i];
-                  // _servingProvider.tableNumber =
-                  //     "${i + 1}";
-                });
-              }
-              if (_servingProvider.tray1Select == true) {
-                _servingProvider.setTray1();
-              } else if (_servingProvider.tray2Select ==
-                  true) {
-                _servingProvider.setTray2();
-              } else if (_servingProvider.tray3Select ==
-                  true) {
-                _servingProvider.setTray3();
-              }
-              uploadTableNumberNItemImg();
-              showTrayStatusPopup(context);
-            }
-                : widget.screens == 4
-                ? () {
-              showCountDownPopup(context);
-            }
-                : widget.screens == 5
                 ? () {
               _servingProvider.clearAllTray();
               navPage(

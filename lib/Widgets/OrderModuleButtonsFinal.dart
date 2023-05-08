@@ -163,7 +163,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
     }
 
     if (widget.screens == 0) {
-      // 장바구니 담기
+      // 장바구니 담기 페이지
       buttonPositionWidth = [60.3, 515.6, 60.3, 515.6, 262];
       buttonPositionHeight = [321, 321, 772, 772, 1309];
 
@@ -182,7 +182,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         _orderProvider.SelectedItemsQT = [true, true, true, true];
       }
     } else if (widget.screens == 1) {
-      // 장바구니 확인
+      // 장바구니 확인 페이지
       buttonPositionWidth = [563.5];
       buttonPositionHeight = [1188.3];
 
@@ -190,7 +190,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
       buttonRadius = 40;
     } else if (widget.screens == 2) {
-      // 결제 선택 및 금액 확인
+      // 결제 선택 및 금액 확인 페이지
       buttonPositionWidth = [62, 506, 62, 506, 62, 506];
       buttonPositionHeight = [550, 550, 750, 750, 949, 949];
 
