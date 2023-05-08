@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
-import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
-import 'package:kori_wis_demo/Widgets/MenuButtons.dart';
 import 'package:kori_wis_demo/Widgets/OrderModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 // ------------------------------ 보류 ---------------------------------------
 
 class ServingOrderReceipt extends StatefulWidget {
-  ServingOrderReceipt({Key? key}) : super(key: key);
+  const ServingOrderReceipt({Key? key}) : super(key: key);
 
   @override
   State<ServingOrderReceipt> createState() => _ServingOrderReceiptState();
@@ -88,9 +83,6 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
 
     selectedItemList = _orderProvider.selectedItemsList!;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     hamburgerQT = _orderProvider.orderedHamburgerQT!;
     ramyeonQT = _orderProvider.orderedRamyeonQT!;
     chickenQT = _orderProvider.orderedChickenQT!;
@@ -104,7 +96,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
     totalPrice = _orderProvider.orderedTotalPrice!;
 
     return Container(
-      padding: EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 100),
       child: Dialog(
         alignment: Alignment.topCenter,
         backgroundColor: Colors.transparent,
@@ -113,27 +105,27 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
           width: 992,
           child: Stack(children: [
             Container(
-              constraints: BoxConstraints.expand(),
+              constraints: const BoxConstraints.expand(),
               decoration: BoxDecoration(
                 // border: Border.fromBorderSide(BorderSide(color: Colors.white)),
                   image: DecorationImage(image: AssetImage(backgroundImage))),
               child: Container(),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(0, 330, 0, 670),
+              padding: const EdgeInsets.fromLTRB(0, 330, 0, 670),
               child: Scrollbar(
                 thickness: 4.0,
-                radius: Radius.circular(8.0),
+                radius: const Radius.circular(8.0),
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: selectedItemList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        margin: EdgeInsets.fromLTRB(60, 25, 60, 0),
+                        margin: const EdgeInsets.fromLTRB(60, 25, 60, 0),
                         height: 240,
                         width: 400,
                         decoration: BoxDecoration(
-                            color: Color(0xff292929),
+                            color: const Color(0xff292929),
                             borderRadius: BorderRadius.circular(50)),
                         child: Stack(
                           children: [
@@ -174,8 +166,8 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${selectedItemList[index]}',
-                                        style: TextStyle(
+                                        selectedItemList[index],
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
                                           color: Color(0xffffffff),
@@ -208,7 +200,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                             "핫도그"
                                             ? hotDogEng
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 20,
                                           color: Color(0xff777777),
@@ -241,7 +233,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                             "핫도그"
                                             ? '$hotDogPrice 원'
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 25,
                                           color: Color(0xff777777),
@@ -273,7 +265,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                             "핫도그"
                                             ? '$hotDogQT'
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
                                           color: Color(0xffffffff),
@@ -290,7 +282,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                   height: 48,
                                   color: Colors.transparent,
                                   // decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 1))),
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
@@ -312,7 +304,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                   width: 45,
                                   height: 48,
                                   color: Colors.transparent,
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
@@ -347,7 +339,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                             "핫도그"
                                             ? '$hotDogTotalPrice'
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
                                           color: Color(0xffffffff),
@@ -363,7 +355,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                                   width: 45,
                                   height: 48,
                                   color: Colors.transparent,
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
@@ -391,7 +383,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   width: 250,
                   height: 48,
                   // color: Colors.transparent,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 3))
                   ),
                   child: Row(
@@ -399,7 +391,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                     children: [
                       Text(
                         "$totalPrice",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'kor',
                           fontSize: 30,
                           color: Color(0xffffffff),
@@ -415,10 +407,10 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   width: 45,
                   height: 48,
                   // color: Colors.transparent,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -440,10 +432,10 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   width: 250,
                   height: 48,
                   // color: Colors.transparent,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 3))
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -464,10 +456,10 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   width: 45,
                   height: 48,
                   // color: Colors.transparent,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -489,7 +481,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   width: 250,
                   height: 48,
                   // color: Colors.transparent,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 3))
                   ),
                   child: Row(
@@ -497,7 +489,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                     children: [
                       Text(
                         "$totalPrice",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'kor',
                           fontSize: 30,
                           color: Color(0xffffffff),
@@ -513,10 +505,10 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                   width: 45,
                   height: 48,
                   // color: Colors.transparent,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 3))
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -530,7 +522,7 @@ class _ServingOrderReceiptState extends State<ServingOrderReceipt> {
                     ],
                   ),
                 )),
-            OrderModuleButtonsFinal(screens: 3,)
+            const OrderModuleButtonsFinal(screens: 3,)
           ]),
         ),
       ),

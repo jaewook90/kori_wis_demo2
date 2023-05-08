@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Videos/ServiceScreenVideoFinal.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
-import 'package:video_player/video_player.dart';
 
 class ServiceScreenFinal extends StatefulWidget {
   const ServiceScreenFinal({
@@ -16,14 +14,8 @@ class ServiceScreenFinal extends StatefulWidget {
 
 class _ServiceScreenFinalState extends State<ServiceScreenFinal>
     with TickerProviderStateMixin {
-  // late NetworkModel _networkProvider;
 
   String? currentGoal;
-
-  // dynamic poseData;
-
-  final String _wallpape = "assets/screens/koriZFinalService.png";
-  final String _fingerIcon = "assets/icons/pushIcon.png";
 
   final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.png";
   final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.png";
@@ -89,16 +81,16 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                                context: context,
-                                page: MainScreenFinal(),
-                                enablePop: false)
+                            context: context,
+                            page: MainScreenFinal(),
+                            enablePop: false)
                             .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
                           fixedSize: Size(80, 80),
                           shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
+                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
                     ),
@@ -123,16 +115,16 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                                context: context,
-                                page: MainScreenFinal(),
-                                enablePop: false)
+                            context: context,
+                            page: MainScreenFinal(),
+                            enablePop: false)
                             .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
                           fixedSize: Size(80, 80),
                           shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
+                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
                     ),
@@ -163,7 +155,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
           margin: EdgeInsets.only(top: 110),
           height: 1810,
           decoration: BoxDecoration(
-              color: Colors.transparent,),
+            color: Colors.transparent,),
           child: Stack(
             children: [
               Positioned(
@@ -172,8 +164,8 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                   height: 580,
                   width: 1080,
                   decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage(_shipping)),
-                      color: Colors.transparent,),
+                    image: DecorationImage(image: AssetImage(_shipping)),
+                    color: Colors.transparent,),
                   // child: ServiceScreenVideoFinal(videoName: _shipping)
                 ),
               ),
@@ -183,8 +175,8 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                 child: Container(
                   height: 580,
                   decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage(_serving)),
-                      color: Colors.transparent,),
+                    image: DecorationImage(image: AssetImage(_serving)),
+                    color: Colors.transparent,),
                   // child:ServiceScreenVideoFinal(videoName: _serving)
                 ),
               ),
@@ -192,10 +184,10 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                 top: 1205,
                 width: 1080,
                 child: Container(
-                    height: 580,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage(_hotel)),
-                        color: Colors.transparent,),
+                  height: 580,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: AssetImage(_hotel)),
+                    color: Colors.transparent,),
                   // child:ServiceScreenVideoFinal(videoName: _hotel)
                 ),
               ),

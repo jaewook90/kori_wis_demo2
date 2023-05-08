@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';

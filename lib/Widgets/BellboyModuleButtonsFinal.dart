@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellboyDestinationsModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/navCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';

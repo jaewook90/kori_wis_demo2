@@ -27,9 +27,9 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
 
-  late List<double> SelButtonPositionWidth;
-  late List<double> SelButtonPositionHeight;
-  late List<double> SelButtonSize;
+  late List<double> selButtonPositionWidth;
+  late List<double> selButtonPositionHeight;
+  late List<double> selButtonSize;
 
   late double buttonRadius;
 
@@ -50,7 +50,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
 
   bool? checkOutItems;
 
-  List<bool>? selectedItem;
+  // List<bool>? selectedItem;
 
   List<String> selectedItemList = [];
 
@@ -67,7 +67,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return CheckOutScreenFinal();
+          return const CheckOutScreenFinal();
         });
   }
 
@@ -76,7 +76,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return PaymentScreenFinal();
+          return const PaymentScreenFinal();
         });
   }
 
@@ -85,7 +85,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return NFCModuleScreenFinal();
+          return const NFCModuleScreenFinal();
         });
   }
 
@@ -101,7 +101,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
             content: SizedBox(
               width: screenWidth * 0.5,
               height: screenHeight * 0.1,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -114,11 +114,11 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                 ],
               ),
             ),
-            backgroundColor: Color(0xff2C2C2C),
+            backgroundColor: const Color(0xff2C2C2C),
             contentTextStyle: Theme.of(context).textTheme.headlineLarge,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xFFB7B7B7),
                   style: BorderStyle.solid,
                   width: 1,
@@ -129,19 +129,19 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text(
+                  style: TextButton.styleFrom(
+                      shape: const LinearBorder(
+                          side: BorderSide(color: Colors.white, width: 2),
+                          top: LinearBorderEdge(size: 1)),
+                      minimumSize:
+                      Size(screenWidth * 0.5, screenHeight * 0.05)),
+                  child: const Text(
                     '확 인',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontSize: 30,
                         color: Color(0xffF0F0F0)),
                   ),
-                  style: TextButton.styleFrom(
-                      shape: LinearBorder(
-                          side: BorderSide(color: Colors.white, width: 2),
-                          top: LinearBorderEdge(size: 1)),
-                      minimumSize:
-                          Size(screenWidth * 0.5, screenHeight * 0.05)),
                 ),
               ),
             ],
@@ -175,10 +175,10 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       buttonRadius1 = 43;
       buttonRadius2 = 40;
 
-      SelButtonPositionWidth = [57.5, 507.5, 57.5, 507.5, 370];
+      selButtonPositionWidth = [57.5, 507.5, 57.5, 507.5, 370];
 
-      SelButtonPositionHeight = [316, 316, 769, 769, 1855];
-      SelButtonSize = [430, 430];
+      selButtonPositionHeight = [316, 316, 769, 769, 1855];
+      selButtonSize = [430, 430];
 
       if (selectedQt == 0) {
         _orderProvider.SelectedItemsQT = [true, true, true, true];
@@ -210,19 +210,19 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
     }
 
     buttonNumbers = buttonPositionHeight.length;
-    selectedItem = List<bool>.filled(buttonNumbers - 1, true, growable: true);
+    // selectedItem = List<bool>.filled(buttonNumbers - 1, true, growable: true);
 
     return Stack(children: [
       if (widget.screens == 0)
         for (int i = 0; i < buttonNumbers - 1; i++)
           Positioned(
-            left: SelButtonPositionWidth[i],
-            top: SelButtonPositionHeight[i],
+            left: selButtonPositionWidth[i],
+            top: selButtonPositionHeight[i],
             child: Offstage(
               offstage: _orderProvider.SelectedItemsQT![i],
               child: Container(
-                  width: SelButtonSize[buttonWidth],
-                  height: SelButtonSize[buttonHeight],
+                  width: selButtonSize[buttonWidth],
+                  height: selButtonSize[buttonHeight],
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(selectedItemFrame),
@@ -239,74 +239,71 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               style: FilledButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
-                      // side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                       borderRadius: BorderRadius.circular(widget.screens == 0
                           ? i == 4
-                              ? buttonRadius2
-                              : buttonRadius1
+                          ? buttonRadius2
+                          : buttonRadius1
                           : buttonRadius)),
                   fixedSize: (widget.screens == 0)
                       ? i == (buttonNumbers - 1)
-                          ? Size(buttonSize2[buttonWidth],
-                              buttonSize2[buttonHeight])
-                          : Size(buttonSize1[buttonWidth],
-                              buttonSize1[buttonHeight])
+                      ? Size(buttonSize2[buttonWidth],
+                      buttonSize2[buttonHeight])
+                      : Size(buttonSize1[buttonWidth],
+                      buttonSize1[buttonHeight])
                       : Size(
-                          buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                      buttonSize[buttonWidth], buttonSize[buttonHeight])),
               onPressed: widget.screens == 0
                   ? () {
-                      if (i != 4) {
-                        setState(() {
-                          if (_orderProvider.SelectedItemsQT![i] == false) {
-                            _orderProvider.SelectedItemsQT![i] = true;
-                            selectedQt = selectedQt! - 1;
-                            _orderProvider.SelectedQT = selectedQt;
-                            if(i==0){
-                              selectedItemList.remove('햄버거');
-                            }else if(i==1){
-                              selectedItemList.remove('라면');
-                            }else if(i==2){
-                              selectedItemList.remove('치킨');
-                            }else if(i==3){
-                              selectedItemList.remove('핫도그');
-                            }
-                          } else {
-                            _orderProvider.SelectedItemsQT![i] = false;
-                            selectedQt = selectedQt! + 1;
-                            _orderProvider.SelectedQT = selectedQt;
-                            if(i==0){
-                              selectedItemList.add('햄버거');
-                            }else if(i==1){
-                              selectedItemList.add('라면');
-                            }else if(i==2){
-                              selectedItemList.add('치킨');
-                            }else if(i==3){
-                              selectedItemList.add('핫도그');
-                            }
-                          }
-                          _orderProvider.selectedItemsList = selectedItemList;
-                        });
-                      } else {
-                        showCheckingPopup(context);
+                if (i != 4) {
+                  setState(() {
+                    if (_orderProvider.SelectedItemsQT![i] == false) {
+                      _orderProvider.SelectedItemsQT![i] = true;
+                      selectedQt = selectedQt! - 1;
+                      _orderProvider.SelectedQT = selectedQt;
+                      if(i==0){
+                        selectedItemList.remove('햄버거');
+                      }else if(i==1){
+                        selectedItemList.remove('라면');
+                      }else if(i==2){
+                        selectedItemList.remove('치킨');
+                      }else if(i==3){
+                        selectedItemList.remove('핫도그');
                       }
-                      print(_orderProvider.SelectedItemsQT);
-                      print(selectedQt);
-                      print(_orderProvider.SelectedQT);
+                    } else {
+                      _orderProvider.SelectedItemsQT![i] = false;
+                      selectedQt = selectedQt! + 1;
+                      _orderProvider.SelectedQT = selectedQt;
+                      if(i==0){
+                        selectedItemList.add('햄버거');
+                      }else if(i==1){
+                        selectedItemList.add('라면');
+                      }else if(i==2){
+                        selectedItemList.add('치킨');
+                      }else if(i==3){
+                        selectedItemList.add('핫도그');
+                      }
                     }
+                    _orderProvider.selectedItemsList = selectedItemList;
+                  });
+                } else {
+                  showCheckingPopup(context);
+                }
+              }
                   : widget.screens == 1
-                      ? () {
-                            showPaymentPopup(context);
-                        }
-                      : widget.screens == 2
-                          ? () {
-                              if (i == 1) {
-                                showNFCPopup(context);
-                              } else {
-                                showCashServing(context);
-                              }
-                            }
-                          : widget.screens == 3 ?(){
-                navPage(context: context, page: TraySelectionFinal(), enablePop: false).navPageToPage();
+                  ? () {
+                showPaymentPopup(context);
+              }
+                  : widget.screens == 2
+                  ? () {
+                if (i == 1) {
+                  showNFCPopup(context);
+                } else {
+                  showCashServing(context);
+                }
+              }
+                  : widget.screens == 3 ?(){
+                navPage(context: context, page: const TraySelectionFinal(), enablePop: false).navPageToPage();
               } :null,
               child: null,
             ),
@@ -322,17 +319,17 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 0, 0, 30),
+                  color: const Color.fromRGBO(255, 0, 0, 30),
                   borderRadius: BorderRadius.circular(40)),
               child: Center(
                   child: Text(
-                '$selectedQt',
-                style: TextStyle(
-                    fontFamily: 'kor',
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold),
-              )),
+                    '$selectedQt',
+                    style: const TextStyle(
+                        fontFamily: 'kor',
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  )),
             ),
           ),
         ),

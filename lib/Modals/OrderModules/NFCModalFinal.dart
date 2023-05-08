@@ -25,14 +25,14 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
   }
 
   late NetworkModel _networkProvider;
-  String NFCimg = 'assets/images/koriZFinalNFC.jpg';
+  String nfcImg = 'assets/images/koriZFinalNFC.jpg';
 
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
-    return GestureDetector(
+    return GestureDetector( // 추후 제스쳐 터치가 아닌 NFC 신호 수신시로 변경
       onTap: () {
         if (_networkProvider.serviceState == 1) {
           Navigator.pop(context);
@@ -50,7 +50,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
         }
       },
       child: Container(
-          padding: EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 100),
           child: Dialog(
             alignment: Alignment.topCenter,
             backgroundColor: Colors.transparent,
@@ -58,8 +58,8 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
               height: 1401,
               width: 1072.5,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(30, 30, 30, 1),
-                  border: Border.fromBorderSide(
+                  color: const Color.fromRGBO(30, 30, 30, 1),
+                  border: const Border.fromBorderSide(
                       BorderSide(color: Colors.transparent, width: 1)),
                   borderRadius: BorderRadius.circular(50)),
               child: Stack(children: [
@@ -70,7 +70,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                     width: 1072.5,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(NFCimg), fit: BoxFit.cover),
+                          image: AssetImage(nfcImg), fit: BoxFit.cover),
                     ),
                   ),
                 ),
@@ -80,7 +80,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Backward.png',
@@ -96,9 +96,9 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                     },
                     child: null,
                     style: FilledButton.styleFrom(
-                        fixedSize: Size(80, 80),
+                        fixedSize: const Size(80, 80),
                         shape: RoundedRectangleBorder(
-                          // side: BorderSide(color: Colors.white, width: 1),
+
                             borderRadius: BorderRadius.circular(0)),
                         backgroundColor: Colors.transparent),
                   ),
@@ -119,7 +119,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                           },
-                          icon: Icon(Icons.clear)),
+                          icon: const Icon(Icons.clear)),
                     )),
               ]),
             ),

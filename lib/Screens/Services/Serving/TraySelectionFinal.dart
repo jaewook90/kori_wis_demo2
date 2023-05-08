@@ -20,36 +20,9 @@ class TraySelectionFinal extends StatefulWidget {
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
 
-  String? tableNumber;
-  String? itemName;
-
-  late var goalPosition = List<String>.empty();
-  List<String> orderedItems = [];
-
-  List<String> testItems = ['햄버거', '라면', '치킨', '핫도그', '미주문'];
-
   // 배경 화면
   late String backgroundImage;
   late String resetIcon;
-
-  late String downArrowIcon1;
-  late String downArrowIcon2;
-  late String downArrowIcon3;
-
-  // 상품 사진
-  late String hamburger;
-  late String hotDog;
-  late String chicken;
-  late String ramyeon;
-
-  // 상품 구분 번호
-  // late int itemNumber;
-  int itemNumber = 0;
-
-  // 상품 목록
-  late List<List> itemImagesList; // 트레이 1, 2, 3 다발 리스트
-  late List<String> itemImages;
-  late int trayNumber;
 
   // 트레이 하이드 앤 쇼
   bool? offStageTray1;
@@ -65,15 +38,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   String? table1;
   String? table2;
   String? table3;
-
-  //트레이별 선택 메뉴
-  String? item1;
-  String? item2;
-  String? item3;
-
-  //restAPI url
-  String? startUrl;
-  String? navUrl;
 
   //디버그
   bool _debugTray = false;
@@ -98,7 +62,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         context: context,
         builder: (context) {
           if (receiptModeOn == true) {
-            return SelectReceiptModalFinal();
+            return const SelectReceiptModalFinal();
           } else {
             return SelectItemModalFinal();
           }
@@ -107,11 +71,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
   @override
   Widget build(BuildContext context) {
-    // _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-
-    itemName = _servingProvider.menuItem;
-    tableNumber = _servingProvider.tableNumber;
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -127,22 +87,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     table2 = _servingProvider.table2;
     table3 = _servingProvider.table3;
 
-    item1 = _servingProvider.item1;
-    item2 = _servingProvider.item2;
-    item3 = _servingProvider.item3;
-
-    if (itemName == '햄버거') {
-      itemNumber = 0;
-    } else if (itemName == '핫도그') {
-      itemNumber = 1;
-    } else if (itemName == '치킨') {
-      itemNumber = 2;
-    } else if (itemName == '라면') {
-      itemNumber = 3;
-    } else {
-      itemNumber.isNaN;
-    }
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double textButtonWidth = screenWidth * 0.6;
@@ -152,16 +96,18 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     return WillPopScope(
       onWillPop: () {
-        navPage(context: context, page: ServiceScreenFinal(), enablePop: false).navPageToPage();
+        navPage(
+            context: context,
+            page: const ServiceScreenFinal(),
+            enablePop: false)
+            .navPageToPage();
         return Future.value(false);
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading:
           actions: [
             Container(
               width: screenWidth,
@@ -169,72 +115,36 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               child: Stack(
                 children: [
                   Positioned(
-                      left: 30,
-                      top: 25,
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/icons/appBar/appBar_Backward.png',
-                                ),
-                                fit: BoxFit.fill)),
-                      )),
-                  Positioned(
-                    left: 20,
-                    top: 18,
-                    child: FilledButton(
-                      onPressed: () {
-                        _servingProvider.clearAllTray();
-                        navPage(
-                            context: context,
-                            page: ServiceScreenFinal(),
-                            enablePop: false)
-                            .navPageToPage();
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: Size(80, 80),
-                          shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    ),
+                    left: 22,
+                    top: 17,
+                    child: IconButton(
+                        onPressed: () {
+                          _servingProvider.clearAllTray();
+                          navPage(
+                              context: context,
+                              page: const ServiceScreenFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        },
+                        icon: Image.asset(
+                            'assets/icons/appBar/appBar_Backward.png'),
+                        iconSize: 60),
                   ),
                   Positioned(
-                    left: 130,
-                    top: 25,
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Home.png',
-                              ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                  Positioned(
-                    left: 120,
-                    top: 18,
-                    child: FilledButton(
-                      onPressed: () {
-                        navPage(
-                            context: context,
-                            page: MainScreenFinal(),
-                            enablePop: false)
-                            .navPageToPage();
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: Size(80, 80),
-                          shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    ),
+                    left: 122,
+                    top: 17,
+                    child: IconButton(
+                        onPressed: () {
+                          _servingProvider.clearAllTray();
+                          navPage(
+                              context: context,
+                              page: const MainScreenFinal(),
+                              enablePop: false)
+                              .navPageToPage();
+                        },
+                        icon:
+                        Image.asset('assets/icons/appBar/appBar_Home.png'),
+                        iconSize: 60),
                   ),
                   Positioned(
                     right: 50,
@@ -242,7 +152,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
@@ -253,18 +163,21 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                 ],
               ),
             )
-            // SizedBox(width: screenWidth * 0.03)
           ],
           toolbarHeight: 110,
         ),
         extendBodyBehindAppBar: true,
         body: WillPopScope(
-          onWillPop: (){
-            navPage(context: context, page: ServiceScreenFinal(), enablePop: false).navPageToPage();
+          onWillPop: () {
+            navPage(
+                context: context,
+                page: const ServiceScreenFinal(),
+                enablePop: false)
+                .navPageToPage();
             return Future.value(false);
           },
           child: Container(
-            constraints: BoxConstraints.expand(),
+            constraints: const BoxConstraints.expand(),
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
@@ -272,7 +185,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               children: [
                 //기능적 부분
                 Stack(children: [
-                  ServingModuleButtonsFinal(
+                  const ServingModuleButtonsFinal(
                     screens: 0,
                   ),
                   // 디버그 버튼
@@ -297,69 +210,69 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                       }
                                     });
                                   },
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(textButtonWidth * 0.25,
+                                          textButtonHeight * 0.5),
+                                      shape: const RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color(0xFFB7B7B7),
+                                              style: BorderStyle.solid,
+                                              width: 10))),
                                   child: _servingProvider.receiptModeOn == true
                                       ? Text(
                                     'Receipt Mode',
                                     style: buttonFont,
                                   )
-                                      : Text('Normal Mode', style: buttonFont),
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      fixedSize: Size(textButtonWidth * 0.25,
-                                          textButtonHeight * 0.5),
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color(0xFFB7B7B7),
-                                              style: BorderStyle.solid,
-                                              width: 10)))),
+                                      : Text('Normal Mode', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
                                     setState(() {
                                       _servingProvider.stickTray1();
                                     });
                                   },
-                                  child: Text('Tray1', style: buttonFont),
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       fixedSize: Size(textButtonWidth * 0.2,
                                           textButtonHeight * 0.5),
-                                      shape: RoundedRectangleBorder(
+                                      shape: const RoundedRectangleBorder(
                                           side: BorderSide(
                                               color: Color(0xFFB7B7B7),
                                               style: BorderStyle.solid,
-                                              width: 10)))),
+                                              width: 10))),
+                                  child: Text('Tray1', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
                                     setState(() {
                                       _servingProvider.stickTray2();
                                     });
                                   },
-                                  child: Text('Tray2', style: buttonFont),
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       fixedSize: Size(textButtonWidth * 0.2,
                                           textButtonHeight * 0.5),
-                                      shape: RoundedRectangleBorder(
+                                      shape: const RoundedRectangleBorder(
                                           side: BorderSide(
                                               color: Color(0xFFB7B7B7),
                                               style: BorderStyle.solid,
-                                              width: 10)))),
+                                              width: 10))),
+                                  child: Text('Tray2', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
                                     setState(() {
                                       _servingProvider.stickTray3();
                                     });
                                   },
-                                  child: Text('Tray3', style: buttonFont),
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       fixedSize: Size(textButtonWidth * 0.2,
                                           textButtonHeight * 0.5),
-                                      shape: RoundedRectangleBorder(
+                                      shape: const RoundedRectangleBorder(
                                           side: BorderSide(
                                               color: Color(0xFFB7B7B7),
                                               style: BorderStyle.solid,
-                                              width: 10)))),
+                                              width: 10))),
+                                  child: Text('Tray3', style: buttonFont)),
                             ],
                           ),
                         ),
@@ -378,7 +291,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
-                            fixedSize: Size(64, 64),
+                            fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
                               // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
@@ -395,7 +308,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
-                            fixedSize: Size(64, 64),
+                            fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
                               // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
@@ -439,8 +352,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   offstage: servedItem1!,
                                   child: Center(
                                     child: Text(
-                                      // '$table1 번',
-                                      '${table1} 번',
+                                      '$table1 번',
                                       style: buttonFont,
                                     ),
                                   )),
@@ -475,16 +387,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   _servingProvider.trayCheckAll = false;
                                   showTraySetPopup(context);
                                 },
-                                child: Container(),
                                 style: TextButton.styleFrom(
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.green, width: 1),
-                                        borderRadius: BorderRadius.circular(20)))),
+                                        borderRadius:
+                                        BorderRadius.circular(20))),
+                                child: Container()),
                           ),
                         ],
                       ),
@@ -528,8 +441,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   height: 120,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(
-                                            _servingProvider.itemImageList![1])),
+                                        image: AssetImage(_servingProvider
+                                            .itemImageList![1])),
                                     borderRadius: BorderRadius.circular(0),
                                     // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                                   )),
@@ -546,16 +459,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   _servingProvider.trayCheckAll = false;
                                   showTraySetPopup(context);
                                 },
-                                child: Container(),
                                 style: TextButton.styleFrom(
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.green, width: 1),
-                                        borderRadius: BorderRadius.circular(20)))),
+                                        borderRadius:
+                                        BorderRadius.circular(20))),
+                                child: Container()),
                           ),
                         ],
                       ),
@@ -599,8 +513,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   height: 120,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(
-                                            _servingProvider.itemImageList![2])),
+                                        image: AssetImage(_servingProvider
+                                            .itemImageList![2])),
                                     borderRadius: BorderRadius.circular(0),
                                     // border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                                   )),
@@ -617,16 +531,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   _servingProvider.trayCheckAll = false;
                                   showTraySetPopup(context);
                                 },
-                                child: Container(),
                                 style: TextButton.styleFrom(
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
-                                        side: BorderSide(
+                                        side: const BorderSide(
                                             color: Colors.green, width: 1),
-                                        borderRadius: BorderRadius.circular(20)))),
+                                        borderRadius:
+                                        BorderRadius.circular(20))),
+                                child: Container()),
                           ),
                         ],
                       ),

@@ -15,7 +15,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   late OrderModel _orderProvider;
   String shoppingCartImg = 'assets/screens/Serving/koriZFinalShoppingCart.png';
 
-  late String selectedItemImg;
+  // late String selectedItemImg;
 
   late String hamburger;
   late String hotDog;
@@ -51,7 +51,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return ItemOrderModalFinal();
+          return const ItemOrderModalFinal();
         });
   }
 
@@ -85,7 +85,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
     ramyeonTotalPrice = 0;
 
     totalPrice = 0;
-
   }
 
   @override
@@ -95,8 +94,8 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
     selectedItemList = _orderProvider.selectedItemsList!;
 
     return Container(
-      padding: EdgeInsets.only(top: 100),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.only(top: 100),
+      decoration: const BoxDecoration(
         color: Colors.transparent,
       ),
       child: Dialog(
@@ -107,7 +106,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
           width: 998,
           child: Stack(children: [
             Container(
-              constraints: BoxConstraints.expand(),
+              constraints: const BoxConstraints.expand(),
               decoration: BoxDecoration(
                   color: Colors.transparent,
                   image: DecorationImage(image: AssetImage(shoppingCartImg))),
@@ -125,8 +124,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                       backgroundColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      print("aaaaaaaaaaaaaaaaaaaaaaaaa");
-                      print(_orderProvider.SelectedQT);
                       Navigator.pop(context);
                       // Navigator.pop(context);
                       // showOrderPopup(context);
@@ -154,20 +151,20 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                 )),
             // 1번 목록 예시
             Container(
-              padding: EdgeInsets.fromLTRB(0, 85, 0, 280),
+              padding: const EdgeInsets.fromLTRB(0, 85, 0, 280),
               child: Scrollbar(
                 thickness: 4.0,
-                radius: Radius.circular(8.0),
+                radius: const Radius.circular(8.0),
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: selectedItemList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        margin: EdgeInsets.fromLTRB(60, 25, 60, 0),
+                        margin: const EdgeInsets.fromLTRB(60, 25, 60, 0),
                         height: 240,
                         width: 400,
                         decoration: BoxDecoration(
-                            color: Color(0xff292929),
+                            color: const Color(0xff292929),
                             borderRadius: BorderRadius.circular(50)),
                         child: Stack(
                           children: [
@@ -206,8 +203,8 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${selectedItemList[index]}',
-                                        style: TextStyle(
+                                        selectedItemList[index],
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
                                           color: Color(0xffffffff),
@@ -239,7 +236,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             "핫도그"
                                             ? hotDogEng
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 20,
                                           color: Color(0xff777777),
@@ -271,7 +268,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             "핫도그"
                                             ? '$hotDogPrice 원'
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 25,
                                           color: Color(0xff777777),
@@ -296,13 +293,14 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             ? '$hamburgerQT'
                                             : selectedItemList[index] == "라면"
                                             ? '$ramyeonQT'
-                                            : selectedItemList[index] == "치킨"
+                                            : selectedItemList[index] ==
+                                            "치킨"
                                             ? '$chickenQT'
                                             : selectedItemList[index] ==
                                             "핫도그"
                                             ? '$hotDogQT'
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
                                           color: Color(0xffffffff),
@@ -325,50 +323,76 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                       children: [
                                         IconButton(
                                             style: IconButton.styleFrom(
-                                                fixedSize: Size(40, 40)),
+                                                fixedSize: const Size(40, 40)),
                                             onPressed: () {
                                               setState(() {
                                                 if (selectedItemList[index] ==
                                                     "햄버거") {
-                                                  if(hamburgerQT>0){
+                                                  if (hamburgerQT > 0) {
                                                     hamburgerQT--;
                                                   }
-                                                  hamburgerTotalPrice = hamburgerQT * hamburgerPrice;
+                                                  hamburgerTotalPrice =
+                                                      hamburgerQT *
+                                                          hamburgerPrice;
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "라면") {
-                                                  if(ramyeonQT>0){
+                                                  if (ramyeonQT > 0) {
                                                     ramyeonQT--;
                                                   }
-                                                  ramyeonTotalPrice = ramyeonQT * ramyeonPrice;
+                                                  ramyeonTotalPrice =
+                                                      ramyeonQT * ramyeonPrice;
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "치킨") {
-                                                  if(chickenQT>0){
+                                                  if (chickenQT > 0) {
                                                     chickenQT--;
                                                   }
-                                                  chickenTotalPrice = chickenQT * chickenPrice;
+                                                  chickenTotalPrice =
+                                                      chickenQT * chickenPrice;
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "핫도그") {
-                                                  if(hotDogQT>0){
+                                                  if (hotDogQT > 0) {
                                                     hotDogQT--;
                                                   }
-                                                  hotDogTotalPrice = hotDogQT * hotDogPrice;
+                                                  hotDogTotalPrice =
+                                                      hotDogQT * hotDogPrice;
                                                 }
-                                                totalPrice = hamburgerTotalPrice + ramyeonTotalPrice + chickenTotalPrice + hotDogTotalPrice;
-                                                _orderProvider.orderedHamburgerPrice = hamburgerTotalPrice;
-                                                _orderProvider.orderedRamyeonPrice = ramyeonTotalPrice;
-                                                _orderProvider.orderedChickenPrice = chickenTotalPrice;
-                                                _orderProvider.orderedHotdogPrice = hotDogTotalPrice;
-                                                _orderProvider.orderedHamburgerQT = hamburgerQT;
-                                                _orderProvider.orderedRamyeonQT = ramyeonQT;
-                                                _orderProvider.orderedChickenQT = chickenQT;
-                                                _orderProvider.orderedHotdogQT = hotDogQT;
-                                                _orderProvider.orderedTotalPrice = totalPrice;
+                                                totalPrice =
+                                                    hamburgerTotalPrice +
+                                                        ramyeonTotalPrice +
+                                                        chickenTotalPrice +
+                                                        hotDogTotalPrice;
+                                                _orderProvider
+                                                    .orderedHamburgerPrice =
+                                                    hamburgerTotalPrice;
+                                                _orderProvider
+                                                    .orderedRamyeonPrice =
+                                                    ramyeonTotalPrice;
+                                                _orderProvider
+                                                    .orderedChickenPrice =
+                                                    chickenTotalPrice;
+                                                _orderProvider
+                                                    .orderedHotdogPrice =
+                                                    hotDogTotalPrice;
+                                                _orderProvider
+                                                    .orderedHamburgerQT =
+                                                    hamburgerQT;
+                                                _orderProvider
+                                                    .orderedRamyeonQT =
+                                                    ramyeonQT;
+                                                _orderProvider
+                                                    .orderedChickenQT =
+                                                    chickenQT;
+                                                _orderProvider.orderedHotdogQT =
+                                                    hotDogQT;
+                                                _orderProvider
+                                                    .orderedTotalPrice =
+                                                    totalPrice;
                                               });
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons
                                                   .remove_circle_outline_outlined,
                                               color: Colors.white,
@@ -376,42 +400,68 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             )),
                                         IconButton(
                                             style: IconButton.styleFrom(
-                                                fixedSize: Size(40, 40)),
+                                                fixedSize: const Size(40, 40)),
                                             onPressed: () {
                                               setState(() {
                                                 if (selectedItemList[index] ==
                                                     "햄버거") {
                                                   hamburgerQT++;
-                                                  hamburgerTotalPrice = hamburgerQT * hamburgerPrice;
+                                                  hamburgerTotalPrice =
+                                                      hamburgerQT *
+                                                          hamburgerPrice;
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "라면") {
                                                   ramyeonQT++;
-                                                  ramyeonTotalPrice = ramyeonQT * ramyeonPrice;
+                                                  ramyeonTotalPrice =
+                                                      ramyeonQT * ramyeonPrice;
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "치킨") {
                                                   chickenQT++;
-                                                  chickenTotalPrice = chickenQT * chickenPrice;
+                                                  chickenTotalPrice =
+                                                      chickenQT * chickenPrice;
                                                 } else if (selectedItemList[
                                                 index] ==
                                                     "핫도그") {
                                                   hotDogQT++;
-                                                  hotDogTotalPrice = hotDogQT * hotDogPrice;
+                                                  hotDogTotalPrice =
+                                                      hotDogQT * hotDogPrice;
                                                 }
-                                                totalPrice = hamburgerTotalPrice + ramyeonTotalPrice + chickenTotalPrice + hotDogTotalPrice;
-                                                _orderProvider.orderedHamburgerPrice = hamburgerTotalPrice;
-                                                _orderProvider.orderedRamyeonPrice = ramyeonTotalPrice;
-                                                _orderProvider.orderedChickenPrice = chickenTotalPrice;
-                                                _orderProvider.orderedHotdogPrice = hotDogTotalPrice;
-                                                _orderProvider.orderedHamburgerQT = hamburgerQT;
-                                                _orderProvider.orderedRamyeonQT = ramyeonQT;
-                                                _orderProvider.orderedChickenQT = chickenQT;
-                                                _orderProvider.orderedHotdogQT = hotDogQT;
-                                                _orderProvider.orderedTotalPrice = totalPrice;
+                                                totalPrice =
+                                                    hamburgerTotalPrice +
+                                                        ramyeonTotalPrice +
+                                                        chickenTotalPrice +
+                                                        hotDogTotalPrice;
+                                                _orderProvider
+                                                    .orderedHamburgerPrice =
+                                                    hamburgerTotalPrice;
+                                                _orderProvider
+                                                    .orderedRamyeonPrice =
+                                                    ramyeonTotalPrice;
+                                                _orderProvider
+                                                    .orderedChickenPrice =
+                                                    chickenTotalPrice;
+                                                _orderProvider
+                                                    .orderedHotdogPrice =
+                                                    hotDogTotalPrice;
+                                                _orderProvider
+                                                    .orderedHamburgerQT =
+                                                    hamburgerQT;
+                                                _orderProvider
+                                                    .orderedRamyeonQT =
+                                                    ramyeonQT;
+                                                _orderProvider
+                                                    .orderedChickenQT =
+                                                    chickenQT;
+                                                _orderProvider.orderedHotdogQT =
+                                                    hotDogQT;
+                                                _orderProvider
+                                                    .orderedTotalPrice =
+                                                    totalPrice;
                                               });
                                             },
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.add_circle_outline_outlined,
                                               color: Colors.white,
                                               size: 40,
@@ -425,7 +475,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                   width: 45,
                                   height: 48,
                                   color: Colors.transparent,
-                                  child: Row(
+                                  child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
@@ -454,13 +504,14 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                                             ? '$hamburgerTotalPrice'
                                             : selectedItemList[index] == "라면"
                                             ? '$ramyeonTotalPrice'
-                                            : selectedItemList[index] == "치킨"
+                                            : selectedItemList[index] ==
+                                            "치킨"
                                             ? '$chickenTotalPrice'
                                             : selectedItemList[index] ==
                                             "핫도그"
                                             ? '$hotDogTotalPrice'
                                             : "",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'kor',
                                           fontSize: 40,
                                           color: Color(0xffffffff),
@@ -488,7 +539,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                     children: [
                       Text(
                         '$totalPrice',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'kor',
                           fontSize: 55,
                           color: Color(0xffffffff),
@@ -504,7 +555,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                   width: 55,
                   height: 80,
                   color: Colors.transparent,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -518,7 +569,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                     ],
                   ),
                 )),
-            OrderModuleButtonsFinal(
+            const OrderModuleButtonsFinal(
               screens: 1,
             )
           ]),
