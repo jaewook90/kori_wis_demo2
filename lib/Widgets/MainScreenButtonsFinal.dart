@@ -55,7 +55,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
       const AdminScreen(),
       const ConfigScreen()
     ];
-    serviceList = [ShippingMenuFinal(), TraySelectionFinal(), HotelServiceMenu()];
+    serviceList = [const ShippingMenuFinal(), const TraySelectionFinal(), HotelServiceMenu()];
   }
 
   @override
@@ -91,52 +91,51 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    // side: BorderSide(width: 1, color: Colors.redAccent),
+                  // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
-                        BorderRadius.circular(buttonRadius)),
+                    BorderRadius.circular(buttonRadius)),
                 fixedSize: Size(buttonSize[buttonWidth],
                     buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    navPage(
-                            context: context,
-                            page: screenList[i],
-                            enablePop: true)
-                        .navPageToPage();
-                    // _networkProvider.serviceState = i;
-                  }
+              navPage(
+                  context: context,
+                  page: screenList[i],
+                  enablePop: true)
+                  .navPageToPage();
+            }
                 : widget.screens == 1
-                    ? () {
-                        if (i == 0) {
-                          setState(() {
-                            _networkProvider.serviceState = 0;
-                          });
-                          navPage(
-                                  context: context,
-                                  page: serviceList[i],
-                                  enablePop: true)
-                              .navPageToPage();
-                        } else if (i == 1) {
-                          setState(() {
-                            _networkProvider.serviceState = 1;
-                          });
-                          navPage(
-                                  context: context,
-                                  page: serviceList[i],
-                                  enablePop: true)
-                              .navPageToPage();
-                        } else {
-                          setState(() {
-                            _networkProvider.serviceState = 2;
-                          });
-                          navPage(
-                                  context: context,
-                                  page: serviceList[i],
-                                  enablePop: true)
-                              .navPageToPage();
-                        }
-                      }
-                    : null,
+                ? () {
+              if (i == 0) {
+                setState(() {
+                  _networkProvider.serviceState = 0;
+                });
+                navPage(
+                    context: context,
+                    page: serviceList[i],
+                    enablePop: true)
+                    .navPageToPage();
+              } else if (i == 1) {
+                setState(() {
+                  _networkProvider.serviceState = 1;
+                });
+                navPage(
+                    context: context,
+                    page: serviceList[i],
+                    enablePop: true)
+                    .navPageToPage();
+              } else {
+                setState(() {
+                  _networkProvider.serviceState = 2;
+                });
+                navPage(
+                    context: context,
+                    page: serviceList[i],
+                    enablePop: true)
+                    .navPageToPage();
+              }
+            }
+                : null,
             child: null,
           ),
         ),

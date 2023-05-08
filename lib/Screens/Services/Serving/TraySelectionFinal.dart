@@ -5,7 +5,6 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Widgets/KoriAppBar.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -189,16 +188,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                       onPressed: () {
                         _servingProvider.clearAllTray();
                         navPage(
-                                context: context,
-                                page: ServiceScreenFinal(),
-                                enablePop: false)
+                            context: context,
+                            page: ServiceScreenFinal(),
+                            enablePop: false)
                             .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
                           fixedSize: Size(80, 80),
                           shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
+                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
                     ),
@@ -223,16 +222,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                                context: context,
-                                page: MainScreenFinal(),
-                                enablePop: false)
+                            context: context,
+                            page: MainScreenFinal(),
+                            enablePop: false)
                             .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
                           fixedSize: Size(80, 80),
                           shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
+                            // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
                     ),
@@ -251,7 +250,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
-               ],
+                ],
               ),
             )
             // SizedBox(width: screenWidth * 0.03)
@@ -300,9 +299,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   },
                                   child: _servingProvider.receiptModeOn == true
                                       ? Text(
-                                          'Receipt Mode',
-                                          style: buttonFont,
-                                        )
+                                    'Receipt Mode',
+                                    style: buttonFont,
+                                  )
                                       : Text('Normal Mode', style: buttonFont),
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
@@ -381,7 +380,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         style: FilledButton.styleFrom(
                             fixedSize: Size(64, 64),
                             shape: RoundedRectangleBorder(
-                                // side: BorderSide(color: Colors.white, width: 1),
+                              // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
                             backgroundColor: Colors.transparent),
                       )),
@@ -398,7 +397,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         style: FilledButton.styleFrom(
                             fixedSize: Size(64, 64),
                             shape: RoundedRectangleBorder(
-                                // side: BorderSide(color: Colors.white, width: 1),
+                              // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
                             backgroundColor: Colors.transparent),
                       )),
@@ -415,7 +414,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         style: FilledButton.styleFrom(
                             fixedSize: Size(64, 64),
                             shape: RoundedRectangleBorder(
-                                // side: BorderSide(color: Colors.white, width: 1),
+                              // side: BorderSide(color: Colors.white, width: 1),
                                 borderRadius: BorderRadius.circular(0)),
                             backgroundColor: Colors.transparent),
                       )),
@@ -481,7 +480,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
+                                    Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: BorderSide(
                                             color: Colors.green, width: 1),
@@ -552,7 +551,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
+                                    Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: BorderSide(
                                             color: Colors.green, width: 1),
@@ -623,7 +622,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
+                                    Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: BorderSide(
                                             color: Colors.green, width: 1),

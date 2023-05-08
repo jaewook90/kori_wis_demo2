@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
 
@@ -13,19 +12,12 @@ class MainScreenFinal extends StatefulWidget {
 
 class _MainScreenFinalState extends State<MainScreenFinal>
     with TickerProviderStateMixin {
-  // late NetworkModel _networkProvider;
-
-  // dynamic newPoseData;
-  // dynamic poseData;
 
   DateTime? currentBackPressTime;
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
 
   final String _wallpape = "assets/screens/koriZFinalHome.png";
   final String _fingerIcon = "assets/icons/pushIcon.png";
-
-  // 버튼 디자인 위에 올리기
-  double pixelRatio = 0.75;
 
   late final AnimationController _textAniCon = AnimationController(
     duration: const Duration(milliseconds: 1000),
@@ -45,16 +37,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     super.initState();
     fToast = FToast();
     fToast?.init(context);
-
-    // poseDataUpdate(widget.parsePoseData);
   }
-
-  // void poseDataUpdate(dynamic parsePoseData) {
-  //   newPoseData = parsePoseData;
-  //   if (newPoseData != null) {
-  //     poseData = newPoseData;
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -65,16 +48,8 @@ class _MainScreenFinalState extends State<MainScreenFinal>
 
   @override
   Widget build(BuildContext context) {
-    // _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
-    // if (poseData == null) {
-    //   poseData = _networkProvider.getPoseData;
-    // }
-    //
-    // _networkProvider.getPoseData = poseData;
 
     return WillPopScope(
       onWillPop: () async {
@@ -84,7 +59,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                 const Duration(milliseconds: 1300)) {
           currentBackPressTime = now;
           fToast?.showToast(
-              toastDuration: Duration(milliseconds: 1300),
+              toastDuration: const Duration(milliseconds: 1300),
               child: Material(
                 color: Colors.transparent,
                 child: Column(
@@ -94,7 +69,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ImageIcon(
+                          const ImageIcon(
                             AssetImage('assets/logos/ExaIcon.png'),
                             size: 25,
                             color: Color(0xffB7B7B7),
@@ -122,11 +97,9 @@ class _MainScreenFinalState extends State<MainScreenFinal>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
-          // leading:
           actions: [
             Container(
               width: screenWidth,
@@ -139,7 +112,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                     child: Container(
                       height: 60,
                       width: 60,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
                                 'assets/icons/appBar/appBar_Battery.png',
@@ -157,28 +130,28 @@ class _MainScreenFinalState extends State<MainScreenFinal>
         extendBodyBehindAppBar: true,
         body: Stack(children: [
           Container(
-            constraints: BoxConstraints.expand(),
+            constraints: const BoxConstraints.expand(),
             decoration: BoxDecoration(
                 image: DecorationImage(image: AssetImage(_wallpape))),
             child: Container(),
           ),
-          MainScreenButtonsFinal(screens: 0),
+          const MainScreenButtonsFinal(screens: 0),
           Positioned(
-              left: 670 * pixelRatio,
-              top: 1829 * pixelRatio,
+              left: 502.5,
+              top: 1371.75,
               child: FadeTransition(
                 opacity: _animation,
                 child: SizedBox(
                   child: ImageIcon(
                     AssetImage(_fingerIcon),
-                    color: Color(0xffB7B7B7),
+                    color: const Color(0xffB7B7B7),
                     size: 100,
                   ),
                 ),
               )),
           Container(
-            margin: EdgeInsets.only(top: 1970 * pixelRatio),
-            child: Row(
+            margin: const EdgeInsets.only(top: 1477.5),
+            child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
