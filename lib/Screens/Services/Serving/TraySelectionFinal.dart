@@ -222,33 +222,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              // TextButton(
-                              //     onPressed: () {
-                              //       setState(() {
-                              //         if (receiptModeOn == true) {
-                              //           _servingProvider.receiptModeOn = false;
-                              //         } else {
-                              //           _servingProvider.receiptModeOn = true;
-                              //         }
-                              //       });
-                              //     },
-                              //     style: TextButton.styleFrom(
-                              //         backgroundColor: Colors.transparent,
-                              //         fixedSize: Size(textButtonWidth * 0.25,
-                              //             textButtonHeight * 0.5),
-                              //         shape: const RoundedRectangleBorder(
-                              //             side: BorderSide(
-                              //                 color: Color(0xFFB7B7B7),
-                              //                 style: BorderStyle.solid,
-                              //                 width: 10))),
-                              //     child:
-                              //         Text('Normal Mode', style: buttonFont)),
-                              // _servingProvider.receiptModeOn == true
-                              //                   ? Text(
-                              //                       'Receipt Mode',
-                              //                       style: buttonFont,
-                              //                     )
-                              //                   : Text('Normal Mode', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
                                     setState(() {

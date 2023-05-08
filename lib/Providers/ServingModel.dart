@@ -1,55 +1,56 @@
 import 'package:flutter/material.dart';
 
 class ServingModel with ChangeNotifier {
-  bool? tray1;
-  bool? tray2;
-  bool? tray3;
-  List<String>? trayList;
-  //트레이 장착 여부
+  //트레이 장착 여부//
   bool? attachedTray1;
   bool? attachedTray2;
   bool? attachedTray3;
-  //트레이 별 상품 이름
+  //트레이 장착 여부//
+
+
+  //트레이 별 상품 이름 //
   bool? servedItem1;
   bool? servedItem2;
   bool? servedItem3;
+  //트레이 별 상품 이름 //
+
+
   //트레이 선택
   bool? tray1Select;
   bool? tray2Select;
   bool? tray3Select;
+  //트레이 선택
+
+
   //서빙 모드
   bool? receiptModeOn;
-  bool? playAd;
 
-  bool? servingBeginningIsNot;
 
+  //트레이 표시 상품 이미지
   List<String>? itemImageList;
+  //트레이 표시 상품 이미지
 
+  //트레이 선택 후 상품 선택 시 메뉴 이름
   String? menuItem;
+  //트레이 선택 시 메뉴 이름
 
   String? item1;
   String? item2;
   String? item3;
-  String? namelessItem;
-  List<String>? itemList;
 
-  String? tableNumber;
+  // 테이블 넘버 선택 및 트레이에 번호 표시 //
   String? table1;
   String? table2;
   String? table3;
-  String? generalTable;
-  List<String>? tableList;
+  // 테이블 넘버 선택 및 트레이에 번호 표시 //
+
   bool? trayCheckAll;
 
-  bool? setTrayTF;
-
+  // 디버그모드 온/오프 서빙 //
   bool? trayDebug;
+  // 디버그모드 온/오프 서빙 //
 
   ServingModel({
-    this.tray1,
-    this.tray2,
-    this.tray3,
-
     this.menuItem,
     this.itemImageList,
 
@@ -60,9 +61,6 @@ class ServingModel with ChangeNotifier {
     this.tray2Select,
     this.tray3Select,
 
-    this.playAd,
-
-    this.servingBeginningIsNot,
 
     this.servedItem1,
     this.servedItem2,
@@ -70,83 +68,45 @@ class ServingModel with ChangeNotifier {
     this.item1,
     this.item2,
     this.item3,
-    this.namelessItem,
-    this.tableNumber,
     this.table1,
     this.table2,
     this.table3,
-    this.generalTable,
-    this.tableList,
-    this.itemList,
-    this.trayList,
+
     this.trayCheckAll,
     this.receiptModeOn,
     this.trayDebug
   });
 
-  void initServing() {
-    tray1 = false;
-    tray2 = false;
-    tray3 = false;
-    menuItem = null;
-    item1 = null;
-    item2 = null;
-    item3 = null;
-    tableNumber = null;
-    table1 = null;
-    table2 = null;
-    table3 = null;
-    tableList!.isEmpty;
-    itemList!.isEmpty;
-    trayCheckAll = false;
 
+  // 트레이 온/오프 //
+  void stickTray1(){
+    if(attachedTray1 == true){
+      attachedTray1 = false;
+    }else{
+      attachedTray1 = true;
+    }
     notifyListeners();
   }
-
-  // 주문서 선택 ( 상품, 테이블 일괄 지정 )
-  void setTray1() {
-    tray1 = true;
-    item1 = menuItem;
-    table1 = tableNumber;
-
+  void stickTray2(){
+    if(attachedTray2 == true){
+      attachedTray2 = false;
+    }else{
+      attachedTray2 = true;
+    }
     notifyListeners();
   }
-
-  void setTray2() {
-    tray2 = true;
-    item2 = menuItem;
-    table2 = tableNumber;
-
+  void stickTray3(){
+    if(attachedTray3 == true){
+      attachedTray3 = false;
+    }else{
+      attachedTray3 = true;
+    }
     notifyListeners();
   }
+  // 트레이 온/오프 //
 
-  void setTray3() {
-    tray3 = true;
-    item3 = menuItem;
-    table3 = tableNumber;
-
-    notifyListeners();
-  }
-
-  void setTrayAll() {
-    // tray1 = true;
-    // tray2 = true;
-    // tray3 = true;
-    item1 = menuItem;
-    item2 = menuItem;
-    item3 = menuItem;
-    table1 = tableNumber;
-    table2 = tableNumber;
-    table3 = tableNumber;
-
-    menuItem = "";
-    tableNumber = "";
-
-    notifyListeners();
-  }
-
+  // 각 트레이 설정 초기화 //
   void clearTray1(){
-    tray1 = false;
     servedItem1 = true;
     tray1Select = false;
     item1 = "";
@@ -156,7 +116,6 @@ class ServingModel with ChangeNotifier {
   }
 
   void clearTray2(){
-    tray2 = false;
     servedItem2 = true;
     tray2Select = false;
     item2 = "";
@@ -166,7 +125,6 @@ class ServingModel with ChangeNotifier {
   }
 
   void clearTray3(){
-    tray3 = false;
     servedItem3 = true;
     tray3Select = false;
     item3 = "";
@@ -174,12 +132,26 @@ class ServingModel with ChangeNotifier {
     itemImageList![2]='';
     notifyListeners();
   }
+  // 각 트레이 설정 리셋 //
 
+  // 트레이 상품, 테이블 미 선택 후 일괄 이송 시
+  void setTrayAll() {
+    // tray1 = true;
+    // tray2 = true;
+    // tray3 = true;
+    item1 = menuItem;
+    item2 = menuItem;
+    item3 = menuItem;
+
+    menuItem = "";
+    // tableNumber = "";
+
+    notifyListeners();
+  }
+  // 트레이 상품, 테이블 미 선택 후 일괄 이송 시
+
+  // 서빙 서비스 재시작 시 모든 트레이 초기화
   void clearAllTray(){
-
-    tray1 = false;
-    tray2 = false;
-    tray3 = false;
     item1 = null;
     item2 = null;
     item3 = null;
@@ -195,72 +167,5 @@ class ServingModel with ChangeNotifier {
     // itemImageList=['a', 'b', 'c'];
     notifyListeners();
   }
-
-  void cancelTraySelection(){
-    tray1Select = false;
-    tray2Select = false;
-    tray3Select = false;
-    notifyListeners();
-  }
-
-  void playAD(){
-    if(playAd == true){
-      playAd = false;
-    }else{
-      playAd = true;
-    }
-    notifyListeners();
-  }
-
-  void stickTray1(){
-    if(attachedTray1 == true){
-      attachedTray1 = false;
-    }else{
-      attachedTray1 = true;
-    }
-    notifyListeners();
-  }
-
-  void stickTray2(){
-    if(attachedTray2 == true){
-      attachedTray2 = false;
-    }else{
-      attachedTray2 = true;
-    }
-    notifyListeners();
-  }
-
-  void stickTray3(){
-    if(attachedTray3 == true){
-      attachedTray3 = false;
-    }else{
-      attachedTray3 = true;
-    }
-    notifyListeners();
-  }
-
-  void servedItemTray1(){
-    if(servedItem1 == true){
-      servedItem1 = false;
-    }else{
-      servedItem1 = true;
-    }
-    notifyListeners();
-  }
-
-  void servedItemTray2(){
-    if(servedItem2 == true){
-      servedItem2 = false;
-    }else{
-      servedItem2 = true;
-    }
-    notifyListeners();
-  }
-
-  void servedItemTray3(){
-    if(servedItem3 == true){
-      servedItem3 = false;
-    }
-    notifyListeners();
-  }
+  // 서빙 서비스 재시작 시 모든 트레이 초기화
 }

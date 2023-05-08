@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/roomItemSelectModalFinal.dart';
-import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/roomItemSelectScreenFinal.dart';
@@ -18,7 +18,7 @@ class RoomServiceMenu extends StatefulWidget {
 }
 
 class _RoomServiceMenuState extends State<RoomServiceMenu> {
-  late RoomServiceModel _roomServiceProvider;
+  late HotelModel _hotelProvider;
 
   // 배경 화면
   late String backgroundImage;
@@ -35,9 +35,9 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
   bool? servedItem3;
 
   //트레이별 선택 테이블 넘버
-  String? table1;
-  String? table2;
-  String? table3;
+  String? room1;
+  String? room2;
+  String? room3;
 
   //디버그
   late bool _debugTray;
@@ -50,9 +50,9 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
     backgroundImage =
         "assets/screens/Hotel/RoomService/koriZFinalRoomBegin.png";
 
-    table1 = "";
-    table2 = "";
-    table3 = "";
+    room1 = "";
+    room2 = "";
+    room3 = "";
   }
 
   void showTraySetPopup(context) {
@@ -66,22 +66,22 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
 
   @override
   Widget build(BuildContext context) {
-    _roomServiceProvider =
-        Provider.of<RoomServiceModel>(context, listen: false);
+    _hotelProvider =
+        Provider.of<HotelModel>(context, listen: false);
 
-    _debugTray = _roomServiceProvider.trayDebug!;
+    _debugTray = _hotelProvider.trayDebug!;
 
-    offStageTray1 = _roomServiceProvider.attachedTray1;
-    offStageTray2 = _roomServiceProvider.attachedTray2;
-    offStageTray3 = _roomServiceProvider.attachedTray3;
+    offStageTray1 = _hotelProvider.attachedTray1;
+    offStageTray2 = _hotelProvider.attachedTray2;
+    offStageTray3 = _hotelProvider.attachedTray3;
 
-    servedItem1 = _roomServiceProvider.servedItem1;
-    servedItem2 = _roomServiceProvider.servedItem2;
-    servedItem3 = _roomServiceProvider.servedItem3;
+    servedItem1 = _hotelProvider.servedItem1;
+    servedItem2 = _hotelProvider.servedItem2;
+    servedItem3 = _hotelProvider.servedItem3;
 
-    table1 = _roomServiceProvider.table1;
-    table2 = _roomServiceProvider.table2;
-    table3 = _roomServiceProvider.table3;
+    room1 = _hotelProvider.room1;
+    room2 = _hotelProvider.room2;
+    room3 = _hotelProvider.room3;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -219,7 +219,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      _roomServiceProvider.stickTray1();
+                                      _hotelProvider.stickTray1();
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -235,7 +235,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      _roomServiceProvider.stickTray2();
+                                      _hotelProvider.stickTray2();
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -251,7 +251,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               TextButton(
                                   onPressed: () {
                                     setState(() {
-                                      _roomServiceProvider.stickTray3();
+                                      _hotelProvider.stickTray3();
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -277,7 +277,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       child: FilledButton(
                         onPressed: () {
                           setState(() {
-                            _roomServiceProvider.clearTray1();
+                            _hotelProvider.clearTray1();
                           });
                         },
                         child: null,
@@ -293,7 +293,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       child: FilledButton(
                         onPressed: () {
                           setState(() {
-                            _roomServiceProvider.clearTray2();
+                            _hotelProvider.clearTray2();
                           });
                         },
                         child: null,
@@ -309,7 +309,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       child: FilledButton(
                         onPressed: () {
                           setState(() {
-                            _roomServiceProvider.clearTray3();
+                            _hotelProvider.clearTray3();
                           });
                         },
                         child: null,
@@ -339,7 +339,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '$table1 호',
+                                          '$room1 호',
                                           style: buttonFont,
                                         ),
                                       ])),
@@ -356,7 +356,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage(
-                                          _roomServiceProvider.itemImageList![0]),
+                                          _hotelProvider.itemImageList![0]),
                                     ),
                                   )),
                             ),
@@ -366,10 +366,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                             height: 180,
                             child: TextButton(
                                 onPressed: () {
-                                  _roomServiceProvider.tray1Select = true;
-                                  _roomServiceProvider.tray2Select = false;
-                                  _roomServiceProvider.tray3Select = false;
-                                  _roomServiceProvider.trayCheckAll = false;
+                                  _hotelProvider.tray1Select = true;
+                                  _hotelProvider.tray2Select = false;
+                                  _hotelProvider.tray3Select = false;
+                                  _hotelProvider.trayCheckAll = false;
                                   navPage(
                                           context: context,
                                           page: const SelectRoomItemScreenFinal(),
@@ -410,7 +410,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '$table2 호',
+                                          '$room2 호',
                                           style: buttonFont,
                                         ),
                                       ])),
@@ -426,7 +426,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                   height: 120,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(_roomServiceProvider
+                                        image: AssetImage(_hotelProvider
                                             .itemImageList![1])),
                                   )),
                             ),
@@ -436,10 +436,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               height: 180,
                               child: TextButton(
                                   onPressed: () {
-                                    _roomServiceProvider.tray1Select = false;
-                                    _roomServiceProvider.tray2Select = true;
-                                    _roomServiceProvider.tray3Select = false;
-                                    _roomServiceProvider.trayCheckAll = false;
+                                    _hotelProvider.tray1Select = false;
+                                    _hotelProvider.tray2Select = true;
+                                    _hotelProvider.tray3Select = false;
+                                    _hotelProvider.trayCheckAll = false;
                                     navPage(
                                             context: context,
                                             page:
@@ -481,7 +481,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '$table3 호',
+                                          '$room3 호',
                                           style: buttonFont,
                                         ),
                                       ])),
@@ -497,7 +497,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                                   height: 120,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(_roomServiceProvider
+                                        image: AssetImage(_hotelProvider
                                             .itemImageList![2])),
                                   )),
                             ),
@@ -507,10 +507,10 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                               height: 180,
                               child: TextButton(
                                   onPressed: () {
-                                    _roomServiceProvider.tray1Select = false;
-                                    _roomServiceProvider.tray2Select = false;
-                                    _roomServiceProvider.tray3Select = true;
-                                    _roomServiceProvider.trayCheckAll = false;
+                                    _hotelProvider.tray1Select = false;
+                                    _hotelProvider.tray2Select = false;
+                                    _hotelProvider.tray3Select = true;
+                                    _hotelProvider.trayCheckAll = false;
                                     navPage(
                                             context: context,
                                             page:

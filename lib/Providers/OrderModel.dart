@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class OrderModel with ChangeNotifier {
-  List<String>? orderedItems;
   List<String>? selectedItemsList;
   List<bool>? SelectedItemsQT;
   int? SelectedQT;
@@ -24,7 +23,6 @@ class OrderModel with ChangeNotifier {
   int? orderedChickenQT;
 
   OrderModel({
-    this.orderedItems,
     this.orderedHamburgerPrice,
     this.orderedRamyeonPrice,
     this.orderedHotdogPrice,

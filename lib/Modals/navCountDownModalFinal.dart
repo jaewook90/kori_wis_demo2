@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class NavCountDownModalFinal extends StatefulWidget {
 }
 
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
-  late NetworkModel _networkProvider;
+  late MainStatusModel _statusProvider;
 
   late String countDownPopup;
 
@@ -23,16 +23,16 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     final CountdownController controller =
         CountdownController(autoStart: true);
 
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
-    if (_networkProvider.serviceState == 0) {
+    if (_statusProvider.serviceState == 0) {
       countDownPopup = 'assets/screens/Shipping/koriZFinalShipCountdown.png';
-    } else if (_networkProvider.serviceState == 1) {
+    } else if (_statusProvider.serviceState == 1) {
       countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
-    } else if (_networkProvider.serviceState == 2) {
+    } else if (_statusProvider.serviceState == 2) {
       countDownPopup =
           'assets/screens/Hotel/BellBoy/koriZFinalBellCountDown.png';
-    } else if (_networkProvider.serviceState == 3) {
+    } else if (_statusProvider.serviceState == 3) {
       countDownPopup =
           'assets/screens/Hotel/RoomService/koriZFinalRoomCountDown.png';
     }

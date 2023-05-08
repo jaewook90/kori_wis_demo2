@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
-import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:provider/provider.dart';
@@ -28,44 +28,56 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context)=>MainStatusModel(
+          serviceState: 0,
+          playAd: false,
+        )),
         ChangeNotifierProvider(
-            create: (context) => NetworkModel(
-                startUrl: "172.30.1.22",
-                getPoseData: null,
-                currentGoal: "",
-                serviceState: 0,
-                servingDone: false,
-                shippingDone: false)),
-        ChangeNotifierProvider(
-            create: (context) => ServingModel(
-              trayDebug: false,
-                tray1: false,
-                tray2: false,
-                tray3: false,
+            create: (context) => HotelModel(
+                trayDebug: false,
                 receiptModeOn: false,
                 attachedTray1: false,
                 attachedTray2: false,
                 attachedTray3: false,
-                playAd: false,
                 servedItem1: true,
                 servedItem2: true,
                 servedItem3: true,
                 tray1Select: false,
                 tray2Select: false,
                 tray3Select: false,
-                servingBeginningIsNot: true,
+                item1: '',
+                item2: '',
+                item3: '',
+                room1: "",
+                room2: "",
+                room3: "",
+                itemImageList: ['a', 'b', 'c'],
+                menuItem: "미지정",
+                roomNumber: "10"
+            )),
+        ChangeNotifierProvider(
+            create: (context) => ServingModel(
+              trayDebug: false,
+                receiptModeOn: false,
+                attachedTray1: false,
+                attachedTray2: false,
+                attachedTray3: false,
+                servedItem1: true,
+                servedItem2: true,
+                servedItem3: true,
+                tray1Select: false,
+                tray2Select: false,
+                tray3Select: false,
                 item1: '',
                 item2: '',
                 item3: '',
                 table1: "",
                 table2: "",
                 table3: "",
-                tableList: [],
                 itemImageList: ['a', 'b', 'c'],
                 menuItem: "미지정",
-                tableNumber: "10")),
+            )),
         ChangeNotifierProvider(create: (context) => OrderModel(
-          orderedItems: [],
           orderedChickenPrice: 0,
           orderedChickenQT: 0,
           orderedHamburgerPrice: 0,
@@ -76,34 +88,6 @@ class MyApp extends StatelessWidget {
           orderedRamyeonQT: 0,
           orderedTotalPrice: 0
         )),
-        ChangeNotifierProvider(create: (context)=>RoomServiceModel(
-            trayDebug: false,
-            tray1: false,
-            tray2: false,
-            tray3: false,
-            receiptModeOn: false,
-            attachedTray1: false,
-            attachedTray2: false,
-            attachedTray3: false,
-            playAd: false,
-            servedItem1: true,
-            servedItem2: true,
-            servedItem3: true,
-            tray1Select: false,
-            tray2Select: false,
-            tray3Select: false,
-            servingBeginningIsNot: true,
-            item1: '',
-            item2: '',
-            item3: '',
-            table1: "",
-            table2: "",
-            table3: "",
-            tableList: [],
-            itemImageList: ['a', 'b', 'c'],
-            menuItem: "미지정",
-            roomNumber: "10"
-        ))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

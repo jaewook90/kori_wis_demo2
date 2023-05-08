@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/ServingOrderReceiptModal.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomReceipt.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -24,24 +24,24 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
         });
   }
 
-  late NetworkModel _networkProvider;
+  late MainStatusModel _statusProvider;
   String nfcImg = 'assets/images/koriZFinalNFC.jpg';
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     return GestureDetector( // 추후 제스쳐 터치가 아닌 NFC 신호 수신시로 변경
       onTap: () {
-        if (_networkProvider.serviceState == 1) {
+        if (_statusProvider.serviceState == 1) {
           // 서빙 상품 주문 영수증
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
           showServingReceiptPopup(context);
-        } else if (_networkProvider.serviceState == 2) {
+        } else if (_statusProvider.serviceState == 2) {
           // 호텔 체크인 영수증
           navPage(context: context, page: HotelRoomReceipt(), enablePop: false)
               .navPageToPage();

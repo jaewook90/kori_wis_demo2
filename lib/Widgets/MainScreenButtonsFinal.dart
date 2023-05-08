@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/AdminScreen.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
 import 'package:kori_wis_demo/Screens/LinkConnectorScreen.dart';
@@ -23,7 +23,7 @@ class MainScreenButtonsFinal extends StatefulWidget {
 }
 
 class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
-  late NetworkModel _networkProvider;
+  late MainStatusModel _statusProvider;
 
   late var screenList = List<Widget>.empty();
   late var serviceList = List<Widget>.empty();
@@ -55,7 +55,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 메인 화면 ( 서비스, 커넥터, 관리자 설정 버튼 )
@@ -102,7 +102,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                     ? () {
                         if (i == 0) {
                           setState(() {
-                            _networkProvider.serviceState = 0;
+                            _statusProvider.serviceState = 0;
                           });
                           navPage(
                                   context: context,
@@ -111,7 +111,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                               .navPageToPage();
                         } else if (i == 1) {
                           setState(() {
-                            _networkProvider.serviceState = 1;
+                            _statusProvider.serviceState = 1;
                           });
                           navPage(
                                   context: context,
@@ -120,7 +120,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                               .navPageToPage();
                         } else {
                           setState(() {
-                            _networkProvider.serviceState = 2;
+                            _statusProvider.serviceState = 2;
                           });
                           navPage(
                                   context: context,

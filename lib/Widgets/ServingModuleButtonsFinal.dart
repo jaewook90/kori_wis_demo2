@@ -201,9 +201,9 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                       });
                       showOrderPopup(context);
                     } else {
-                      if ((_servingProvider.tray1 == true ||
-                              _servingProvider.tray2 == true) ||
-                          _servingProvider.tray3 == true) {
+                      if ((_servingProvider.table1!=""||
+                          _servingProvider.table2!="") ||
+                          _servingProvider.table3!="") {
                         showCountDownPopup(context);
                       } else {
                         _servingProvider.trayCheckAll = true;
@@ -224,14 +224,11 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             setState(() {
                               if (_servingProvider.trayCheckAll == false) {
                                 if (_servingProvider.tray1Select == true) {
-                                  _servingProvider.tray1 = true; // 트레이 물건 적재 여부
                                   _servingProvider.table1 = "${i + 1}";
                                 } else if (_servingProvider.tray2Select ==
                                     true) {
-                                  _servingProvider.tray2 = true; // 트레이 물건 적재 여부
                                   _servingProvider.table2 = "${i + 1}";
                                 } else {
-                                  _servingProvider.tray3 = true; // 트레이 물건 적재 여부
                                   _servingProvider.table3 = "${i + 1}";
                                 }
                                 uploadTableNumberNItemImg();

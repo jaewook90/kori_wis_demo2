@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellBoyYNModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
-import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceRoomInfoNCartFinal.dart';
@@ -28,9 +28,10 @@ class HotelModuleButtonsFinal extends StatefulWidget {
 }
 
 class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
-  late NetworkModel _networkProvider;
-  late RoomServiceModel _roomServiceProvider;
+  late HotelModel _hotelProvider;
   late OrderModel _orderProvider;
+  late MainStatusModel _statusProvider;
+
 
   late var homeButtonName = List<String>.empty();
   late List<String> roomList;
@@ -85,9 +86,10 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
   @override
   Widget build(BuildContext context) {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _roomServiceProvider =
-        Provider.of<RoomServiceModel>(context, listen: false);
+    _hotelProvider =
+        Provider.of<HotelModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
+
 
     if (widget.screens == 0) {
       // 호텔 서비스 선택 화면
@@ -170,7 +172,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                     } else if (i == 1) {
                       //벨보이
                       setState(() {
-                        _networkProvider.serviceState = 2;
+                        _statusProvider.serviceState = 2;
                       });
                       navPage(
                               context: context,
@@ -180,8 +182,8 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                     } else {
                       //룸서비스
                       setState(() {
-                        _roomServiceProvider.clearAllTray();
-                        _networkProvider.serviceState = 3;
+                        _hotelProvider.clearAllTray();
+                        _statusProvider.serviceState = 3;
                       });
                       navPage(
                               context: context,

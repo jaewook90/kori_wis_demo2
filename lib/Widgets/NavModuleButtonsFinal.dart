@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorPauseModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class NavModuleButtonsFinal extends StatefulWidget {
 }
 
 class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
-  late ServingModel _servingProvider;
+  late MainStatusModel _statusProvider;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -39,7 +39,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 이동 중
@@ -110,7 +110,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                   page: const NavigatorProgressModuleFinal(),
                                   enablePop: false)
                               .navPageToPage();
-                          _servingProvider.playAd = false;
+                          _statusProvider.playAd = false;
                         } else if (i == 1) {
                           // 추후에는 API 통신을 이용한 충전하러가기 기능 추가
                           navPage(
@@ -118,7 +118,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                   page: const NavigatorProgressModuleFinal(),
                                   enablePop: false)
                               .navPageToPage();
-                          _servingProvider.playAd = false;
+                          _statusProvider.playAd = false;
                         } else if (i == 2) {
                           // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
                           navPage(
@@ -126,7 +126,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                   page: const NavigatorProgressModuleFinal(),
                                   enablePop: false)
                               .navPageToPage();
-                          _servingProvider.playAd = false;
+                          _statusProvider.playAd = false;
                         } else {
                           // 추후에는 거점으로 복귀
                           navPage(
@@ -134,7 +134,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                   page: const NavigatorProgressModuleFinal(),
                                   enablePop: false)
                               .navPageToPage();
-                          _servingProvider.playAd = false;
+                          _statusProvider.playAd = false;
                         }
                       }
                     : null,

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:provider/provider.dart';
 
 class ShippingNavDone extends StatefulWidget {
   const ShippingNavDone({Key? key}) : super(key: key);
@@ -13,15 +10,11 @@ class ShippingNavDone extends StatefulWidget {
 }
 
 class _ShippingNavDoneState extends State<ShippingNavDone> {
-  late ServingModel _servingProvider;
-  late NetworkModel _networkProvider;
 
   late String countDownPopup = 'assets/screens/Shipping/koriZFinalShippingDone.png';
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;

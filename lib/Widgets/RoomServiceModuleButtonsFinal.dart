@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/RoomServiceDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceReturn.dart';
@@ -23,7 +23,7 @@ class RoomServiceModuleButtonsFinal extends StatefulWidget {
 
 class _RoomServiceModuleButtonsFinalState
     extends State<RoomServiceModuleButtonsFinal> {
-  late RoomServiceModel _roomServiceProvider;
+  late HotelModel _hotelProvider;
 
   // 메뉴 및 호실 선택 요소
   List<String> menuItems = ['수건', '헤어', '가운', '스킨'];
@@ -151,32 +151,32 @@ class _RoomServiceModuleButtonsFinalState
   }
 
   void uploadRoomNumberNItemImg() {
-    if (_roomServiceProvider.tray1Select == true) {
+    if (_hotelProvider.tray1Select == true) {
       setState(() {
-        _roomServiceProvider.itemImageList![0] = itemImagesList[0][itemNumber];
-        _roomServiceProvider.servedItem1 = false;
+        _hotelProvider.itemImageList![0] = itemImagesList[0][itemNumber];
+        _hotelProvider.servedItem1 = false;
       });
-    } else if (_roomServiceProvider.tray2Select == true) {
+    } else if (_hotelProvider.tray2Select == true) {
       setState(() {
-        _roomServiceProvider.itemImageList![1] = itemImagesList[1][itemNumber];
-        _roomServiceProvider.servedItem2 = false;
+        _hotelProvider.itemImageList![1] = itemImagesList[1][itemNumber];
+        _hotelProvider.servedItem2 = false;
       });
-    } else if (_roomServiceProvider.tray3Select == true) {
+    } else if (_hotelProvider.tray3Select == true) {
       setState(() {
-        _roomServiceProvider.itemImageList![2] = itemImagesList[2][itemNumber];
-        _roomServiceProvider.servedItem3 = false;
+        _hotelProvider.itemImageList![2] = itemImagesList[2][itemNumber];
+        _hotelProvider.servedItem3 = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _roomServiceProvider =
-        Provider.of<RoomServiceModel>(context, listen: false);
+    _hotelProvider =
+        Provider.of<HotelModel>(context, listen: false);
 
-    itemName = _roomServiceProvider.menuItem;
+    itemName = _hotelProvider.menuItem;
 
-    if (_roomServiceProvider.trayCheckAll == false) {
+    if (_hotelProvider.trayCheckAll == false) {
       if (itemName == '수건') {
         itemNumber = 0;
       } else if (itemName == '헤어') {
@@ -335,24 +335,24 @@ class _RoomServiceModuleButtonsFinalState
                             buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    if ((_roomServiceProvider.tray1 == true ||
-                            _roomServiceProvider.tray2 == true) ||
-                        _roomServiceProvider.tray3 == true) {
+                    if ((_hotelProvider.room1 != "" ||
+                        _hotelProvider.room2 != "") ||
+                        _hotelProvider.room3 != "") {
                       showCountDownPopup(context);
                     } else {
-                      _roomServiceProvider.trayCheckAll = true;
+                      _hotelProvider.trayCheckAll = true;
                       navPage(
                               context: context,
                               page: const RoomServiceDestinationScreenFinal(),
                               enablePop: true)
                           .navPageToPage();
-                      _roomServiceProvider.menuItem = "상품";
+                      _hotelProvider.menuItem = "상품";
                     }
                   }
                 : widget.screens == 1
                     ? () {
                         setState(() {
-                            _roomServiceProvider.menuItem = menuItems[i];
+                            _hotelProvider.menuItem = menuItems[i];
                         });
                         navPage(
                                 context: context,
@@ -378,24 +378,21 @@ class _RoomServiceModuleButtonsFinalState
                                 if (currentNum == "") {
                                   showNoDestinationWarn(context);
                                 } else {
-                                  _roomServiceProvider.roomNumber =
+                                  _hotelProvider.roomNumber =
                                       '$currentNum';
-                                  if (_roomServiceProvider.trayCheckAll ==
+                                  if (_hotelProvider.trayCheckAll ==
                                       false) {
-                                    if (_roomServiceProvider.tray1Select ==
+                                    if (_hotelProvider.tray1Select ==
                                         true) {
-                                      _roomServiceProvider.tray1 = true;
-                                      _roomServiceProvider.table1 =
+                                      _hotelProvider.room1 =
                                           "$currentNum";
-                                    } else if (_roomServiceProvider
+                                    } else if (_hotelProvider
                                             .tray2Select ==
                                         true) {
-                                      _roomServiceProvider.tray2 = true;
-                                      _roomServiceProvider.table2 =
+                                      _hotelProvider.room2 =
                                           "$currentNum";
                                     } else {
-                                      _roomServiceProvider.tray3 = true;
-                                      _roomServiceProvider.table3 =
+                                      _hotelProvider.room3 =
                                           "$currentNum";
                                     }
                                     uploadRoomNumberNItemImg();
@@ -405,8 +402,8 @@ class _RoomServiceModuleButtonsFinalState
                                             enablePop: false)
                                         .navPageToPage();
                                   } else {
-                                    _roomServiceProvider.setTrayAll();
-                                    _roomServiceProvider.roomNumber =
+                                    _hotelProvider.setTrayAll();
+                                    _hotelProvider.roomNumber =
                                         "$currentNum";
                                     showCountDownPopup(context);
                                   }
@@ -430,24 +427,21 @@ class _RoomServiceModuleButtonsFinalState
                                   } else if (i == 6) {
                                     currentNum = '301';
                                   }
-                                  _roomServiceProvider.roomNumber =
+                                  _hotelProvider.roomNumber =
                                       '$currentNum';
-                                  if (_roomServiceProvider.trayCheckAll ==
+                                  if (_hotelProvider.trayCheckAll ==
                                       false) {
-                                    if (_roomServiceProvider.tray1Select ==
+                                    if (_hotelProvider.tray1Select ==
                                         true) {
-                                      _roomServiceProvider.tray1 = true;
-                                      _roomServiceProvider.table1 =
+                                      _hotelProvider.room1 =
                                           "$currentNum";
-                                    } else if (_roomServiceProvider
+                                    } else if (_hotelProvider
                                             .tray2Select ==
                                         true) {
-                                      _roomServiceProvider.tray2 = true;
-                                      _roomServiceProvider.table2 =
+                                      _hotelProvider.room2 =
                                           "$currentNum";
                                     } else {
-                                      _roomServiceProvider.tray3 = true;
-                                      _roomServiceProvider.table3 =
+                                      _hotelProvider.room3 =
                                           "$currentNum";
                                     }
                                     uploadRoomNumberNItemImg();
@@ -457,8 +451,8 @@ class _RoomServiceModuleButtonsFinalState
                                             enablePop: false)
                                         .navPageToPage();
                                   } else {
-                                    _roomServiceProvider.setTrayAll();
-                                    _roomServiceProvider.roomNumber =
+                                    _hotelProvider.setTrayAll();
+                                    _hotelProvider.roomNumber =
                                         "$currentNum";
                                     showCountDownPopup(context);
                                   }
@@ -466,7 +460,7 @@ class _RoomServiceModuleButtonsFinalState
                               }
                             : widget.screens == 4
                                 ? () {
-                                    _roomServiceProvider.clearAllTray();
+                                    _hotelProvider.clearAllTray();
                                     navPage(
                                             context: context,
                                             page:
