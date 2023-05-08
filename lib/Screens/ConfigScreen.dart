@@ -14,10 +14,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double textButtonWidth = screenWidth * 0.85;
-    double textButtonHeight = screenHeight * 0.15;
 
-    TextStyle? buttonFont = Theme.of(context).textTheme.displayLarge;
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
@@ -26,7 +23,6 @@ class _ConfigScreenState extends State<ConfigScreen> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            // padding: EdgeInsets.only(right: screenWidth * 0.07),
             padding: EdgeInsets.fromLTRB(
                 0, screenHeight * 0.0015, screenWidth * 0.05, 0),
             onPressed: () {
@@ -44,10 +40,10 @@ class _ConfigScreenState extends State<ConfigScreen> {
       extendBodyBehindAppBar: true,
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/KoriBackgroundImage_v1.png"),
-                fit: BoxFit.cover)),
+        // decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //         image: AssetImage("assets/images/KoriBackgroundImage_v1.png"),
+        //         fit: BoxFit.cover)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

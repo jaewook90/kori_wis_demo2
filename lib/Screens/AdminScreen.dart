@@ -38,10 +38,10 @@ class _AdminScreenState extends State<AdminScreen> {
       extendBodyBehindAppBar: true,
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/KoriBackgroundImage_v1.png"),
-                fit: BoxFit.cover)),
+        // decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //         image: AssetImage("assets/images/KoriBackgroundImage_v1.png"),
+        //         fit: BoxFit.cover)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

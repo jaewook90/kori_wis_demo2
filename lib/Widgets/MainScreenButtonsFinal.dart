@@ -28,16 +28,11 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
   late var screenList = List<Widget>.empty();
   late var serviceList = List<Widget>.empty();
 
-  late var homeButtonName = List<String>.empty();
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
 
   late double buttonRadius;
-
-  late List<double> buttonSize1;
-  late List<double> buttonSize2;
 
   late int buttonNumbers;
 
@@ -63,7 +58,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     if (widget.screens == 0) {
-      // 메인 화면
+      // 메인 화면 ( 서비스, 커넥터, 관리자 설정 버튼 )
       buttonPositionWidth = [90, 560, 90, 560];
       buttonPositionHeight = [300, 300, 770, 770];
 
@@ -91,12 +86,11 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                  // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius:
                     BorderRadius.circular(buttonRadius)),
                 fixedSize: Size(buttonSize[buttonWidth],
                     buttonSize[buttonHeight])),
-            onPressed: widget.screens == 0
+            onPressed: widget.screens == 0 // 메인 스크린
                 ? () {
               navPage(
                   context: context,
@@ -104,7 +98,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                   enablePop: true)
                   .navPageToPage();
             }
-                : widget.screens == 1
+                : widget.screens == 1 // 서비스 선택 스크린
                 ? () {
               if (i == 0) {
                 setState(() {
