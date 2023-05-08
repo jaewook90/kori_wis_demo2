@@ -17,7 +17,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -26,12 +26,12 @@ class _ConfigScreenState extends State<ConfigScreen> {
             padding: EdgeInsets.fromLTRB(
                 0, screenHeight * 0.0015, screenWidth * 0.05, 0),
             onPressed: () {
-              navPage(context: context, page: MainScreenFinal(), enablePop: false).navPageToPage();
+              navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.home_outlined,
             ),
-            color: Color(0xffB7B7B7),
+            color: const Color(0xffB7B7B7),
             iconSize: screenHeight * 0.05,
           )
         ],
@@ -39,7 +39,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         // decoration: BoxDecoration(
         //     image: DecorationImage(
         //         image: AssetImage("assets/images/KoriBackgroundImage_v1.png"),

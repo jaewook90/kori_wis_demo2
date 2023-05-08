@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ShippingModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 
 class ShippingDoneFinal extends StatefulWidget {
   const ShippingDoneFinal({Key? key}) : super(key: key);
@@ -14,23 +12,14 @@ class ShippingDoneFinal extends StatefulWidget {
 }
 
 class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
-  late NetworkModel _networkProvider;
-
-  String? startUrl;
-  String? navUrl;
-  String? chgUrl;
 
   String backgroundImage = "assets/screens/Shipping/koriZFinalShippingDone.png";
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
-    startUrl = _networkProvider.startUrl;
-    chgUrl = _networkProvider.chgUrl;
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
         appBar: AppBar(
@@ -93,6 +82,7 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                   top: 450,
                   left: 0,
                   child: GestureDetector(
+                    // 화면 터치로 화면 이동
                       onTap: () {
                         navPage(
                             context: context,

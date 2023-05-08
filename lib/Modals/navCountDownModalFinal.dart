@@ -79,7 +79,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 style: FilledButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
-                      // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
@@ -95,7 +94,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 style: FilledButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
-                      // side: BorderSide(width: 1, color: Colors.redAccent),
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
@@ -111,7 +109,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
           ]),
           backgroundColor: Colors.transparent,
           contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-          // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
         ));
   }
 }
