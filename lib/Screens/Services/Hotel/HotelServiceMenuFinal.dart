@@ -44,7 +44,11 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
                     top: 10,
                     child: FilledButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        navPage(
+                            context: context,
+                            page: const ServiceScreenFinal(),
+                            enablePop: false)
+                            .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
                           fixedSize: const Size(90, 90),

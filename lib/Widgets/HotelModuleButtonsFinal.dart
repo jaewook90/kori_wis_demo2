@@ -125,11 +125,11 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
       buttonRadius = 40;
     } else {
       // 도착 화면
-      buttonPositionWidth = [560, 63];
-      buttonPositionHeight = [1363, 1600];
+      buttonPositionWidth = [558, 80];
+      buttonPositionHeight = [1327, 1558];
 
-      buttonSize1 = [455, 195];
-      buttonSize2 = [953, 185];
+      buttonSize1 = [440, 190];
+      buttonSize2 = [922, 180];
 
       buttonRadius1 = 35;
       buttonRadius2 = 35;

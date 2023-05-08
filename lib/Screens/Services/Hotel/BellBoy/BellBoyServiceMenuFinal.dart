@@ -38,7 +38,6 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -49,8 +48,17 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
             child: Stack(
               children: [
                 Positioned(
-                    left: 30,
-                    top: 25,
+                  left: 20,
+                  top: 10,
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size(90, 90),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
                     child: Container(
                       height: 60,
                       width: 60,
@@ -60,46 +68,36 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
                                 'assets/icons/appBar/appBar_Backward.png',
                               ),
                               fit: BoxFit.fill)),
-                    )),
-                Positioned(
-                  left: 20,
-                  top: 18,
-                  child: FilledButton(onPressed: () {
-                    Navigator.pop(context);
-                  }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: const Size(80, 80),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)
-                      ),
-                      backgroundColor: Colors.transparent
-                  ),),
-                ),
-                Positioned(
-                  left: 130,
-                  top: 25,
-                  child: Container(
-                    height: 60,
-                    width: 60,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Home.png',
-                            ),
-                            fit: BoxFit.fill)),
+                    ),
                   ),
                 ),
                 Positioned(
                   left: 120,
-                  top: 18,
-                  child: FilledButton(onPressed: () {
-                    navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
-                  }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: const Size(80, 80),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)
-                      ),
-                      backgroundColor: Colors.transparent
-                  ),),
+                  top: 10,
+                  child: FilledButton(
+                    onPressed: () {
+                      navPage(
+                          context: context,
+                          page: const MainScreenFinal(),
+                          enablePop: false)
+                          .navPageToPage();
+                    },
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size(90, 90),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Home.png',
+                              ),
+                              fit: BoxFit.fill)),
+                    ),
+                  ),
                 ),
                 Positioned(
                   right: 50,

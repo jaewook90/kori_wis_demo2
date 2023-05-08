@@ -33,7 +33,6 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(''),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           automaticallyImplyLeading: false,
@@ -44,8 +43,21 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
               child: Stack(
                 children: [
                   Positioned(
-                      left: 30,
-                      top: 25,
+                    left: 20,
+                    top: 10,
+                    child: FilledButton(
+                      onPressed: () {
+                        navPage(
+                            context: context,
+                            page: const MainScreenFinal(),
+                            enablePop: false)
+                            .navPageToPage();
+                        },
+                      style: FilledButton.styleFrom(
+                          fixedSize: const Size(90, 90),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
                       child: Container(
                         height: 60,
                         width: 60,
@@ -55,59 +67,35 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                                   'assets/icons/appBar/appBar_Backward.png',
                                 ),
                                 fit: BoxFit.fill)),
-                      )),
-                  Positioned(
-                    left: 20,
-                    top: 18,
-                    child: FilledButton(
-                      onPressed: () {
-                        navPage(
-                                context: context,
-                                page: const MainScreenFinal(),
-                                enablePop: false)
-                            .navPageToPage();
-                      },
-                      child: null,
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(80, 80),
-                          shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                    ),
-                  ),
-                  Positioned(
-                    left: 130,
-                    top: 25,
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Home.png',
-                              ),
-                              fit: BoxFit.fill)),
+                      ),
                     ),
                   ),
                   Positioned(
                     left: 120,
-                    top: 18,
+                    top: 10,
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                                context: context,
-                                page: const MainScreenFinal(),
-                                enablePop: false)
+                            context: context,
+                            page: const MainScreenFinal(),
+                            enablePop: false)
                             .navPageToPage();
                       },
-                      child: null,
                       style: FilledButton.styleFrom(
-                          fixedSize: const Size(80, 80),
+                          fixedSize: const Size(90, 90),
                           shape: RoundedRectangleBorder(
-                              // side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/appBar/appBar_Home.png',
+                                ),
+                                fit: BoxFit.fill)),
+                      ),
                     ),
                   ),
                   Positioned(
@@ -127,7 +115,6 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                 ],
               ),
             )
-            // SizedBox(width: screenWidth * 0.03)
           ],
           toolbarHeight: 110,
         ),

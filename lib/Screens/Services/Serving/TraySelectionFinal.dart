@@ -61,11 +61,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         context: context,
         builder: (context) {
           return const SelectItemModalFinal();
-          // if (receiptModeOn == true) {
-          //   return const SelectReceiptModalFinal();
-          // } else {
-          //   return const SelectItemModalFinal();
-          // }
         });
   }
 
@@ -117,36 +112,60 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               child: Stack(
                 children: [
                   Positioned(
-                    left: 22,
-                    top: 17,
-                    child: IconButton(
-                        onPressed: () {
-                          _servingProvider.clearAllTray();
-                          navPage(
-                                  context: context,
-                                  page: const ServiceScreenFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                        },
-                        icon: Image.asset(
-                            'assets/icons/appBar/appBar_Backward.png'),
-                        iconSize: 60),
+                    left: 20,
+                    top: 10,
+                    child: FilledButton(
+                      onPressed: () {
+                        navPage(
+                            context: context,
+                            page: const ServiceScreenFinal(),
+                            enablePop: false)
+                            .navPageToPage();
+                      },
+                      style: FilledButton.styleFrom(
+                          fixedSize: const Size(90, 90),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/appBar/appBar_Backward.png',
+                                ),
+                                fit: BoxFit.fill)),
+                      ),
+                    ),
                   ),
                   Positioned(
-                    left: 122,
-                    top: 17,
-                    child: IconButton(
-                        onPressed: () {
-                          _servingProvider.clearAllTray();
-                          navPage(
-                                  context: context,
-                                  page: const MainScreenFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                        },
-                        icon:
-                            Image.asset('assets/icons/appBar/appBar_Home.png'),
-                        iconSize: 60),
+                    left: 120,
+                    top: 10,
+                    child: FilledButton(
+                      onPressed: () {
+                        navPage(
+                            context: context,
+                            page: const MainScreenFinal(),
+                            enablePop: false)
+                            .navPageToPage();
+                      },
+                      style: FilledButton.styleFrom(
+                          fixedSize: const Size(90, 90),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/appBar/appBar_Home.png',
+                                ),
+                                fit: BoxFit.fill)),
+                      ),
+                    ),
                   ),
                   Positioned(
                     right: 50,

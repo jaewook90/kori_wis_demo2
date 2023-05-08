@@ -112,9 +112,6 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
                         iconSize: 90,
                           onPressed: () {
                             Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
                           },
                           icon: const Icon(Icons.clear)),
                     )),
