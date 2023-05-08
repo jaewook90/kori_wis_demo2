@@ -69,7 +69,6 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                       onPressed: () {
                         if (_networkProvider.serviceState == 2) {
                           Navigator.pop(context);
-                          Navigator.pop(context);
                         } else {
                           Navigator.pop(context);
                           Navigator.pop(context);

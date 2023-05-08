@@ -40,7 +40,7 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor:Color(0xff2d2d2d),
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
@@ -99,15 +99,17 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
         ),
         extendBodyBehindAppBar: true,
         body: Container(
+          margin: EdgeInsets.only(top: 50),
           constraints: const BoxConstraints.expand(),
           decoration: BoxDecoration(
+              color: Color(0xff2d2d2d),
               image: DecorationImage(
-                  image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+                  image: AssetImage(backgroundImage), fit: BoxFit.fill)),
           child: Stack(
             children: [
               //예약번호
               Positioned(
-                top: 755,
+                top: 735,
                 left: 600,
                 child: Container(
                     height: 50,
@@ -129,7 +131,7 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
               //예약자 정보
               //이름
               Positioned(
-                top: 835,
+                top: 815,
                 left: 600,
                 child: Container(
                     height: 50,
@@ -150,7 +152,7 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
               ),
               //연락처
               Positioned(
-                top: 925,
+                top: 900,
                 left: 600,
                 child: Container(
                     height: 50,
@@ -172,8 +174,8 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
               //결제정보
               //결제일
               Positioned(
-                top: 1055,
-                left: 350,
+                top: 1030,
+                left: 330,
                 child: Container(
                     height: 50,
                     width: 500,
@@ -194,7 +196,7 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
               ),
               //가격
               Positioned(
-                top: 1132,
+                top: 1102,
                 left: 600,
                 child: Container(
                     height: 50,
@@ -215,7 +217,7 @@ class _HotelRoomReceiptState extends State<HotelRoomReceipt> {
               ),
               //할인가격
               Positioned(
-                top: 1215,
+                top: 1190,
                 left: 600,
                 child: Container(
                     height: 50,
