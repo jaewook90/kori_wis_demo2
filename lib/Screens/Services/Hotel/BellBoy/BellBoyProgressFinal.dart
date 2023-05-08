@@ -120,7 +120,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                                   BorderSide(color: Colors.transparent, width: 1))))),
                 ),
                 Container(
-                  child: const BellboyModuleButtonsFinal(screens: 4),
+                  child: const BellboyModuleButtonsFinal(screens: 3),
                 ),
               ]))),
     );

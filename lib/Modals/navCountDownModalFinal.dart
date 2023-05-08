@@ -65,7 +65,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   onFinished: () {
                     navPage(
                         context: context,
-                        page: NavigatorProgressModuleFinal(),
+                        page: const NavigatorProgressModuleFinal(),
                         enablePop: false)
                         .navPageToPage();
                   },
@@ -99,7 +99,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 onPressed: () {
                   navPage(
                       context: context,
-                      page: NavigatorProgressModuleFinal(),
+                      page: const NavigatorProgressModuleFinal(),
                       enablePop: false)
                       .navPageToPage();
                 },

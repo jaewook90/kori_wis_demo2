@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
             orderedTotalPrice: 0
         )),
         ChangeNotifierProvider(create: (context)=>RoomServiceModel(
+            trayDebug: false,
             tray1: false,
             tray2: false,
             tray3: false,
@@ -101,7 +102,7 @@ class MyApp extends StatelessWidget {
             tableList: [],
             itemImageList: ['a', 'b', 'c'],
             menuItem: "미지정",
-            tableNumber: "10"
+            roomNumber: "10"
         ))
       ],
       child: MaterialApp(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellBoyYNModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyServiceMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/HotelServiceMenuFinal.dart';
@@ -13,10 +14,12 @@ import 'package:provider/provider.dart';
 
 class HotelModuleButtonsFinal extends StatefulWidget {
   final int? screens;
+  final String? roomPrice;
 
   const HotelModuleButtonsFinal({
     Key? key,
     this.screens,
+    this.roomPrice,
   }) : super(key: key);
 
   @override
@@ -27,8 +30,10 @@ class HotelModuleButtonsFinal extends StatefulWidget {
 class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
   late NetworkModel _networkProvider;
   late RoomServiceModel _roomServiceProvider;
+  late OrderModel _orderProvider;
 
   late var homeButtonName = List<String>.empty();
+  late List<String> roomList;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -56,66 +61,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
     // TODO: implement initState
     super.initState();
     currentNum = "";
-  }
-
-  void showBookingRoomWarn(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          double screenHeight = MediaQuery.of(context).size.height;
-
-          return AlertDialog(
-            content: SizedBox(
-              width: screenWidth * 0.5,
-              height: screenHeight * 0.1,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '예약 확인 서비스 준비 중',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 50,
-                        color: Color(0xffF0F0F0)),
-                  ),
-                ],
-              ),
-            ),
-            backgroundColor: const Color(0xff2C2C2C),
-            contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-            shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-                borderSide: const BorderSide(
-                  color: Color(0xFFB7B7B7),
-                  style: BorderStyle.solid,
-                  width: 1,
-                )),
-            actions: [
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                      shape: const LinearBorder(
-                          side: BorderSide(color: Colors.white, width: 2),
-                          top: LinearBorderEdge(size: 1)),
-                      minimumSize:
-                      Size(screenWidth * 0.5, screenHeight * 0.05)),
-                  child: const Text(
-                    '확 인',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 30,
-                        color: Color(0xffF0F0F0)),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
+    roomList = ['스탠다드 더블', '스탠다드 트윈', '디럭스 더블', '디럭스 트윈'];
   }
 
   void showPaymentPopup(context) {
@@ -138,12 +84,13 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
+    _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _roomServiceProvider =
         Provider.of<RoomServiceModel>(context, listen: false);
 
     if (widget.screens == 0) {
-      // 택배 메인 화면
+      // 호텔 서비스 선택 화면
       buttonPositionWidth = [91, 91, 91];
       buttonPositionHeight = [300, 540, 783];
 
@@ -151,7 +98,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
       buttonRadius = 25;
     } else if (widget.screens == 1) {
-      // 키패드 화면
+      // 룸 종류 선택 화면
       buttonPositionWidth = [
         122,
         122,
@@ -169,7 +116,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
 
       buttonRadius = 40;
     } else if (widget.screens == 2) {
-      // 목적지 리스트
+      // 결제 전 방 예약 정보 페이지
       buttonPositionWidth = [104];
       buttonPositionHeight = [1547];
 
@@ -199,7 +146,6 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                  // side: BorderSide(color: Colors.red, width: 1),
                     borderRadius: BorderRadius.circular(widget.screens == 3
                         ? i == 0
                         ? buttonRadius1
@@ -215,12 +161,14 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             onPressed: widget.screens == 0
                 ? () {
               if (i == 0) {
+                //체크인
                 navPage(
                     context: context,
                     page: const HotelCheckINRoomSelect(),
                     enablePop: true)
                     .navPageToPage();
               } else if (i == 1) {
+                //벨보이
                 setState(() {
                   _networkProvider.serviceState = 2;
                 });
@@ -230,6 +178,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
                     enablePop: true)
                     .navPageToPage();
               } else {
+                //룸서비스
                 setState(() {
                   _roomServiceProvider.clearAllTray();
                   _networkProvider.serviceState = 3;
@@ -243,15 +192,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             }
                 : widget.screens == 1
                 ? () {
-              if (i == 0) {
-                roomKind = "스탠다드 더블";
-              } else if (i == 1) {
-                roomKind = "스탠다드 트윈";
-              } else if (i == 2) {
-                roomKind = "디럭스 더블";
-              } else if (i == 3) {
-                roomKind = "디럭스 트윈";
-              }
+              roomKind = roomList[i];
               navPage(
                   context: context,
                   page: HotelRoomInfoNCart(kindOfRoom: roomKind),
@@ -260,6 +201,7 @@ class _HotelModuleButtonsFinalState extends State<HotelModuleButtonsFinal> {
             }
                 : widget.screens == 2
                 ? () {
+              _orderProvider.orderedRoomPrice = widget.roomPrice;
               showPaymentPopup(context);
             }
                 : widget.screens == 3

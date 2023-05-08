@@ -23,8 +23,6 @@ class BellboyModuleButtonsFinal extends StatefulWidget {
 class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
   late NetworkModel _networkProvider;
 
-  late var screenList = List<Widget>.empty();
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -66,12 +64,67 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
         });
   }
 
+  // 목적지 미입력 시 알람
+  void showGoalFalsePopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: const EdgeInsets.only(bottom: 270),
+            child: AlertDialog(
+              content: const SizedBox(
+                width: 670,
+                height: 210,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('목적지를 입력 해 주세요.'),
+                  ],
+                ),
+              ),
+              backgroundColor: const Color(0xff191919),
+              contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+              shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(40),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFB7B7B7),
+                    style: BorderStyle.solid,
+                    width: 1,
+                  )),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: TextButton.styleFrom(
+                          foregroundColor: const Color(0xff797979),
+                          shape: const LinearBorder(
+                              side: BorderSide(color: Colors.white, width: 2),
+                              top: LinearBorderEdge(size: 1)),
+                          minimumSize: const Size(670, 120)),
+                      child: Text(
+                        '확인',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     if (widget.screens == 0) {
-      // 택배 메인 화면
+      // 벨보이 메인 화면
       buttonPositionWidth = [104];
       buttonPositionHeight = [1378];
 
@@ -95,23 +148,23 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
         703
       ];
       buttonPositionHeight = [
-        520.5,
-        520.5,
-        520.5,
-        810,
-        810,
-        810,
-        1101,
-        1101,
-        1101,
+        521,
+        521,
+        521,
+        813,
+        813,
+        813,
+        1104,
+        1104,
+        1104,
         1394,
         1394,
         1394
       ];
 
-      buttonSize = [263, 260];
+      buttonSize = [261, 258];
 
-      buttonRadius = 40;
+      buttonRadius = 37;
     } else if (widget.screens == 2) {
       // 목적지 리스트
       buttonPositionWidth = [77, 525, 79, 525, 79, 525, 79];
@@ -124,14 +177,6 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
 
       buttonRadius = 40;
     } else if (widget.screens == 3) {
-      // 도착 화면
-      // buttonPositionWidth = [107];
-      // buttonPositionHeight = [1376];
-      //
-      // buttonSize = [866, 160];
-      //
-      // buttonRadius = 50;
-    } else if (widget.screens == 4) {
       // 도착 화면
       buttonPositionWidth = [107];
       buttonPositionHeight = [1376];
@@ -146,24 +191,33 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
-          : widget.screens == 1 ?Positioned(
-        top: 220,
-        left: 400,
-        width: 270,
+      // 키패드 입력 호수 표시
+          : widget.screens == 1
+          ? Positioned(
+        top: 217.5,
+        left: 323.25,
+        width: 355,
         height: 180,
-        child: Text(
-          '$currentNum',
-          style: const TextStyle(
-              fontFamily: 'kor',
-              fontSize: 150,
-              fontWeight: FontWeight.bold,
-              color: Color(0xffffffff)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              '$currentNum',
+              style: const TextStyle(
+                  fontFamily: 'kor',
+                  fontSize: 150,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xffffffff)),
+            ),
+          ],
         ),
-      ) : Container(),
+      )
+          : Container(),
+      // 키패드 입력 호수 초기화 버튼
       widget.screens == 1
           ? Positioned(
-          left: 909,
-          top: 338,
+          left: 1213 * 0.75,
+          top: 451 * 0.75,
           child: Container(
             width: 60,
             height: 60,
@@ -173,6 +227,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(0),
+                    // side: BorderSide(width: 1, color: Colors.white)
                   )),
               onPressed: () {
                 setState(() {
@@ -189,19 +244,24 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
           top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
+                foregroundColor: widget.screens == 1
+                    ? i != 9
+                    ? i != 11
+                    ? Colors.tealAccent
+                    : null
+                    : null
+                    : null,
+                splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(buttonRadius)),
-                fixedSize:
-                widget.screens == 2
+                    borderRadius: BorderRadius.circular(buttonRadius)),
+                fixedSize: widget.screens == 2
                     ? i == 0
-                    ? Size(buttonSize1[buttonWidth],
-                    buttonSize1[buttonHeight])
-                    : Size(buttonSize2[buttonWidth],
-                    buttonSize2[buttonHeight])
+                    ? Size(
+                    buttonSize1[buttonWidth], buttonSize1[buttonHeight])
                     : Size(
-                    buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                    buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                    : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
               if (_networkProvider.bellboyTF == true) {
@@ -217,7 +277,8 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                 : widget.screens == 1
                 ? () {
               setState(() {
-                if (currentNum!.length < 3) {
+                // 호실 자릿수
+                if (currentNum!.length < 4) {
                   if (i < 9) {
                     currentNum = '$currentNum${i + 1}';
                   }
@@ -228,7 +289,11 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
               } else if (i == 10) {
                 currentNum = '${currentNum}0';
               } else if (i == 11) {
-                showCountDownPopup(context);
+                if (currentNum == "") {
+                  showGoalFalsePopup(context);
+                } else {
+                  showCountDownPopup(context);
+                }
               }
             }
                 : widget.screens == 2
@@ -236,8 +301,6 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
               showCountDownPopup(context);
             }
                 : widget.screens == 3
-                ? () {}
-                : widget.screens == 4
                 ? () {
               setState(() {
                 _networkProvider.bellboyTF = false;
@@ -248,8 +311,6 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                   enablePop: false)
                   .navPageToPage();
             }
-                : widget.screens == 5
-                ? () {}
                 : null,
             child: null,
           ),

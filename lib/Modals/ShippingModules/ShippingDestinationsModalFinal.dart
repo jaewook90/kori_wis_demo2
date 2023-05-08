@@ -9,13 +9,12 @@ class ShippingDestinationModalFinal extends StatefulWidget {
       _ShippingDestinationModalFinalState();
 }
 
-class _ShippingDestinationModalFinalState extends State<ShippingDestinationModalFinal> {
-
+class _ShippingDestinationModalFinalState
+    extends State<ShippingDestinationModalFinal> {
   String itemSelectBG = 'assets/screens/Shipping/koriZFinalShippingList.png';
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -26,7 +25,7 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
           alignment: Alignment.topCenter,
           child: Container(
             width: screenWidth,
-            height: screenHeight*0.8,
+            height: screenHeight * 0.8,
             child: Stack(
               children: [
                 Container(
@@ -54,11 +53,12 @@ class _ShippingDestinationModalFinalState extends State<ShippingDestinationModal
                         child: null,
                       ),
                     )),
-                const ShippingModuleButtonsFinal(screens: 2,)
+                const ShippingModuleButtonsFinal(
+                  screens: 2,
+                )
               ],
             ),
-          )
-      ),
+          )),
     );
   }
 }

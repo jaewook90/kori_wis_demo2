@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/BellboyModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 
 class BellboyDestinationScreenFinal extends StatefulWidget {
   const BellboyDestinationScreenFinal({
@@ -11,97 +9,22 @@ class BellboyDestinationScreenFinal extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BellboyDestinationScreenFinal> createState() => _BellboyDestinationScreenFinalState();
+  State<BellboyDestinationScreenFinal> createState() =>
+      _BellboyDestinationScreenFinalState();
 }
 
-class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreenFinal> {
-  late NetworkModel _networkProvider;
-  String? currentGoal;
-
-  bool? goalChecker;
-
-  late dynamic responsePostMSG;
-
-  late var goalPosition = List<String>.empty();
-
-  String shippingKeyPadIMG = "assets/screens/Hotel/BellBoy/koriZFinalBellBoyRoomSelect.png";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    currentGoal = "";
-    goalChecker = false;
-  }
-
-  void showGoalFalsePopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          double screenHeight = MediaQuery.of(context).size.height;
-
-          return AlertDialog(
-            content: SizedBox(
-              width: screenWidth * 0.5,
-              height: screenHeight * 0.1,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('목적지를 잘못 입력하였습니다.'),
-                ],
-              ),
-            ),
-            backgroundColor: const Color(0xff2C2C2C),
-            contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-            shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-                borderSide: const BorderSide(
-                  color: Color(0xFFB7B7B7),
-                  style: BorderStyle.solid,
-                  width: 1,
-                )),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: TextButton.styleFrom(
-                        shape: const LinearBorder(
-                            side: BorderSide(color: Colors.white, width: 2),
-                            top: LinearBorderEdge(size: 0.9)),
-                        minimumSize:
-                        Size(screenWidth * 0.5, screenHeight * 0.04)),
-                    child: Text(
-                      '확인',
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                  ),
-                ],
-              )
-            ],
-            // actionsPadding: EdgeInsets.only(top: screenHeight * 0.001),
-          );
-        });
-  }
+class _BellboyDestinationScreenFinalState
+    extends State<BellboyDestinationScreenFinal> {
+  String shippingKeyPadIMG =
+      "assets/screens/Hotel/BellBoy/koriZFinalBellBoyRoomSelect.png";
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
 
-    goalPosition = _networkProvider.goalPosition;
-
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         automaticallyImplyLeading: false,
@@ -128,16 +51,18 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                 Positioned(
                   left: 20,
                   top: 18,
-                  child: FilledButton(onPressed: () {
-                    Navigator.pop(context);
-                  }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: const Size(80, 80),
-                      shape: RoundedRectangleBorder(
-                        // side: BorderSide(color: Colors.white, width: 1),
-                          borderRadius: BorderRadius.circular(0)
-                      ),
-                      backgroundColor: Colors.transparent
-                  ),),
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size(80, 80),
+                        shape: RoundedRectangleBorder(
+                          // side: BorderSide(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  ),
                 ),
                 Positioned(
                   left: 130,
@@ -156,15 +81,21 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
                 Positioned(
                   left: 120,
                   top: 18,
-                  child: FilledButton(onPressed: () {
-                    navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
-                  }, child: null, style: FilledButton.styleFrom(
-                      fixedSize: const Size(80, 80),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)
-                      ),
-                      backgroundColor: Colors.transparent
-                  ),),
+                  child: FilledButton(
+                    onPressed: () {
+                      navPage(
+                          context: context,
+                          page: const MainScreenFinal(),
+                          enablePop: false)
+                          .navPageToPage();
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size(80, 80),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  ),
                 ),
                 Positioned(
                   right: 50,
@@ -197,46 +128,21 @@ class _BellboyDestinationScreenFinalState extends State<BellboyDestinationScreen
             Positioned(
               top: 278,
               left: 700,
-              child: Text('호', style: TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 100,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xffffffff)
-              ),),
+              child: Text(
+                '호',
+                style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 100,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffffffff)),
+              ),
             ),
-            BellboyModuleButtonsFinal(screens: 1,)
+            BellboyModuleButtonsFinal(
+              screens: 1,
+            )
           ],
         ),
       ),
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-// 부가기능 버튼
-// IconButton(
-//                             onPressed: () {
-//                               setState(() {
-//                                 currentGoal = "";
-//                                 goalChecker = false;
-//                               });
-//                             },
-//                             icon: Icon(Icons.restart_alt),
-//                             iconSize: 80,
-//                             color: Color(0xffF0F0F0)),
-//                         IconButton(
-//                             onPressed: () {
-//                               showDestinationListPopup(context);
-//                             },
-//                             icon: Icon(Icons.view_list_outlined),
-//                             iconSize: 80,
-//                             color: Color(0xffF0F0F0)),

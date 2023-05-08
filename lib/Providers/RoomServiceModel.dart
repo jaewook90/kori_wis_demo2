@@ -33,7 +33,7 @@ class RoomServiceModel with ChangeNotifier {
   String? namelessItem;
   List<String>? itemList;
 
-  String? tableNumber;
+  String? roomNumber;
   String? table1;
   String? table2;
   String? table3;
@@ -42,6 +42,8 @@ class RoomServiceModel with ChangeNotifier {
   bool? trayCheckAll;
 
   bool? setTrayTF;
+
+  bool? trayDebug;
 
   RoomServiceModel({
     this.tray1,
@@ -69,7 +71,7 @@ class RoomServiceModel with ChangeNotifier {
     this.item2,
     this.item3,
     this.namelessItem,
-    this.tableNumber,
+    this.roomNumber,
     this.table1,
     this.table2,
     this.table3,
@@ -78,7 +80,10 @@ class RoomServiceModel with ChangeNotifier {
     this.itemList,
     this.trayList,
     this.trayCheckAll,
-    this.receiptModeOn
+    this.receiptModeOn,
+
+    this.trayDebug
+
   });
 
   void initServing() {
@@ -89,7 +94,7 @@ class RoomServiceModel with ChangeNotifier {
     item1 = null;
     item2 = null;
     item3 = null;
-    tableNumber = null;
+    roomNumber = null;
     table1 = null;
     table2 = null;
     table3 = null;
@@ -103,7 +108,7 @@ class RoomServiceModel with ChangeNotifier {
   void setTray1() {
     tray1 = true;
     item1 = menuItem;
-    table1 = tableNumber;
+    table1 = roomNumber;
 
     notifyListeners();
   }
@@ -111,7 +116,7 @@ class RoomServiceModel with ChangeNotifier {
   void setTray2() {
     tray2 = true;
     item2 = menuItem;
-    table2 = tableNumber;
+    table2 = roomNumber;
 
     notifyListeners();
   }
@@ -119,7 +124,7 @@ class RoomServiceModel with ChangeNotifier {
   void setTray3() {
     tray3 = true;
     item3 = menuItem;
-    table3 = tableNumber;
+    table3 = roomNumber;
 
     notifyListeners();
   }
@@ -150,12 +155,12 @@ class RoomServiceModel with ChangeNotifier {
     item1 = menuItem;
     item2 = menuItem;
     item3 = menuItem;
-    table1 = tableNumber;
-    table2 = tableNumber;
-    table3 = tableNumber;
+    table1 = roomNumber;
+    table2 = roomNumber;
+    table3 = roomNumber;
 
     menuItem = "";
-    tableNumber = "";
+    roomNumber = "";
 
     notifyListeners();
   }

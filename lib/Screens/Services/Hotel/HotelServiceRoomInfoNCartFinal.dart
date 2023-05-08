@@ -1,11 +1,9 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/HotelModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // ------------------------------ 보류 ---------------------------------------
@@ -19,7 +17,6 @@ class HotelRoomInfoNCart extends StatefulWidget {
 }
 
 class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
-  late OrderModel _orderProvider;
   static const String backgroundImage =
       "assets/screens/Hotel/koriZFinalCart.png";
 
@@ -53,6 +50,8 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
     roomInfo = [widget.kindOfRoom!, roomPrice[roomKindNum].toString()];
   }
 
+  // 일정 변경 용 달력
+  // 기능 추가 필요
   void showCalendarPopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -128,11 +127,6 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
 
   @override
   Widget build(BuildContext context) {
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
-    print(roomInfo);
-
-    _orderProvider.orderedRoomPrice = roomInfo[1];
-
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
 
@@ -148,8 +142,17 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
             child: Stack(
               children: [
                 Positioned(
-                    left: 30,
-                    top: 25,
+                  left: 20,
+                  top: 10,
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size(90, 90),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
                     child: Container(
                       height: 60,
                       width: 60,
@@ -159,39 +162,12 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                                 'assets/icons/appBar/appBar_Backward.png',
                               ),
                               fit: BoxFit.fill)),
-                    )),
-                Positioned(
-                  left: 20,
-                  top: 18,
-                  child: FilledButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: null,
-                    style: FilledButton.styleFrom(
-                        fixedSize: const Size(80, 80),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                        backgroundColor: Colors.transparent),
-                  ),
-                ),
-                Positioned(
-                  left: 130,
-                  top: 25,
-                  child: Container(
-                    height: 60,
-                    width: 60,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Home.png',
-                            ),
-                            fit: BoxFit.fill)),
+                    ),
                   ),
                 ),
                 Positioned(
                   left: 120,
-                  top: 18,
+                  top: 10,
                   child: FilledButton(
                     onPressed: () {
                       navPage(
@@ -200,12 +176,21 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                           enablePop: false)
                           .navPageToPage();
                     },
-                    child: null,
                     style: FilledButton.styleFrom(
-                        fixedSize: const Size(80, 80),
+                        fixedSize: const Size(90, 90),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0)),
                         backgroundColor: Colors.transparent),
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Home.png',
+                              ),
+                              fit: BoxFit.fill)),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -236,8 +221,9 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 image: AssetImage(backgroundImage), fit: BoxFit.cover)),
         child: Stack(
           children: [
-            const HotelModuleButtonsFinal(
+            HotelModuleButtonsFinal(
               screens: 2,
+              roomPrice: roomInfo[1],
             ),
             Positioned(
               top: 160,
@@ -247,6 +233,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 width: 919,
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(30))),
+                //방 이미지 스크롤
                 child: Swiper(
                   itemBuilder: (BuildContext context, int index) {
                     return ClipRRect(
@@ -257,8 +244,6 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                           fit: BoxFit.cover,
                         ));
                   },
-                  // autoplay: true,
-                  // autoplayDelay: 3000,
                   itemCount: roomImages.length,
                   pagination: const SwiperPagination(
                       alignment: Alignment.bottomRight,
@@ -270,6 +255,7 @@ class _HotelRoomInfoNCartState extends State<HotelRoomInfoNCart> {
                 ),
               ),
             ),
+            // 달력 표시
             Positioned(
               top: 710,
               left: 872,
