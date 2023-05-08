@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/HotelModules/BellboyDestinationsModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyReturn.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellboyDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -21,7 +21,7 @@ class BellboyModuleButtonsFinal extends StatefulWidget {
 }
 
 class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
-  late NetworkModel _networkProvider;
+  late HotelModel _hotelProvider;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -121,7 +121,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _hotelProvider = Provider.of<HotelModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 벨보이 메인 화면
@@ -264,7 +264,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                     : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-              if (_networkProvider.bellboyTF == true) {
+              if (_hotelProvider.bellboyTF == true) {
                 showCountDownPopup(context);
               } else {
                 navPage(
@@ -303,7 +303,7 @@ class _BellboyModuleButtonsFinalState extends State<BellboyModuleButtonsFinal> {
                 : widget.screens == 3
                 ? () {
               setState(() {
-                _networkProvider.bellboyTF = false;
+                _hotelProvider.bellboyTF = false;
               });
               navPage(
                   context: context,

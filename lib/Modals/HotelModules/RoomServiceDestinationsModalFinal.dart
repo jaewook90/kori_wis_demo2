@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 
 class RoomServiceDestinationListModalFinal extends StatefulWidget {
   const RoomServiceDestinationListModalFinal({Key? key}) : super(key: key);
@@ -12,17 +10,11 @@ class RoomServiceDestinationListModalFinal extends StatefulWidget {
 }
 
 class _RoomServiceDestinationListModalFinalState extends State<RoomServiceDestinationListModalFinal> {
-  late NetworkModel _networkProvider;
-
-  late var goalPosition = List<String>.empty();
 
   String itemSelectBG = 'assets/screens/Hotel/BellBoy/koriZFinalBellBoyRoomSelectList.png';
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
-    goalPosition = _networkProvider.goalPosition;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/RoomServiceModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceReturn.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -16,14 +16,14 @@ class RoomServiceProgressFinal extends StatefulWidget {
 
 class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
 
-  late RoomServiceModel _roomServiceProvider;
+  late HotelModel _hotelProvider;
 
   String backgroundImage = "assets/screens/Hotel/RoomService/koriZFinalRoomDone.png";
 
   @override
   Widget build(BuildContext context) {
-    _roomServiceProvider =
-        Provider.of<RoomServiceModel>(context, listen: false);
+    _hotelProvider =
+        Provider.of<HotelModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
@@ -103,7 +103,7 @@ class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        _roomServiceProvider.clearAllTray();
+                        _hotelProvider.clearAllTray();
                         navPage(
                             context: context,
                             page: const RoomServiceReturnModuleFinal(),

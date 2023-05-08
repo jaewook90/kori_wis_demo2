@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellboyDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -17,7 +17,7 @@ class BellBoyServiceMenu extends StatefulWidget {
 }
 
 class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
-  late NetworkModel _networkProvider;
+  late HotelModel _hotelProvider;
 
   String backgroundImage = "assets/screens/Hotel/BellBoy/koriZFinalBellBoyBegin.png";
 
@@ -32,7 +32,7 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _hotelProvider = Provider.of<HotelModel>(context, listen: false);
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
 
@@ -132,7 +132,7 @@ class _BellBoyServiceMenuState extends State<BellBoyServiceMenu> {
               left: 0,
               child: GestureDetector(
                   onTap: () {
-                    if (_networkProvider.bellboyTF == true) {
+                    if (_hotelProvider.bellboyTF == true) {
                       showCountDownPopup(context);
                     } else {
                       navPage(

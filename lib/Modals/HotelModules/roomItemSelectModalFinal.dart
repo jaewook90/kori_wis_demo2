@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Widgets/RoomServiceModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +11,10 @@ class SelectRoomItemModalFinal extends StatefulWidget {
 }
 
 class _SelectRoomItemModalFinalState extends State<SelectRoomItemModalFinal> {
-  late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
-  String? tableNumber;
   String? itemName;
 
-  late var goalPosition = List<String>.empty();
   List<String> orderedItems = [];
 
   List<String> menuItems = ['수건', '헤어', '가운', '스킨'];
@@ -80,13 +76,9 @@ class _SelectRoomItemModalFinalState extends State<SelectRoomItemModalFinal> {
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     itemName = _servingProvider.menuItem;
-    tableNumber = _servingProvider.tableNumber;
-
-    goalPosition = _networkProvider.goalPosition;
 
     return Container(
       padding: const EdgeInsets.only(top: 90),

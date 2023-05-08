@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Widgets/OrderModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ class PaymentScreenFinal extends StatefulWidget {
 }
 
 class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
-  late NetworkModel _networkProvider;
+  late MainStatusModel _statusProvider;
   late OrderModel _orderProvider;
 
   String paymentBackground =
@@ -20,7 +20,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
 
     return Container(
@@ -67,7 +67,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                       style: FilledButton.styleFrom(
                           backgroundColor: Colors.transparent),
                       onPressed: () {
-                        if (_networkProvider.serviceState == 2) {
+                        if (_statusProvider.serviceState == 2) {
                           Navigator.pop(context);
                         } else {
                           Navigator.pop(context);
@@ -90,7 +90,7 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            _networkProvider.serviceState == 1
+                            _statusProvider.serviceState == 1
                             // 서빙 주문 총액
                                 ? '${_orderProvider.orderedTotalPrice}'
                             // 체크인 방 금액

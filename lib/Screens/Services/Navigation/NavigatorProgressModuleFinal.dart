@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
@@ -20,21 +20,21 @@ class NavigatorProgressModuleFinal extends StatefulWidget {
 
 class _NavigatorProgressModuleFinalState
     extends State<NavigatorProgressModuleFinal> {
-  late NetworkModel _networkProvider;
+  late MainStatusModel _statusProvider;
 
   late String backgroundImageServ;
 
   @override
   Widget build(BuildContext context) {
-    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
-    if (_networkProvider.serviceState == 0) {
+    if (_statusProvider.serviceState == 0) {
       backgroundImageServ = "assets/screens/Nav/koriZFinalShipProgNav.png";
-    } else if (_networkProvider.serviceState == 1) {
+    } else if (_statusProvider.serviceState == 1) {
       backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
-    } else if (_networkProvider.serviceState == 2) {
+    } else if (_statusProvider.serviceState == 2) {
       backgroundImageServ = "assets/screens/Nav/koriZFinalBellProgNav.png";
-    } else if (_networkProvider.serviceState == 3) {
+    } else if (_statusProvider.serviceState == 3) {
       backgroundImageServ = "assets/screens/Nav/koriZFinalRoomProgNav.png";
     }
 
@@ -90,25 +90,25 @@ class _NavigatorProgressModuleFinalState
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        if (_networkProvider.serviceState == 0) {
+                        if (_statusProvider.serviceState == 0) {
                           navPage(
                               context: context,
                               page: const ShippingDoneFinal(),
                               enablePop: false)
                               .navPageToPage();
-                        } else if (_networkProvider.serviceState == 1) {
+                        } else if (_statusProvider.serviceState == 1) {
                           navPage(
                               context: context,
                               page: const ServingProgressFinal(),
                               enablePop: false)
                               .navPageToPage();
-                        } else if (_networkProvider.serviceState == 2) {
+                        } else if (_statusProvider.serviceState == 2) {
                           navPage(
                               context: context,
                               page: const BellboyProgressFinal(),
                               enablePop: false)
                               .navPageToPage();
-                        }else if (_networkProvider.serviceState == 3) {
+                        }else if (_statusProvider.serviceState == 3) {
                           navPage(
                               context: context,
                               page: const RoomServiceProgressFinal(),
