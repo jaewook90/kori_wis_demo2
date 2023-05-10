@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Utills/ble/ui/ble_status_screen.dart';
+import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:provider/provider.dart';
+
+import 'MainScreenFinal.dart';
 
 class ConfigScreen extends StatefulWidget {
   const ConfigScreen({Key? key}) : super(key: key);
@@ -11,7 +16,8 @@ class ConfigScreen extends StatefulWidget {
 
 class _ConfigScreenState extends State<ConfigScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Consumer<BleStatus?>(
+  builder: (_, status, __) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -40,22 +46,37 @@ class _ConfigScreenState extends State<ConfigScreen> {
       extendBodyBehindAppBar: true,
       body: Container(
         constraints: const BoxConstraints.expand(),
-        // decoration: BoxDecoration(
-        //     image: DecorationImage(
-        //         image: AssetImage("assets/images/KoriBackgroundImage_v1.png"),
-        //         fit: BoxFit.cover)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container()
+                Container(
+                  child: TextButton(
+                    onPressed: () {
+                      if (status == BleStatus.ready) {
+                        navPage(context: context, page: DeviceListScreen(), enablePop: false).navPageToPage();
+                      } else {
+                        navPage(context: context, page: BleStatusScreen(status: status ?? BleStatus.unknown), enablePop: false).navPageToPage();
+                      }
+                    },
+                    child: Text('블루투스 설정', style: TextStyle(
+                      fontFamily: 'kor',
+                      fontSize: 40,
+                      color: Color(0xffdddddd)
+                    ),),
+                    style: TextButton.styleFrom(
+                      backgroundColor: Color(0xff2d2d2d),
+                      side: BorderSide(color: Color(0xffaaaaaa), width: 1)
+                    ),
+                  )
+                )
               ],
             ),
           ],
         ),
       ),
     );
-  }
+  });
 }

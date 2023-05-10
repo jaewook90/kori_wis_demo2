@@ -213,29 +213,32 @@ class ServingModel with ChangeNotifier {
   }
 
   void stickTray1(){
-    if(attachedTray1 == true){
       attachedTray1 = false;
-    }else{
-      attachedTray1 = true;
-    }
     notifyListeners();
   }
 
   void stickTray2(){
-    if(attachedTray2 == true){
       attachedTray2 = false;
-    }else{
-      attachedTray2 = true;
-    }
     notifyListeners();
   }
 
   void stickTray3(){
-    if(attachedTray3 == true){
       attachedTray3 = false;
-    }else{
-      attachedTray3 = true;
-    }
+    notifyListeners();
+  }
+
+  void dittachedTray1(){
+    attachedTray1 = true;
+    notifyListeners();
+  }
+
+  void dittachedTray2(){
+    attachedTray2 = true;
+    notifyListeners();
+  }
+
+  void dittachedTray3(){
+    attachedTray3 = true;
     notifyListeners();
   }
 

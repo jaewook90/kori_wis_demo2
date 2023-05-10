@@ -50,7 +50,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
       const AdminScreen(),
       const ConfigScreen()
     ];
-    serviceList = [const ShippingMenuFinal(), const TraySelectionFinal(), HotelServiceMenu()];
+    serviceList = [const ShippingMenuFinal(), const TraySelectionFinal(characteristic: null, subscribeToCharacteristic: null), const HotelServiceMenu()];
   }
 
   @override

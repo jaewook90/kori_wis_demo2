@@ -1,16 +1,46 @@
+import 'dart:async';
+import 'dart:convert' show utf8;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
+import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 // 트레이 반응형 UI
 
+class TrayEquipped extends StatelessWidget {
+  const TrayEquipped({
+    required this.characteristic,
+    Key? key,
+  }) : super(key: key);
+  final QualifiedCharacteristic characteristic;
+
+  @override
+  Widget build(BuildContext context) => Consumer<BleDeviceInteractor>(
+      builder: (context, interactor, _) => TraySelectionFinal(
+        characteristic: characteristic,
+        subscribeToCharacteristic: interactor.subScribeToCharacteristic,
+      ));
+}
+
 class TraySelectionFinal extends StatefulWidget {
-  const TraySelectionFinal({Key? key}) : super(key: key);
+  const TraySelectionFinal({
+    this.characteristic,
+    this.subscribeToCharacteristic,
+    Key? key}) : super(key: key);
+
+  final QualifiedCharacteristic? characteristic;
+
+  final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
+  subscribeToCharacteristic;
+
 
   @override
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
@@ -18,6 +48,10 @@ class TraySelectionFinal extends StatefulWidget {
 
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
+
+  late String subscribeOutput;
+  late TextEditingController textEditingController;
+  late StreamSubscription<List<int>>? subscribeStream;
 
   // 배경 화면
   late String backgroundImage;
@@ -38,6 +72,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   String? table2;
   String? table3;
 
+  //트레이 BLE시그널
+  late String tray1BLE;
+  late String tray2BLE;
+  late String tray3BLE;
+
   //디버그
   late bool _debugTray;
 
@@ -53,6 +92,39 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     table1 = "";
     table2 = "";
     table3 = "";
+
+    tray1BLE = "";
+    tray2BLE = "";
+    tray3BLE = "";
+
+    subscribeOutput = '';
+    if(widget.characteristic == null){
+      subscribeStream = null;
+    }
+    textEditingController = TextEditingController();
+  }
+
+
+  @override
+  void dispose() {
+    subscribeStream?.cancel();
+    super.dispose();
+  }
+
+  Future<void> subscribeCharacteristic() async {
+      subscribeStream =
+          widget.subscribeToCharacteristic!(widget.characteristic!).listen((event) {
+            setState(() {
+              subscribeOutput = utf8.decode(event);
+              tray1BLE = subscribeOutput.split('')[0];
+              tray2BLE = subscribeOutput.split('')[1];
+              tray3BLE = subscribeOutput.split('')[2];
+            });
+          });
+      setState(() {
+        subscribeOutput = 'Notification set';
+        // subscribeCharacteristic();
+      });
   }
 
   void showTraySetPopup(context) {
@@ -64,11 +136,35 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         });
   }
 
+  //QualifiedCharacteristic(characteristicId: 6e400002-b5a3-f393-e0a9-e50e24dcca9e, serviceId: 6e400001-b5a3-f393-e0a9-e50e24dcca9e, deviceId: DF:75:E4:D6:32:63)
+
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
+    print('test');
+    print(widget.characteristic);
+    print('test');
+
+    // WidgetsBinding.instance.addPostFrameCallback((_){subscribeCharacteristic();});
+
     _debugTray = _servingProvider.trayDebug!;
+
+    if(tray1BLE == "1"){
+      _servingProvider.attachedTray1 = false;
+    }else if(tray1BLE == "0"){
+      _servingProvider.attachedTray1 = true;
+    }
+    if(tray2BLE == "1"){
+      _servingProvider.attachedTray2 = false;
+    }else if(tray2BLE == "0"){
+      _servingProvider.attachedTray2 = true;
+    }
+    if(tray3BLE == "1"){
+      _servingProvider.attachedTray3 = false;
+    }else if(tray3BLE == "0"){
+      _servingProvider.attachedTray3 = true;
+    }
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -181,6 +277,50 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  Positioned(
+                    right: 150,
+                    top: 10,
+                    child: FilledButton(
+                      onPressed: () {
+                        navPage(
+                            context: context,
+                            page: const DeviceListScreen(),
+                            enablePop: false)
+                            .navPageToPage();
+                      },
+                      style: FilledButton.styleFrom(
+                          fixedSize: const Size(90, 90),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/icons/appBar/appBar_Home.png',
+                                ),
+                                fit: BoxFit.fill)),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 300,
+                    top: 10,
+                    child: TextButton(
+                      onPressed: () {
+                        subscribeCharacteristic();
+                      },
+                      style: TextButton.styleFrom(
+                          fixedSize: const Size(150, 90),
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.white, width: 1),
+                              borderRadius: BorderRadius.circular(0)),
+                          backgroundColor: Colors.transparent),
+                      child: Text(subscribeOutput),
+                    ),
+                  )
                 ],
               ),
             )
@@ -387,7 +527,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
-                                            color: Colors.green, width: 1),
+                                            color: Colors.green, width: 10),
                                         borderRadius:
                                         BorderRadius.circular(20))),
                                 child: Container()),
@@ -457,7 +597,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
-                                            color: Colors.green, width: 1),
+                                            color: Colors.green, width: 10),
                                         borderRadius:
                                         BorderRadius.circular(20))),
                                 child: Container()),
@@ -527,7 +667,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
-                                            color: Colors.green, width: 1),
+                                            color: Colors.green, width: 10),
                                         borderRadius:
                                         BorderRadius.circular(20))),
                                 child: Container()),
