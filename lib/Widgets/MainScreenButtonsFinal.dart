@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/AdminScreen.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
@@ -24,6 +25,7 @@ class MainScreenButtonsFinal extends StatefulWidget {
 
 class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
   late MainStatusModel _statusProvider;
+  late BLEModel _bleProvider;
 
   late var screenList = List<Widget>.empty();
   late var serviceList = List<Widget>.empty();
@@ -48,14 +50,20 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
       const ServiceScreenFinal(),
       const LinkConnectorScreen(),
       const AdminScreen(),
-      const ConfigScreen()
+      // const ConfigScreenDeviceConnect()
     ];
-    serviceList = [const ShippingMenuFinal(), const TraySelectionFinal(characteristic: null, subscribeToCharacteristic: null), const HotelServiceMenu()];
+    serviceList = [
+      const ShippingMenuFinal(),
+      const TraySelectionFinal(
+          characteristic: null, subscribeToCharacteristic: null),
+      const HotelServiceMenu()
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     if (widget.screens == 0) {
       // 메인 화면 ( 서비스, 커넥터, 관리자 설정 버튼 )
@@ -86,50 +94,49 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(buttonRadius)),
-                fixedSize: Size(buttonSize[buttonWidth],
-                    buttonSize[buttonHeight])),
+                    borderRadius: BorderRadius.circular(buttonRadius)),
+                fixedSize:
+                    Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0 // 메인 스크린
                 ? () {
-              navPage(
-                  context: context,
-                  page: screenList[i],
-                  enablePop: true)
-                  .navPageToPage();
-            }
+                    navPage(
+                            context: context,
+                            page: i==3?ConfigScreenDeviceConnect(deviceId: _bleProvider.deviceId1) : screenList[i],
+                            enablePop: true)
+                        .navPageToPage();
+                  }
                 : widget.screens == 1 // 서비스 선택 스크린
-                ? () {
-              if (i == 0) {
-                setState(() {
-                  _statusProvider.serviceState = 0;
-                });
-                navPage(
-                    context: context,
-                    page: serviceList[i],
-                    enablePop: true)
-                    .navPageToPage();
-              } else if (i == 1) {
-                setState(() {
-                  _statusProvider.serviceState = 1;
-                });
-                navPage(
-                    context: context,
-                    page: serviceList[i],
-                    enablePop: true)
-                    .navPageToPage();
-              } else {
-                setState(() {
-                  _statusProvider.serviceState = 2;
-                });
-                navPage(
-                    context: context,
-                    page: serviceList[i],
-                    enablePop: true)
-                    .navPageToPage();
-              }
-            }
-                : null,
+                    ? () {
+                        if (i == 0) {
+                          setState(() {
+                            _statusProvider.serviceState = 0;
+                          });
+                          navPage(
+                                  context: context,
+                                  page: serviceList[i],
+                                  enablePop: true)
+                              .navPageToPage();
+                        } else if (i == 1) {
+                          setState(() {
+                            _statusProvider.serviceState = 1;
+                          });
+                          navPage(
+                                  context: context,
+                                  page: serviceList[i],
+                                  enablePop: true)
+                              .navPageToPage();
+                        } else {
+                          setState(() {
+                            _statusProvider.serviceState = 2;
+                          });
+                          navPage(
+                                  context: context,
+                                  page: serviceList[i],
+                                  enablePop: true)
+                              .navPageToPage();
+                        }
+                      }
+                    : null,
             child: null,
           ),
         ),

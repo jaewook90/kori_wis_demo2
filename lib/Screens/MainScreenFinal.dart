@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:functional_data/functional_data.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
+import 'package:kori_wis_demo/Utills/ble/ui/device_detail/device_interaction_tab.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
+import 'package:provider/provider.dart';
 
 class MainScreenFinal extends StatefulWidget {
-  const MainScreenFinal({Key? key, this.parsePoseData}) : super(key: key);
+  const MainScreenFinal({Key? key, this.parsePoseData, this.viewModel,
+  }) : super(key: key);
   final dynamic parsePoseData;
+  final DeviceInteractionViewModel? viewModel;
 
   @override
   State<MainScreenFinal> createState() => _MainScreenFinalState();
@@ -12,6 +20,8 @@ class MainScreenFinal extends StatefulWidget {
 
 class _MainScreenFinalState extends State<MainScreenFinal>
     with TickerProviderStateMixin {
+
+  late List<DiscoveredService> discoveredServices;
 
   DateTime? currentBackPressTime;
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
@@ -35,8 +45,16 @@ class _MainScreenFinalState extends State<MainScreenFinal>
   void initState() {
     // TODO: implement initState
     super.initState();
+    discoveredServices = [];
     fToast = FToast();
     fToast?.init(context);
+  }
+
+  Future<void> discoverServices() async {
+    final result = await widget.viewModel?.discoverServices();
+    setState(() {
+      discoveredServices = result!;
+    });
   }
 
   @override

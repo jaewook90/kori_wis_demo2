@@ -1,7 +1,10 @@
+// import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
@@ -135,6 +138,10 @@ void main() async {
             orderedRamyeonQT: 0,
             orderedTotalPrice: 0
         )),
+        ChangeNotifierProvider(create: (context) => BLEModel(
+          characteristicId: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
+          deviceId1: 'DF:75:E4:D6:32:63',
+        ))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

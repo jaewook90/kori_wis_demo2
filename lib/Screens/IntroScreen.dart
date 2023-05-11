@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:provider/provider.dart';
 
 import 'package:video_player/video_player.dart';
 
