@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ShippingModules/ShippingDestinationsModalFinal.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
+import 'package:provider/provider.dart';
 
 class ShippingModuleButtonsFinal extends StatefulWidget {
   final int? screens;
@@ -20,6 +23,21 @@ class ShippingModuleButtonsFinal extends StatefulWidget {
 
 class _ShippingModuleButtonsFinalState
     extends State<ShippingModuleButtonsFinal> {
+  late NetworkModel _networkProvider;
+
+  // API 통신에서 불러오는 변수 목록
+  // 키패드 호실 설정
+  String? currentNum;
+
+  String? goalPosition;
+
+  String? startUrl;
+  String? chgUrl;
+  String? stpUrl;
+
+  late var goalPositionList = List<String>.empty();
+
+  // 버튼 파라미터
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -34,9 +52,6 @@ class _ShippingModuleButtonsFinalState
   int buttonWidth = 0;
   int buttonHeight = 1;
 
-  // 키패드 호실 설정
-  String? currentNum;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -44,12 +59,14 @@ class _ShippingModuleButtonsFinalState
     currentNum = "";
   }
 
-  void showCountDownStarting(context) {
+  void showCountDownStarting(context, goalPosition) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return const NavCountDownModalFinal();
+          return NavCountDownModalFinal(
+            goalPosition: goalPosition,
+          );
         });
   }
 
@@ -62,7 +79,7 @@ class _ShippingModuleButtonsFinalState
         });
   }
 
-  // 목적지 미입력 시 알람
+  // 목적지 미입력 혹은 오입력 시 알람
   void showGoalFalsePopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -77,7 +94,7 @@ class _ShippingModuleButtonsFinalState
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('목적지를 입력 해 주세요.'),
+                    Text('목적지를 잘못 입력하였습니다.'),
                   ],
                 ),
               ),
@@ -117,8 +134,22 @@ class _ShippingModuleButtonsFinalState
         });
   }
 
+  void setGoalPose(int poseNum) {
+    goalPosition = goalPositionList[poseNum];
+    // print(goalPosition);
+    showCountDownStarting(context, goalPosition);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+
+    goalPositionList = _networkProvider.getPoseData;
+
+    startUrl = _networkProvider.startUrl;
+    stpUrl = _networkProvider.stpUrl;
+    chgUrl = _networkProvider.chgUrl;
+
     if (widget.screens == 0) {
       // 택배 메인 화면
       buttonPositionWidth = [104];
@@ -164,7 +195,7 @@ class _ShippingModuleButtonsFinalState
     } else if (widget.screens == 2) {
       // 목적지 리스트
       buttonPositionWidth = [79, 525, 79, 525, 79, 525, 79];
-      buttonPositionHeight = [1287, 303, 303, 550, 550, 797, 797];
+      buttonPositionHeight = [303, 303, 550, 550, 797, 797, 1287];
 
       buttonSize = [];
 
@@ -187,52 +218,52 @@ class _ShippingModuleButtonsFinalState
     return Stack(children: [
       (currentNum == null && widget.screens == 1)
           ? Container()
-      // 키패드 입력 호수 표시
+          // 키패드 입력 호수 표시
           : widget.screens == 1
-          ? Positioned(
-        top: 217.5,
-        left: 323.25,
-        width: 355,
-        height: 180,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              '$currentNum',
-              style: const TextStyle(
-                  fontFamily: 'kor',
-                  fontSize: 150,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xffffffff)),
-            ),
-          ],
-        ),
-      )
-          : Container(),
+              ? Positioned(
+                  top: 217.5,
+                  left: 323.25,
+                  width: 355,
+                  height: 180,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '$currentNum',
+                        style: const TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 150,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffffffff)),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
       // 키패드 입력 호수 초기화 버튼
       widget.screens == 1
           ? Positioned(
-          left: 1213 * 0.75,
-          top: 451 * 0.75,
-          child: Container(
-            width: 60,
-            height: 60,
-            color: Colors.transparent,
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0),
-                    // side: BorderSide(width: 1, color: Colors.white)
-                  )),
-              onPressed: () {
-                setState(() {
-                  currentNum = "";
-                });
-              },
-              child: null,
-            ),
-          ))
+              left: 1213 * 0.75,
+              top: 451 * 0.75,
+              child: Container(
+                width: 60,
+                height: 60,
+                color: Colors.transparent,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        // side: BorderSide(width: 1, color: Colors.white)
+                      )),
+                  onPressed: () {
+                    setState(() {
+                      currentNum = "";
+                    });
+                  },
+                  child: null,
+                ),
+              ))
           : Container(),
       for (int i = 0; i < buttonNumbers; i++)
         Positioned(
@@ -242,66 +273,102 @@ class _ShippingModuleButtonsFinalState
             style: FilledButton.styleFrom(
                 foregroundColor: widget.screens == 1
                     ? i != 9
-                    ? i != 11
-                    ? Colors.tealAccent
-                    : null
-                    : null
+                        ? i != 11
+                            ? Colors.tealAccent
+                            : null
+                        : null
                     : null,
                 splashFactory: InkSparkle.constantTurbulenceSeedSplashFactory,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
-                  // side: BorderSide(width: 1, color: Colors.redAccent),
+                    // side: BorderSide(width: 1, color: Colors.redAccent),
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize: widget.screens == 2
-                    ? i != 0
-                    ? Size(
-                    buttonSize2[buttonWidth], buttonSize2[buttonHeight])
-                    : Size(
-                    buttonSize1[buttonWidth], buttonSize1[buttonHeight])
+                    ? i != 6
+                        ? Size(
+                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                        : Size(
+                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
                     : Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-              navPage(
-                  context: context,
-                  page: const ShippingDestinationNewFinal(),
-                  enablePop: true)
-                  .navPageToPage();
-            }
-                : widget.screens == 1
-                ? () {
-              setState(() {
-                // 호실 자릿수
-                if (currentNum!.length < 4) {
-                  if (i < 9) {
-                    currentNum = '$currentNum${i + 1}';
+              PostApi(
+                  url: startUrl,
+                  endadr: stpUrl,
+                  keyBody: 'charging_pile')
+                  .Posting();
+                    navPage(
+                            context: context,
+                            page: const ShippingDestinationNewFinal(),
+                            enablePop: true)
+                        .navPageToPage();
                   }
-                }
-              });
-              if (i == 9) {
-                showDestinationListPopup(context);
-              } else if (i == 10) {
-                currentNum = '${currentNum}0';
-              } else if (i == 11) {
-                if (currentNum == "") {
-                  showGoalFalsePopup(context);
-                } else {
-                  showCountDownStarting(context);
-                }
-              }
-            }
-                : widget.screens == 2
-                ? () {
-              showCountDownStarting(context);
-            }
-                : widget.screens == 3
-                ? () {
-              navPage(
-                  context: context,
-                  page: const ShippingMenuFinal(),
-                  enablePop: false)
-                  .navPageToPage();
-            }
-                : null,
+                : widget.screens == 1
+                    ? () {
+                        setState(() {
+                          // 호실 자릿수
+                          if (currentNum!.length < 4) {
+                            if (i < 9) {
+                              currentNum = '$currentNum${i + 1}';
+                            }
+                          }
+                        });
+                        if (i == 9) {
+                          showDestinationListPopup(context);
+                        } else if (i == 10) {
+                          currentNum = '${currentNum}0';
+                        } else if (i == 11) {
+                          if (currentNum == "101") {
+                            setGoalPose(1);
+                          } else if (currentNum == "102") {
+                            setGoalPose(2);
+                          } else if (currentNum == "201") {
+                            setGoalPose(3);
+                          } else if (currentNum == "202") {
+                            setGoalPose(4);
+                          } else if (currentNum == "301") {
+                            setGoalPose(5);
+                          } else if (currentNum == "302") {
+                            setGoalPose(6);
+                          } else if (currentNum == "0") {
+                            setGoalPose(0);
+                          } else {
+                            showGoalFalsePopup(context);
+                          }
+                        }
+                      }
+                    : widget.screens == 2
+                        ? () {
+                            if (i == 0) {
+                              setGoalPose(i + 1);
+                            } else if (i == 1) {
+                              setGoalPose(i + 1);
+                            } else if (i == 2) {
+                              setGoalPose(i + 1);
+                            } else if (i == 3) {
+                              setGoalPose(i + 1);
+                            } else if (i == 4) {
+                              setGoalPose(i + 1);
+                            } else if (i == 5) {
+                              setGoalPose(i + 1);
+                            } else if (i == 6) {
+                              setGoalPose(0);
+                            }
+                          }
+                        : widget.screens == 3
+                            ? () {
+                                PostApi(
+                                        url: startUrl,
+                                        endadr: chgUrl,
+                                        keyBody: 'charging_pile')
+                                    .Posting();
+                                navPage(
+                                        context: context,
+                                        page: const ShippingMenuFinal(),
+                                        enablePop: false)
+                                    .navPageToPage();
+                              }
+                            : null,
             child: null,
           ),
         ),

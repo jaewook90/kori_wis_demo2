@@ -1,4 +1,3 @@
-// import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/HotelModel.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
@@ -81,6 +81,10 @@ void main() async {
         ChangeNotifierProvider(create: (context)=>MainStatusModel(
           serviceState: 0,
           playAd: false,
+        )),
+        ChangeNotifierProvider(create: (context)=>NetworkModel(
+            startUrl: '172.30.1.22'
+
         )),
         ChangeNotifierProvider(
             create: (context) => HotelModel(
@@ -202,7 +206,7 @@ void main() async {
                 color: Color(0xffF0F0F0)),
           ),
         ),
-        home: const IntroScreen(),
+        home: IntroScreen(),
       ),
     ),
   );

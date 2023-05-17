@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:functional_data/functional_data.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_detail/device_interaction_tab.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +20,14 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     with TickerProviderStateMixin {
 
   late List<DiscoveredService> discoveredServices;
+
+  late NetworkModel _networkProvider;
+
+  dynamic newPoseData;
+  dynamic poseData;
+
+  late List<String> PositioningList;
+  late List<String> PositionList;
 
   DateTime? currentBackPressTime;
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
@@ -45,9 +51,53 @@ class _MainScreenFinalState extends State<MainScreenFinal>
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    PositioningList = [];
+    PositionList = [];
+
     discoveredServices = [];
     fToast = FToast();
     fToast?.init(context);
+    poseDataUpdate(widget.parsePoseData);
+  }
+
+  void poseDataUpdate(dynamic parsePoseData) {
+    newPoseData = parsePoseData;
+    if(newPoseData != null) {
+      poseData = newPoseData;
+      String editPoseData = poseData.toString();
+
+      editPoseData = editPoseData.replaceAll('{', "");
+      editPoseData = editPoseData.replaceAll('}', "");
+      List<String> PositionWithCordList =
+      editPoseData.split("], ");
+
+      for (int i = 0;
+      i < PositionWithCordList.length;
+      i++) {
+        PositioningList =
+            PositionWithCordList[i].split(":");
+        for (int j = 0;
+        j < PositioningList.length;
+        j++) {
+          if (j == 0) {
+            if (PositioningList[j] ==
+                'charging_pile') {
+              PositionList.replaceRange(
+                  0, 0, [PositioningList[j]]);
+            } else {
+              if(!PositioningList[j].contains('['))
+              {
+                poseData = PositioningList[j];
+                PositionList.add(poseData);
+              }
+            }
+          }
+        }
+      }
+    }else{
+      PositionList = [];
+    }
   }
 
   Future<void> discoverServices() async {
@@ -66,8 +116,15 @@ class _MainScreenFinalState extends State<MainScreenFinal>
 
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    if(PositionList.isEmpty){
+      PositionList = _networkProvider.getPoseData;
+    }
+    _networkProvider.getPoseData = PositionList;
 
     return WillPopScope(
       onWillPop: () async {

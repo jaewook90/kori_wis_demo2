@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorPauseModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
 
 class NavModuleButtonsFinal extends StatefulWidget {
@@ -19,6 +22,13 @@ class NavModuleButtonsFinal extends StatefulWidget {
 
 class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
   late MainStatusModel _statusProvider;
+  late NetworkModel _networkProvider;
+
+  String? startUrl;
+  String? stpUrl;
+  String? rsmUrl;
+  String? navUrl;
+  String? chgUrl;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -40,6 +50,13 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
   @override
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+
+    startUrl = _networkProvider.startUrl;
+    stpUrl = _networkProvider.stpUrl;
+    rsmUrl = _networkProvider.rsmUrl;
+    navUrl = _networkProvider.navUrl;
+    chgUrl = _networkProvider.chgUrl;
 
     if (widget.screens == 0) {
       // 이동 중
@@ -94,6 +111,11 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                     buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
+              PostApi(
+                  url: startUrl,
+                  endadr: stpUrl,
+                  keyBody: 'stop')
+                  .Posting();
               navPage(
                   context: context,
                   page: const NavigatorPauseModuleFinal(),
@@ -105,6 +127,11 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 ? () {
               if (i == 0) {
                 // 재시작 추가 필요
+                PostApi(
+                    url: startUrl,
+                    endadr: rsmUrl,
+                    keyBody: 'stop')
+                    .Posting();
                 navPage(
                     context: context,
                     page: const NavigatorProgressModuleFinal(),
@@ -113,6 +140,11 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 _statusProvider.playAd = false;
               } else if (i == 1) {
                 // 추후에는 API 통신을 이용한 충전하러가기 기능 추가
+                PostApi(
+                    url: startUrl,
+                    endadr: chgUrl,
+                    keyBody: 'charging_pile').Posting();
+                _networkProvider.currentGoal = '충전스테이션';
                 navPage(
                     context: context,
                     page: const NavigatorProgressModuleFinal(),
@@ -123,12 +155,22 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
                 navPage(
                     context: context,
-                    page: const NavigatorProgressModuleFinal(),
-                    enablePop: false)
+                    page: const ShippingDestinationNewFinal(),
+                    enablePop: true)
                     .navPageToPage();
+                // navPage(
+                //     context: context,
+                //     page: const NavigatorProgressModuleFinal(),
+                //     enablePop: false)
+                //     .navPageToPage();
                 _statusProvider.playAd = false;
               } else {
                 // 추후에는 거점으로 복귀
+                PostApi(
+                    url: startUrl,
+                    endadr: chgUrl,
+                    keyBody: 'charging_pile').Posting();
+                _networkProvider.currentGoal = '충전스테이션';
                 navPage(
                     context: context,
                     page: const NavigatorProgressModuleFinal(),

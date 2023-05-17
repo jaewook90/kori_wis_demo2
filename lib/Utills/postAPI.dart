@@ -18,7 +18,7 @@ class PostApi{
 
     if (apiKeyBody != 'charging_pile') {
       postData = {"point": apiKeyBody};
-    } else if (apiKeyBody == 'stop') {
+    } else if (apiKeyBody == 'stop' || apiKeyBody == 'resume') {
       postData = {};
     } else {
       postData = {"type": 0, "point": apiKeyBody};

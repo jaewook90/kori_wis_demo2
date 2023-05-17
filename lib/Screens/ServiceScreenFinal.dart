@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
+import 'package:provider/provider.dart';
 
 class ServiceScreenFinal extends StatefulWidget {
   const ServiceScreenFinal({
@@ -15,15 +17,36 @@ class ServiceScreenFinal extends StatefulWidget {
 class _ServiceScreenFinalState extends State<ServiceScreenFinal>
     with TickerProviderStateMixin {
 
+  late NetworkModel _networkProvider;
+
+  String? currentGoal;
+
+  dynamic poseData;
+
+  bool? shippingCheck;
+  bool? navCheck;
+  bool? pauseCheck;
+
+  String? startUrl;
+  String? navUrl;
+  String? chgUrl;
+  String? stpUrl;
+  String? rsmUrl;
+
+  List<String>? goalPosition;
+
   final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.png";
   final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.png";
   final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.png";
 
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
+
+    poseData = _networkProvider.getPoseData;
 
     return WillPopScope(
       onWillPop: () async {
@@ -49,7 +72,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenFinal(),
+                            page: MainScreenFinal(),
                             enablePop: false)
                             .navPageToPage();
                       },

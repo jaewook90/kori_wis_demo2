@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 class NavCountDownModalFinal extends StatefulWidget {
-  const NavCountDownModalFinal({Key? key}) : super(key: key);
+  final String? goalPosition;
+
+  const NavCountDownModalFinal({Key? key, this.goalPosition}) : super(key: key);
 
   @override
   State<NavCountDownModalFinal> createState() => _NavCountDownModalFinalState();
@@ -15,13 +19,36 @@ class NavCountDownModalFinal extends StatefulWidget {
 
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late MainStatusModel _statusProvider;
+  late NetworkModel _networkProvider;
+
+  String? currentGoal;
+
+  String? startUrl;
+  String? navUrl;
+  String? chgUrl;
+
+  bool? goalChecker;
 
   late String countDownPopup;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentGoal = "";
+    goalChecker = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final CountdownController controller =
-    CountdownController(autoStart: true);
+    final CountdownController controller = CountdownController(autoStart: true);
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+
+    startUrl = _networkProvider.startUrl;
+    navUrl = _networkProvider.navUrl;
+    chgUrl = _networkProvider.chgUrl;
+
+    currentGoal = widget.goalPosition;
 
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
@@ -31,10 +58,10 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
       countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
     } else if (_statusProvider.serviceState == 2) {
       countDownPopup =
-      'assets/screens/Hotel/BellBoy/koriZFinalBellCountDown.png';
+          'assets/screens/Hotel/BellBoy/koriZFinalBellCountDown.png';
     } else if (_statusProvider.serviceState == 3) {
       countDownPopup =
-      'assets/screens/Hotel/RoomService/koriZFinalRoomCountDown.png';
+          'assets/screens/Hotel/RoomService/koriZFinalRoomCountDown.png';
     }
 
     return Container(
@@ -58,16 +85,27 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     style: const TextStyle(
                         fontFamily: 'kor',
                         fontSize: 80,
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
-                    navPage(
-                        context: context,
-                        page: const NavigatorProgressModuleFinal(),
-                        enablePop: false)
-                        .navPageToPage();
+                    if (currentGoal != 'chargint_pile') {
+                      PostApi(
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: currentGoal).Posting();
+                      // _networkProvider.currentGoal = currentGoal;
+
+                      navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
+                    } else {
+                      PostApi(
+                          url: startUrl,
+                          endadr: chgUrl,
+                          keyBody: 'charging_pile').Posting();
+                      // _networkProvider.currentGoal = '충전스테이션';
+
+                      navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
+                    }
                   },
                 ),
               ),
@@ -97,11 +135,23 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  navPage(
-                      context: context,
-                      page: const NavigatorProgressModuleFinal(),
-                      enablePop: false)
-                      .navPageToPage();
+                  if (currentGoal != 'chargint_pile') {
+                    PostApi(
+                        url: startUrl,
+                        endadr: navUrl,
+                        keyBody: currentGoal).Posting();
+                    _networkProvider.currentGoal = currentGoal;
+
+                    navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
+                  } else {
+                    PostApi(
+                        url: startUrl,
+                        endadr: chgUrl,
+                        keyBody: 'charging_pile').Posting();
+                    _networkProvider.currentGoal = '충전스테이션';
+
+                    navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
+                  }
                 },
                 child: null,
               ),

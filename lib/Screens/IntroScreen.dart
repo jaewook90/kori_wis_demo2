@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
+import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +21,11 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
+
+  late NetworkModel _networkProvider;
+
+  String positionURL = "";
+  String hostAdr = "";
 
   late VideoPlayerController _controller;
   late AudioPlayer _audioPlayer;
@@ -88,9 +93,29 @@ class _IntroScreenState extends State<IntroScreen>
     // print('-------------VIDEO END-------------');
     _playAudio();
     await Future.delayed(const Duration(milliseconds: 500));
+    _networkProvider.hostIP();
     setState(() {
       updateComplete = true;
     });
+  }
+
+  dynamic getting(String hostUrl, String endUrl) async {
+    String hostIP = hostUrl;
+    String endPoint = endUrl;
+
+    String apiAddress = hostIP + endPoint;
+
+    NetworkGet network = NetworkGet(apiAddress);
+
+    dynamic getApiData = await network.getAPI();
+
+    navPage(
+        context: context,
+        page: MainScreenFinal(
+          parsePoseData: getApiData,
+        ),
+        enablePop: true)
+        .navPageToPage();
   }
 
   @override
@@ -103,6 +128,10 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+
+    hostAdr = _networkProvider.startUrl;
+    positionURL = _networkProvider.positionURL;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -160,13 +189,7 @@ class _IntroScreenState extends State<IntroScreen>
       child: GestureDetector(
         // 스크린 터치시 화면 이동을 위한 위젯
         onTap: () {
-          updateComplete == true
-              ? navPage(
-              context: context,
-              page: const MainScreenFinal(),
-              enablePop: true)
-              .navPageToPage()
-              : null;
+          updateComplete == true ? getting(hostAdr, positionURL) : null;
         },
         child: Center(
           child: Scaffold(
