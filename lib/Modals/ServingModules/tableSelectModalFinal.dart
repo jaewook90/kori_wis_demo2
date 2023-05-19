@@ -63,15 +63,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                       _servingProvider.item1 = "";
                       _servingProvider.item2 = "";
                       _servingProvider.item3 = "";
-                      // // setState(() {
-                      //   if (_servingProvider.trayCheckAll == true) {
-                      //     // setState(() {
-                      //     //   _servingProvider.tray1 = false;
-                      //     //   _servingProvider.tray2 = false;
-                      //     //   _servingProvider.tray3 = false;
-                      //     // });
-                      //   }
-                      // // });
                     },
                     child: null,
                   ),

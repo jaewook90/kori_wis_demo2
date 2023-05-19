@@ -49,6 +49,7 @@ class TraySelectionFinal extends StatefulWidget {
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
 
+
   late String subscribeOutput;
   late TextEditingController textEditingController;
   late StreamSubscription<List<int>>? subscribeStream;
@@ -112,7 +113,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   }
 
   Future<void> subscribeCharacteristic() async {
-    if(widget.characteristic! != null){
       subscribeStream =
           widget.subscribeToCharacteristic!(widget.characteristic!).listen((event) {
             setState(() {
@@ -129,7 +129,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
       // if(subscribeOutput == 'Notification set'){
       //   subscribeCharacteristic();
       // }
-    }
+
   }
 
   void showTraySetPopup(context) {

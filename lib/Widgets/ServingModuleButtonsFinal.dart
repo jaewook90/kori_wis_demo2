@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
 
 class ServingModuleButtonsFinal extends StatefulWidget {
@@ -24,6 +27,8 @@ class ServingModuleButtonsFinal extends StatefulWidget {
 class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late ServingModel _servingProvider;
   late OrderModel _orderProvider;
+  late NetworkModel _networkProvider;
+
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -49,6 +54,14 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late List<List> itemImagesList;
   late List<String> itemImages;
 
+  late String targetTableNum;
+
+  String? currentGoal;
+
+  String? startUrl;
+  String? navUrl;
+  String? chgUrl;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -58,6 +71,8 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     hotDog = "assets/images/serving_item_imgs/hotDog.png";
     chicken = "assets/images/serving_item_imgs/chicken.png";
     ramyeon = "assets/images/serving_item_imgs/ramyeon.png";
+
+    currentGoal = "";
 
     itemImages = [hamburger, hotDog, chicken, ramyeon];
     itemImagesList = [itemImages, itemImages, itemImages];
@@ -113,6 +128,53 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+
+
+    startUrl = _networkProvider.startUrl;
+    navUrl = _networkProvider.navUrl;
+    chgUrl = _networkProvider.chgUrl;
+
+    // 서빙 타겟 테이블 번호
+    // if(_servingProvider.targetTableNum != null){
+    //   targetTableNum = _servingProvider.targetTableNum!;
+    // }
+    //
+    // // 서빙 완료화면 출력 시 다음 목표 지점으로 타겟 변경
+    // if(widget.screens == 3){
+    //   if(targetTableNum != null){
+    //     setState(() {
+    //       if(targetTableNum == _servingProvider.table1){
+    //         print('table1');
+    //         _servingProvider.table1="";
+    //       }else if(targetTableNum == _servingProvider.table2){
+    //         print('table2');
+    //         _servingProvider.table2="";
+    //       }else if(targetTableNum == _servingProvider.table3){
+    //         print('table3');
+    //         _servingProvider.table3="";
+    //       }
+    //     });
+    //     if (_servingProvider.table1 != "") {
+    //       print('aaa');
+    //       targetTableNum = _servingProvider.table1!;
+    //     }else{
+    //       if (_servingProvider.table2 != "") {
+    //         print('bbb');
+    //         targetTableNum = _servingProvider.table2!;
+    //       } else{
+    //         if (_servingProvider.table3 != "") {
+    //           print('ccc');
+    //           targetTableNum = _servingProvider.table3!;
+    //         } else {
+    //           targetTableNum = 'none';
+    //         }
+    //       }
+    //     }
+    //     print('48465435');
+    //     print(targetTableNum);
+    //   }
+    // }
 
     // 트레이 상품 정의
     itemName = _servingProvider.menuItem;
@@ -238,19 +300,32 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                       enablePop: false)
                       .navPageToPage();
                 } else {
-                  _servingProvider.setTrayAll();
+                  _servingProvider.allTable = '${i+1}';
                   showCountDownPopup(context);
                 }
               });
             }
                 : widget.screens == 3
                 ? () {
+              if(_servingProvider.targetTableNum != 'none'){
+                PostApi(
+                    url: startUrl,
+                    endadr: navUrl,
+                    keyBody: _servingProvider.targetTableNum)
+                    .Posting();
+                navPage(
+                    context: context,
+                    page: NavigatorProgressModuleFinal(),
+                    enablePop: true)
+                    .navPageToPage();
+              }else{
               _servingProvider.clearAllTray();
               navPage(
                   context: context,
                   page: const TraySelectionFinal(),
                   enablePop: false)
                   .navPageToPage();
+              }
             }
                 : null,
             child: null,

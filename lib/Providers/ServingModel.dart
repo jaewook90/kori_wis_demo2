@@ -33,11 +33,12 @@ class ServingModel with ChangeNotifier {
   String? namelessItem;
   List<String>? itemList;
 
+  String? targetTableNum;
   String? tableNumber;
   String? table1;
   String? table2;
   String? table3;
-  String? generalTable;
+  String? allTable;
   List<String>? tableList;
   bool? trayCheckAll;
 
@@ -75,7 +76,7 @@ class ServingModel with ChangeNotifier {
     this.table1,
     this.table2,
     this.table3,
-    this.generalTable,
+    this.allTable,
     this.tableList,
     this.itemList,
     this.trayList,
@@ -138,6 +139,7 @@ class ServingModel with ChangeNotifier {
     table1 = tableNumber;
     table2 = tableNumber;
     table3 = tableNumber;
+    allTable = tableNumber;
 
     menuItem = "";
     tableNumber = "";
@@ -180,12 +182,12 @@ class ServingModel with ChangeNotifier {
     tray1 = false;
     tray2 = false;
     tray3 = false;
-    item1 = null;
-    item2 = null;
-    item3 = null;
-    table1 = null;
-    table2 = null;
-    table3 = null;
+    item1 = "";
+    item2 = "";
+    item3 = "";
+    table1 = "";
+    table2 = "";
+    table3 = "";
     servedItem1 = true;
     servedItem2 = true;
     servedItem3 = true;

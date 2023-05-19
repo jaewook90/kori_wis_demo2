@@ -9,6 +9,7 @@ class NetworkModel with ChangeNotifier {
   String positionURL = "reeman/android_target";
   dynamic getPoseData;
   List<String> goalPosition = [];
+  List<String> servingPosition = [];
   String? currentGoal;
   int? serviceState;
   bool? servingDone;

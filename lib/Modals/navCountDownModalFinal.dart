@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -20,6 +21,7 @@ class NavCountDownModalFinal extends StatefulWidget {
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
+  late ServingModel _servingProvider;
 
   String? currentGoal;
 
@@ -27,7 +29,13 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   String? navUrl;
   String? chgUrl;
 
+  late int tableQT;
+
+  late String targetTableNum;
+
   bool? goalChecker;
+
+  late bool apiCallFlag;
 
   late String countDownPopup;
 
@@ -37,25 +45,45 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     super.initState();
     currentGoal = "";
     goalChecker = false;
+    tableQT = 8;
+    apiCallFlag = false;
   }
 
   @override
   Widget build(BuildContext context) {
     final CountdownController controller = CountdownController(autoStart: true);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
-    currentGoal = widget.goalPosition;
-
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     if (_statusProvider.serviceState == 0) {
       countDownPopup = 'assets/screens/Shipping/koriZFinalShipCountdown.png';
+      currentGoal = widget.goalPosition;
     } else if (_statusProvider.serviceState == 1) {
       countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
+      if(_servingProvider.trayCheckAll == true){
+        targetTableNum = _servingProvider.allTable!;
+      }else{
+        if (_servingProvider.table1 != "") {
+          targetTableNum = _servingProvider.table1!;
+        }else{
+          if (_servingProvider.table2 != "") {
+            targetTableNum = _servingProvider.table2!;
+          } else{
+            if (_servingProvider.table3 != "") {
+              targetTableNum = _servingProvider.table3!;
+            }
+          }
+        }
+      }
+      print('first');
+      print(targetTableNum);
+      _servingProvider.targetTableNum = targetTableNum;
     } else if (_statusProvider.serviceState == 2) {
       countDownPopup =
           'assets/screens/Hotel/BellBoy/koriZFinalBellCountDown.png';
@@ -89,22 +117,53 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
-                    if (currentGoal != 'chargint_pile') {
-                      PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: currentGoal).Posting();
-                      // _networkProvider.currentGoal = currentGoal;
+                    if (_statusProvider.serviceState == 0){
+                      if (currentGoal != 'chargint_pile') {
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: currentGoal)
+                            .Posting();
+                        navPage(
+                            context: context,
+                            page: NavigatorProgressModuleFinal(),
+                            enablePop: true)
+                            .navPageToPage();
+                      } else {
+                        PostApi(
+                            url: startUrl,
+                            endadr: chgUrl,
+                            keyBody: 'charging_pile')
+                            .Posting();
+                        navPage(
+                            context: context,
+                            page: NavigatorProgressModuleFinal(),
+                            enablePop: true)
+                            .navPageToPage();
+                      }
+                    } else if (_statusProvider.serviceState == 1) {
+                      if (apiCallFlag == false) {
+                          for (int i = 0; i < tableQT; i++) {
+                            if (targetTableNum == "${i+1}") {
+                              print('8888');
+                              print(_networkProvider.getPoseData);
+                              print(_networkProvider.getPoseData[i]);
+                              currentGoal = _networkProvider.getPoseData[i];
+                            }
+                          }
+                            PostApi(
+                                    url: startUrl,
+                                    endadr: navUrl,
+                                    keyBody: currentGoal)
+                                .Posting();
+                            navPage(
+                                    context: context,
+                                    page: NavigatorProgressModuleFinal(),
+                                    enablePop: true)
+                                .navPageToPage();
+                            apiCallFlag = true;
 
-                      navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
-                    } else {
-                      PostApi(
-                          url: startUrl,
-                          endadr: chgUrl,
-                          keyBody: 'charging_pile').Posting();
-                      // _networkProvider.currentGoal = '충전스테이션';
-
-                      navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
+                      }
                     }
                   },
                 ),
@@ -120,6 +179,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
+                  _networkProvider.servingPosition = [];
                   Navigator.pop(context);
                 },
                 child: null,
@@ -135,22 +195,53 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  if (currentGoal != 'chargint_pile') {
-                    PostApi(
-                        url: startUrl,
-                        endadr: navUrl,
-                        keyBody: currentGoal).Posting();
-                    _networkProvider.currentGoal = currentGoal;
+                  if (_statusProvider.serviceState == 0){
+                    if (currentGoal != 'chargint_pile') {
+                      PostApi(
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: currentGoal)
+                          .Posting();
+                      navPage(
+                          context: context,
+                          page: NavigatorProgressModuleFinal(),
+                          enablePop: true)
+                          .navPageToPage();
+                    } else {
+                      PostApi(
+                          url: startUrl,
+                          endadr: chgUrl,
+                          keyBody: 'charging_pile')
+                          .Posting();
+                      navPage(
+                          context: context,
+                          page: NavigatorProgressModuleFinal(),
+                          enablePop: true)
+                          .navPageToPage();
+                    }
+                  } else if (_statusProvider.serviceState == 1) {
+                    if (apiCallFlag == false) {
+                        for (int i = 0; i < tableQT+1; i++) {
+                          if (targetTableNum == "$i") {
+                            print('8888');
+                            print(_networkProvider.getPoseData);
+                            print(_networkProvider.getPoseData[i]);
+                            currentGoal = _networkProvider.getPoseData[i];
+                          }
+                        }
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: currentGoal)
+                            .Posting();
+                        navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                            enablePop: true)
+                            .navPageToPage();
+                        apiCallFlag = true;
 
-                    navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
-                  } else {
-                    PostApi(
-                        url: startUrl,
-                        endadr: chgUrl,
-                        keyBody: 'charging_pile').Posting();
-                    _networkProvider.currentGoal = '충전스테이션';
-
-                    navPage(context: context, page: NavigatorProgressModuleFinal(), enablePop: true).navPageToPage();
+                    }
                   }
                 },
                 child: null,

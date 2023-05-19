@@ -18,10 +18,14 @@ class PostApi{
 
     if (apiKeyBody != 'charging_pile') {
       postData = {"point": apiKeyBody};
+      print(apiKeyBody);
+      print('apiA');
     } else if (apiKeyBody == 'stop' || apiKeyBody == 'resume') {
       postData = {};
+      print('apiB');
     } else {
       postData = {"type": 0, "point": apiKeyBody};
+      print('apiC');
     }
 
     var postBody = json.encode(postData);
@@ -29,6 +33,9 @@ class PostApi{
     NetworkPost network = NetworkPost(apiAddress, postBody);
 
     var postResponse = await network.postAPI();
+
+    print('apiKeyBody : $apiKeyBody');
+    print('apiAddress : $apiAddress');
 
     print("postResponse : $postResponse");
   }
