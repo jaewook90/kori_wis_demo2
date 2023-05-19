@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -23,9 +25,22 @@ class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
 
   late NetworkModel _networkProvider;
+  late BLEModel _bleProvider;
+
 
   String positionURL = "";
   String hostAdr = "";
+
+  // 블루투스 연결
+
+  // 허스키 렌즈
+  late Uuid huskyCharacteristicId;
+  late Uuid huskyServiceId;
+  late String huskyDeviceId;
+  // 트레이
+  late Uuid trayDetectorCharacteristicId;
+  late Uuid trayDetectorServiceId;
+  late String trayDetectorDeviceId;
 
   late VideoPlayerController _controller;
   late AudioPlayer _audioPlayer;
@@ -66,6 +81,14 @@ class _IntroScreenState extends State<IntroScreen>
     fToast?.init(context);
 
     _playVideo();
+
+    huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    huskyDeviceId = 'F0:52:FD:5C:8D:73';
+
+    trayDetectorCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    trayDetectorDeviceId = 'F0:52:FD:5C:8D:73';
   }
 
   void _playVideo() async {
@@ -129,6 +152,17 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
+
+    // 허스키 BLE 정보
+    _bleProvider.huskyDeviceId = huskyDeviceId;
+    _bleProvider.huskyCharacteristicId = huskyCharacteristicId;
+    _bleProvider.huskyServiceId = huskyServiceId;
+
+    // 트레이디텍터 BLE 정보
+    _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
+    _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
+    _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
 
     hostAdr = _networkProvider.startUrl;
     positionURL = _networkProvider.positionURL;

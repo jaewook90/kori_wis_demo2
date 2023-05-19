@@ -7,8 +7,6 @@ import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
-import 'characteristic_interaction_dialog.dart';
-
 part 'device_interaction_tab.g.dart';
 //ignore_for_file: annotate_overrides
 
@@ -24,15 +22,15 @@ class DeviceInteractionTab extends StatelessWidget {
   Widget build(BuildContext context) =>
       Consumer3<BleDeviceConnector, ConnectionStateUpdate, BleDeviceInteractor>(
         builder: (_, deviceConnector, connectionStateUpdate, serviceDiscoverer,
-                __) =>
+            __) =>
             _DeviceInteractionTab(
-          viewModel: DeviceInteractionViewModel(
-              deviceId: device.id,
-              connectionStatus: connectionStateUpdate.connectionState,
-              deviceConnector: deviceConnector,
-              discoverServices: () =>
-                  serviceDiscoverer.discoverServices(device.id)),
-        ),
+              viewModel: DeviceInteractionViewModel(
+                  deviceId: device.id,
+                  connectionStatus: connectionStateUpdate.connectionState,
+                  deviceConnector: deviceConnector,
+                  discoverServices: () =>
+                      serviceDiscoverer.discoverServices(device.id)),
+            ),
       );
 }
 
@@ -93,7 +91,8 @@ class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
   }
 
   @override
-  Widget build(BuildContext context) => CustomScrollView(
+  Widget build(BuildContext context) =>
+      CustomScrollView(
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate.fixed(
@@ -195,20 +194,33 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
     return props.join("\n");
   }
 
-  Widget _characteristicTile(
-          DiscoveredCharacteristic characteristic, String deviceId) =>
+  Widget _characteristicTile(DiscoveredCharacteristic characteristic,
+      String deviceId) =>
       ListTile(
         onTap:
-            () => navPage(
-                context: context,
-                page: TrayEquipped(
-                  characteristic: QualifiedCharacteristic(
-                      characteristicId: characteristic.characteristicId,
-                      serviceId: characteristic.serviceId,
-                      deviceId: deviceId),
-                ),
-                enablePop: false)
-            .navPageToPage(),
+            // () {
+          // print(characteristic.characteristicId.runtimeType);
+          // print(characteristic.serviceId.runtimeType);
+          // print(deviceId.runtimeType);
+          // Provider
+          //     .of<BLEModel>(context, listen: false)
+          //     .characteristic = QualifiedCharacteristic(
+          //     characteristicId: characteristic.characteristicId,
+          //     serviceId: characteristic.serviceId,
+          //     deviceId: deviceId);
+          // Navigator.pop(context);
+          // Navigator.pop(context);
+        // },
+        () => navPage(
+            context: context,
+            page: TrayEquipped(
+              characteristic: QualifiedCharacteristic(
+                  characteristicId: characteristic.characteristicId,
+                  serviceId: characteristic.serviceId,
+                  deviceId: deviceId),
+            ),
+            enablePop: false)
+        .navPageToPage(),
         // () => showDialog<void>(
         // context: context,
         // builder: (context) => CharacteristicInteractionDialog(
@@ -218,7 +230,8 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
         //           deviceId: deviceId),
         //     )),
         title: Text(
-          '${characteristic.characteristicId}\n(${_charactisticsSummary(characteristic)})',
+          '${characteristic.characteristicId}\n(${_charactisticsSummary(
+              characteristic)})',
           style: const TextStyle(
             fontSize: 14,
           ),
@@ -229,7 +242,8 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
     final panels = <ExpansionPanel>[];
 
     widget.discoveredServices.asMap().forEach(
-          (index, service) => panels.add(
+          (index, service) =>
+          panels.add(
             ExpansionPanel(
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,52 +260,55 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    itemBuilder: (context, index) => _characteristicTile(
-                      service.characteristics[index],
-                      widget.deviceId,
-                    ),
+                    itemBuilder: (context, index) =>
+                        _characteristicTile(
+                          service.characteristics[index],
+                          widget.deviceId,
+                        ),
                     itemCount: service.characteristicIds.length,
                   ),
                 ],
               ),
-              headerBuilder: (context, isExpanded) => ListTile(
-                title: Text(
-                  '${service.serviceId}',
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ),
+              headerBuilder: (context, isExpanded) =>
+                  ListTile(
+                    title: Text(
+                      '${service.serviceId}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
               isExpanded: _expandedItems.contains(index),
             ),
           ),
-        );
+    );
 
     return panels;
   }
 
   @override
-  Widget build(BuildContext context) => widget.discoveredServices.isEmpty
-      ? const SizedBox()
-      : Padding(
-          padding: const EdgeInsetsDirectional.only(
-            top: 20.0,
-            start: 20.0,
-            end: 20.0,
-          ),
-          child: ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
+  Widget build(BuildContext context) =>
+      widget.discoveredServices.isEmpty
+          ? const SizedBox()
+          : Padding(
+        padding: const EdgeInsetsDirectional.only(
+          top: 20.0,
+          start: 20.0,
+          end: 20.0,
+        ),
+        child: ExpansionPanelList(
+          expansionCallback: (int index, bool isExpanded) {
+            setState(() {
               setState(() {
-                setState(() {
-                  if (isExpanded) {
-                    _expandedItems.remove(index);
-                  } else {
-                    _expandedItems.add(index);
-                  }
-                });
+                if (isExpanded) {
+                  _expandedItems.remove(index);
+                } else {
+                  _expandedItems.add(index);
+                }
               });
-            },
-            children: [
-              ...buildPanels(),
-            ],
-          ),
-        );
+            });
+          },
+          children: [
+            ...buildPanels(),
+          ],
+        ),
+      );
 }

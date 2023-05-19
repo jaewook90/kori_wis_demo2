@@ -26,6 +26,7 @@ class TrayEquipped extends StatelessWidget {
   Widget build(BuildContext context) => Consumer<BleDeviceInteractor>(
       builder: (context, interactor, _) => TraySelectionFinal(
         characteristic: characteristic,
+        // characteristic: Provider.of<BLEModel>(context, listen: false).characteristic,
         subscribeToCharacteristic: interactor.subScribeToCharacteristic,
       ));
 }
@@ -48,7 +49,7 @@ class TraySelectionFinal extends StatefulWidget {
 
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
-
+  late QualifiedCharacteristic? characteristic;
 
   late String subscribeOutput;
   late TextEditingController textEditingController;
@@ -99,9 +100,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     tray3BLE = "";
 
     subscribeOutput = '';
-    if(widget.characteristic == null){
-      subscribeStream = null;
-    }
+    // if(widget.characteristic == null){
+    //   subscribeStream = null;
+    // }
     textEditingController = TextEditingController();
   }
 
@@ -112,9 +113,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     super.dispose();
   }
 
-  Future<void> subscribeCharacteristic() async {
+  Future<void> subscribeCharacteristic(characteristic) async {
+    if(characteristic == null){
+      subscribeStream = null;
+    }else{
       subscribeStream =
-          widget.subscribeToCharacteristic!(widget.characteristic!).listen((event) {
+          widget.subscribeToCharacteristic!(characteristic).listen((event) {
             setState(() {
               subscribeOutput = utf8.decode(event);
               tray1BLE = subscribeOutput.split('')[0];
@@ -126,10 +130,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         subscribeOutput = 'Notification set';
         // subscribeCharacteristic();
       });
-      // if(subscribeOutput == 'Notification set'){
-      //   subscribeCharacteristic();
-      // }
-
+    }
+    // print(characteristic);
   }
 
   void showTraySetPopup(context) {
@@ -191,6 +193,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     double textButtonHeight = screenHeight * 0.08;
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
+
+    subscribeCharacteristic(widget.characteristic);
 
     return WillPopScope(
       onWillPop: () {
@@ -290,7 +294,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         navPage(
                             context: context,
                             page: const DeviceListScreen(),
-                            enablePop: false)
+                            enablePop: true)
                             .navPageToPage();
                       },
                       icon: Icon(Icons.bluetooth),
@@ -302,7 +306,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     top: 10,
                     child: TextButton(
                       onPressed: () {
-                        subscribeCharacteristic();
+                        // subscribeCharacteristic(widget.characteristic);
                       },
                       style: TextButton.styleFrom(
                           fixedSize: const Size(150, 90),

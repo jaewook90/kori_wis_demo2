@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/AdminScreen.dart';
@@ -27,6 +28,11 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
   late MainStatusModel _statusProvider;
   late BLEModel _bleProvider;
 
+
+  // late Uuid huskyCharacteristicId;
+  // late Uuid huskyServiceId;
+  // late String huskyDeviceId;
+
   late var screenList = List<Widget>.empty();
   late var serviceList = List<Widget>.empty();
 
@@ -46,24 +52,47 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     // TODO: implement initState
     super.initState();
 
+    // huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    // huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    // huskyDeviceId = 'F0:52:FD:5C:8D:73';
+
     screenList = [
       const ServiceScreenFinal(),
       const LinkConnectorScreen(),
       const AdminScreen(),
-      // const ConfigScreenDeviceConnect()
+      const ConfigScreen(characteristic: null, subscribeToCharacteristic: null)
     ];
-    serviceList = [
-      const ShippingMenuFinal(),
-      const TraySelectionFinal(
-          characteristic: null, subscribeToCharacteristic: null),
-      const HotelServiceMenu()
-    ];
+    // serviceList = [
+    //   const ShippingMenuFinal(),
+    //   // const TraySelectionFinal(
+    //   //     characteristic: null, subscribeToCharacteristic: null),
+    //   TrayEquipped(
+    //     characteristic: QualifiedCharacteristic(
+    //         characteristicId: _bleProvider.huskyCharacteristicId!,
+    //         serviceId: _bleProvider.huskyServiceId!,
+    //         deviceId: _bleProvider.huskyDeviceId!),
+    //   ),
+    //   const HotelServiceMenu()
+    // ];
   }
 
   @override
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
+
+    serviceList = [
+      const ShippingMenuFinal(),
+      // const TraySelectionFinal(
+      //     characteristic: null, subscribeToCharacteristic: null),
+      TrayEquipped(
+        characteristic: QualifiedCharacteristic(
+            characteristicId: _bleProvider.huskyCharacteristicId!,
+            serviceId: _bleProvider.huskyServiceId!,
+            deviceId: _bleProvider.huskyDeviceId!),
+      ),
+      const HotelServiceMenu()
+    ];
 
     if (widget.screens == 0) {
       // 메인 화면 ( 서비스, 커넥터, 관리자 설정 버튼 )
@@ -101,7 +130,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                 ? () {
                     navPage(
                             context: context,
-                            page: i==3?ConfigScreenDeviceConnect(deviceId: _bleProvider.deviceId1) : screenList[i],
+                            page: screenList[i],
                             enablePop: true)
                         .navPageToPage();
                   }
