@@ -15,6 +15,9 @@ class NetworkModel with ChangeNotifier {
   bool? servingDone;
   bool? shippingDone;
 
+  dynamic? APIGetData;
+  dynamic? APIPostData;
+
   NetworkModel({
     this.serviceState,
     this.getPoseData,

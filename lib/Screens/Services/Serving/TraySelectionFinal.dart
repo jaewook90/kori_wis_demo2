@@ -106,13 +106,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     textEditingController = TextEditingController();
   }
 
-
-  @override
-  void dispose() {
-    subscribeStream?.cancel();
-    super.dispose();
-  }
-
   Future<void> subscribeCharacteristic(characteristic) async {
     if(characteristic == null){
       subscribeStream = null;
@@ -121,9 +114,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
           widget.subscribeToCharacteristic!(characteristic).listen((event) {
             setState(() {
               subscribeOutput = utf8.decode(event);
-              tray1BLE = subscribeOutput.split('')[0];
-              tray2BLE = subscribeOutput.split('')[1];
-              tray3BLE = subscribeOutput.split('')[2];
+              // tray1BLE = subscribeOutput.split('')[0];
+              // tray2BLE = subscribeOutput.split('')[1];
+              // tray3BLE = subscribeOutput.split('')[2];
             });
           });
       setState(() {
@@ -131,6 +124,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         // subscribeCharacteristic();
       });
     }
+    // print('123123');
+    // print(subscribeOutput);
     // print(characteristic);
   }
 
@@ -143,6 +138,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         });
   }
 
+  @override
+  void dispose() {
+    subscribeStream?.cancel();
+    super.dispose();
+  }
+  
 //QualifiedCharacteristic(characteristicId: 6e400002-b5a3-f393-e0a9-e50e24dcca9e, serviceId: 6e400001-b5a3-f393-e0a9-e50e24dcca9e, deviceId: DF:75:E4:D6:32:63)
 
   @override
@@ -194,7 +195,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    subscribeCharacteristic(widget.characteristic);
+    subscribeCharacteristic(widget.characteristic); // 허스키렌즈 데이터 수신
+    print('asdf');
+    print(widget.characteristic);
+    print('asdf');
 
     return WillPopScope(
       onWillPop: () {

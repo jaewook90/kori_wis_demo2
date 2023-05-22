@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Debug/test_api_feedback/feedbackAPI.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -70,10 +71,30 @@ class _ConfigScreenState extends State<ConfigScreen> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
+        padding: EdgeInsets.only(top: 200),
         constraints: const BoxConstraints.expand(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            TextButton(
+                onPressed: () {
+                  navPage(
+                          context: context,
+                          page: testAPIFeedback(),
+                          enablePop: true)
+                      .navPageToPage();
+                },
+                style: TextButton.styleFrom(
+                  fixedSize: Size(150, 150),
+                  side: BorderSide(
+                    width: 1,
+                    color: Colors.white
+                  )
+                ),
+                child: Text('api디버그')),
+            SizedBox(
+              height: 200,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

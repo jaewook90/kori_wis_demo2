@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
+import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,21 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
   late String backgroundImage;
 
+  late int navStatus;
+
+  Future<dynamic> Getting() async {
+    NetworkGet network =
+    NetworkGet("http://172.30.1.22/reeman/movebase_status");
+
+    dynamic getApiData = await network.getAPI();
+
+    Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
+
+    setState(() {
+      navStatus = Provider.of<NetworkModel>((context), listen: false).APIGetData['status'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
@@ -35,6 +52,34 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
       backgroundImage = "assets/screens/Nav/koriZFinalBellPauseNav.png";
     } else if (_statusProvider.serviceState == 3) {
       backgroundImage = "assets/screens/Nav/koriZFinalRoomPauseNav.png";
+    }
+
+    if(navStatus==3){
+      if (_statusProvider.serviceState == 0) {
+        navPage(
+            context: context,
+            page: const ShippingDoneFinal(),
+            enablePop: false)
+            .navPageToPage();
+      } else if (_statusProvider.serviceState == 1) {
+        navPage(
+            context: context,
+            page: const ServingProgressFinal(),
+            enablePop: false)
+            .navPageToPage();
+      } else if (_statusProvider.serviceState == 2) {
+        navPage(
+            context: context,
+            page: const BellboyProgressFinal(),
+            enablePop: false)
+            .navPageToPage();
+      } else if (_statusProvider.serviceState == 3) {
+        navPage(
+            context: context,
+            page: const RoomServiceProgressFinal(),
+            enablePop: false)
+            .navPageToPage();
+      }
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
