@@ -144,7 +144,7 @@ class _ShippingModuleButtonsFinalState
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
-    goalPositionList = _networkProvider.getPoseData;
+    goalPositionList = _networkProvider.getPoseData!;
 
     startUrl = _networkProvider.startUrl;
     stpUrl = _networkProvider.stpUrl;

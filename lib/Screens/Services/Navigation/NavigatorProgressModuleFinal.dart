@@ -13,10 +13,10 @@ import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class NavigatorProgressModuleFinal extends StatefulWidget {
-  final String? servGoalPose;
+  // final String? servGoalPose;
 
   const NavigatorProgressModuleFinal({
-    this.servGoalPose,
+    // this.servGoalPose,
     Key? key,
   }) : super(key: key);
 
@@ -42,9 +42,24 @@ class _NavigatorProgressModuleFinalState
 
   late int navStatus;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    navStatus = 0;
+    // servTableNum = "";
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+
   Future<dynamic> Getting() async {
     NetworkGet network =
-        NetworkGet("http://172.30.1.22/reeman/movebase_status");
+    NetworkGet("http://172.30.1.22/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 
@@ -56,19 +71,6 @@ class _NavigatorProgressModuleFinalState
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    navStatus = 0;
-    servTableNum = "";
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +81,15 @@ class _NavigatorProgressModuleFinalState
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
 
-    if(widget.servGoalPose != null){
-      servTableNum = widget.servGoalPose!;
-    }
+    servTableNum = _networkProvider.servTable!;
 
-    print('form navCount');
-    print(widget.servGoalPose);
-    print('form navCount');
+    // if(widget.servGoalPose != null){
+    //   servTableNum = widget.servGoalPose!;
+    // }
+
+    // print('form navCount');
+    // print(widget.servGoalPose);
+    // print('form navCount');
 
     if (_statusProvider.serviceState == 0) {
       backgroundImageServ = "assets/screens/Nav/koriZFinalShipProgNav.png";
@@ -140,16 +144,17 @@ class _NavigatorProgressModuleFinalState
       }
     }
     _servingProvider.targetTableNum = targetTableNum;
+
     print('48465435');
     print(targetTableNum);
 
-    Getting();
+    WidgetsBinding.instance!.addPostFrameCallback((_){Getting();});
 
-    if (navStatus == 0) {
-      PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
-          .Posting(context);
-      print(Provider.of<NetworkModel>((context), listen: false).APIPostData);
-    }
+    // if (navStatus == 0) {
+    //   PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
+    //       .Posting(context);
+    //   print(Provider.of<NetworkModel>((context), listen: false).APIPostData);
+    // }
 
     if (navStatus == 3) {
       if (_statusProvider.serviceState == 0) {

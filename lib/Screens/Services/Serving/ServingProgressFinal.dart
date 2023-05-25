@@ -120,6 +120,12 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                             .navPageToPage();
                       }else{
                         _servingProvider.clearAllTray();
+                        print('Serving Return to waiting point');
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.waitingPoint)
+                            .Posting(context);
                         navPage(
                             context: context,
                             page: const TraySelectionFinal(),

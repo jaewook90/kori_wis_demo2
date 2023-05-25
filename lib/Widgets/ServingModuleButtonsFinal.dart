@@ -309,6 +309,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                 ? () {
               if(_servingProvider.targetTableNum != 'none'){
                 _servingProvider.trayChange = true;
+                _networkProvider.servTable = _servingProvider.targetTableNum;
                 PostApi(
                     url: startUrl,
                     endadr: navUrl,
@@ -316,8 +317,8 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                     .Posting(context);
                 navPage(
                     context: context,
-                    page: NavigatorProgressModuleFinal(
-                      servGoalPose: _servingProvider.targetTableNum,
+                    page: const NavigatorProgressModuleFinal(
+                      // servGoalPose: _servingProvider.targetTableNum,
                     ),
                     enablePop: true)
                     .navPageToPage();

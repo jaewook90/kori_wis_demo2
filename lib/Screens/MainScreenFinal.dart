@@ -117,7 +117,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     double screenHeight = MediaQuery.of(context).size.height;
 
     if(PositionList.isEmpty){
-      PositionList = _networkProvider.getPoseData;
+      PositionList = _networkProvider.getPoseData!;
     }
     _networkProvider.getPoseData = PositionList;
     print(PositionList);

@@ -3,7 +3,6 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +23,9 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  final CountdownController _controller =
+      new CountdownController(autoStart: true);
+
   String? currentGoal;
 
   String? startUrl;
@@ -31,6 +33,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   String? chgUrl;
 
   late int tableQT;
+
+  late bool countDownNav;
 
   late String targetTableNum;
 
@@ -48,6 +52,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     goalChecker = false;
     tableQT = 8;
     apiCallFlag = false;
+    countDownNav = true;
   }
 
   @override
@@ -67,15 +72,15 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
       currentGoal = widget.goalPosition;
     } else if (_statusProvider.serviceState == 1) {
       countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
-      if(_servingProvider.trayCheckAll == true){
+      if (_servingProvider.trayCheckAll == true) {
         targetTableNum = _servingProvider.allTable!;
-      }else{
+      } else {
         if (_servingProvider.table1 != "") {
           targetTableNum = _servingProvider.table1!;
-        }else{
+        } else {
           if (_servingProvider.table2 != "") {
             targetTableNum = _servingProvider.table2!;
-          } else{
+          } else {
             if (_servingProvider.table3 != "") {
               targetTableNum = _servingProvider.table3!;
             }
@@ -105,7 +110,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(130, 10, 0, 0),
                 child: Countdown(
-                  controller: controller,
+                  controller: _controller,
                   seconds: 5,
                   build: (_, double time) => Text(
                     time.toInt().toString(),
@@ -116,55 +121,49 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
-                    if (_statusProvider.serviceState == 0){
-                      if (currentGoal != 'chargint_pile') {
+                    if (countDownNav == true) {
+                      if (_statusProvider.serviceState == 0) {
+                        if (currentGoal != 'chargint_pile') {
+                          PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: currentGoal)
+                              .Posting(context);
+                          navPage(
+                              context: context,
+                              page: NavigatorProgressModuleFinal(),
+                              enablePop: true)
+                              .navPageToPage();
+                        } else {
+                          PostApi(
+                              url: startUrl,
+                              endadr: chgUrl,
+                              keyBody: 'charging_pile')
+                              .Posting(context);
+                          navPage(
+                              context: context,
+                              page: NavigatorProgressModuleFinal(),
+                              enablePop: true)
+                              .navPageToPage();
+                        }
+                      } else if (_statusProvider.serviceState == 1) {
+                        _servingProvider.trayChange = true;
+                        _networkProvider.servTable =
+                            _servingProvider.targetTableNum;
                         PostApi(
                             url: startUrl,
                             endadr: navUrl,
-                            keyBody: currentGoal)
+                            keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
-                        navPage(
-                            context: context,
-                            page: NavigatorProgressModuleFinal(),
-                            enablePop: true)
-                            .navPageToPage();
-                      } else {
-                        PostApi(
-                            url: startUrl,
-                            endadr: chgUrl,
-                            keyBody: 'charging_pile')
-                            .Posting(context);
-                        navPage(
-                            context: context,
-                            page: NavigatorProgressModuleFinal(),
-                            enablePop: true)
-                            .navPageToPage();
+                          navPage(
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(
+                                // servGoalPose: _servingProvider.targetTableNum,
+                              ),
+                              enablePop: true)
+                              .navPageToPage();
                       }
-                    } else if (_statusProvider.serviceState == 1) {
-                      if (apiCallFlag == false) {
-                          for (int i = 0; i < tableQT; i++) {
-                            if (targetTableNum == "$i") {
-                              print('8888');
-                              print(_networkProvider.getPoseData);
-                              print(_networkProvider.getPoseData[i]);
-                              currentGoal = _networkProvider.getPoseData[i];
-                            }
-                          }
-                            PostApi(
-                                    url: startUrl,
-                                    endadr: navUrl,
-                                    keyBody: currentGoal)
-                                .Posting(context);
-                            navPage(
-                                    context: context,
-                                    page: NavigatorProgressModuleFinal(
-                                      servGoalPose: currentGoal,
-                                    ),
-                                    enablePop: true)
-                                .navPageToPage();
-                            apiCallFlag = true;
-
-                      }
+                      countDownNav = false;
                     }
                   },
                 ),
@@ -180,6 +179,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
+                  _controller.resume();
                   _networkProvider.servingPosition = [];
                   Navigator.pop(context);
                 },
@@ -196,55 +196,73 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  if (_statusProvider.serviceState == 0){
+                  _controller.resume();
+                  if (_statusProvider.serviceState == 0) {
                     if (currentGoal != 'chargint_pile') {
                       PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: currentGoal)
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: currentGoal)
                           .Posting(context);
                       navPage(
-                          context: context,
-                          page: NavigatorProgressModuleFinal(),
-                          enablePop: true)
+                              context: context,
+                              page: NavigatorProgressModuleFinal(),
+                              enablePop: true)
                           .navPageToPage();
                     } else {
                       PostApi(
-                          url: startUrl,
-                          endadr: chgUrl,
-                          keyBody: 'charging_pile')
+                              url: startUrl,
+                              endadr: chgUrl,
+                              keyBody: 'charging_pile')
                           .Posting(context);
                       navPage(
-                          context: context,
-                          page: NavigatorProgressModuleFinal(),
-                          enablePop: true)
+                              context: context,
+                              page: NavigatorProgressModuleFinal(),
+                              enablePop: true)
                           .navPageToPage();
                     }
                   } else if (_statusProvider.serviceState == 1) {
-                    if (apiCallFlag == false) {
-                        for (int i = 0; i < tableQT+1; i++) {
-                          if (targetTableNum == "$i") {
-                            print('8888');
-                            print(_networkProvider.getPoseData);
-                            print(_networkProvider.getPoseData[i]);
-                            currentGoal = _networkProvider.getPoseData[i];
-                          }
-                        }
-                        PostApi(
+                    _servingProvider.trayChange = true;
+                    _networkProvider.servTable =
+                        _servingProvider.targetTableNum;
+                    PostApi(
                             url: startUrl,
                             endadr: navUrl,
-                            keyBody: currentGoal)
-                            .Posting(context);
-                        navPage(
-                            context: context,
-                            page: NavigatorProgressModuleFinal(
-                              servGoalPose: currentGoal,
-                            ),
-                            enablePop: true)
-                            .navPageToPage();
-                        apiCallFlag = true;
+                            keyBody: _servingProvider.targetTableNum)
+                        .Posting(context);
+                    WidgetsBinding.instance!.addPostFrameCallback((_){
+                      navPage(
+                          context: context,
+                          page: const NavigatorProgressModuleFinal(
+                            // servGoalPose: _servingProvider.targetTableNum,
+                          ),
+                          enablePop: true)
+                          .navPageToPage();
+                    });
 
-                    }
+                    // if (apiCallFlag == false) {
+                    //   for (int i = 0; i < tableQT+1; i++) {
+                    //     if (targetTableNum == "${i+1}") {
+                    //       print('8888');
+                    //       currentGoal = _networkProvider.getPoseData![i];
+                    //
+                    //       _networkProvider.servTable = currentGoal;
+                    //     }
+                    //   }
+                    //   PostApi(
+                    //           url: startUrl,
+                    //           endadr: navUrl,
+                    //           keyBody: currentGoal)
+                    //       .Posting(context);
+                    //   navPage(
+                    //           context: context,
+                    //           page: const NavigatorProgressModuleFinal(
+                    //             // servGoalPose: currentGoal,
+                    //           ),
+                    //           enablePop: true)
+                    //       .navPageToPage();
+                    //   apiCallFlag = true;
+                    // }
                   }
                 },
                 child: null,
