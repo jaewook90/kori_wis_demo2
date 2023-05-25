@@ -88,7 +88,7 @@ class _IntroScreenState extends State<IntroScreen>
 
     trayDetectorCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    trayDetectorDeviceId = 'F0:52:FD:5C:8D:73';
+    trayDetectorDeviceId = 'F0:28:31:D5:10:D0';
   }
 
   void _playVideo() async {
@@ -220,65 +220,71 @@ class _IntroScreenState extends State<IntroScreen>
         }
         return Future.value(false);
       },
-      child: GestureDetector(
-        // 스크린 터치시 화면 이동을 위한 위젯
-        onTap: () {
-          updateComplete == true ? getting(hostAdr, positionURL) : null;
-        },
-        child: Center(
-          child: Scaffold(
-            body: Stack(children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: screenWidth,
-                        height: screenHeight * 0.8,
-                        child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: SizedBox(
-                            width: videoWidth,
-                            height: videoHeight,
-                            child: _controller.value.isInitialized
-                                ? AspectRatio(
-                              aspectRatio: _controller.value.aspectRatio,
-                              child: VideoPlayer(
-                                _controller,
-                              ),
-                            )
-                                : Container(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.transparent,
+        ),
+        body: GestureDetector(
+          // 스크린 터치시 화면 이동을 위한 위젯
+          onTap: () {
+            updateComplete == true ? getting(hostAdr, positionURL) : null;
+          },
+          child: Center(
+            child: Scaffold(
+              body: Stack(children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: screenWidth,
+                          height: screenHeight * 0.8,
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: SizedBox(
+                              width: videoWidth,
+                              height: videoHeight,
+                              child: _controller.value.isInitialized
+                                  ? AspectRatio(
+                                aspectRatio: _controller.value.aspectRatio,
+                                child: VideoPlayer(
+                                  _controller,
+                                ),
+                              )
+                                  : Container(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (updateComplete == true)
-                        FadeTransition(
-                          opacity: _animation,
-                          child: Text("화면을 터치해 주세요",
-                              style: Theme.of(context).textTheme.titleLarge),
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (updateComplete == true)
+                          FadeTransition(
+                            opacity: _animation,
+                            child: Text("화면을 터치해 주세요",
+                                style: Theme.of(context).textTheme.titleLarge),
+                          )
+                        else
+                          const SizedBox(),
+                        SizedBox(
+                          height: screenHeight * 0.4,
                         )
-                      else
-                        const SizedBox(),
-                      SizedBox(
-                        height: screenHeight * 0.4,
-                      )
-                    ],
-                  ),
-                ],
-              )
-            ]),
+                      ],
+                    ),
+                  ],
+                )
+              ]),
+            ),
           ),
         ),
       ),

@@ -111,6 +111,7 @@ void main() async {
             )),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
+              waitingPoint: 'wait',
               trayDebug: false,
               receiptModeOn: false,
               attachedTray1: true,

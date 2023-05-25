@@ -19,7 +19,7 @@ class MainScreenFinal extends StatefulWidget {
 class _MainScreenFinalState extends State<MainScreenFinal>
     with TickerProviderStateMixin {
 
-  late List<DiscoveredService> discoveredServices;
+  // late List<DiscoveredService> discoveredServices;
 
   late NetworkModel _networkProvider;
 
@@ -55,7 +55,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     PositioningList = [];
     PositionList = [];
 
-    discoveredServices = [];
+    // discoveredServices = [];
     fToast = FToast();
     fToast?.init(context);
     poseDataUpdate(widget.parsePoseData);
@@ -81,31 +81,26 @@ class _MainScreenFinalState extends State<MainScreenFinal>
         j < PositioningList.length;
         j++) {
           if (j == 0) {
-            if (PositioningList[j] ==
-                'charging_pile') {
-              PositionList.replaceRange(
-                  0, 0, [PositioningList[j]]);
-            } else {
               if(!PositioningList[j].contains('['))
               {
                 poseData = PositioningList[j];
                 PositionList.add(poseData);
               }
-            }
           }
         }
       }
+      PositionList.sort();
     }else{
       PositionList = [];
     }
   }
 
-  Future<void> discoverServices() async {
-    final result = await widget.viewModel?.discoverServices();
-    setState(() {
-      discoveredServices = result!;
-    });
-  }
+  // Future<void> discoverServices() async {
+  //   final result = await widget.viewModel?.discoverServices();
+  //   setState(() {
+  //     discoveredServices = result!;
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -125,6 +120,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
       PositionList = _networkProvider.getPoseData;
     }
     _networkProvider.getPoseData = PositionList;
+    print(PositionList);
 
     return WillPopScope(
       onWillPop: () async {

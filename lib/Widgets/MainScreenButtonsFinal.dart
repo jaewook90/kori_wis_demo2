@@ -81,16 +81,34 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
+    QualifiedCharacteristic trayDetectorInform = QualifiedCharacteristic(
+      characteristicId: _bleProvider.trayDetectorCharacteristicId!,
+      serviceId: _bleProvider.trayDetectorServiceId!,
+      deviceId: _bleProvider.trayDetectorDeviceId!
+    );
+
+    QualifiedCharacteristic huskyInform = QualifiedCharacteristic(
+        characteristicId: _bleProvider.trayDetectorCharacteristicId!,
+        serviceId: _bleProvider.trayDetectorServiceId!,
+        deviceId: _bleProvider.trayDetectorDeviceId!
+    );
+
     serviceList = [
       const ShippingMenuFinal(),
       // const TraySelectionFinal(
       //     characteristic: null, subscribeToCharacteristic: null),
+      // TrayEquipped(
+      //   characteristic: QualifiedCharacteristic(
+      //       characteristicId: _bleProvider.huskyCharacteristicId!,
+      //       serviceId: _bleProvider.huskyServiceId!,
+      //       deviceId: _bleProvider.huskyDeviceId!),
+      // ),
       TrayEquipped(
-        characteristic: QualifiedCharacteristic(
-            characteristicId: _bleProvider.huskyCharacteristicId!,
-            serviceId: _bleProvider.huskyServiceId!,
-            deviceId: _bleProvider.huskyDeviceId!),
-      ),
+              characteristic: QualifiedCharacteristic(
+                  characteristicId: _bleProvider.trayDetectorCharacteristicId!,
+                  serviceId: _bleProvider.trayDetectorServiceId!,
+                  deviceId: _bleProvider.trayDetectorDeviceId!),
+            ),
       const HotelServiceMenu()
     ];
 

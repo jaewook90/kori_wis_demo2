@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
+import 'package:provider/provider.dart';
 
 class PostApi{
   final String? url;
@@ -9,7 +12,7 @@ class PostApi{
 
   PostApi({this.url, this.endadr, this.keyBody});
 
-  void Posting() async {
+  void Posting(BuildContext context) async {
     String host = url!;
     String endPoint = endadr!;
     String apiAddress = host + endPoint;
@@ -32,12 +35,14 @@ class PostApi{
 
     NetworkPost network = NetworkPost(apiAddress, postBody);
 
-    var postResponse = await network.postAPI();
+    Provider.of<NetworkModel>((context), listen: false).APIPostData = await network.postAPI();
 
-    print('apiKeyBody : $apiKeyBody');
-    print('apiAddress : $apiAddress');
+    // var postResponse = await network.postAPI();
 
-    print("postResponse : $postResponse");
+    // print('apiKeyBody : $apiKeyBody');
+    // print('apiAddress : $apiAddress');
+
+    // print("postResponse : $postResponse");
   }
 
 }

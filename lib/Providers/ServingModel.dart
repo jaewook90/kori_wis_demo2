@@ -4,6 +4,7 @@ class ServingModel with ChangeNotifier {
   bool? tray1;
   bool? tray2;
   bool? tray3;
+  bool? trayChange;
   List<String>? trayList;
   //트레이 장착 여부
   bool? attachedTray1;
@@ -34,6 +35,7 @@ class ServingModel with ChangeNotifier {
   List<String>? itemList;
 
   String? targetTableNum;
+  String? waitingPoint;
   String? tableNumber;
   String? table1;
   String? table2;
@@ -64,6 +66,8 @@ class ServingModel with ChangeNotifier {
     this.playAd,
 
     this.servingBeginningIsNot,
+
+    this.waitingPoint,
 
     this.servedItem1,
     this.servedItem2,

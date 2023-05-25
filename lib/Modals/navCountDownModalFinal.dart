@@ -3,6 +3,7 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
+import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -81,8 +82,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
           }
         }
       }
-      print('first');
-      print(targetTableNum);
       _servingProvider.targetTableNum = targetTableNum;
     } else if (_statusProvider.serviceState == 2) {
       countDownPopup =
@@ -123,7 +122,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             url: startUrl,
                             endadr: navUrl,
                             keyBody: currentGoal)
-                            .Posting();
+                            .Posting(context);
                         navPage(
                             context: context,
                             page: NavigatorProgressModuleFinal(),
@@ -134,7 +133,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             url: startUrl,
                             endadr: chgUrl,
                             keyBody: 'charging_pile')
-                            .Posting();
+                            .Posting(context);
                         navPage(
                             context: context,
                             page: NavigatorProgressModuleFinal(),
@@ -144,7 +143,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     } else if (_statusProvider.serviceState == 1) {
                       if (apiCallFlag == false) {
                           for (int i = 0; i < tableQT; i++) {
-                            if (targetTableNum == "${i+1}") {
+                            if (targetTableNum == "$i") {
                               print('8888');
                               print(_networkProvider.getPoseData);
                               print(_networkProvider.getPoseData[i]);
@@ -155,10 +154,12 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                     url: startUrl,
                                     endadr: navUrl,
                                     keyBody: currentGoal)
-                                .Posting();
+                                .Posting(context);
                             navPage(
                                     context: context,
-                                    page: NavigatorProgressModuleFinal(),
+                                    page: NavigatorProgressModuleFinal(
+                                      servGoalPose: currentGoal,
+                                    ),
                                     enablePop: true)
                                 .navPageToPage();
                             apiCallFlag = true;
@@ -201,7 +202,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                           url: startUrl,
                           endadr: navUrl,
                           keyBody: currentGoal)
-                          .Posting();
+                          .Posting(context);
                       navPage(
                           context: context,
                           page: NavigatorProgressModuleFinal(),
@@ -212,7 +213,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                           url: startUrl,
                           endadr: chgUrl,
                           keyBody: 'charging_pile')
-                          .Posting();
+                          .Posting(context);
                       navPage(
                           context: context,
                           page: NavigatorProgressModuleFinal(),
@@ -233,10 +234,12 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             url: startUrl,
                             endadr: navUrl,
                             keyBody: currentGoal)
-                            .Posting();
+                            .Posting(context);
                         navPage(
                             context: context,
-                            page: const NavigatorProgressModuleFinal(),
+                            page: NavigatorProgressModuleFinal(
+                              servGoalPose: currentGoal,
+                            ),
                             enablePop: true)
                             .navPageToPage();
                         apiCallFlag = true;

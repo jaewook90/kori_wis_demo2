@@ -11,7 +11,10 @@ import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class NavigatorPauseModuleFinal extends StatefulWidget {
+  final String? servGoalPose;
+
   const NavigatorPauseModuleFinal({
+    this.servGoalPose,
     Key? key,
   }) : super(key: key);
 
@@ -25,21 +28,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
   late String backgroundImage;
 
-  late int navStatus;
-
-  Future<dynamic> Getting() async {
-    NetworkGet network =
-    NetworkGet("http://172.30.1.22/reeman/movebase_status");
-
-    dynamic getApiData = await network.getAPI();
-
-    Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
-
-    setState(() {
-      navStatus = Provider.of<NetworkModel>((context), listen: false).APIGetData['status'];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
@@ -52,34 +40,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
       backgroundImage = "assets/screens/Nav/koriZFinalBellPauseNav.png";
     } else if (_statusProvider.serviceState == 3) {
       backgroundImage = "assets/screens/Nav/koriZFinalRoomPauseNav.png";
-    }
-
-    if(navStatus==3){
-      if (_statusProvider.serviceState == 0) {
-        navPage(
-            context: context,
-            page: const ShippingDoneFinal(),
-            enablePop: false)
-            .navPageToPage();
-      } else if (_statusProvider.serviceState == 1) {
-        navPage(
-            context: context,
-            page: const ServingProgressFinal(),
-            enablePop: false)
-            .navPageToPage();
-      } else if (_statusProvider.serviceState == 2) {
-        navPage(
-            context: context,
-            page: const BellboyProgressFinal(),
-            enablePop: false)
-            .navPageToPage();
-      } else if (_statusProvider.serviceState == 3) {
-        navPage(
-            context: context,
-            page: const RoomServiceProgressFinal(),
-            enablePop: false)
-            .navPageToPage();
-      }
     }
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -168,6 +128,28 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               border: Border.fromBorderSide(BorderSide(
                                   color: Colors.transparent, width: 1))))),
                 ),
+                Positioned(
+                    top: 372,
+                    left: 460,
+                    child: Container(
+                      width: 300,
+                      height: 90,
+                      // decoration: BoxDecoration(
+                      //     border: Border.fromBorderSide(
+                      //         BorderSide(color: Colors.white, width: 1))),
+                      child: Text(
+                        widget.servGoalPose == 'charging_pile'
+                            ? '충전스테이션'
+                            : widget.servGoalPose == 'wait'
+                            ? '대기장소'
+                            : '${widget.servGoalPose!}번 테이블',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 55,
+                            color: Color(0xfffffefe)),
+                      ),
+                    )),
                 const NavModuleButtonsFinal(screens: 1),
               ],
             ),

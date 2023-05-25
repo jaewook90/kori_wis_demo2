@@ -136,45 +136,45 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     chgUrl = _networkProvider.chgUrl;
 
     // 서빙 타겟 테이블 번호
-    // if(_servingProvider.targetTableNum != null){
-    //   targetTableNum = _servingProvider.targetTableNum!;
-    // }
-    //
-    // // 서빙 완료화면 출력 시 다음 목표 지점으로 타겟 변경
-    // if(widget.screens == 3){
-    //   if(targetTableNum != null){
-    //     setState(() {
-    //       if(targetTableNum == _servingProvider.table1){
-    //         print('table1');
-    //         _servingProvider.table1="";
-    //       }else if(targetTableNum == _servingProvider.table2){
-    //         print('table2');
-    //         _servingProvider.table2="";
-    //       }else if(targetTableNum == _servingProvider.table3){
-    //         print('table3');
-    //         _servingProvider.table3="";
-    //       }
-    //     });
-    //     if (_servingProvider.table1 != "") {
-    //       print('aaa');
-    //       targetTableNum = _servingProvider.table1!;
-    //     }else{
-    //       if (_servingProvider.table2 != "") {
-    //         print('bbb');
-    //         targetTableNum = _servingProvider.table2!;
-    //       } else{
-    //         if (_servingProvider.table3 != "") {
-    //           print('ccc');
-    //           targetTableNum = _servingProvider.table3!;
-    //         } else {
-    //           targetTableNum = 'none';
-    //         }
-    //       }
-    //     }
-    //     print('48465435');
-    //     print(targetTableNum);
-    //   }
-    // }
+    if(_servingProvider.targetTableNum != null){
+      targetTableNum = _servingProvider.targetTableNum!;
+    }
+
+    // 서빙 완료화면 출력 시 다음 목표 지점으로 타겟 변경
+    if(widget.screens == 3){
+      if(targetTableNum != null){
+        // setState(() {
+        //   if(targetTableNum == _servingProvider.table1){
+        //     print('table1');
+        //     _servingProvider.table1="";
+        //   }else if(targetTableNum == _servingProvider.table2){
+        //     print('table2');
+        //     _servingProvider.table2="";
+        //   }else if(targetTableNum == _servingProvider.table3){
+        //     print('table3');
+        //     _servingProvider.table3="";
+        //   }
+        // });
+        if (_servingProvider.table1 != "") {
+          print('aaa');
+          targetTableNum = _servingProvider.table1!;
+        }else{
+          if (_servingProvider.table2 != "") {
+            print('bbb');
+            targetTableNum = _servingProvider.table2!;
+          } else{
+            if (_servingProvider.table3 != "") {
+              print('ccc');
+              targetTableNum = _servingProvider.table3!;
+            } else {
+              targetTableNum = 'none';
+            }
+          }
+        }
+        print('48465435');
+        print(targetTableNum);
+      }
+    }
 
     // 트레이 상품 정의
     itemName = _servingProvider.menuItem;
@@ -308,18 +308,27 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                 : widget.screens == 3
                 ? () {
               if(_servingProvider.targetTableNum != 'none'){
+                _servingProvider.trayChange = true;
                 PostApi(
                     url: startUrl,
                     endadr: navUrl,
                     keyBody: _servingProvider.targetTableNum)
-                    .Posting();
+                    .Posting(context);
                 navPage(
                     context: context,
-                    page: NavigatorProgressModuleFinal(),
+                    page: NavigatorProgressModuleFinal(
+                      servGoalPose: _servingProvider.targetTableNum,
+                    ),
                     enablePop: true)
                     .navPageToPage();
               }else{
               _servingProvider.clearAllTray();
+              print('Serving Return to waiting point');
+              PostApi(
+                  url: startUrl,
+                  endadr: navUrl,
+                  keyBody: _servingProvider.waitingPoint)
+                  .Posting(context);
               navPage(
                   context: context,
                   page: const TraySelectionFinal(),

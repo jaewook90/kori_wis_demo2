@@ -82,6 +82,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   //디버그
   late bool _debugTray;
 
+  int testtest = 1;
+
   // late bool receiptModeOn;
 
   @override
@@ -100,30 +102,50 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     tray3BLE = "";
 
     subscribeOutput = '';
-    // if(widget.characteristic == null){
-    //   subscribeStream = null;
-    // }
+    if(widget.characteristic == null){
+      subscribeStream = null;
+    }
     textEditingController = TextEditingController();
   }
 
-  Future<void> subscribeCharacteristic(characteristic) async {
-    if(characteristic == null){
-      subscribeStream = null;
-    }else{
-      subscribeStream =
-          widget.subscribeToCharacteristic!(characteristic).listen((event) {
+  Future<void> subscribeCharacteristic() async {
+    subscribeStream =
+        widget.subscribeToCharacteristic!(widget.characteristic!).listen((event) {
+          if(utf8.decode(event) != subscribeOutput){
             setState(() {
               subscribeOutput = utf8.decode(event);
-              // tray1BLE = subscribeOutput.split('')[0];
-              // tray2BLE = subscribeOutput.split('')[1];
-              // tray3BLE = subscribeOutput.split('')[2];
+              tray1BLE = subscribeOutput.split('')[0];
+              tray2BLE = subscribeOutput.split('')[1];
+              tray3BLE = subscribeOutput.split('')[2];
+              print(subscribeOutput);
+              if(subscribeOutput != 'Notification set'){
+                subscribeStream!.cancel();
+              }
             });
-          });
-      setState(() {
-        subscribeOutput = 'Notification set';
-        // subscribeCharacteristic();
-      });
-    }
+          }
+        });
+    setState(() {
+      subscribeOutput = 'Notification set';
+      // subscribeCharacteristic();
+    });
+    // if(characteristic == null){
+    //   subscribeStream = null;
+    // }else{
+    //   subscribeStream =
+    //       widget.subscribeToCharacteristic!(characteristic).listen((event) {
+    //         setState(() {
+    //           subscribeOutput = utf8.decode(event);
+    //           // tray1BLE = subscribeOutput.split('')[0];
+    //           // tray2BLE = subscribeOutput.split('')[1];
+    //           // tray3BLE = subscribeOutput.split('')[2];
+    //           print(subscribeOutput);
+    //         });
+    //       });
+    //   setState(() {
+    //     subscribeOutput = 'Notification set';
+    //     // subscribeCharacteristic();
+    //   });
+    // }
     // print('123123');
     // print(subscribeOutput);
     // print(characteristic);
@@ -140,8 +162,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
   @override
   void dispose() {
-    subscribeStream?.cancel();
     super.dispose();
+    subscribeStream?.cancel();
   }
   
 //QualifiedCharacteristic(characteristicId: 6e400002-b5a3-f393-e0a9-e50e24dcca9e, serviceId: 6e400001-b5a3-f393-e0a9-e50e24dcca9e, deviceId: DF:75:E4:D6:32:63)
@@ -149,12 +171,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-
-    print('test');
-    print(subscribeOutput);
-    print('test');
-
-    // WidgetsBinding.instance.addPostFrameCallback((_){subscribeCharacteristic();});
 
     _debugTray = _servingProvider.trayDebug!;
 
@@ -195,10 +211,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    subscribeCharacteristic(widget.characteristic); // 허스키렌즈 데이터 수신
-    print('asdf');
-    print(widget.characteristic);
-    print('asdf');
+    // subscribeCharacteristic();
 
     return WillPopScope(
       onWillPop: () {
@@ -310,15 +323,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     top: 10,
                     child: TextButton(
                       onPressed: () {
-                        // subscribeCharacteristic(widget.characteristic);
+                        subscribeCharacteristic();
                       },
                       style: TextButton.styleFrom(
                           fixedSize: const Size(150, 90),
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.white, width: 1),
+                            side: BorderSide(color: Colors.transparent, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
-                      child: Text(subscribeOutput),
+                      child: Container(),
+                      // child: Text(subscribeOutput),
                     ),
                   )
                 ],

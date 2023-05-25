@@ -10,10 +10,13 @@ import 'package:provider/provider.dart';
 
 class NavModuleButtonsFinal extends StatefulWidget {
   final int? screens;
+  final String? servGoalPose;
 
   const NavModuleButtonsFinal({
     Key? key,
     this.screens,
+    this.servGoalPose,
+
   }) : super(key: key);
 
   @override
@@ -29,6 +32,8 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
   String? rsmUrl;
   String? navUrl;
   String? chgUrl;
+
+  String? currentGoal;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -48,6 +53,13 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
   int buttonHeight = 1;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentGoal = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
@@ -57,6 +69,10 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
     rsmUrl = _networkProvider.rsmUrl;
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
+
+    if(widget.servGoalPose != null){
+      currentGoal = widget.servGoalPose;
+    }
 
     if (widget.screens == 0) {
       // 이동 중
@@ -115,10 +131,12 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                   url: startUrl,
                   endadr: stpUrl,
                   keyBody: 'stop')
-                  .Posting();
+                  .Posting(context);
               navPage(
                   context: context,
-                  page: const NavigatorPauseModuleFinal(),
+                  page: NavigatorPauseModuleFinal(
+                      servGoalPose: currentGoal
+                  ),
                   enablePop: false)
                   .navPageToPage();
               // 일시정지 명령 추가 필요
@@ -131,7 +149,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                     url: startUrl,
                     endadr: rsmUrl,
                     keyBody: 'stop')
-                    .Posting();
+                    .Posting(context);
                 navPage(
                     context: context,
                     page: const NavigatorProgressModuleFinal(),
@@ -143,7 +161,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 PostApi(
                     url: startUrl,
                     endadr: chgUrl,
-                    keyBody: 'charging_pile').Posting();
+                    keyBody: 'charging_pile').Posting(context);
                 _networkProvider.currentGoal = '충전스테이션';
                 navPage(
                     context: context,
@@ -169,7 +187,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 PostApi(
                     url: startUrl,
                     endadr: chgUrl,
-                    keyBody: 'charging_pile').Posting();
+                    keyBody: 'charging_pile').Posting(context);
                 _networkProvider.currentGoal = '충전스테이션';
                 navPage(
                     context: context,
