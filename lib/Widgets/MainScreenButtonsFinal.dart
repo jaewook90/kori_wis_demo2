@@ -28,7 +28,6 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
   late MainStatusModel _statusProvider;
   late BLEModel _bleProvider;
 
-
   // late Uuid huskyCharacteristicId;
   // late Uuid huskyServiceId;
   // late String huskyDeviceId;
@@ -81,17 +80,18 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    QualifiedCharacteristic trayDetectorInform = QualifiedCharacteristic(
-      characteristicId: _bleProvider.trayDetectorCharacteristicId!,
-      serviceId: _bleProvider.trayDetectorServiceId!,
-      deviceId: _bleProvider.trayDetectorDeviceId!
-    );
-
-    QualifiedCharacteristic huskyInform = QualifiedCharacteristic(
-        characteristicId: _bleProvider.trayDetectorCharacteristicId!,
-        serviceId: _bleProvider.trayDetectorServiceId!,
-        deviceId: _bleProvider.trayDetectorDeviceId!
-    );
+    // ble 모듈 예상 변수
+    // QualifiedCharacteristic trayDetectorInform = QualifiedCharacteristic(
+    //   characteristicId: _bleProvider.trayDetectorCharacteristicId!,
+    //   serviceId: _bleProvider.trayDetectorServiceId!,
+    //   deviceId: _bleProvider.trayDetectorDeviceId!
+    // );
+    //
+    // QualifiedCharacteristic huskyInform = QualifiedCharacteristic(
+    //     characteristicId: _bleProvider.trayDetectorCharacteristicId!,
+    //     serviceId: _bleProvider.trayDetectorServiceId!,
+    //     deviceId: _bleProvider.trayDetectorDeviceId!
+    // );
 
     serviceList = [
       const ShippingMenuFinal(),

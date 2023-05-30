@@ -29,7 +29,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late OrderModel _orderProvider;
   late NetworkModel _networkProvider;
 
-
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -130,50 +129,35 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
-
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
     // 서빙 타겟 테이블 번호
-    if(_servingProvider.targetTableNum != null){
+    if (_servingProvider.targetTableNum != null) {
       targetTableNum = _servingProvider.targetTableNum!;
     }
 
     // 서빙 완료화면 출력 시 다음 목표 지점으로 타겟 변경
-    if(widget.screens == 3){
-      if(targetTableNum != null){
-        // setState(() {
-        //   if(targetTableNum == _servingProvider.table1){
-        //     print('table1');
-        //     _servingProvider.table1="";
-        //   }else if(targetTableNum == _servingProvider.table2){
-        //     print('table2');
-        //     _servingProvider.table2="";
-        //   }else if(targetTableNum == _servingProvider.table3){
-        //     print('table3');
-        //     _servingProvider.table3="";
-        //   }
-        // });
-        if (_servingProvider.table1 != "") {
-          print('aaa');
-          targetTableNum = _servingProvider.table1!;
-        }else{
-          if (_servingProvider.table2 != "") {
-            print('bbb');
-            targetTableNum = _servingProvider.table2!;
-          } else{
-            if (_servingProvider.table3 != "") {
-              print('ccc');
-              targetTableNum = _servingProvider.table3!;
-            } else {
-              targetTableNum = 'none';
-            }
+    if (widget.screens == 3) {
+      if (_servingProvider.table1 != "") {
+        print('aaa');
+        targetTableNum = _servingProvider.table1!;
+      } else {
+        if (_servingProvider.table2 != "") {
+          print('bbb');
+          targetTableNum = _servingProvider.table2!;
+        } else {
+          if (_servingProvider.table3 != "") {
+            print('ccc');
+            targetTableNum = _servingProvider.table3!;
+          } else {
+            targetTableNum = 'none';
           }
         }
-        print('48465435');
-        print(targetTableNum);
       }
+      print('48465435');
+      print(targetTableNum);
     }
 
     // 트레이 상품 정의
@@ -249,95 +233,101 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
-                Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                    Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-              if (i == 0) {
-                setState(() {
-                  _orderProvider.SelectedItemsQT = [
-                    false,
-                    false,
-                    false,
-                    false
-                  ];
-                });
-                showOrderPopup(context);
-              } else {
-                if ((_servingProvider.table1!=""||
-                    _servingProvider.table2!="") ||
-                    _servingProvider.table3!="") {
-                  showCountDownPopup(context);
-                } else {
-                  _servingProvider.trayCheckAll = true;
-                  showTableSelectPopup(context);
-                  _servingProvider.menuItem = "상품";
-                }
-              }
-            }
-                : widget.screens == 1
-                ? () {
-              setState(() {
-                _servingProvider.menuItem = menuItems[i];
-              });
-              showTableSelectPopup(context);
-            }
-                : widget.screens == 2
-                ? () {
-              setState(() {
-                if (_servingProvider.trayCheckAll == false) {
-                  if (_servingProvider.tray1Select == true) {
-                    _servingProvider.table1 = "${i + 1}";
-                  } else if (_servingProvider.tray2Select ==
-                      true) {
-                    _servingProvider.table2 = "${i + 1}";
-                  } else {
-                    _servingProvider.table3 = "${i + 1}";
+                    if (i == 0) {
+                      setState(() {
+                        _orderProvider.SelectedItemsQT = [
+                          false,
+                          false,
+                          false,
+                          false
+                        ];
+                      });
+                      showOrderPopup(context);
+                    } else {
+                      if ((_servingProvider.table1 != "" ||
+                              _servingProvider.table2 != "") ||
+                          _servingProvider.table3 != "") {
+                        showCountDownPopup(context);
+                      } else {
+                        _servingProvider.trayCheckAll = true;
+                        showTableSelectPopup(context);
+                        _servingProvider.menuItem = "상품";
+                      }
+                    }
                   }
-                  uploadTableNumberNItemImg();
-                  navPage(
-                      context: context,
-                      page: const TraySelectionFinal(),
-                      enablePop: false)
-                      .navPageToPage();
-                } else {
-                  _servingProvider.allTable = '${i+1}';
-                  showCountDownPopup(context);
-                }
-              });
-            }
-                : widget.screens == 3
-                ? () {
-              if(_servingProvider.targetTableNum != 'none'){
-                _servingProvider.trayChange = true;
-                _networkProvider.servTable = _servingProvider.targetTableNum;
-                PostApi(
-                    url: startUrl,
-                    endadr: navUrl,
-                    keyBody: _servingProvider.targetTableNum)
-                    .Posting(context);
-                navPage(
-                    context: context,
-                    page: const NavigatorProgressModuleFinal(
-                      // servGoalPose: _servingProvider.targetTableNum,
-                    ),
-                    enablePop: true)
-                    .navPageToPage();
-              }else{
-              _servingProvider.clearAllTray();
-              print('Serving Return to waiting point');
-              PostApi(
-                  url: startUrl,
-                  endadr: navUrl,
-                  keyBody: _servingProvider.waitingPoint)
-                  .Posting(context);
-              navPage(
-                  context: context,
-                  page: const TraySelectionFinal(),
-                  enablePop: false)
-                  .navPageToPage();
-              }
-            }
-                : null,
+                : widget.screens == 1
+                    ? () {
+                        setState(() {
+                          _servingProvider.menuItem = menuItems[i];
+                        });
+                        showTableSelectPopup(context);
+                      }
+                    : widget.screens == 2
+                        ? () {
+                            setState(() {
+                              if (_servingProvider.trayCheckAll == false) {
+                                if (_servingProvider.tray1Select == true) {
+                                  _servingProvider.table1 = "${i + 1}";
+                                } else if (_servingProvider.tray2Select ==
+                                    true) {
+                                  _servingProvider.table2 = "${i + 1}";
+                                } else {
+                                  _servingProvider.table3 = "${i + 1}";
+                                }
+                                uploadTableNumberNItemImg();
+                                navPage(
+                                        context: context,
+                                        page: const TraySelectionFinal(),
+                                        enablePop: false)
+                                    .navPageToPage();
+                              } else {
+                                _servingProvider.allTable = '${i + 1}';
+                                showCountDownPopup(context);
+                              }
+                            });
+                          }
+                        : widget.screens == 3
+                            ? () {
+                                if (_servingProvider.targetTableNum != 'none') {
+                                  _servingProvider.trayChange = true;
+                                  _networkProvider.servTable =
+                                      _servingProvider.targetTableNum;
+                                  PostApi(
+                                          url: startUrl,
+                                          endadr: navUrl,
+                                          keyBody:
+                                              _servingProvider.targetTableNum)
+                                      .Posting(context);
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    navPage(
+                                            context: context,
+                                            page: const NavigatorProgressModuleFinal(
+                                                // servGoalPose: _servingProvider.targetTableNum,
+                                                ),
+                                            enablePop: true)
+                                        .navPageToPage();
+                                  });
+                                } else {
+                                  _servingProvider.clearAllTray();
+                                  print('Serving Return to waiting point');
+                                  PostApi(
+                                          url: startUrl,
+                                          endadr: navUrl,
+                                          keyBody:
+                                              _servingProvider.waitingPoint)
+                                      .Posting(context);
+                                  navPage(
+                                          context: context,
+                                          page: const TraySelectionFinal(),
+                                          enablePop: false)
+                                      .navPageToPage();
+                                }
+                              }
+                            : null,
             child: null,
           ),
         ),

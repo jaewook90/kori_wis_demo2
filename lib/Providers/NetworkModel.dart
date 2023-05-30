@@ -17,8 +17,8 @@ class NetworkModel with ChangeNotifier {
 
   String? servTable;
 
-  dynamic? APIGetData;
-  dynamic? APIPostData;
+  dynamic APIGetData;
+  dynamic APIPostData;
 
   NetworkModel({
     this.serviceState,

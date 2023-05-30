@@ -8,7 +8,6 @@ import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -137,8 +136,13 @@ class _NavigatorProgressModuleFinalState
             targetTableNum = _servingProvider.table3!;
             _servingProvider.trayChange = false;
           } else {
-            targetTableNum = 'none';
-            _servingProvider.trayChange = false;
+            if(targetTableNum == 'wait'){
+              targetTableNum = 'none';
+              _servingProvider.trayChange = false;
+            }else{
+              targetTableNum = 'wait';
+              _servingProvider.trayChange = false;
+            }
           }
         }
       }
@@ -148,7 +152,7 @@ class _NavigatorProgressModuleFinalState
     print('48465435');
     print(targetTableNum);
 
-    WidgetsBinding.instance!.addPostFrameCallback((_){Getting();});
+    WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
 
     // if (navStatus == 0) {
     //   PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)

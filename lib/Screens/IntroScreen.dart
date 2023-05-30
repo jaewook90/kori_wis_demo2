@@ -23,10 +23,8 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
-
   late NetworkModel _networkProvider;
   late BLEModel _bleProvider;
-
 
   String positionURL = "";
   String hostAdr = "";
@@ -37,6 +35,7 @@ class _IntroScreenState extends State<IntroScreen>
   late Uuid huskyCharacteristicId;
   late Uuid huskyServiceId;
   late String huskyDeviceId;
+
   // 트레이
   late Uuid trayDetectorCharacteristicId;
   late Uuid trayDetectorServiceId;
@@ -86,7 +85,8 @@ class _IntroScreenState extends State<IntroScreen>
     huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     huskyDeviceId = 'F0:52:FD:5C:8D:73';
 
-    trayDetectorCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    trayDetectorCharacteristicId =
+        Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     trayDetectorDeviceId = 'F0:28:31:D5:10:D0';
   }
@@ -132,12 +132,14 @@ class _IntroScreenState extends State<IntroScreen>
 
     dynamic getApiData = await network.getAPI();
 
+    Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
+
     navPage(
-        context: context,
-        page: MainScreenFinal(
-          parsePoseData: getApiData,
-        ),
-        enablePop: true)
+            context: context,
+            page: MainScreenFinal(
+              parsePoseData: getApiData,
+            ),
+            enablePop: true)
         .navPageToPage();
   }
 
@@ -153,6 +155,9 @@ class _IntroScreenState extends State<IntroScreen>
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
+
+    print(
+        "getData = ${Provider.of<NetworkModel>((context), listen: false).APIGetData}");
 
     // 허스키 BLE 정보
     _bleProvider.huskyDeviceId = huskyDeviceId;
@@ -200,10 +205,7 @@ class _IntroScreenState extends State<IntroScreen>
                           ),
                           Text(
                             _text,
-                            style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 35
-                            ),
+                            style: TextStyle(fontFamily: 'kor', fontSize: 35),
                           )
                         ],
                       ),
@@ -228,7 +230,19 @@ class _IntroScreenState extends State<IntroScreen>
         body: GestureDetector(
           // 스크린 터치시 화면 이동을 위한 위젯
           onTap: () {
-            updateComplete == true ? getting(hostAdr, positionURL) : null;
+            updateComplete == true
+                ? Provider.of<NetworkModel>((context), listen: false)
+                            .APIGetData ==
+                        null
+                    ? navPage(
+                            context: context,
+                            page: MainScreenFinal(
+                                // parsePoseData: getApiData,
+                                ),
+                            enablePop: true)
+                        .navPageToPage()
+                    : getting(hostAdr, positionURL)
+                : null;
           },
           child: Center(
             child: Scaffold(
@@ -249,11 +263,12 @@ class _IntroScreenState extends State<IntroScreen>
                               height: videoHeight,
                               child: _controller.value.isInitialized
                                   ? AspectRatio(
-                                aspectRatio: _controller.value.aspectRatio,
-                                child: VideoPlayer(
-                                  _controller,
-                                ),
-                              )
+                                      aspectRatio:
+                                          _controller.value.aspectRatio,
+                                      child: VideoPlayer(
+                                        _controller,
+                                      ),
+                                    )
                                   : Container(),
                             ),
                           ),

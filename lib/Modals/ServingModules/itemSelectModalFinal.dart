@@ -66,6 +66,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                       child: null,
                     ),
                   )),
+              // 상품 버튼
               const ServingModuleButtonsFinal(
                 screens: 1,
               ),

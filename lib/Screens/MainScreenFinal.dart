@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_detail/device_interaction_tab.dart';
@@ -58,7 +57,11 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     // discoveredServices = [];
     fToast = FToast();
     fToast?.init(context);
-    poseDataUpdate(widget.parsePoseData);
+    if(Provider.of<NetworkModel>((context), listen: false).APIGetData == null){
+      PositionList = ['1', '2','3', '4', '5', '6', '7', '8', '999', 'charging_pile'];
+    }else{
+      poseDataUpdate(widget.parsePoseData);
+    }
   }
 
   void poseDataUpdate(dynamic parsePoseData) {

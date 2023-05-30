@@ -57,7 +57,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
 
   @override
   Widget build(BuildContext context) {
-    final CountdownController controller = CountdownController(autoStart: true);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
@@ -121,49 +120,49 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
-                    if (countDownNav == true) {
-                      if (_statusProvider.serviceState == 0) {
-                        if (currentGoal != 'chargint_pile') {
-                          PostApi(
+                    if (_statusProvider.serviceState == 0) {
+                      if (currentGoal != 'chargint_pile') {
+                        PostApi(
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: currentGoal)
+                            .Posting(context);
+                        navPage(
+                                context: context,
+                                page: NavigatorProgressModuleFinal(),
+                                enablePop: true)
+                            .navPageToPage();
+                      } else {
+                        PostApi(
+                                url: startUrl,
+                                endadr: chgUrl,
+                                keyBody: 'charging_pile')
+                            .Posting(context);
+                        navPage(
+                                context: context,
+                                page: NavigatorProgressModuleFinal(),
+                                enablePop: true)
+                            .navPageToPage();
+                      }
+                    } else if (_statusProvider.serviceState == 1) {
+                      _servingProvider.trayChange = true;
+                      _networkProvider.servTable =
+                          targetTableNum;
+                      // _networkProvider.servTable =
+                      //     _servingProvider.targetTableNum;
+                      PostApi(
                               url: startUrl,
                               endadr: navUrl,
-                              keyBody: currentGoal)
-                              .Posting(context);
-                          navPage(
-                              context: context,
-                              page: NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                              .navPageToPage();
-                        } else {
-                          PostApi(
-                              url: startUrl,
-                              endadr: chgUrl,
-                              keyBody: 'charging_pile')
-                              .Posting(context);
-                          navPage(
-                              context: context,
-                              page: NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                              .navPageToPage();
-                        }
-                      } else if (_statusProvider.serviceState == 1) {
-                        _servingProvider.trayChange = true;
-                        _networkProvider.servTable =
-                            _servingProvider.targetTableNum;
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                          navPage(
+                          keyBody: targetTableNum)
+                              // keyBody: _servingProvider.targetTableNum)
+                          .Posting(context);
+                      navPage(
                               context: context,
                               page: const NavigatorProgressModuleFinal(
-                                // servGoalPose: _servingProvider.targetTableNum,
-                              ),
+                                  // servGoalPose: _servingProvider.targetTableNum,
+                                  ),
                               enablePop: true)
-                              .navPageToPage();
-                      }
-                      countDownNav = false;
+                          .navPageToPage();
                     }
                   },
                 ),
@@ -179,7 +178,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  _controller.resume();
+                  _controller.pause();
                   _networkProvider.servingPosition = [];
                   Navigator.pop(context);
                 },
@@ -196,7 +195,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  _controller.resume();
+                  _controller.pause();
                   if (_statusProvider.serviceState == 0) {
                     if (currentGoal != 'chargint_pile') {
                       PostApi(
@@ -228,15 +227,15 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     PostApi(
                             url: startUrl,
                             endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
+                            // keyBody: _servingProvider.targetTableNum)
+                            keyBody: targetTableNum)
                         .Posting(context);
-                    WidgetsBinding.instance!.addPostFrameCallback((_){
+                    print('타겟 : $targetTableNum');
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       navPage(
-                          context: context,
-                          page: const NavigatorProgressModuleFinal(
-                            // servGoalPose: _servingProvider.targetTableNum,
-                          ),
-                          enablePop: true)
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(),
+                              enablePop: true)
                           .navPageToPage();
                     });
 

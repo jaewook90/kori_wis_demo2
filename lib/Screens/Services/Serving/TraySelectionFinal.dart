@@ -108,6 +108,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     textEditingController = TextEditingController();
   }
 
+  // 트레이 디텍팅
   Future<void> subscribeCharacteristic() async {
     subscribeStream =
         widget.subscribeToCharacteristic!(widget.characteristic!).listen((event) {
@@ -174,6 +175,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     _debugTray = _servingProvider.trayDebug!;
 
+    // 트레이 디텍터에 따른 트레이 표시
     if(tray1BLE == "1"){
       _servingProvider.attachedTray1 = false;
     }else if(tray1BLE == "0"){
