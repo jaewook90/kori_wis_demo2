@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Debug/test_api_feedback/ble_auto_test.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/feedbackAPI.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_scanner.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -16,22 +18,27 @@ class BLEdeviceList extends StatelessWidget {
   final QualifiedCharacteristic characteristic;
 
   @override
-  Widget build(BuildContext context) => Consumer<BleDeviceInteractor>(
-      builder: (context, interactor, _) => ConfigScreen(
-            characteristic: characteristic,
-            subscribeToCharacteristic: interactor.subScribeToCharacteristic,
-          ));
+  Widget build(BuildContext context) =>
+      Consumer<BleDeviceInteractor>(
+          builder: (_, interactor, __) =>
+              ConfigScreen(
+                characteristic: characteristic,
+                subscribeToCharacteristic: interactor.subScribeToCharacteristic,
+              ));
 }
 
 class ConfigScreen extends StatefulWidget {
-  const ConfigScreen(
-      {this.characteristic, this.subscribeToCharacteristic, Key? key})
+  const ConfigScreen({this.characteristic,
+    this.subscribeToCharacteristic,
+    this.scannerState,
+    Key? key})
       : super(key: key);
 
+  final BleScannerState? scannerState;
   final QualifiedCharacteristic? characteristic;
 
   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
-      subscribeToCharacteristic;
+  subscribeToCharacteristic;
 
   @override
   State<ConfigScreen> createState() => _ConfigScreenState();
@@ -40,8 +47,14 @@ class ConfigScreen extends StatefulWidget {
 class _ConfigScreenState extends State<ConfigScreen> {
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,9 +68,9 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 0, screenHeight * 0.0015, screenWidth * 0.05, 0),
             onPressed: () {
               navPage(
-                      context: context,
-                      page: const MainScreenFinal(),
-                      enablePop: false)
+                  context: context,
+                  page: const MainScreenFinal(),
+                  enablePop: false)
                   .navPageToPage();
             },
             icon: const Icon(
@@ -79,18 +92,14 @@ class _ConfigScreenState extends State<ConfigScreen> {
             TextButton(
                 onPressed: () {
                   navPage(
-                          context: context,
-                          page: testAPIFeedback(),
-                          enablePop: true)
+                      context: context,
+                      page: testAPIFeedback(),
+                      enablePop: true)
                       .navPageToPage();
                 },
                 style: TextButton.styleFrom(
-                  fixedSize: Size(150, 150),
-                  side: BorderSide(
-                    width: 1,
-                    color: Colors.white
-                  )
-                ),
+                    fixedSize: Size(150, 150),
+                    side: BorderSide(width: 1, color: Colors.white)),
                 child: Text('api디버그')),
             SizedBox(
               height: 200,
@@ -100,30 +109,57 @@ class _ConfigScreenState extends State<ConfigScreen> {
               children: [
                 Container(
                     child: TextButton(
-                  onPressed: () {
-                    navPage(
+                      onPressed: () {
+                        navPage(
                             context: context,
                             page: const DeviceListScreen(),
                             enablePop: true)
-                        .navPageToPage();
-                  },
-                  child: Text(
-                    '블루투스 연결',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 40,
-                        color: Color(0xffdddddd)),
-                  ),
-                  style: TextButton.styleFrom(
-                      backgroundColor: Color(0xff2d2d2d),
-                      side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
-                ))
+                            .navPageToPage();
+                      },
+                      child: Text(
+                        '블루투스 연결',
+                        style: TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 40,
+                            color: Color(0xffdddddd)),
+                      ),
+                      style: TextButton.styleFrom(
+                          backgroundColor: Color(0xff2d2d2d),
+                          side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
+                    ))
               ],
             ),
             SizedBox(
               height: 200,
             ),
-
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    child: TextButton(
+                      onPressed: () {
+                        navPage(
+                            context: context,
+                            page: BLEAutoConnect(),
+                            enablePop: true)
+                            .navPageToPage();
+                      },
+                      child: Text(
+                        '블루투스 자동 연결',
+                        style: TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 40,
+                            color: Color(0xffdddddd)),
+                      ),
+                      style: TextButton.styleFrom(
+                          backgroundColor: Color(0xff2d2d2d),
+                          side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
+                    ))
+              ],
+            ),
+            SizedBox(
+              height: 200,
+            ),
           ],
         ),
       ),

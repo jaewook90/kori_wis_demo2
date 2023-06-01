@@ -1,15 +1,86 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:functional_data/functional_data.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_detail/device_interaction_tab.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
 import 'package:provider/provider.dart';
+
+part 'MainScreenFinal.g.dart';
+//ignore_for_file: annotate_overrides
+
+class MainScreenBLEAutoConnect extends StatelessWidget {
+  final dynamic parsePoseData;
+  const MainScreenBLEAutoConnect({
+    this.parsePoseData,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    DiscoveredDevice device = DiscoveredDevice(
+        id: 'F0:28:31:D5:10:D0',
+        name: 'BBC micro:bit',
+        serviceData: {},
+        rssi: 0,
+        serviceUuids: [],
+        manufacturerData: Uint8List(0));
+    return Consumer3<BleDeviceConnector,
+        ConnectionStateUpdate,
+        BleDeviceInteractor>(
+      builder:
+          (_, deviceConnector, connectionStateUpdate, serviceDiscoverer, __) =>
+          MainScreenFinal(
+            viewModel: MainScreenBLEAutoViewModel(
+                deviceId: device.id,
+                connectionStatus: connectionStateUpdate.connectionState,
+                deviceConnector: deviceConnector,
+                discoverServices: () =>
+                    serviceDiscoverer.discoverServices(device.id)),
+            parsePoseData: parsePoseData,
+          ),
+    );
+  }
+}
+
+@immutable
+@FunctionalData()
+class MainScreenBLEAutoViewModel extends $MainScreenBLEAutoViewModel {
+  const MainScreenBLEAutoViewModel({
+    required this.deviceId,
+    required this.connectionStatus,
+    required this.deviceConnector,
+    required this.discoverServices,
+  });
+
+  final String deviceId;
+  final DeviceConnectionState connectionStatus;
+  final BleDeviceConnector deviceConnector;
+  @CustomEquality(Ignore())
+  final Future<List<DiscoveredService>> Function() discoverServices;
+
+  bool get deviceConnected =>
+      connectionStatus == DeviceConnectionState.connected;
+
+  void connect() {
+    deviceConnector.connect(deviceId);
+  }
+
+  void disconnect() {
+    deviceConnector.disconnect(deviceId);
+  }
+}
 
 class MainScreenFinal extends StatefulWidget {
   const MainScreenFinal({Key? key, this.parsePoseData, this.viewModel,
   }) : super(key: key);
   final dynamic parsePoseData;
-  final DeviceInteractionViewModel? viewModel;
+  final MainScreenBLEAutoViewModel? viewModel;
 
   @override
   State<MainScreenFinal> createState() => _MainScreenFinalState();
@@ -21,6 +92,8 @@ class _MainScreenFinalState extends State<MainScreenFinal>
   // late List<DiscoveredService> discoveredServices;
 
   late NetworkModel _networkProvider;
+
+  late List<DiscoveredService> discoveredServices;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -54,12 +127,15 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     PositioningList = [];
     PositionList = [];
 
-    // discoveredServices = [];
+    discoveredServices = [];
+
     fToast = FToast();
     fToast?.init(context);
-    if(Provider.of<NetworkModel>((context), listen: false).APIGetData == null){
-      PositionList = ['1', '2','3', '4', '5', '6', '7', '8', '999', 'charging_pile'];
+    if(widget.parsePoseData == null){
+      Provider.of<NetworkModel>((context), listen: false).APIGetFlag = false;
+      PositionList = ['1', '2','3', '4', '5', '6', '7', '8', '999', 'charging_pile', 'asdf'];
     }else{
+      Provider.of<NetworkModel>((context), listen: false).APIGetFlag = true;
       poseDataUpdate(widget.parsePoseData);
     }
   }
@@ -124,6 +200,12 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     }
     _networkProvider.getPoseData = PositionList;
     print(PositionList);
+
+    print(widget.viewModel!.deviceConnected);
+
+    if(!widget.viewModel!.deviceConnected){
+      widget.viewModel!.connect();
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -197,6 +279,24 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  Positioned(
+                    left: 50,
+                    top: 25,
+                    child: Container(
+                      height: 60,
+                      width: 60,
+                      child: Icon(
+                        _networkProvider.APIGetFlag==true
+                          ? Icons.check_circle_outline
+                            : Icons.cancel_outlined
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 100,
+                      top: 25,
+                    child: Text("Status: ${widget.viewModel!.connectionStatus}"),
+                  )
                 ],
               ),
             )

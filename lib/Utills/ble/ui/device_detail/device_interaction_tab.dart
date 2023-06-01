@@ -112,6 +112,14 @@ class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
+                // Padding(
+                //   padding: const EdgeInsetsDirectional.only(
+                //       top: 8.0, bottom: 16.0, start: 16.0),
+                //   child: Text(
+                //     "ID: ${widget.viewModel}",
+                //     style: const TextStyle(fontWeight: FontWeight.bold),
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: Row(
@@ -198,6 +206,11 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
       String deviceId) =>
       ListTile(
         onTap:
+        // (){print(QualifiedCharacteristic(
+        //     characteristicId: characteristic.characteristicId,
+        //     serviceId: characteristic.serviceId,
+        //     deviceId: deviceId));},
+
             // () {
           // print(characteristic.characteristicId.runtimeType);
           // print(characteristic.serviceId.runtimeType);
@@ -217,7 +230,7 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
               characteristic: QualifiedCharacteristic(
                   characteristicId: characteristic.characteristicId,
                   serviceId: characteristic.serviceId,
-                  deviceId: deviceId),
+                  deviceId: deviceId)
             ),
             enablePop: false)
         .navPageToPage(),

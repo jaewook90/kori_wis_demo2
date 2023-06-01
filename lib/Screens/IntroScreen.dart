@@ -132,8 +132,6 @@ class _IntroScreenState extends State<IntroScreen>
 
     dynamic getApiData = await network.getAPI();
 
-    Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
-
     navPage(
             context: context,
             page: MainScreenFinal(
@@ -156,13 +154,10 @@ class _IntroScreenState extends State<IntroScreen>
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    print(
-        "getData = ${Provider.of<NetworkModel>((context), listen: false).APIGetData}");
-
-    // 허스키 BLE 정보
-    _bleProvider.huskyDeviceId = huskyDeviceId;
-    _bleProvider.huskyCharacteristicId = huskyCharacteristicId;
-    _bleProvider.huskyServiceId = huskyServiceId;
+    // 허스키 BLE 정보 멀티 ble 구현시 추가 수정
+    // _bleProvider.huskyDeviceId = huskyDeviceId;
+    // _bleProvider.huskyCharacteristicId = huskyCharacteristicId;
+    // _bleProvider.huskyServiceId = huskyServiceId;
 
     // 트레이디텍터 BLE 정보
     _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
@@ -231,17 +226,7 @@ class _IntroScreenState extends State<IntroScreen>
           // 스크린 터치시 화면 이동을 위한 위젯
           onTap: () {
             updateComplete == true
-                ? Provider.of<NetworkModel>((context), listen: false)
-                            .APIGetData ==
-                        null
-                    ? navPage(
-                            context: context,
-                            page: MainScreenFinal(
-                                // parsePoseData: getApiData,
-                                ),
-                            enablePop: true)
-                        .navPageToPage()
-                    : getting(hostAdr, positionURL)
+                ? getting(hostAdr, positionURL)
                 : null;
           },
           child: Center(

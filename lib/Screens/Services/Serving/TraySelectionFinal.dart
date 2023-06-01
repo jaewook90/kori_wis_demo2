@@ -40,8 +40,7 @@ class TraySelectionFinal extends StatefulWidget {
   final QualifiedCharacteristic? characteristic;
 
   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
-  subscribeToCharacteristic;
-
+      subscribeToCharacteristic;
 
   @override
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
@@ -49,7 +48,7 @@ class TraySelectionFinal extends StatefulWidget {
 
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
-  late QualifiedCharacteristic? characteristic;
+  // late QualifiedCharacteristic? characteristic;
 
   late String subscribeOutput;
   late TextEditingController textEditingController;
@@ -130,25 +129,25 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
       // subscribeCharacteristic();
     });
     // if(characteristic == null){
-    //   subscribeStream = null;
+    //   traySubscribeStream = null;
     // }else{
-    //   subscribeStream =
+    //   traySubscribeStream =
     //       widget.subscribeToCharacteristic!(characteristic).listen((event) {
     //         setState(() {
-    //           subscribeOutput = utf8.decode(event);
-    //           // tray1BLE = subscribeOutput.split('')[0];
-    //           // tray2BLE = subscribeOutput.split('')[1];
-    //           // tray3BLE = subscribeOutput.split('')[2];
-    //           print(subscribeOutput);
+    //           traySubscribeOutput = utf8.decode(event);
+    //           // tray1BLE = traySubscribeOutput.split('')[0];
+    //           // tray2BLE = traySubscribeOutput.split('')[1];
+    //           // tray3BLE = traySubscribeOutput.split('')[2];
+    //           print(traySubscribeOutput);
     //         });
     //       });
     //   setState(() {
-    //     subscribeOutput = 'Notification set';
+    //     traySubscribeOutput = 'Notification set';
     //     // subscribeCharacteristic();
     //   });
     // }
     // print('123123');
-    // print(subscribeOutput);
+    // print(traySubscribeOutput);
     // print(characteristic);
   }
 
@@ -166,7 +165,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     super.dispose();
     subscribeStream?.cancel();
   }
-  
+
 //QualifiedCharacteristic(characteristicId: 6e400002-b5a3-f393-e0a9-e50e24dcca9e, serviceId: 6e400001-b5a3-f393-e0a9-e50e24dcca9e, deviceId: DF:75:E4:D6:32:63)
 
   @override
@@ -176,19 +175,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     _debugTray = _servingProvider.trayDebug!;
 
     // 트레이 디텍터에 따른 트레이 표시
-    if(tray1BLE == "1"){
+    if (tray1BLE == "1") {
       _servingProvider.attachedTray1 = false;
-    }else if(tray1BLE == "0"){
+    } else if (tray1BLE == "0") {
       _servingProvider.attachedTray1 = true;
     }
-    if(tray2BLE == "1"){
+    if (tray2BLE == "1") {
       _servingProvider.attachedTray2 = false;
-    }else if(tray2BLE == "0"){
+    } else if (tray2BLE == "0") {
       _servingProvider.attachedTray2 = true;
     }
-    if(tray3BLE == "1"){
+    if (tray3BLE == "1") {
       _servingProvider.attachedTray3 = false;
-    }else if(tray3BLE == "0"){
+    } else if (tray3BLE == "0") {
       _servingProvider.attachedTray3 = true;
     }
 
@@ -218,9 +217,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     return WillPopScope(
       onWillPop: () {
         navPage(
-            context: context,
-            page: const ServiceScreenFinal(),
-            enablePop: false)
+                context: context,
+                page: const ServiceScreenFinal(),
+                enablePop: false)
             .navPageToPage();
         return Future.value(false);
       },
@@ -241,9 +240,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                            context: context,
-                            page: const ServiceScreenFinal(),
-                            enablePop: false)
+                                context: context,
+                                page: const ServiceScreenFinal(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
@@ -269,9 +268,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                            context: context,
-                            page: const MainScreenFinal(),
-                            enablePop: false)
+                                context: context,
+                                page: const MainScreenFinal(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
@@ -311,9 +310,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     child: IconButton(
                       onPressed: () {
                         navPage(
-                            context: context,
-                            page: const DeviceListScreen(),
-                            enablePop: true)
+                                context: context,
+                                page: const DeviceListScreen(),
+                                enablePop: true)
                             .navPageToPage();
                       },
                       icon: Icon(Icons.bluetooth),
@@ -328,15 +327,15 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         subscribeCharacteristic();
                       },
                       style: TextButton.styleFrom(
-                          fixedSize: const Size(150, 90),
+                          fixedSize: const Size(90, 90),
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.transparent, width: 1),
+                              side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
-                      child: Container(),
-                      // child: Text(subscribeOutput),
+                      child: Text('t'),
+                      // child: Text(traySubscribeOutput),
                     ),
-                  )
+                  ),
                 ],
               ),
             )
@@ -347,9 +346,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         body: WillPopScope(
           onWillPop: () {
             navPage(
-                context: context,
-                page: const ServiceScreenFinal(),
-                enablePop: false)
+                    context: context,
+                    page: const ServiceScreenFinal(),
+                    enablePop: false)
                 .navPageToPage();
             return Future.value(false);
           },
@@ -540,12 +539,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
-                                    Size(textButtonWidth, textButtonHeight),
+                                        Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
                                             color: Colors.green, width: 10),
                                         borderRadius:
-                                        BorderRadius.circular(20))),
+                                            BorderRadius.circular(20))),
                                 child: Container()),
                           ),
                         ],
@@ -610,12 +609,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
-                                    Size(textButtonWidth, textButtonHeight),
+                                        Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
                                             color: Colors.green, width: 10),
                                         borderRadius:
-                                        BorderRadius.circular(20))),
+                                            BorderRadius.circular(20))),
                                 child: Container()),
                           ),
                         ],
@@ -680,12 +679,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                     foregroundColor: Colors.tealAccent,
                                     backgroundColor: Colors.transparent,
                                     fixedSize:
-                                    Size(textButtonWidth, textButtonHeight),
+                                        Size(textButtonWidth, textButtonHeight),
                                     shape: RoundedRectangleBorder(
                                         side: const BorderSide(
                                             color: Colors.green, width: 10),
                                         borderRadius:
-                                        BorderRadius.circular(20))),
+                                            BorderRadius.circular(20))),
                                 child: Container()),
                           ),
                         ],

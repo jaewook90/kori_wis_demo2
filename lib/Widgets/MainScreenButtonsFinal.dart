@@ -51,16 +51,24 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     // TODO: implement initState
     super.initState();
 
-    // huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    // huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    // huskyDeviceId = 'F0:52:FD:5C:8D:73';
-
     screenList = [
       const ServiceScreenFinal(),
       const LinkConnectorScreen(),
       const AdminScreen(),
       const ConfigScreen(characteristic: null, subscribeToCharacteristic: null)
     ];
+
+    serviceList = [
+      const ShippingMenuFinal(),
+      TrayEquipped(
+        characteristic: QualifiedCharacteristic(
+            characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+            serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+            deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+      ),
+      const HotelServiceMenu()
+    ];
+    //
     // serviceList = [
     //   const ShippingMenuFinal(),
     //   // const TraySelectionFinal(
@@ -80,37 +88,20 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    // ble 모듈 예상 변수
-    // QualifiedCharacteristic trayDetectorInform = QualifiedCharacteristic(
-    //   characteristicId: _bleProvider.trayDetectorCharacteristicId!,
-    //   serviceId: _bleProvider.trayDetectorServiceId!,
-    //   deviceId: _bleProvider.trayDetectorDeviceId!
-    // );
-    //
-    // QualifiedCharacteristic huskyInform = QualifiedCharacteristic(
-    //     characteristicId: _bleProvider.trayDetectorCharacteristicId!,
-    //     serviceId: _bleProvider.trayDetectorServiceId!,
-    //     deviceId: _bleProvider.trayDetectorDeviceId!
-    // );
-
-    serviceList = [
-      const ShippingMenuFinal(),
-      // const TraySelectionFinal(
-      //     characteristic: null, subscribeToCharacteristic: null),
-      // TrayEquipped(
-      //   characteristic: QualifiedCharacteristic(
-      //       characteristicId: _bleProvider.huskyCharacteristicId!,
-      //       serviceId: _bleProvider.huskyServiceId!,
-      //       deviceId: _bleProvider.huskyDeviceId!),
-      // ),
-      TrayEquipped(
-              characteristic: QualifiedCharacteristic(
-                  characteristicId: _bleProvider.trayDetectorCharacteristicId!,
-                  serviceId: _bleProvider.trayDetectorServiceId!,
-                  deviceId: _bleProvider.trayDetectorDeviceId!),
-            ),
-      const HotelServiceMenu()
-    ];
+    // serviceList = [
+    //   const ShippingMenuFinal(),
+    //   TrayEquipped(
+    //     characteristic1: QualifiedCharacteristic(
+    //         characteristicId: _bleProvider.trayDetectorCharacteristicId!,
+    //         serviceId: _bleProvider.trayDetectorServiceId!,
+    //         deviceId: _bleProvider.trayDetectorDeviceId!),
+    //     characteristic2: QualifiedCharacteristic(
+    //         characteristicId: _bleProvider.huskyCharacteristicId!,
+    //         serviceId: _bleProvider.huskyServiceId!,
+    //         deviceId: _bleProvider.huskyDeviceId!),
+    //   ),
+    //   const HotelServiceMenu()
+    // ];
 
     if (widget.screens == 0) {
       // 메인 화면 ( 서비스, 커넥터, 관리자 설정 버튼 )

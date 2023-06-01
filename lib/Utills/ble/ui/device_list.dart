@@ -83,97 +83,195 @@ class _DeviceListState extends State<_DeviceList> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(
-        appBar: AppBar(
-          title: const Text('Scan for devices'),
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  const Text('Service UUID (2, 4, 16 bytes):'),
-                  TextField(
-                    controller: _uuidController,
-                    enabled: !widget.scannerState.scanIsInProgress,
-                    decoration: InputDecoration(
-                        errorText:
-                        _uuidController.text.isEmpty || _isValidUuidInput()
-                            ? null
-                            : 'Invalid UUID format'),
-                    autocorrect: false,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        child: const Text('Scan'),
-                        onPressed: !widget.scannerState.scanIsInProgress &&
-                            _isValidUuidInput()
-                            ? _startScanning
-                            : null,
-                      ),
-                      ElevatedButton(
-                        child: const Text('Stop'),
-                        onPressed: widget.scannerState.scanIsInProgress
-                            ? widget.stopScan
-                            : null,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Flexible(
-              child: ListView(
-                children: [
-                  SwitchListTile(
-                    title: const Text("Verbose logging"),
-                    value: widget.verboseLogging,
-                    onChanged: (_) => setState(widget.toggleVerboseLogging),
-                  ),
-                  ListTile(
-                    title: Text(
-                      !widget.scannerState.scanIsInProgress
-                          ? 'Enter a UUID above and tap start to begin scanning'
-                          : 'Tap a device to connect to it',
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Scan for devices'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                const Text('Service UUID (2, 4, 16 bytes):'),
+                TextField(
+                  controller: _uuidController,
+                  enabled: !widget.scannerState.scanIsInProgress,
+                  decoration: InputDecoration(
+                      errorText:
+                      _uuidController.text.isEmpty || _isValidUuidInput()
+                          ? null
+                          : 'Invalid UUID format'),
+                  autocorrect: false,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      child: const Text('Scan'),
+                      onPressed: !widget.scannerState.scanIsInProgress &&
+                          _isValidUuidInput()
+                          ? _startScanning
+                          : null,
                     ),
-                    trailing: (widget.scannerState.scanIsInProgress ||
-                        widget.scannerState.discoveredDevices.isNotEmpty)
-                        ? Text(
-                      'count: ${widget.scannerState.discoveredDevices.length}',
-                    )
-                        : null,
-                  ),
-                  ...widget.scannerState.discoveredDevices
-                      .map(
-                        (device) =>
-                        device.name.compareTo('BBC') == 1 ?
-                        ListTile(
-                          title : Text(device.name),
-                          subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
-                          leading: const BluetoothIcon(),
-                          onTap: () async {
-                            widget.stopScan();
-                            await Navigator.push<void>(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        DeviceDetailScreen(device: device)));
-                          },
-                        ):Container(),
-                  )
-                      .toList(),
-                ],
-              ),
+                    ElevatedButton(
+                      child: const Text('Stop'),
+                      onPressed: widget.scannerState.scanIsInProgress
+                          ? widget.stopScan
+                          : null,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
-      );
+          ),
+          const SizedBox(height: 8),
+          Flexible(
+            child: ListView(
+              children: [
+                SwitchListTile(
+                  title: const Text("Verbose logging"),
+                  value: widget.verboseLogging,
+                  onChanged: (_) => setState(widget.toggleVerboseLogging),
+                ),
+                ListTile(
+                  title: Text(
+                    !widget.scannerState.scanIsInProgress
+                        ? 'Enter a UUID above and tap start to begin scanning'
+                        : 'Tap a device to connect to it',
+                  ),
+                  trailing: (widget.scannerState.scanIsInProgress ||
+                      widget.scannerState.discoveredDevices.isNotEmpty)
+                      ? Text(
+                    'count: ${widget.scannerState.discoveredDevices.length}',
+                  )
+                      : null,
+                ),
+                ...widget.scannerState.discoveredDevices
+                    .map(
+                      (device) =>
+                  device.name.compareTo('BBC') == 1 ?
+                  ListTile(
+                    title : Text(device.name),
+                    subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
+                    leading: const BluetoothIcon(),
+                    onTap: () async {
+                      // print(device.runtimeType);
+                      widget.stopScan();
+                      await Navigator.push<void>(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  DeviceDetailScreen(device: device)));
+                    },
+                  ):Container(),
+                )
+                    .toList(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // @override
+  // Widget build(BuildContext context) =>
+  //     Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text('Scan for devices'),
+  //       ),
+  //       body: Column(
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 const SizedBox(height: 16),
+  //                 const Text('Service UUID (2, 4, 16 bytes):'),
+  //                 TextField(
+  //                   controller: _uuidController,
+  //                   enabled: !widget.scannerState.scanIsInProgress,
+  //                   decoration: InputDecoration(
+  //                       errorText:
+  //                       _uuidController.text.isEmpty || _isValidUuidInput()
+  //                           ? null
+  //                           : 'Invalid UUID format'),
+  //                   autocorrect: false,
+  //                 ),
+  //                 const SizedBox(height: 16),
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     ElevatedButton(
+  //                       child: const Text('Scan'),
+  //                       onPressed: !widget.scannerState.scanIsInProgress &&
+  //                           _isValidUuidInput()
+  //                           ? _startScanning
+  //                           : null,
+  //                     ),
+  //                     ElevatedButton(
+  //                       child: const Text('Stop'),
+  //                       onPressed: widget.scannerState.scanIsInProgress
+  //                           ? widget.stopScan
+  //                           : null,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Flexible(
+  //             child: ListView(
+  //               children: [
+  //                 SwitchListTile(
+  //                   title: const Text("Verbose logging"),
+  //                   value: widget.verboseLogging,
+  //                   onChanged: (_) => setState(widget.toggleVerboseLogging),
+  //                 ),
+  //                 ListTile(
+  //                   title: Text(
+  //                     !widget.scannerState.scanIsInProgress
+  //                         ? 'Enter a UUID above and tap start to begin scanning'
+  //                         : 'Tap a device to connect to it',
+  //                   ),
+  //                   trailing: (widget.scannerState.scanIsInProgress ||
+  //                       widget.scannerState.discoveredDevices.isNotEmpty)
+  //                       ? Text(
+  //                     'count: ${widget.scannerState.discoveredDevices.length}',
+  //                   )
+  //                       : null,
+  //                 ),
+  //                 ...widget.scannerState.discoveredDevices
+  //                     .map(
+  //                       (device) =>
+  //                       device.name.compareTo('BBC') == 1 ?
+  //                       ListTile(
+  //                         title : Text(device.name),
+  //                         subtitle: Text("${device.id}\nRSSI: ${device.rssi}"),
+  //                         leading: const BluetoothIcon(),
+  //                         onTap: () async {
+  //                           widget.stopScan();
+  //                           await Navigator.push<void>(
+  //                               context,
+  //                               MaterialPageRoute(
+  //                                   builder: (_) =>
+  //                                       DeviceDetailScreen(device: device)));
+  //                         },
+  //                       ):Container(),
+  //                 )
+  //                     .toList(),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     );
 }
