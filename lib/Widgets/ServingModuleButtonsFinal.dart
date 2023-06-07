@@ -30,6 +30,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late ServingModel _servingProvider;
   late OrderModel _orderProvider;
   late NetworkModel _networkProvider;
+  late BLEModel _bleProvider;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -130,6 +131,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -238,6 +240,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                     Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
+                    _bleProvider.onTraySelectionScreen = false;
                     if (i == 0) {
                       setState(() {
                         _orderProvider.SelectedItemsQT = [
@@ -284,9 +287,18 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                         context: context,
                                         page: TrayEquipped(
                                           characteristic: QualifiedCharacteristic(
-                                              characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                                              serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                                              deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                                              characteristicId: Provider.of<
+                                                          BLEModel>(context,
+                                                      listen: false)
+                                                  .trayDetectorCharacteristicId!,
+                                              serviceId: Provider.of<BLEModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .trayDetectorServiceId!,
+                                              deviceId: Provider.of<BLEModel>(
+                                                      context,
+                                                      listen: false)
+                                                  .trayDetectorDeviceId!),
                                         ),
                                         enablePop: false)
                                     .navPageToPage();
@@ -331,9 +343,19 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                           context: context,
                                           page: TrayEquipped(
                                             characteristic: QualifiedCharacteristic(
-                                                characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                                                serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                                                deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                                                characteristicId: Provider.of<
+                                                            BLEModel>(context,
+                                                        listen: false)
+                                                    .trayDetectorCharacteristicId!,
+                                                serviceId:
+                                                    Provider.of<BLEModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .trayDetectorServiceId!,
+                                                deviceId: Provider.of<BLEModel>(
+                                                        context,
+                                                        listen: false)
+                                                    .trayDetectorDeviceId!),
                                           ),
                                           enablePop: false)
                                       .navPageToPage();

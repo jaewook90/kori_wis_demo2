@@ -10,9 +10,7 @@ class BLEModel with ChangeNotifier {
   Uuid? trayDetectorCharacteristicId;
   Uuid? trayDetectorServiceId;
 
-  String? trayDetectorTray1;
-  String? trayDetectorTray2;
-  String? trayDetectorTray3;
+  bool? onTraySelectionScreen;
 
   // BLEModel(
   //     {required this.huskyCharacteristicId,

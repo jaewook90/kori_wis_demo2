@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/OrderModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +17,7 @@ class CheckOutScreenFinal extends StatefulWidget {
 
 class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   late OrderModel _orderProvider;
+  late BLEModel _bleProvider;
   String shoppingCartImg = 'assets/screens/Serving/koriZFinalShoppingCart.png';
 
   late String hamburger;
@@ -92,6 +97,7 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   @override
   Widget build(BuildContext context) {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     selectedItemList = _orderProvider.selectedItemsList!;
 
@@ -181,8 +187,12 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                       backgroundColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                      navPage(context: context, page: TrayEquipped(
+                        characteristic: QualifiedCharacteristic(
+                            characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                            serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                            deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                      ), enablePop: false).navPageToPage();
                     },
                     child: null,
                   ),

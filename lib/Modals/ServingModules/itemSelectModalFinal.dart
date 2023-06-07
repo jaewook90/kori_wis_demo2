@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +62,12 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
-                        Navigator.pop(context);
+                        navPage(context: context, page: TrayEquipped(
+                          characteristic: QualifiedCharacteristic(
+                              characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                              serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                              deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                        ), enablePop: false).navPageToPage();
                         _servingProvider.item1 = "";
                         _servingProvider.item2 = "";
                         _servingProvider.item3 = "";

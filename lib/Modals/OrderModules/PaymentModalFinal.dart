@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/OrderModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +18,7 @@ class PaymentScreenFinal extends StatefulWidget {
 class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
   late MainStatusModel _statusProvider;
   late OrderModel _orderProvider;
+  late BLEModel _bleProvider;
 
   String paymentBackground =
       'assets/screens/Serving/koriZFinalSelectPayment.png';
@@ -22,6 +27,8 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
   Widget build(BuildContext context) {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
+
 
     return Container(
         padding: const EdgeInsets.only(top: 100),
@@ -70,9 +77,12 @@ class _PaymentScreenFinalState extends State<PaymentScreenFinal> {
                         if (_statusProvider.serviceState == 2) {
                           Navigator.pop(context);
                         } else {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                          navPage(context: context, page: TrayEquipped(
+                            characteristic: QualifiedCharacteristic(
+                                characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                                serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                                deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                          ), enablePop: false).navPageToPage();
                         }
                       },
                       child: null,

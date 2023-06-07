@@ -4,6 +4,7 @@ import 'dart:convert' show utf8;
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
@@ -48,6 +49,7 @@ class TraySelectionFinal extends StatefulWidget {
 
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
+  late BLEModel _bleProvider;
   // late QualifiedCharacteristic? characteristic;
 
   late String subscribeOutput;
@@ -104,6 +106,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     // trayDetecting = true;
 
     subscribeOutput = '';
+
+    Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
+
     if(widget.characteristic == null){
       subscribeStream = null;
     }
@@ -131,27 +136,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
       subscribeOutput = 'Notification set';
       // subscribeCharacteristic();
     });
-    // if(characteristic == null){
-    //   traySubscribeStream = null;
-    // }else{
-    //   traySubscribeStream =
-    //       widget.subscribeToCharacteristic!(characteristic).listen((event) {
-    //         setState(() {
-    //           traySubscribeOutput = utf8.decode(event);
-    //           // tray1BLE = traySubscribeOutput.split('')[0];
-    //           // tray2BLE = traySubscribeOutput.split('')[1];
-    //           // tray3BLE = traySubscribeOutput.split('')[2];
-    //           print(traySubscribeOutput);
-    //         });
-    //       });
-    //   setState(() {
-    //     traySubscribeOutput = 'Notification set';
-    //     // subscribeCharacteristic();
-    //   });
-    // }
-    // print('123123');
-    // print(traySubscribeOutput);
-    // print(characteristic);
   }
 
   void showTraySetPopup(context) {
@@ -169,11 +153,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     subscribeStream?.cancel();
   }
 
-//QualifiedCharacteristic(characteristicId: 6e400002-b5a3-f393-e0a9-e50e24dcca9e, serviceId: 6e400001-b5a3-f393-e0a9-e50e24dcca9e, deviceId: DF:75:E4:D6:32:63)
-
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     _debugTray = _servingProvider.trayDebug!;
 
@@ -215,7 +198,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    subscribeCharacteristic();
+    if(_bleProvider.onTraySelectionScreen == true){
+      subscribeCharacteristic();
+    }
 
     return WillPopScope(
       onWillPop: () {
@@ -532,6 +517,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                             height: 171.8,
                             child: TextButton(
                                 onPressed: () {
+                                  _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = true;
                                   _servingProvider.tray2Select = false;
                                   _servingProvider.tray3Select = false;
@@ -602,6 +588,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                             height: 171.8,
                             child: TextButton(
                                 onPressed: () {
+                                  _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = false;
                                   _servingProvider.tray2Select = true;
                                   _servingProvider.tray3Select = false;
@@ -672,6 +659,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                             height: 293 * 0.75,
                             child: TextButton(
                                 onPressed: () {
+                                  _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = false;
                                   _servingProvider.tray2Select = false;
                                   _servingProvider.tray3Select = true;
