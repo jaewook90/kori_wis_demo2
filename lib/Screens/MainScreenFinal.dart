@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:typed_data';
+import 'dart:convert' show utf8;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:functional_data/functional_data.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
@@ -25,6 +28,8 @@ class MainScreenBLEAutoConnect extends StatelessWidget {
   Widget build(BuildContext context) {
     DiscoveredDevice device = DiscoveredDevice(
         id: 'F0:28:31:D5:10:D0',
+        // F0:28:31:D5:10:D0 트레이 디텍터
+        // FA:BF:4C:CE:D5:F8 디버그용
         name: 'BBC micro:bit',
         serviceData: {},
         rssi: 0,
@@ -32,10 +37,15 @@ class MainScreenBLEAutoConnect extends StatelessWidget {
         manufacturerData: Uint8List(0));
     return Consumer3<BleDeviceConnector,
         ConnectionStateUpdate,
-        BleDeviceInteractor>(
+        BleDeviceInteractor
+        //, BleDeviceInteractor
+    >(
       builder:
-          (_, deviceConnector, connectionStateUpdate, serviceDiscoverer, __) =>
+          (_, deviceConnector, connectionStateUpdate, serviceDiscoverer,
+          // interactor,
+          __) =>
           MainScreenFinal(
+            // subscribeToCharacteristic: interactor.subScribeToCharacteristic,
             viewModel: MainScreenBLEAutoViewModel(
                 deviceId: device.id,
                 connectionStatus: connectionStateUpdate.connectionState,
@@ -78,9 +88,13 @@ class MainScreenBLEAutoViewModel extends $MainScreenBLEAutoViewModel {
 
 class MainScreenFinal extends StatefulWidget {
   const MainScreenFinal({Key? key, this.parsePoseData, this.viewModel,
+    // this.subscribeToCharacteristic,
+
   }) : super(key: key);
   final dynamic parsePoseData;
   final MainScreenBLEAutoViewModel? viewModel;
+  // final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
+  // subscribeToCharacteristic;
 
   @override
   State<MainScreenFinal> createState() => _MainScreenFinalState();
@@ -94,6 +108,12 @@ class _MainScreenFinalState extends State<MainScreenFinal>
   late NetworkModel _networkProvider;
 
   late List<DiscoveredService> discoveredServices;
+
+  // late StreamSubscription<List<int>>? subscribeStream;
+  // late String subscribeOutput;
+  // late String tray1BLE;
+  // late String tray2BLE;
+  // late String tray3BLE;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -131,13 +151,20 @@ class _MainScreenFinalState extends State<MainScreenFinal>
 
     fToast = FToast();
     fToast?.init(context);
-    if(widget.parsePoseData == null){
-      Provider.of<NetworkModel>((context), listen: false).APIGetFlag = false;
-      PositionList = ['1', '2','3', '4', '5', '6', '7', '8', '999', 'charging_pile', 'asdf'];
-    }else{
-      Provider.of<NetworkModel>((context), listen: false).APIGetFlag = true;
+    // if(widget.parsePoseData == null){
+    //   Provider.of<NetworkModel>((context), listen: false).APIGetFlag = false;
+    //   PositionList = ['1', '2','3', '4', '5', '6', '7', '8', '999', 'charging_pile', 'asdf'];
+    // }else{
+    //   Provider.of<NetworkModel>((context), listen: false).APIGetFlag = true;
+    //   poseDataUpdate(widget.parsePoseData);
+    // }
+
       poseDataUpdate(widget.parsePoseData);
-    }
+
+    // tray1BLE = "";
+    // tray2BLE = "";
+    // tray3BLE = "";
+
   }
 
   void poseDataUpdate(dynamic parsePoseData) {
@@ -181,10 +208,38 @@ class _MainScreenFinalState extends State<MainScreenFinal>
   //   });
   // }
 
+  // Future<void> subscribeCharacteristic() async {
+  //   subscribeStream =
+  //       widget.subscribeToCharacteristic!(
+  //           QualifiedCharacteristic(
+  //               characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+  //               serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+  //               deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!)
+  //       ).listen((event) {
+  //         if(utf8.decode(event) != subscribeOutput){
+  //           setState(() {
+  //             subscribeOutput = utf8.decode(event);
+  //             tray1BLE = subscribeOutput.split('')[0];
+  //             tray2BLE = subscribeOutput.split('')[1];
+  //             tray3BLE = subscribeOutput.split('')[2];
+  //             print(subscribeOutput);
+  //             if(subscribeOutput != 'Notification set'){
+  //               subscribeStream!.cancel();
+  //             }
+  //           });
+  //         }
+  //       });
+  //   setState(() {
+  //     subscribeOutput = 'Notification set';
+  //     // subscribeCharacteristic();
+  //   });
+  // }
+
   @override
   void dispose() {
     // TODO: implement dispose
     _textAniCon.dispose();
+    // subscribeStream?.cancel();
     super.dispose();
   }
 
@@ -197,15 +252,31 @@ class _MainScreenFinalState extends State<MainScreenFinal>
 
     if(PositionList.isEmpty){
       PositionList = _networkProvider.getPoseData!;
+    }else{
+      _networkProvider.getPoseData = PositionList;
     }
-    _networkProvider.getPoseData = PositionList;
     print(PositionList);
 
-    print(widget.viewModel!.deviceConnected);
+    print("before : ${widget.viewModel!.deviceConnected}");
 
     if(!widget.viewModel!.deviceConnected){
       widget.viewModel!.connect();
+      // if(widget.viewModel!.deviceConnected){
+      //   subscribeCharacteristic();
+      // }
     }
+
+    print("after : ${widget.viewModel!.deviceConnected}");
+
+    // Provider.of<BLEModel>(context, listen: false).trayDetectorTray1 = tray1BLE;
+    // Provider.of<BLEModel>(context, listen: false).trayDetectorTray2 = tray2BLE;
+    // Provider.of<BLEModel>(context, listen: false).trayDetectorTray3 = tray3BLE;
+
+    // print('bleTest');
+    // print(tray1BLE);
+    // print(tray2BLE);
+    // print(tray3BLE);
+    // print('bleTest');
 
     return WillPopScope(
       onWillPop: () async {
@@ -279,23 +350,28 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                               fit: BoxFit.fill)),
                     ),
                   ),
-                  Positioned(
-                    left: 50,
-                    top: 25,
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      child: Icon(
-                        _networkProvider.APIGetFlag==true
-                          ? Icons.check_circle_outline
-                            : Icons.cancel_outlined
-                      ),
-                    ),
-                  ),
+                  // Positioned(
+                  //   left: 50,
+                  //   top: 25,
+                  //   child: Container(
+                  //     height: 60,
+                  //     width: 60,
+                  //     child: Icon(
+                  //       _networkProvider.APIGetFlag==true
+                  //         ? Icons.check_circle_outline
+                  //           : Icons.cancel_outlined
+                  //     ),
+                  //   ),
+                  // ),
                   Positioned(
                     left: 100,
                       top: 25,
-                    child: Text("Status: ${widget.viewModel!.connectionStatus}"),
+                    child: Column(
+                      children: [
+                        Text("id: ${widget.viewModel!.deviceId}"),
+                        Text("Status: ${widget.viewModel!.connectionStatus}"),
+                      ],
+                    ),
                   )
                 ],
               ),

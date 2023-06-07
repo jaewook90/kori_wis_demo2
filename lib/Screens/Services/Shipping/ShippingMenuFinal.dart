@@ -64,7 +64,7 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
                     onPressed: () {
                       navPage(
                           context: context,
-                          page: const MainScreenFinal(),
+                          page: const MainScreenBLEAutoConnect(),
                           enablePop: false)
                           .navPageToPage();
                     },

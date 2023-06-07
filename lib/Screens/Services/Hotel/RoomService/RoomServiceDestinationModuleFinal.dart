@@ -141,7 +141,7 @@ class _RoomServiceDestinationScreenFinalState extends State<RoomServiceDestinati
                   left: 120,
                   top: 18,
                   child: FilledButton(onPressed: () {
-                    navPage(context: context, page: const MainScreenFinal(), enablePop: false).navPageToPage();
+                    navPage(context: context, page: const MainScreenBLEAutoConnect(), enablePop: false).navPageToPage();
                   }, child: null, style: FilledButton.styleFrom(
                       fixedSize: const Size(80, 80),
                       shape: RoundedRectangleBorder(

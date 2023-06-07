@@ -39,7 +39,7 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenFinal(),
+                            page: const MainScreenBLEAutoConnect(),
                             enablePop: false)
                             .navPageToPage();
                       },

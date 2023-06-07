@@ -50,7 +50,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
 
     return WillPopScope(
       onWillPop: () async {
-        navPage(context: context, page: const MainScreenFinal(), enablePop: false)
+        navPage(context: context, page: const MainScreenBLEAutoConnect(), enablePop: false)
             .navPageToPage();
         return Future.value(false);
       },
@@ -70,11 +70,12 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     top: 10,
                     child: FilledButton(
                       onPressed: () {
-                        navPage(
-                            context: context,
-                            page: MainScreenFinal(),
-                            enablePop: false)
-                            .navPageToPage();
+                        Navigator.pop(context);
+                        // navPage(
+                        //     context: context,
+                        //     page: MainScreenBLEAutoConnect(),
+                        //     enablePop: false)
+                        //     .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
                           fixedSize: const Size(90, 90),
@@ -100,7 +101,7 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenFinal(),
+                            page: const MainScreenBLEAutoConnect(),
                             enablePop: false)
                             .navPageToPage();
                       },

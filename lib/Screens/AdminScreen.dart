@@ -24,7 +24,7 @@ class _AdminScreenState extends State<AdminScreen> {
             // padding: EdgeInsets.only(right: screenWidth * 0.07),
             padding: EdgeInsets.fromLTRB(0, screenHeight*0.0015, screenWidth*0.05, 0),
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MainScreenFinal();}));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){return MainScreenBLEAutoConnect();}));
             },
             icon: Icon(
               Icons.home_outlined,

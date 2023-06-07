@@ -61,7 +61,7 @@ class _HotelCheckINRoomSelectState extends State<HotelCheckINRoomSelect> {
                     onPressed: () {
                       navPage(
                           context: context,
-                          page: const MainScreenFinal(),
+                          page: const MainScreenBLEAutoConnect(),
                           enablePop: false)
                           .navPageToPage();
                     },

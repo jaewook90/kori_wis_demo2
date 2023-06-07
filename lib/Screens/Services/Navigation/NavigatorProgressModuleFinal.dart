@@ -108,6 +108,7 @@ class _NavigatorProgressModuleFinalState
       if (targetTableNum == _servingProvider.table1) {
         print('table1');
         _servingProvider.table1 = "";
+        _servingProvider.item1 = '';
       } else if (targetTableNum == _servingProvider.table2) {
         print('table2');
         _servingProvider.table2 = "";

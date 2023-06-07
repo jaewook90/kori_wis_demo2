@@ -49,7 +49,7 @@ class _BellboyProgressFinalState extends State<BellboyProgressFinal> {
                         onPressed: () {
                           navPage(
                               context: context,
-                              page: const MainScreenFinal(),
+                              page: const MainScreenBLEAutoConnect(),
                               enablePop: false)
                               .navPageToPage();
                         },

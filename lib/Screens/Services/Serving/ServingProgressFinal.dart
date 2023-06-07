@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
@@ -54,7 +56,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenFinal(),
+                            page: const MainScreenBLEAutoConnect(),
                             enablePop: false)
                             .navPageToPage();
                       },
@@ -107,28 +109,43 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 left: 0,
                 child: GestureDetector(
                     onTap: () {
-                      if(_servingProvider.targetTableNum != 'none'){
+                      if (_servingProvider.targetTableNum != 'none') {
+                        _servingProvider.trayChange = true;
+                        _networkProvider.servTable =
+                            _servingProvider.targetTableNum;
                         PostApi(
                             url: startUrl,
                             endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
+                            keyBody:
+                            _servingProvider.targetTableNum)
                             .Posting(context);
-                        navPage(
-                            context: context,
-                            page: NavigatorProgressModuleFinal(),
-                            enablePop: true)
-                            .navPageToPage();
-                      }else{
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((_) {
+                          navPage(
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(
+                                // servGoalPose: _servingProvider.targetTableNum,
+                              ),
+                              enablePop: true)
+                              .navPageToPage();
+                        });
+                      } else {
                         _servingProvider.clearAllTray();
                         print('Serving Return to waiting point');
                         PostApi(
                             url: startUrl,
                             endadr: navUrl,
-                            keyBody: _servingProvider.waitingPoint)
+                            keyBody:
+                            _servingProvider.waitingPoint)
                             .Posting(context);
                         navPage(
                             context: context,
-                            page: const TraySelectionFinal(),
+                            page: TrayEquipped(
+                              characteristic: QualifiedCharacteristic(
+                                  characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                                  serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                                  deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                            ),
                             enablePop: false)
                             .navPageToPage();
                       }

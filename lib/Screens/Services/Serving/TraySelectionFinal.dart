@@ -74,6 +74,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   String? table3;
 
   //트레이 BLE시그널
+  // late bool trayDetecting;
   late String tray1BLE;
   late String tray2BLE;
   late String tray3BLE;
@@ -99,6 +100,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     tray1BLE = "";
     tray2BLE = "";
     tray3BLE = "";
+
+    // trayDetecting = true;
 
     subscribeOutput = '';
     if(widget.characteristic == null){
@@ -212,7 +215,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    // subscribeCharacteristic();
+    subscribeCharacteristic();
 
     return WillPopScope(
       onWillPop: () {
@@ -269,7 +272,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                       onPressed: () {
                         navPage(
                                 context: context,
-                                page: const MainScreenFinal(),
+                                page: const MainScreenBLEAutoConnect(),
                                 enablePop: false)
                             .navPageToPage();
                       },
@@ -332,7 +335,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               side: BorderSide(color: Colors.white, width: 1),
                               borderRadius: BorderRadius.circular(0)),
                           backgroundColor: Colors.transparent),
-                      child: Text('t'),
+                      child: Text(subscribeOutput),
                       // child: Text(traySubscribeOutput),
                     ),
                   ),

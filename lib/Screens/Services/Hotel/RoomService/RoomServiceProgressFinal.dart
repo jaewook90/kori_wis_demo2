@@ -50,7 +50,7 @@ class _RoomServiceProgressFinalState extends State<RoomServiceProgressFinal> {
                         onPressed: () {
                           navPage(
                               context: context,
-                              page: const MainScreenFinal(),
+                              page: const MainScreenBLEAutoConnect(),
                               enablePop: false)
                               .navPageToPage();
                         },

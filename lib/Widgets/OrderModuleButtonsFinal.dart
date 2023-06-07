@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/CheckOutModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/NFCModalFinal.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/PaymentModalFinal.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -92,8 +94,14 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          double screenWidth = MediaQuery.of(context).size.width;
-          double screenHeight = MediaQuery.of(context).size.height;
+          double screenWidth = MediaQuery
+              .of(context)
+              .size
+              .width;
+          double screenHeight = MediaQuery
+              .of(context)
+              .size
+              .height;
 
           return AlertDialog(
             content: SizedBox(
@@ -113,7 +121,10 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
               ),
             ),
             backgroundColor: const Color(0xff2C2C2C),
-            contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+            contentTextStyle: Theme
+                .of(context)
+                .textTheme
+                .headlineLarge,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
                 borderSide: const BorderSide(
@@ -197,7 +208,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
       buttonSize = [425, 178];
 
       buttonRadius = 28;
-    }else if (widget.screens == 3) {
+    } else if (widget.screens == 3) {
       // 결제 선택 및 금액 확인
       buttonPositionWidth = [88];
       buttonPositionHeight = [1305];
@@ -259,26 +270,26 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                       _orderProvider.SelectedItemsQT![i] = true;
                       selectedQt = selectedQt! - 1;
                       _orderProvider.SelectedQT = selectedQt;
-                      if(i==0){
+                      if (i == 0) {
                         selectedItemList.remove('햄버거');
-                      }else if(i==1){
+                      } else if (i == 1) {
                         selectedItemList.remove('라면');
-                      }else if(i==2){
+                      } else if (i == 2) {
                         selectedItemList.remove('치킨');
-                      }else if(i==3){
+                      } else if (i == 3) {
                         selectedItemList.remove('핫도그');
                       }
                     } else {
                       _orderProvider.SelectedItemsQT![i] = false;
                       selectedQt = selectedQt! + 1;
                       _orderProvider.SelectedQT = selectedQt;
-                      if(i==0){
+                      if (i == 0) {
                         selectedItemList.add('햄버거');
-                      }else if(i==1){
+                      } else if (i == 1) {
                         selectedItemList.add('라면');
-                      }else if(i==2){
+                      } else if (i == 2) {
                         selectedItemList.add('치킨');
-                      }else if(i==3){
+                      } else if (i == 3) {
                         selectedItemList.add('핫도그');
                       }
                     }
@@ -300,9 +311,20 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                   showCashServing(context);
                 }
               }
-                  : widget.screens == 3 ?(){
-                navPage(context: context, page: const TraySelectionFinal(), enablePop: false).navPageToPage();
-              } :null,
+                  : widget.screens == 3 ? () {
+                navPage(context: context, page: TrayEquipped(
+                  characteristic: QualifiedCharacteristic(
+                      characteristicId: Provider
+                          .of<BLEModel>(context, listen: false)
+                          .trayDetectorCharacteristicId!,
+                      serviceId: Provider
+                          .of<BLEModel>(context, listen: false)
+                          .trayDetectorServiceId!,
+                      deviceId: Provider
+                          .of<BLEModel>(context, listen: false)
+                          .trayDetectorDeviceId!),
+                ), enablePop: false).navPageToPage();
+              } : null,
               child: null,
             ),
           ),

@@ -141,7 +141,7 @@ class _RoomServiceMenuState extends State<RoomServiceMenu> {
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenFinal(),
+                            page: const MainScreenBLEAutoConnect(),
                             enablePop: false)
                             .navPageToPage();
                       },

@@ -60,6 +60,12 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
 
     serviceList = [
       const ShippingMenuFinal(),
+      // TraySelectionFinal(
+      //   characteristic: QualifiedCharacteristic(
+      //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+      //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+      //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+      // ),
       TrayEquipped(
         characteristic: QualifiedCharacteristic(
             characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,

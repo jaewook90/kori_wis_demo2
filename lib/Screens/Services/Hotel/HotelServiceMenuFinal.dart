@@ -74,7 +74,7 @@ class _HotelServiceMenuState extends State<HotelServiceMenu> {
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenFinal(),
+                            page: const MainScreenBLEAutoConnect(),
                             enablePop: false)
                             .navPageToPage();
                       },

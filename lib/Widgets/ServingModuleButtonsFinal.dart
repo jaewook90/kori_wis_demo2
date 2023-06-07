@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -280,7 +282,12 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                 uploadTableNumberNItemImg();
                                 navPage(
                                         context: context,
-                                        page: const TraySelectionFinal(),
+                                        page: TrayEquipped(
+                                          characteristic: QualifiedCharacteristic(
+                                              characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                                              serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                                              deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                                        ),
                                         enablePop: false)
                                     .navPageToPage();
                               } else {
@@ -322,7 +329,12 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                       .Posting(context);
                                   navPage(
                                           context: context,
-                                          page: const TraySelectionFinal(),
+                                          page: TrayEquipped(
+                                            characteristic: QualifiedCharacteristic(
+                                                characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                                                serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                                                deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                                          ),
                                           enablePop: false)
                                       .navPageToPage();
                                 }
