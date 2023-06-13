@@ -64,12 +64,16 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
                       backgroundColor: Colors.transparent,
                     ),
                     onPressed: () {
-                      navPage(context: context, page: TrayEquipped(
-                        characteristic: QualifiedCharacteristic(
-                            characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                            serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                            deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                      ), enablePop: false).navPageToPage();
+                      setState(() {
+                        _bleProvider.onTraySelectionScreen = true;
+                      });
+                      Navigator.pop(context);
+                      // navPage(context: context, page: TrayEquipped(
+                      //   characteristic: QualifiedCharacteristic(
+                      //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                      //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                      //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                      // ), enablePop: false).navPageToPage();
                     },
                     child: null,
                   ),

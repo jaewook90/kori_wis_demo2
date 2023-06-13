@@ -11,6 +11,7 @@ import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
+import 'package:kori_wis_demo/test/widget_test.dart';
 
 class MainScreenButtonsFinal extends StatefulWidget {
   final int? screens;
@@ -55,7 +56,13 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
       const ServiceScreenFinal(),
       const LinkConnectorScreen(),
       const AdminScreen(),
-      const ConfigScreen(characteristic: null, subscribeToCharacteristic: null)
+      const ConfigScreen(characteristic: null, subscribeToCharacteristic: null),
+      IsolateTestSub(
+        characteristic: QualifiedCharacteristic(
+            characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+            serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+            deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+      ),
     ];
 
     serviceList = [
@@ -94,25 +101,10 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
     _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    // serviceList = [
-    //   const ShippingMenuFinal(),
-    //   TrayEquipped(
-    //     characteristic1: QualifiedCharacteristic(
-    //         characteristicId: _bleProvider.trayDetectorCharacteristicId!,
-    //         serviceId: _bleProvider.trayDetectorServiceId!,
-    //         deviceId: _bleProvider.trayDetectorDeviceId!),
-    //     characteristic2: QualifiedCharacteristic(
-    //         characteristicId: _bleProvider.huskyCharacteristicId!,
-    //         serviceId: _bleProvider.huskyServiceId!,
-    //         deviceId: _bleProvider.huskyDeviceId!),
-    //   ),
-    //   const HotelServiceMenu()
-    // ];
-
     if (widget.screens == 0) {
       // 메인 화면 ( 서비스, 커넥터, 관리자 설정 버튼 )
-      buttonPositionWidth = [90, 560, 90, 560];
-      buttonPositionHeight = [300, 300, 770, 770];
+      buttonPositionWidth = [90, 560, 90, 560, 500];
+      buttonPositionHeight = [300, 300, 770, 770, 1000];
 
       buttonSize = [430, 425];
 
@@ -163,6 +155,7 @@ class _MainScreenButtonsFinalState extends State<MainScreenButtonsFinal> {
                         } else if (i == 1) {
                           setState(() {
                             _statusProvider.serviceState = 1;
+                            Provider.of<BLEModel>(context, listen: false).subscribeOutput = '000';
                           });
                           navPage(
                                   context: context,

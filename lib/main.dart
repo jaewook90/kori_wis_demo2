@@ -23,6 +23,9 @@ import 'package:kori_wis_demo/Utills/ble/module/ble_status_monitor.dart';
 //허가 유틸 헤더
 import 'package:permission_handler/permission_handler.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -144,6 +147,7 @@ void main() async {
             orderedTotalPrice: 0
         )),
         ChangeNotifierProvider(create: (context) => BLEModel(
+          subscribeOutput: '000',
           // characteristicId: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
           // deviceId1: 'DF:75:E4:D6:32:63',
         ))
@@ -208,6 +212,7 @@ void main() async {
           ),
         ),
         home: IntroScreen(),
+        navigatorKey: navigatorKey,
       ),
     ),
   );

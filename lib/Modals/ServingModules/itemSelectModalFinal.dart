@@ -16,6 +16,7 @@ class SelectItemModalFinal extends StatefulWidget {
 
 class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
   late ServingModel _servingProvider;
+  late BLEModel _bleProvider;
 
   String itemSelectBG = 'assets/screens/Serving/koriZFinalItemSelect.png';
 
@@ -29,6 +30,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
 
     return Container(
@@ -62,15 +64,19 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
-                        navPage(context: context, page: TrayEquipped(
-                          characteristic: QualifiedCharacteristic(
-                              characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                              serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                              deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                        ), enablePop: false).navPageToPage();
-                        _servingProvider.item1 = "";
-                        _servingProvider.item2 = "";
-                        _servingProvider.item3 = "";
+                        // navPage(context: context, page: TrayEquipped(
+                        //   characteristic: QualifiedCharacteristic(
+                        //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                        //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                        //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                        // ), enablePop: false).navPageToPage();
+                        setState(() {
+                          _bleProvider.onTraySelectionScreen = true;
+                          _servingProvider.item1 = "";
+                          _servingProvider.item2 = "";
+                          _servingProvider.item3 = "";
+                        });
+                        Navigator.pop(context);
                       },
                       child: null,
                     ),

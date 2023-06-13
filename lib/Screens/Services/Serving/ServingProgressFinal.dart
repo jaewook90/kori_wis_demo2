@@ -22,6 +22,7 @@ class ServingProgressFinal extends StatefulWidget {
 class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late BLEModel _bleProvider;
 
   String backgroundImage = "assets/screens/Serving/koriZFinalServingDone.png";
   String? startUrl;
@@ -31,6 +32,8 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
+
 
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
@@ -138,6 +141,9 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                             keyBody:
                             _servingProvider.waitingPoint)
                             .Posting(context);
+                        setState(() {
+                          _bleProvider.onTraySelectionScreen = true;
+                        });
                         navPage(
                             context: context,
                             page: TrayEquipped(

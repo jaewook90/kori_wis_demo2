@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
-
 class BLEModel with ChangeNotifier {
   String? huskyDeviceId;
   Uuid? huskyCharacteristicId;
@@ -10,11 +9,17 @@ class BLEModel with ChangeNotifier {
   Uuid? trayDetectorCharacteristicId;
   Uuid? trayDetectorServiceId;
 
+
+
   bool? onTraySelectionScreen;
 
-  // BLEModel(
-  //     {required this.huskyCharacteristicId,
-  //     required this.huskyServiceId,
-  //     required this.trayDetectorCharacteristicId,
-  //     required this.trayDetectorServiceId});
+  String? subscribeOutput;
+
+  BLEModel({this.subscribeOutput});
+
+// BLEModel(
+//     {required this.huskyCharacteristicId,
+//     required this.huskyServiceId,
+//     required this.trayDetectorCharacteristicId,
+//     required this.trayDetectorServiceId});
 }

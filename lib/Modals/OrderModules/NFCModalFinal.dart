@@ -25,7 +25,7 @@ class _NFCModuleScreenFinalState extends State<NFCModuleScreenFinal> {
   }
 
   late MainStatusModel _statusProvider;
-  String nfcImg = 'assets/images/koriZFinalNFC.jpg';
+  String nfcImg = 'assets/images/koriZFinalNFC.webp';
 
   @override
   Widget build(BuildContext context) {

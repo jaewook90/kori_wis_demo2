@@ -26,17 +26,15 @@ class TrayEquipped extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer<BleDeviceInteractor>(
       builder: (context, interactor, _) => TraySelectionFinal(
-        characteristic: characteristic,
-        // characteristic: Provider.of<BLEModel>(context, listen: false).characteristic,
-        subscribeToCharacteristic: interactor.subScribeToCharacteristic,
-      ));
+            characteristic: characteristic,
+            subscribeToCharacteristic: interactor.subScribeToCharacteristic,
+          ));
 }
 
 class TraySelectionFinal extends StatefulWidget {
-  const TraySelectionFinal({
-    this.characteristic,
-    this.subscribeToCharacteristic,
-    Key? key}) : super(key: key);
+  const TraySelectionFinal(
+      {this.characteristic, this.subscribeToCharacteristic, Key? key})
+      : super(key: key);
 
   final QualifiedCharacteristic? characteristic;
 
@@ -50,6 +48,9 @@ class TraySelectionFinal extends StatefulWidget {
 class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
+
+  late Timer _timer;
+
   // late QualifiedCharacteristic? characteristic;
 
   late String subscribeOutput;
@@ -93,6 +94,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     // TODO: implement initState
     super.initState();
 
+    print('aaaaaaaaaaaaaaaaaaaaaaa');
+
     backgroundImage = "assets/screens/Serving/koriZFinalServing.png";
 
     table1 = "";
@@ -105,36 +108,47 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     // trayDetecting = true;
 
-    subscribeOutput = '';
+    subscribeOutput = 'init';
 
     Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
 
-    if(widget.characteristic == null){
+    if (widget.characteristic == null) {
       subscribeStream = null;
     }
     textEditingController = TextEditingController();
   }
 
   // 트레이 디텍팅
+
   Future<void> subscribeCharacteristic() async {
-    subscribeStream =
-        widget.subscribeToCharacteristic!(widget.characteristic!).listen((event) {
-          if(utf8.decode(event) != subscribeOutput){
-            setState(() {
-              subscribeOutput = utf8.decode(event);
-              tray1BLE = subscribeOutput.split('')[0];
-              tray2BLE = subscribeOutput.split('')[1];
-              tray3BLE = subscribeOutput.split('')[2];
-              print(subscribeOutput);
-              if(subscribeOutput != 'Notification set'){
-                subscribeStream!.cancel();
-              }
-            });
-          }
-        });
-    setState(() {
-      subscribeOutput = 'Notification set';
-      // subscribeCharacteristic();
+    _timer = Timer(Duration(milliseconds: 500), () {
+      // print("Yeah, this line is printed after 1 second");
+      subscribeStream = widget.subscribeToCharacteristic!
+              (widget.characteristic!)
+          .listen((event) {
+        if (mounted) {
+          setState(() {
+            subscribeOutput = utf8.decode(event);
+            tray1BLE = subscribeOutput.split('')[0];
+            tray2BLE = subscribeOutput.split('')[1];
+            tray3BLE = subscribeOutput.split('')[2];
+
+            // Provider.of<BLEModel>(context, listen: false).subscribeOutput =
+            //     subscribeOutput;
+
+            if (subscribeOutput != 'Notification set') {
+              subscribeStream!.cancel();
+            }
+            _timer.cancel();
+          });
+          // }
+        }
+      });
+      setState(() {
+        subscribeOutput = 'Notification set';
+        _timer.cancel();
+        // subscribeCharacteristic();
+      });
     });
   }
 
@@ -150,7 +164,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   @override
   void dispose() {
     super.dispose();
-    subscribeStream?.cancel();
+    subscribeStream!.cancel();
   }
 
   @override
@@ -161,20 +175,49 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     _debugTray = _servingProvider.trayDebug!;
 
     // 트레이 디텍터에 따른 트레이 표시
+    // Timer(Duration(seconds: 1), () {
+    //   print("Yeah, this line is printed after 1 second");
+    // });
+
+    if (mounted) {
+      if (_bleProvider.onTraySelectionScreen == true) {
+        subscribeCharacteristic();
+      }
+    } else {
+      subscribeStream!.cancel();
+    }
+
     if (tray1BLE == "1") {
       _servingProvider.attachedTray1 = false;
     } else if (tray1BLE == "0") {
       _servingProvider.attachedTray1 = true;
+      if (table1 != "") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _servingProvider.clearTray1();
+        });
+      }
     }
     if (tray2BLE == "1") {
       _servingProvider.attachedTray2 = false;
     } else if (tray2BLE == "0") {
       _servingProvider.attachedTray2 = true;
+      if (table2 != "") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _servingProvider.clearTray2();
+        });
+        // print('t2');
+      }
     }
     if (tray3BLE == "1") {
       _servingProvider.attachedTray3 = false;
     } else if (tray3BLE == "0") {
       _servingProvider.attachedTray3 = true;
+      if (table3 != "") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _servingProvider.clearTray3();
+        });
+        // print('t3');
+      }
     }
 
     offStageTray1 = _servingProvider.attachedTray1;
@@ -197,10 +240,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     double textButtonHeight = screenHeight * 0.08;
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
-
-    if(_bleProvider.onTraySelectionScreen == true){
-      subscribeCharacteristic();
-    }
 
     return WillPopScope(
       onWillPop: () {
@@ -307,23 +346,23 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                       iconSize: 70,
                     ),
                   ),
-                  Positioned(
-                    right: 300,
-                    top: 10,
-                    child: TextButton(
-                      onPressed: () {
-                        subscribeCharacteristic();
-                      },
-                      style: TextButton.styleFrom(
-                          fixedSize: const Size(90, 90),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.white, width: 1),
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                      child: Text(subscribeOutput),
-                      // child: Text(traySubscribeOutput),
-                    ),
-                  ),
+                  // Positioned(
+                  //   right: 300,
+                  //   top: 10,
+                  //   child: TextButton(
+                  //     onPressed: () {
+                  //       subscribeCharacteristic();
+                  //     },
+                  //     style: TextButton.styleFrom(
+                  //         fixedSize: const Size(90, 90),
+                  //         shape: RoundedRectangleBorder(
+                  //             side: BorderSide(color: Colors.white, width: 1),
+                  //             borderRadius: BorderRadius.circular(0)),
+                  //         backgroundColor: Colors.transparent),
+                  //     child: Text(subscribeOutput),
+                  //     // child: Text(traySubscribeOutput),
+                  //   ),
+                  // ),
                 ],
               ),
             )

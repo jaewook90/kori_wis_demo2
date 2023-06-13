@@ -201,40 +201,6 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     }
   }
 
-  // Future<void> discoverServices() async {
-  //   final result = await widget.viewModel?.discoverServices();
-  //   setState(() {
-  //     discoveredServices = result!;
-  //   });
-  // }
-
-  // Future<void> subscribeCharacteristic() async {
-  //   subscribeStream =
-  //       widget.subscribeToCharacteristic!(
-  //           QualifiedCharacteristic(
-  //               characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-  //               serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-  //               deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!)
-  //       ).listen((event) {
-  //         if(utf8.decode(event) != subscribeOutput){
-  //           setState(() {
-  //             subscribeOutput = utf8.decode(event);
-  //             tray1BLE = subscribeOutput.split('')[0];
-  //             tray2BLE = subscribeOutput.split('')[1];
-  //             tray3BLE = subscribeOutput.split('')[2];
-  //             print(subscribeOutput);
-  //             if(subscribeOutput != 'Notification set'){
-  //               subscribeStream!.cancel();
-  //             }
-  //           });
-  //         }
-  //       });
-  //   setState(() {
-  //     subscribeOutput = 'Notification set';
-  //     // subscribeCharacteristic();
-  //   });
-  // }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -259,24 +225,11 @@ class _MainScreenFinalState extends State<MainScreenFinal>
 
     print("before : ${widget.viewModel!.deviceConnected}");
 
-    if(!widget.viewModel!.deviceConnected){
+    if(widget.viewModel!.deviceConnected == false){
       widget.viewModel!.connect();
-      // if(widget.viewModel!.deviceConnected){
-      //   subscribeCharacteristic();
-      // }
     }
 
     print("after : ${widget.viewModel!.deviceConnected}");
-
-    // Provider.of<BLEModel>(context, listen: false).trayDetectorTray1 = tray1BLE;
-    // Provider.of<BLEModel>(context, listen: false).trayDetectorTray2 = tray2BLE;
-    // Provider.of<BLEModel>(context, listen: false).trayDetectorTray3 = tray3BLE;
-
-    // print('bleTest');
-    // print(tray1BLE);
-    // print(tray2BLE);
-    // print(tray3BLE);
-    // print('bleTest');
 
     return WillPopScope(
       onWillPop: () async {

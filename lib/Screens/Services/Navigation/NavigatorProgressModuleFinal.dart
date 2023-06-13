@@ -49,27 +49,26 @@ class _NavigatorProgressModuleFinalState
     // servTableNum = "";
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-
   Future<dynamic> Getting() async {
     NetworkGet network =
     NetworkGet("http://172.30.1.22/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 
-    Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
-
-    setState(() {
-      navStatus = Provider.of<NetworkModel>((context), listen: false)
-          .APIGetData['status'];
-    });
+    if(mounted){
+      Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
+      setState(() {
+        navStatus = Provider.of<NetworkModel>((context), listen: false)
+            .APIGetData['status'];
+      });
+    }
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

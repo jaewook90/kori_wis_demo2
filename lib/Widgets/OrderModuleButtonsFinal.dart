@@ -24,6 +24,7 @@ class OrderModuleButtonsFinal extends StatefulWidget {
 
 class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   late OrderModel _orderProvider;
+  late BLEModel _bleProvider;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -162,6 +163,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   @override
   Widget build(BuildContext context) {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     setState(() {
       selectedQt = _orderProvider.SelectedQT;
@@ -312,18 +314,23 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                 }
               }
                   : widget.screens == 3 ? () {
-                navPage(context: context, page: TrayEquipped(
-                  characteristic: QualifiedCharacteristic(
-                      characteristicId: Provider
-                          .of<BLEModel>(context, listen: false)
-                          .trayDetectorCharacteristicId!,
-                      serviceId: Provider
-                          .of<BLEModel>(context, listen: false)
-                          .trayDetectorServiceId!,
-                      deviceId: Provider
-                          .of<BLEModel>(context, listen: false)
-                          .trayDetectorDeviceId!),
-                ), enablePop: false).navPageToPage();
+                setState(() {
+                  _bleProvider.onTraySelectionScreen = true;
+                });
+                Navigator.pop(context);
+                // navPage(context: context, page: TraySelectionFinal(), enablePop: false).navPageToPage();
+                // navPage(context: context, page: TrayEquipped(
+                //   characteristic: QualifiedCharacteristic(
+                //       characteristicId: Provider
+                //           .of<BLEModel>(context, listen: false)
+                //           .trayDetectorCharacteristicId!,
+                //       serviceId: Provider
+                //           .of<BLEModel>(context, listen: false)
+                //           .trayDetectorServiceId!,
+                //       deviceId: Provider
+                //           .of<BLEModel>(context, listen: false)
+                //           .trayDetectorDeviceId!),
+                // ), enablePop: false).navPageToPage();
               } : null,
               child: null,
             ),

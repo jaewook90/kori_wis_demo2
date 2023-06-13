@@ -23,6 +23,7 @@ class BLEAutoConnect extends StatelessWidget {
   Widget build(BuildContext context) {
     DiscoveredDevice device = DiscoveredDevice(
         id: 'F0:28:31:D5:10:D0',
+        // id: 'FA:BF:4C:CE:D5:F8',
         name: 'BBC micro:bit',
         serviceData: {},
         rssi: 0,

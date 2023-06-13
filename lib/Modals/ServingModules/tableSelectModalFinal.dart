@@ -16,6 +16,7 @@ class SelectTableModalFinal extends StatefulWidget {
 
 class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   late ServingModel _servingProvider;
+  late BLEModel _bleProvider;
 
   String tableSelectBG = 'assets/screens/Serving/koriZFinalTableSelect.png';
 
@@ -28,6 +29,9 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
+
+    print(_servingProvider.trayCheckAll);
 
     return Container(
       padding: const EdgeInsets.only(top: 90),
@@ -59,19 +63,28 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                         )),
                     onPressed: () {
                       if(_servingProvider.trayCheckAll == true){
-                        navPage(context: context, page: TrayEquipped(
-                          characteristic: QualifiedCharacteristic(
-                              characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                              serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                              deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                        ), enablePop: false).navPageToPage();
+                        setState(() {
+                          _bleProvider.onTraySelectionScreen = true;
+                        });
+                        Navigator.pop(context);
+                        // navPage(context: context, page: TrayEquipped(
+                        //   characteristic: QualifiedCharacteristic(
+                        //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                        //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                        //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                        // ), enablePop: false).navPageToPage();
                       }else{
-                        navPage(context: context, page: TrayEquipped(
-                          characteristic: QualifiedCharacteristic(
-                              characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                              serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                              deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                        ), enablePop: false).navPageToPage();
+                        setState(() {
+                          _bleProvider.onTraySelectionScreen = true;
+                        });
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        // navPage(context: context, page: TrayEquipped(
+                        //   characteristic: QualifiedCharacteristic(
+                        //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                        //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                        //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                        // ), enablePop: false).navPageToPage();
                       }
                       _servingProvider.item1 = "";
                       _servingProvider.item2 = "";

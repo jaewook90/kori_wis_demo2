@@ -25,6 +25,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late BLEModel _bleProvider;
 
   final CountdownController _controller =
       new CountdownController(autoStart: true);
@@ -62,6 +63,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -183,12 +185,17 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 onPressed: () {
                   _controller.pause();
                   _networkProvider.servingPosition = [];
-                  navPage(context: context, page: TrayEquipped(
-                    characteristic: QualifiedCharacteristic(
-                        characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                        serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                        deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                  ), enablePop: false).navPageToPage();
+                  setState(() {
+                    _bleProvider.onTraySelectionScreen = true;
+                  });
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  // navPage(context: context, page: TrayEquipped(
+                  //   characteristic: QualifiedCharacteristic(
+                  //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                  //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                  //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                  // ), enablePop: false).navPageToPage();
                 },
                 child: null,
               ),
@@ -240,6 +247,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         .Posting(context);
                     print('타겟 : $targetTableNum');
                     WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
                       navPage(
                               context: context,
                               page: const NavigatorProgressModuleFinal(),

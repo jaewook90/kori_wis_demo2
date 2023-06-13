@@ -134,7 +134,7 @@ class _IntroScreenState extends State<IntroScreen>
 
     navPage(
             context: context,
-            page: MainScreenFinal(
+            page: MainScreenBLEAutoConnect(
               parsePoseData: getApiData,
             ),
             enablePop: true)

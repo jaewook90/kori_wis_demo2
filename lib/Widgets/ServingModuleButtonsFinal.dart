@@ -283,6 +283,9 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                   _servingProvider.table3 = "${i + 1}";
                                 }
                                 uploadTableNumberNItemImg();
+
+                                _bleProvider.onTraySelectionScreen = true;
+
                                 navPage(
                                         context: context,
                                         page: TrayEquipped(
@@ -339,6 +342,9 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                           keyBody:
                                               _servingProvider.waitingPoint)
                                       .Posting(context);
+                                  setState(() {
+                                    _bleProvider.onTraySelectionScreen = true;
+                                  });
                                   navPage(
                                           context: context,
                                           page: TrayEquipped(
