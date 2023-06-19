@@ -16,7 +16,6 @@ class ServiceScreenFinal extends StatefulWidget {
 
 class _ServiceScreenFinalState extends State<ServiceScreenFinal>
     with TickerProviderStateMixin {
-
   late NetworkModel _networkProvider;
 
   String? currentGoal;
@@ -35,9 +34,15 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
 
   List<String>? goalPosition;
 
-  final String _shipping = "assets/images/Service_menu_img/koriZFinalShipBanner.png";
-  final String _serving = "assets/images/Service_menu_img/koriZFinalServBanner.png";
-  final String _hotel = "assets/images/Service_menu_img/koriZFinalHotelBanner.png";
+  final List<String> buttonImg = [
+    "assets/images/Service_menu_img/koriZFinalShipBanner.png",
+    "assets/images/Service_menu_img/koriZFinalServBanner.png",
+    "assets/images/Service_menu_img/koriZFinalHotelBanner.png"
+  ];
+
+  final int _shipping = 0;
+  final int _serving = 1;
+  final int _hotel = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,10 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
 
     return WillPopScope(
       onWillPop: () async {
-        navPage(context: context, page: const MainScreenBLEAutoConnect(), enablePop: false)
+        navPage(
+                context: context,
+                page: const MainScreenBLEAutoConnect(),
+                enablePop: false)
             .navPageToPage();
         return Future.value(false);
       },
@@ -100,9 +108,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                            context: context,
-                            page: const MainScreenBLEAutoConnect(),
-                            enablePop: false)
+                                context: context,
+                                page: const MainScreenBLEAutoConnect(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
@@ -147,45 +155,9 @@ class _ServiceScreenFinalState extends State<ServiceScreenFinal>
           margin: const EdgeInsets.only(top: 110),
           height: 1810,
           decoration: const BoxDecoration(
-            color: Colors.transparent,),
-          child: Stack(
-            children: [
-              //택배
-              Positioned(
-                top: 15,
-                child: Container(
-                  height: 580,
-                  width: 1080,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(_shipping)),
-                    color: Colors.transparent,),
-                ),
-              ),
-              //서빙
-              Positioned(
-                top: 610,
-                width: 1080,
-                child: Container(
-                  height: 580,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(_serving)),
-                    color: Colors.transparent,),
-                ),
-              ),
-              //호텔
-              Positioned(
-                top: 1205,
-                width: 1080,
-                child: Container(
-                  height: 580,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(_hotel)),
-                    color: Colors.transparent,),
-                ),
-              ),
-              const MainScreenButtonsFinal(screens: 1),
-            ],
+            color: Colors.transparent,
           ),
+          child: const MainScreenButtonsFinal(screens: 1),
         ),
       ),
     );

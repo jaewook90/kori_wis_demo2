@@ -17,7 +17,6 @@ class CheckOutScreenFinal extends StatefulWidget {
 
 class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   late OrderModel _orderProvider;
-  late BLEModel _bleProvider;
   String shoppingCartImg = 'assets/screens/Serving/koriZFinalShoppingCart.png';
 
   late String hamburger;
@@ -97,7 +96,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
   @override
   Widget build(BuildContext context) {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     selectedItemList = _orderProvider.selectedItemsList!;
 
@@ -189,12 +187,6 @@ class _CheckOutScreenFinalState extends State<CheckOutScreenFinal> {
                     onPressed: () {
                       Navigator.pop(context);
                       Navigator.pop(context);
-                      // navPage(context: context, page: TrayEquipped(
-                      //   characteristic: QualifiedCharacteristic(
-                      //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                      //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                      //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                      // ), enablePop: false).navPageToPage();
                     },
                     child: null,
                   ),

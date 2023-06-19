@@ -14,7 +14,7 @@ class GetApi{
     // String endPoint = endadr!;
     // String apiAddress = host + endPoint;
 
-    String apiAddress = "http://172.30.1.22/reeman/movebase_status";
+    String apiAddress = "http://172.30.1.35/reeman/movebase_status";
 
     NetworkGet network = NetworkGet(apiAddress);
 

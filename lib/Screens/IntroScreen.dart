@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -10,6 +12,8 @@ import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
 import 'package:video_player/video_player.dart';
+
+import 'package:firebase_core/firebase_core.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -26,10 +30,13 @@ class _IntroScreenState extends State<IntroScreen>
   late NetworkModel _networkProvider;
   late BLEModel _bleProvider;
 
+  FirebaseFirestore testDb = FirebaseFirestore.instance;
+
   String positionURL = "";
   String hostAdr = "";
 
   // 블루투스 연결
+  final String robotId = '2';
 
   // 허스키 렌즈
   late Uuid huskyCharacteristicId;
@@ -39,12 +46,12 @@ class _IntroScreenState extends State<IntroScreen>
   // 트레이
   late Uuid trayDetectorCharacteristicId;
   late Uuid trayDetectorServiceId;
-  late String trayDetectorDeviceId;
+  // late String trayDetectorDeviceId;
 
   late VideoPlayerController _controller;
   late AudioPlayer _audioPlayer;
 
-  String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
+  final String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
 
   bool updateComplete = false;
 
@@ -73,13 +80,14 @@ class _IntroScreenState extends State<IntroScreen>
         // setLooping -> true 무한반복 false 1회 재생
         setState(() {});
       });
-
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
 
     fToast = FToast();
     fToast?.init(context);
 
     _playVideo();
+
+    getStarted_readData();
 
     huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
@@ -88,7 +96,7 @@ class _IntroScreenState extends State<IntroScreen>
     trayDetectorCharacteristicId =
         Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    trayDetectorDeviceId = 'F0:28:31:D5:10:D0';
+    // trayDetectorDeviceId = 'DF:75:E4:D6:32:63';
   }
 
   void _playVideo() async {
@@ -141,6 +149,22 @@ class _IntroScreenState extends State<IntroScreen>
         .navPageToPage();
   }
 
+  void getStarted_readData() async {
+    // [START get_started_read_data]
+    await testDb.collection("microBit").get().then((event) {
+      for (var doc in event.docs) {
+        print("${doc.id} => ${doc.data()}");
+        if(doc.data()['id'] == robotId){
+          print('1');
+          print(doc.data()['trayDetector']);
+          print('1');
+          Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId = doc.data()['trayDetector'];
+        }
+      }
+    });
+    // [END get_started_read_data]
+  }
+
   @override
   void dispose() {
     _audioPlayer.dispose();
@@ -148,6 +172,8 @@ class _IntroScreenState extends State<IntroScreen>
     _textAniCon.dispose();
     super.dispose();
   }
+
+  var deviceId1 = "";
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +186,7 @@ class _IntroScreenState extends State<IntroScreen>
     // _bleProvider.huskyServiceId = huskyServiceId;
 
     // 트레이디텍터 BLE 정보
-    _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
+    // _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
     _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
     _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
 
@@ -173,121 +199,239 @@ class _IntroScreenState extends State<IntroScreen>
     double videoWidth = _controller.value.size.width;
     double videoHeight = _controller.value.size.height;
 
+    print(Provider.of<MainStatusModel>(context, listen: false).testFire);
+
     return WillPopScope(
-      onWillPop: () async {
-        DateTime now = DateTime.now();
-        if (updateComplete == true) {
-          if (currentBackPressTime == null ||
-              now.difference(currentBackPressTime!) >
-                  const Duration(milliseconds: 1300)) {
-            currentBackPressTime = now;
-            fToast?.showToast(
-                toastDuration: const Duration(milliseconds: 1300),
-                child: Material(
-                  color: Colors.transparent,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const ImageIcon(
-                            AssetImage('assets/icons/ExaIcon.png'),
-                            size: 35,
-                            color: Color(0xffB7B7B7),
-                          ),
-                          SizedBox(
-                            width: screenWidth * 0.01,
-                          ),
-                          Text(
-                            _text,
-                            style: TextStyle(fontFamily: 'kor', fontSize: 35),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: screenHeight * 0.05,
-                      )
-                    ],
-                  ),
-                ),
-                gravity: ToastGravity.BOTTOM);
-            return Future.value(false);
-          }
-          return Future.value(true);
-        }
-        return Future.value(false);
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.transparent,
-        ),
-        body: GestureDetector(
-          // 스크린 터치시 화면 이동을 위한 위젯
-          onTap: () {
-            updateComplete == true
-                ? getting(hostAdr, positionURL)
-                : null;
-          },
-          child: Center(
-            child: Scaffold(
-              body: Stack(children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+        onWillPop: () async {
+          DateTime now = DateTime.now();
+          if (updateComplete == true) {
+            if (currentBackPressTime == null ||
+                now.difference(currentBackPressTime!) >
+                    const Duration(milliseconds: 1300)) {
+              currentBackPressTime = now;
+              fToast?.showToast(
+                  toastDuration: const Duration(milliseconds: 1300),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Column(
                       children: [
-                        SizedBox(
-                          width: screenWidth,
-                          height: screenHeight * 0.8,
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: SizedBox(
-                              width: videoWidth,
-                              height: videoHeight,
-                              child: _controller.value.isInitialized
-                                  ? AspectRatio(
-                                      aspectRatio:
-                                          _controller.value.aspectRatio,
-                                      child: VideoPlayer(
-                                        _controller,
-                                      ),
-                                    )
-                                  : Container(),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const ImageIcon(
+                              AssetImage('assets/icons/ExaIcon.png'),
+                              size: 35,
+                              color: Color(0xffB7B7B7),
                             ),
-                          ),
+                            SizedBox(
+                              width: screenWidth * 0.01,
+                            ),
+                            Text(
+                              _text,
+                              style: TextStyle(fontFamily: 'kor', fontSize: 35),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (updateComplete == true)
-                          FadeTransition(
-                            opacity: _animation,
-                            child: Text("화면을 터치해 주세요",
-                                style: Theme.of(context).textTheme.titleLarge),
-                          )
-                        else
-                          const SizedBox(),
                         SizedBox(
-                          height: screenHeight * 0.4,
+                          height: screenHeight * 0.05,
                         )
                       ],
                     ),
-                  ],
-                )
-              ]),
+                  ),
+                  gravity: ToastGravity.BOTTOM);
+              return Future.value(false);
+            }
+            return Future.value(true);
+          }
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.transparent,
+          ),
+          body: GestureDetector(
+            // 스크린 터치시 화면 이동을 위한 위젯
+            onTap: () {
+              updateComplete == true ? getting(hostAdr, positionURL) : null;
+            },
+            child: Center(
+              child: Scaffold(
+                body: Stack(children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: screenWidth,
+                            height: screenHeight * 0.8,
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: SizedBox(
+                                width: videoWidth,
+                                height: videoHeight,
+                                child: _controller.value.isInitialized
+                                    ? AspectRatio(
+                                        aspectRatio:
+                                            _controller.value.aspectRatio,
+                                        child: VideoPlayer(
+                                          _controller,
+                                        ),
+                                      )
+                                    : Container(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (updateComplete == true)
+                            FadeTransition(
+                              opacity: _animation,
+                              child: Text("화면을 터치해 주세요",
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                            )
+                          else
+                            const SizedBox(),
+                          SizedBox(
+                            height: screenHeight * 0.4,
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+                ]),
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        )
+
+        // child: WillPopScope(
+        //   onWillPop: () async {
+        //     DateTime now = DateTime.now();
+        //     if (updateComplete == true) {
+        //       if (currentBackPressTime == null ||
+        //           now.difference(currentBackPressTime!) >
+        //               const Duration(milliseconds: 1300)) {
+        //         currentBackPressTime = now;
+        //         fToast?.showToast(
+        //             toastDuration: const Duration(milliseconds: 1300),
+        //             child: Material(
+        //               color: Colors.transparent,
+        //               child: Column(
+        //                 children: [
+        //                   Row(
+        //                     mainAxisSize: MainAxisSize.min,
+        //                     children: [
+        //                       const ImageIcon(
+        //                         AssetImage('assets/icons/ExaIcon.png'),
+        //                         size: 35,
+        //                         color: Color(0xffB7B7B7),
+        //                       ),
+        //                       SizedBox(
+        //                         width: screenWidth * 0.01,
+        //                       ),
+        //                       Text(
+        //                         _text,
+        //                         style: TextStyle(fontFamily: 'kor', fontSize: 35),
+        //                       )
+        //                     ],
+        //                   ),
+        //                   SizedBox(
+        //                     height: screenHeight * 0.05,
+        //                   )
+        //                 ],
+        //               ),
+        //             ),
+        //             gravity: ToastGravity.BOTTOM);
+        //         return Future.value(false);
+        //       }
+        //       return Future.value(true);
+        //     }
+        //     return Future.value(false);
+        //   },
+        //   child: Scaffold(
+        //     appBar: AppBar(
+        //       backgroundColor: Colors.transparent,
+        //       foregroundColor: Colors.transparent,
+        //     ),
+        //     body: GestureDetector(
+        //       // 스크린 터치시 화면 이동을 위한 위젯
+        //       onTap: () {
+        //         updateComplete == true
+        //             ? getting(hostAdr, positionURL)
+        //             : null;
+        //       },
+        //       child: Center(
+        //         child: Scaffold(
+        //           body: Stack(children: [
+        //             Column(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 Row(
+        //                   mainAxisAlignment: MainAxisAlignment.center,
+        //                   children: [
+        //                     SizedBox(
+        //                       width: screenWidth,
+        //                       height: screenHeight * 0.8,
+        //                       child: FittedBox(
+        //                         fit: BoxFit.cover,
+        //                         child: SizedBox(
+        //                           width: videoWidth,
+        //                           height: videoHeight,
+        //                           child: _controller.value.isInitialized
+        //                               ? AspectRatio(
+        //                                   aspectRatio:
+        //                                       _controller.value.aspectRatio,
+        //                                   child: VideoPlayer(
+        //                                     _controller,
+        //                                   ),
+        //                                 )
+        //                               : Container(),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ],
+        //             ),
+        //             Column(
+        //               mainAxisAlignment: MainAxisAlignment.end,
+        //               children: [
+        //                 Row(
+        //                   mainAxisAlignment: MainAxisAlignment.center,
+        //                   children: [
+        //                     if (updateComplete == true)
+        //                       FadeTransition(
+        //                         opacity: _animation,
+        //                         child: Text("화면을 터치해 주세요",
+        //                             style: Theme.of(context).textTheme.titleLarge),
+        //                       )
+        //                     else
+        //                       const SizedBox(),
+        //                     SizedBox(
+        //                       height: screenHeight * 0.4,
+        //                     )
+        //                   ],
+        //                 ),
+        //               ],
+        //             )
+        //           ]),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        );
   }
 }

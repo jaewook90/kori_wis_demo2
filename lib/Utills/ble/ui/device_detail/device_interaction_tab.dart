@@ -55,6 +55,7 @@ class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
 
   void connect() {
     deviceConnector.connect(deviceId);
+    print(deviceId);
   }
 
   void disconnect() {

@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:convert' show utf8;
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:functional_data/functional_data.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
-import 'package:kori_wis_demo/Utills/ble/ui/device_detail/device_interaction_tab.dart';
 import 'package:kori_wis_demo/Widgets/MainScreenButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +18,7 @@ part 'MainScreenFinal.g.dart';
 
 class MainScreenBLEAutoConnect extends StatelessWidget {
   final dynamic parsePoseData;
+
   const MainScreenBLEAutoConnect({
     this.parsePoseData,
     Key? key,
@@ -27,33 +27,38 @@ class MainScreenBLEAutoConnect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DiscoveredDevice device = DiscoveredDevice(
-        id: 'F0:28:31:D5:10:D0',
-        // F0:28:31:D5:10:D0 트레이 디텍터
+        id: 'DF:75:E4:D6:32:63',
+        // F0:28:31:D5:10:D0 트레이 디텍터 / 서빙 봇
+        // DF:75:E4:D6:32:63 트레이 디텍터 / 충전 봇
+        // F0:52:FD:5C:8D:73 허스키렌즈
         // FA:BF:4C:CE:D5:F8 디버그용
         name: 'BBC micro:bit',
         serviceData: {},
         rssi: 0,
         serviceUuids: [],
         manufacturerData: Uint8List(0));
-    return Consumer3<BleDeviceConnector,
+    return Consumer3<
+        BleDeviceConnector,
         ConnectionStateUpdate,
         BleDeviceInteractor
         //, BleDeviceInteractor
-    >(
-      builder:
-          (_, deviceConnector, connectionStateUpdate, serviceDiscoverer,
-          // interactor,
-          __) =>
+        >(
+      builder: (_,
+              deviceConnector,
+              connectionStateUpdate,
+              serviceDiscoverer,
+              // interactor,
+              __) =>
           MainScreenFinal(
-            // subscribeToCharacteristic: interactor.subScribeToCharacteristic,
-            viewModel: MainScreenBLEAutoViewModel(
-                deviceId: device.id,
-                connectionStatus: connectionStateUpdate.connectionState,
-                deviceConnector: deviceConnector,
-                discoverServices: () =>
-                    serviceDiscoverer.discoverServices(device.id)),
-            parsePoseData: parsePoseData,
-          ),
+        // subscribeToCharacteristic: interactor.subScribeToCharacteristic,
+        viewModel: MainScreenBLEAutoViewModel(
+            deviceId: device.id,
+            connectionStatus: connectionStateUpdate.connectionState,
+            deviceConnector: deviceConnector,
+            discoverServices: () =>
+                serviceDiscoverer.discoverServices(device.id)),
+        parsePoseData: parsePoseData,
+      ),
     );
   }
 }
@@ -87,14 +92,13 @@ class MainScreenBLEAutoViewModel extends $MainScreenBLEAutoViewModel {
 }
 
 class MainScreenFinal extends StatefulWidget {
-  const MainScreenFinal({Key? key, this.parsePoseData, this.viewModel,
-    // this.subscribeToCharacteristic,
-
+  const MainScreenFinal({
+    Key? key,
+    this.parsePoseData,
+    this.viewModel,
   }) : super(key: key);
   final dynamic parsePoseData;
   final MainScreenBLEAutoViewModel? viewModel;
-  // final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
-  // subscribeToCharacteristic;
 
   @override
   State<MainScreenFinal> createState() => _MainScreenFinalState();
@@ -102,18 +106,11 @@ class MainScreenFinal extends StatefulWidget {
 
 class _MainScreenFinalState extends State<MainScreenFinal>
     with TickerProviderStateMixin {
-
   // late List<DiscoveredService> discoveredServices;
 
   late NetworkModel _networkProvider;
 
   late List<DiscoveredService> discoveredServices;
-
-  // late StreamSubscription<List<int>>? subscribeStream;
-  // late String subscribeOutput;
-  // late String tray1BLE;
-  // late String tray2BLE;
-  // late String tray3BLE;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -151,52 +148,33 @@ class _MainScreenFinalState extends State<MainScreenFinal>
 
     fToast = FToast();
     fToast?.init(context);
-    // if(widget.parsePoseData == null){
-    //   Provider.of<NetworkModel>((context), listen: false).APIGetFlag = false;
-    //   PositionList = ['1', '2','3', '4', '5', '6', '7', '8', '999', 'charging_pile', 'asdf'];
-    // }else{
-    //   Provider.of<NetworkModel>((context), listen: false).APIGetFlag = true;
-    //   poseDataUpdate(widget.parsePoseData);
-    // }
 
-      poseDataUpdate(widget.parsePoseData);
-
-    // tray1BLE = "";
-    // tray2BLE = "";
-    // tray3BLE = "";
-
+    poseDataUpdate(widget.parsePoseData);
   }
 
   void poseDataUpdate(dynamic parsePoseData) {
     newPoseData = parsePoseData;
-    if(newPoseData != null) {
+    if (newPoseData != null) {
       poseData = newPoseData;
       String editPoseData = poseData.toString();
 
       editPoseData = editPoseData.replaceAll('{', "");
       editPoseData = editPoseData.replaceAll('}', "");
-      List<String> PositionWithCordList =
-      editPoseData.split("], ");
+      List<String> PositionWithCordList = editPoseData.split("], ");
 
-      for (int i = 0;
-      i < PositionWithCordList.length;
-      i++) {
-        PositioningList =
-            PositionWithCordList[i].split(":");
-        for (int j = 0;
-        j < PositioningList.length;
-        j++) {
+      for (int i = 0; i < PositionWithCordList.length; i++) {
+        PositioningList = PositionWithCordList[i].split(":");
+        for (int j = 0; j < PositioningList.length; j++) {
           if (j == 0) {
-              if(!PositioningList[j].contains('['))
-              {
-                poseData = PositioningList[j];
-                PositionList.add(poseData);
-              }
+            if (!PositioningList[j].contains('[')) {
+              poseData = PositioningList[j];
+              PositionList.add(poseData);
+            }
           }
         }
       }
       PositionList.sort();
-    }else{
+    } else {
       PositionList = [];
     }
   }
@@ -216,20 +194,20 @@ class _MainScreenFinalState extends State<MainScreenFinal>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    if(PositionList.isEmpty){
+    if (PositionList.isEmpty) {
       PositionList = _networkProvider.getPoseData!;
-    }else{
+    } else {
       _networkProvider.getPoseData = PositionList;
     }
-    print(PositionList);
+    // print(PositionList);
+    //
+    // print("before : ${widget.viewModel!.deviceConnected}");
 
-    print("before : ${widget.viewModel!.deviceConnected}");
-
-    if(widget.viewModel!.deviceConnected == false){
+    if (widget.viewModel!.deviceConnected == false) {
       widget.viewModel!.connect();
     }
 
-    print("after : ${widget.viewModel!.deviceConnected}");
+    // print("after : ${widget.viewModel!.deviceConnected}");
 
     return WillPopScope(
       onWillPop: () async {
@@ -259,10 +237,7 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                           ),
                           Text(
                             _text,
-                            style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 35
-                            ),
+                            style: TextStyle(fontFamily: 'kor', fontSize: 35),
                           )
                         ],
                       ),
@@ -304,28 +279,15 @@ class _MainScreenFinalState extends State<MainScreenFinal>
                     ),
                   ),
                   // Positioned(
-                  //   left: 50,
+                  //   left: 100,
                   //   top: 25,
-                  //   child: Container(
-                  //     height: 60,
-                  //     width: 60,
-                  //     child: Icon(
-                  //       _networkProvider.APIGetFlag==true
-                  //         ? Icons.check_circle_outline
-                  //           : Icons.cancel_outlined
-                  //     ),
+                  //   child: Column(
+                  //     children: [
+                  //       Text("id: ${widget.viewModel!.deviceId}"),
+                  //       Text("Status: ${widget.viewModel!.connectionStatus}"),
+                  //     ],
                   //   ),
-                  // ),
-                  Positioned(
-                    left: 100,
-                      top: 25,
-                    child: Column(
-                      children: [
-                        Text("id: ${widget.viewModel!.deviceId}"),
-                        Text("Status: ${widget.viewModel!.connectionStatus}"),
-                      ],
-                    ),
-                  )
+                  // )
                 ],
               ),
             )

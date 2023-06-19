@@ -15,7 +15,6 @@ class ItemOrderModalFinal extends StatefulWidget {
 }
 
 class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
-  late OrderModel _orderProvider;
   late BLEModel _bleProvider;
 
   String orderBookImg = 'assets/screens/Serving/koriZFinalOrderBook.png';
@@ -24,16 +23,12 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Provider.of<OrderModel>(context, listen: false).SelectedQT = 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
-
-    setState(() {
-      _orderProvider.SelectedQT = 0;
-    });
 
     return Container(
       padding: const EdgeInsets.only(top: 100),
@@ -68,12 +63,6 @@ class _ItemOrderModalFinalState extends State<ItemOrderModalFinal> {
                         _bleProvider.onTraySelectionScreen = true;
                       });
                       Navigator.pop(context);
-                      // navPage(context: context, page: TrayEquipped(
-                      //   characteristic: QualifiedCharacteristic(
-                      //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                      //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                      //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                      // ), enablePop: false).navPageToPage();
                     },
                     child: null,
                   ),

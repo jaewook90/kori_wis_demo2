@@ -59,7 +59,7 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    selectedQt = 0;
+    selectedQt = Provider.of<OrderModel>(context, listen: false).SelectedQT;
     checkOutItems = true;
   }
 
@@ -165,9 +165,9 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
     _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    setState(() {
-      selectedQt = _orderProvider.SelectedQT;
-    });
+    // setState(() {
+    //   selectedQt = _orderProvider.SelectedQT;
+    // });
 
     if (selectedQt == 0) {
       checkOutItems = true;
@@ -318,19 +318,6 @@ class _OrderModuleButtonsFinalState extends State<OrderModuleButtonsFinal> {
                   _bleProvider.onTraySelectionScreen = true;
                 });
                 Navigator.pop(context);
-                // navPage(context: context, page: TraySelectionFinal(), enablePop: false).navPageToPage();
-                // navPage(context: context, page: TrayEquipped(
-                //   characteristic: QualifiedCharacteristic(
-                //       characteristicId: Provider
-                //           .of<BLEModel>(context, listen: false)
-                //           .trayDetectorCharacteristicId!,
-                //       serviceId: Provider
-                //           .of<BLEModel>(context, listen: false)
-                //           .trayDetectorServiceId!,
-                //       deviceId: Provider
-                //           .of<BLEModel>(context, listen: false)
-                //           .trayDetectorDeviceId!),
-                // ), enablePop: false).navPageToPage();
               } : null,
               child: null,
             ),

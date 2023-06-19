@@ -11,6 +11,7 @@ import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 //BLE 모듈 헤더
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -29,6 +30,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  await Firebase.initializeApp();
 
   await initializeDateFormatting();
 
@@ -86,7 +88,7 @@ void main() async {
           playAd: false,
         )),
         ChangeNotifierProvider(create: (context)=>NetworkModel(
-            startUrl: '172.30.1.22'
+            startUrl: '172.30.1.35'
 
         )),
         ChangeNotifierProvider(

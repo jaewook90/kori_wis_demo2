@@ -51,7 +51,7 @@ class _NavigatorProgressModuleFinalState
 
   Future<dynamic> Getting() async {
     NetworkGet network =
-    NetworkGet("http://172.30.1.22/reeman/movebase_status");
+    NetworkGet("http://172.30.1.35/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 

@@ -122,7 +122,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
   Future<void> subscribeCharacteristic() async {
     _timer = Timer(Duration(milliseconds: 500), () {
-      // print("Yeah, this line is printed after 1 second");
+
       subscribeStream = widget.subscribeToCharacteristic!
               (widget.characteristic!)
           .listen((event) {
@@ -133,22 +133,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
             tray2BLE = subscribeOutput.split('')[1];
             tray3BLE = subscribeOutput.split('')[2];
 
-            // Provider.of<BLEModel>(context, listen: false).subscribeOutput =
-            //     subscribeOutput;
-
             if (subscribeOutput != 'Notification set') {
               subscribeStream!.cancel();
             }
             _timer.cancel();
           });
-          // }
-        }
+          }
       });
-      setState(() {
-        subscribeOutput = 'Notification set';
-        _timer.cancel();
-        // subscribeCharacteristic();
-      });
+      if(mounted){
+        setState(() {
+          subscribeOutput = 'Notification set';
+          _timer.cancel();
+        });
+      }
     });
   }
 
@@ -175,9 +172,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     _debugTray = _servingProvider.trayDebug!;
 
     // 트레이 디텍터에 따른 트레이 표시
-    // Timer(Duration(seconds: 1), () {
-    //   print("Yeah, this line is printed after 1 second");
-    // });
 
     if (mounted) {
       if (_bleProvider.onTraySelectionScreen == true) {
@@ -266,6 +260,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     top: 10,
                     child: FilledButton(
                       onPressed: () {
+                        subscribeStream!.cancel();
                         navPage(
                                 context: context,
                                 page: const ServiceScreenFinal(),
@@ -299,6 +294,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                 page: const MainScreenBLEAutoConnect(),
                                 enablePop: false)
                             .navPageToPage();
+                        subscribeStream!.cancel();
                       },
                       style: FilledButton.styleFrom(
                           fixedSize: const Size(90, 90),
@@ -470,6 +466,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
+                          foregroundColor: Colors.transparent,
                             fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0)),
@@ -486,6 +483,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
+                            foregroundColor: Colors.transparent,
                             fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0)),
@@ -502,6 +500,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
+                            foregroundColor: Colors.transparent,
                             fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0)),
