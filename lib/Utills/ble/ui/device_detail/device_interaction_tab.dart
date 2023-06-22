@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:functional_data/functional_data.dart';
@@ -53,8 +54,11 @@ class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
   bool get deviceConnected =>
       connectionStatus == DeviceConnectionState.connected;
 
+
+
   void connect() {
     deviceConnector.connect(deviceId);
+
     print(deviceId);
   }
 
@@ -77,6 +81,8 @@ class _DeviceInteractionTab extends StatefulWidget {
 
 class _DeviceInteractionTabState extends State<_DeviceInteractionTab> {
   late List<DiscoveredService> discoveredServices;
+
+  FirebaseFirestore microBitDb = FirebaseFirestore.instance;
 
   @override
   void initState() {

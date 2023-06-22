@@ -30,7 +30,7 @@ class _IntroScreenState extends State<IntroScreen>
   late NetworkModel _networkProvider;
   late BLEModel _bleProvider;
 
-  FirebaseFirestore testDb = FirebaseFirestore.instance;
+  FirebaseFirestore microBitDb = FirebaseFirestore.instance;
 
   String positionURL = "";
   String hostAdr = "";
@@ -93,9 +93,9 @@ class _IntroScreenState extends State<IntroScreen>
     huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     huskyDeviceId = 'F0:52:FD:5C:8D:73';
 
-    trayDetectorCharacteristicId =
-        Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    // trayDetectorCharacteristicId =
+    //     Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    // trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     // trayDetectorDeviceId = 'DF:75:E4:D6:32:63';
   }
 
@@ -151,14 +151,18 @@ class _IntroScreenState extends State<IntroScreen>
 
   void getStarted_readData() async {
     // [START get_started_read_data]
-    await testDb.collection("microBit").get().then((event) {
+    await microBitDb.collection("microBit").get().then((event) {
       for (var doc in event.docs) {
         print("${doc.id} => ${doc.data()}");
         if(doc.data()['id'] == robotId){
           print('1');
           print(doc.data()['trayDetector']);
+          print(doc.data()['trayDetectorService']);
+          print(doc.data()['trayDetectorCharacteristic']);
           print('1');
           Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId = doc.data()['trayDetector'];
+          Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId = Uuid.parse(doc.data()['trayDetectorService']);
+          Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId = Uuid.parse(doc.data()['trayDetectorCharacteristic']);
         }
       }
     });
@@ -187,8 +191,8 @@ class _IntroScreenState extends State<IntroScreen>
 
     // 트레이디텍터 BLE 정보
     // _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
-    _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
-    _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
+    // _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
+    // _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
 
     hostAdr = _networkProvider.startUrl;
     positionURL = _networkProvider.positionURL;
