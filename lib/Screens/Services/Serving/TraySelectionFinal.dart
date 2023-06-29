@@ -98,6 +98,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
 
+  FirebaseFirestore robotDb = FirebaseFirestore.instance;
+
   late Timer _timer;
 
   dynamic newPoseData;
@@ -185,6 +187,18 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     }
   }
 
+  void getStarted_readData() async {
+    // [START get_started_read_data]
+    await robotDb.collection("servingBot1").get().then((event) {
+      for (var doc in event.docs) {
+        if(doc.id == "robotState"){
+          Provider.of<ServingModel>(context, listen: false).servingState = doc.data()['serviceState'];
+        }
+      }
+    });
+    // [END get_started_read_data]
+  }
+
   void poseDataUpdate() {
     newPoseData = Provider.of<NetworkModel>(context, listen: false).getApiData;
     if (newPoseData != null) {
@@ -265,6 +279,22 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     _debugTray = _servingProvider.trayDebug!;
+
+    // 서버에서 로봇 스테이트 읽기
+    getStarted_readData();
+
+    serviceState = Provider.of<ServingModel>(context, listen: false).servingState!;
+    //0: 일반 1: 퇴식
+
+    print(serviceState);
+
+    if(serviceState == 1){
+      // 퇴식 화면 제작 후 이동 함수 추가
+      print('퇴식화면으로 이동');
+      print('퇴식화면으로 이동');
+      print('퇴식화면으로 이동');
+      print('퇴식화면으로 이동');
+    }
 
     // 트레이 디텍터에 따른 트레이 표시
 
