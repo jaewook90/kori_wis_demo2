@@ -1,42 +1,42 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'MainScreenFinal.dart';
+part of 'TraySelectionFinal.dart';
 
 // **************************************************************************
 // FunctionalDataGenerator
 // **************************************************************************
 
-abstract class $MainScreenBLEAutoViewModel {
-  const $MainScreenBLEAutoViewModel();
+abstract class $TrayEquippedViewModel {
+  const $TrayEquippedViewModel();
 
   String get deviceId;
   DeviceConnectionState get connectionStatus;
   BleDeviceConnector get deviceConnector;
   Future<List<DiscoveredService>> Function() get discoverServices;
 
-  MainScreenBLEAutoViewModel copyWith({
+  TrayEquippedViewModel copyWith({
     String? deviceId,
     DeviceConnectionState? connectionStatus,
     BleDeviceConnector? deviceConnector,
     Future<List<DiscoveredService>> Function()? discoverServices,
   }) =>
-      MainScreenBLEAutoViewModel(
+      TrayEquippedViewModel(
         deviceId: deviceId ?? this.deviceId,
         connectionStatus: connectionStatus ?? this.connectionStatus,
         deviceConnector: deviceConnector ?? this.deviceConnector,
         discoverServices: discoverServices ?? this.discoverServices,
       );
 
-  MainScreenBLEAutoViewModel copyUsing(
-      void Function(MainScreenBLEAutoViewModel$Change change) mutator) {
-    final change = MainScreenBLEAutoViewModel$Change._(
+  TrayEquippedViewModel copyUsing(
+      void Function(TrayEquippedViewModel$Change change) mutator) {
+    final change = TrayEquippedViewModel$Change._(
       this.deviceId,
       this.connectionStatus,
       this.deviceConnector,
       this.discoverServices,
     );
     mutator(change);
-    return MainScreenBLEAutoViewModel(
+    return TrayEquippedViewModel(
       deviceId: change.deviceId,
       connectionStatus: change.connectionStatus,
       deviceConnector: change.deviceConnector,
@@ -46,12 +46,12 @@ abstract class $MainScreenBLEAutoViewModel {
 
   @override
   String toString() =>
-      "MainScreenBLEAutoViewModel(deviceId: $deviceId, connectionStatus: $connectionStatus, deviceConnector: $deviceConnector, discoverServices: $discoverServices)";
+      "TrayEquippedViewModel(deviceId: $deviceId, connectionStatus: $connectionStatus, deviceConnector: $deviceConnector, discoverServices: $discoverServices)";
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) =>
-      other is MainScreenBLEAutoViewModel &&
+      other is TrayEquippedViewModel &&
       other.runtimeType == runtimeType &&
       deviceId == other.deviceId &&
       connectionStatus == other.connectionStatus &&
@@ -70,8 +70,8 @@ abstract class $MainScreenBLEAutoViewModel {
   }
 }
 
-class MainScreenBLEAutoViewModel$Change {
-  MainScreenBLEAutoViewModel$Change._(
+class TrayEquippedViewModel$Change {
+  TrayEquippedViewModel$Change._(
     this.deviceId,
     this.connectionStatus,
     this.deviceConnector,
@@ -85,28 +85,28 @@ class MainScreenBLEAutoViewModel$Change {
 }
 
 // ignore: avoid_classes_with_only_static_members
-class MainScreenBLEAutoViewModel$ {
-  static final deviceId = Lens<MainScreenBLEAutoViewModel, String>(
+class TrayEquippedViewModel$ {
+  static final deviceId = Lens<TrayEquippedViewModel, String>(
     (deviceIdContainer) => deviceIdContainer.deviceId,
     (deviceIdContainer, deviceId) =>
         deviceIdContainer.copyWith(deviceId: deviceId),
   );
 
   static final connectionStatus =
-      Lens<MainScreenBLEAutoViewModel, DeviceConnectionState>(
+      Lens<TrayEquippedViewModel, DeviceConnectionState>(
     (connectionStatusContainer) => connectionStatusContainer.connectionStatus,
     (connectionStatusContainer, connectionStatus) =>
         connectionStatusContainer.copyWith(connectionStatus: connectionStatus),
   );
 
   static final deviceConnector =
-      Lens<MainScreenBLEAutoViewModel, BleDeviceConnector>(
+      Lens<TrayEquippedViewModel, BleDeviceConnector>(
     (deviceConnectorContainer) => deviceConnectorContainer.deviceConnector,
     (deviceConnectorContainer, deviceConnector) =>
         deviceConnectorContainer.copyWith(deviceConnector: deviceConnector),
   );
 
-  static final discoverServices = Lens<MainScreenBLEAutoViewModel,
+  static final discoverServices = Lens<TrayEquippedViewModel,
       Future<List<DiscoveredService>> Function()>(
     (discoverServicesContainer) => discoverServicesContainer.discoverServices,
     (discoverServicesContainer, discoverServices) =>

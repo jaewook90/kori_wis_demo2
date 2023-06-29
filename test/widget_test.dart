@@ -3,16 +3,8 @@ import 'dart:convert' show utf8;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
-import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
-import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class IsolateTestSub extends StatelessWidget {
@@ -147,11 +139,11 @@ class _IsolateTestScreenState extends State<IsolateTestScreen> {
                   top: 10,
                   child: FilledButton(
                     onPressed: () {
-                      navPage(
-                          context: context,
-                          page: const MainScreenBLEAutoConnect(),
-                          enablePop: false)
-                          .navPageToPage();
+                      // navPage(
+                      //     context: context,
+                      //     page: const MainScreenBLEAutoConnect(),
+                      //     enablePop: false)
+                      //     .navPageToPage();
                     },
                     style: FilledButton.styleFrom(
                         fixedSize: const Size(90, 90),
@@ -175,11 +167,11 @@ class _IsolateTestScreenState extends State<IsolateTestScreen> {
                   top: 10,
                   child: FilledButton(
                     onPressed: () {
-                      navPage(
-                          context: context,
-                          page: const MainScreenBLEAutoConnect(),
-                          enablePop: false)
-                          .navPageToPage();
+                      // navPage(
+                      //     context: context,
+                      //     page: const MainScreenBLEAutoConnect(),
+                      //     enablePop: false)
+                      //     .navPageToPage();
                     },
                     style: FilledButton.styleFrom(
                         fixedSize: const Size(90, 90),

@@ -5,13 +5,12 @@ import 'package:kori_wis_demo/Debug/test_api_feedback/ble_auto_test.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/feedbackAPI.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/fireBaseTest.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_scanner.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
-
-import 'MainScreenFinal.dart';
 
 class BLEdeviceList extends StatelessWidget {
   const BLEdeviceList({
@@ -66,25 +65,23 @@ class _ConfigScreenState extends State<ConfigScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('BLE 주소를 입력하세요.'),
+                    const Text('BLE 주소를 입력하세요.'),
                     TextField(
                       controller: tdController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'trayDetector',
                           labelStyle: TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 20,
-                            color: Colors.white
-                          ),
+                              fontFamily: 'kor',
+                              fontSize: 20,
+                              color: Colors.white),
                           border: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 1),
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 1),
                           ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.white, width: 1),
-                        )
-                      ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.white, width: 1),
+                          )),
                     )
                   ],
                 ),
@@ -108,7 +105,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
                       },
                       style: TextButton.styleFrom(
                           foregroundColor: const Color(0xff797979),
-                          shape: LinearBorder(
+                          shape: const LinearBorder(
                             side: BorderSide(color: Colors.white, width: 2),
                             top: LinearBorderEdge(size: 1),
                             end: LinearBorderEdge(size: 0.8),
@@ -132,12 +129,13 @@ class _ConfigScreenState extends State<ConfigScreen> {
                             .collection("microBit")
                             .doc("servingBot2")
                             .set(data, SetOptions(merge: true));
-                        Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId = tdController.text;
+                        Provider.of<BLEModel>(context, listen: false)
+                            .trayDetectorDeviceId = tdController.text;
                         Navigator.pop(context);
                       },
                       style: TextButton.styleFrom(
                           foregroundColor: const Color(0xff797979),
-                          shape: LinearBorder(
+                          shape: const LinearBorder(
                             side: BorderSide(color: Colors.white, width: 2),
                             top: LinearBorderEdge(size: 1),
                             // start:
@@ -174,7 +172,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
             onPressed: () {
               navPage(
                       context: context,
-                      page: const MainScreenBLEAutoConnect(),
+                      page: const TrayEquipped(),
                       enablePop: false)
                   .navPageToPage();
             },
@@ -189,7 +187,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        padding: EdgeInsets.only(top: 200),
+        padding: const EdgeInsets.only(top: 200),
         constraints: const BoxConstraints.expand(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -197,131 +195,129 @@ class _ConfigScreenState extends State<ConfigScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  child: TextButton(
-                      onPressed: () {
-                        navPage(
-                                context: context,
-                                page: testAPIFeedback(),
-                                enablePop: true)
-                            .navPageToPage();
-                      },
-                      style: TextButton.styleFrom(
-                          fixedSize: Size(400, 100),
-                          backgroundColor: Color(0xff2d2d2d),
-                          side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
-                      child: Text('api디버그',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 40,
-                              color: Color(0xffdddddd)))),
+                TextButton(
+                    onPressed: () {
+                      navPage(
+                              context: context,
+                              page: const testAPIFeedback(),
+                              enablePop: true)
+                          .navPageToPage();
+                    },
+                    style: TextButton.styleFrom(
+                        fixedSize: const Size(400, 100),
+                        backgroundColor: const Color(0xff2d2d2d),
+                        side: const BorderSide(
+                            color: Color(0xffaaaaaa), width: 1)),
+                    child: const Text('api디버그',
+                        style: TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 40,
+                            color: Color(0xffdddddd)))),
+                TextButton(
+                  onPressed: () {
+                navPage(
+                        context: context,
+                        page: const DeviceListScreen(),
+                        enablePop: true)
+                    .navPageToPage();
+                  },
+                  style: TextButton.styleFrom(
+                  fixedSize: const Size(400, 100),
+                  backgroundColor: const Color(0xff2d2d2d),
+                  side:
+                      const BorderSide(color: Color(0xffaaaaaa), width: 1)),
+                  child: const Text(
+                '블루투스 연결',
+                style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffdddddd)),
+                  ),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                navPage(
+                        context: context,
+                        page: const BLEAutoConnect(),
+                        enablePop: true)
+                    .navPageToPage();
+                  },
+                  style: TextButton.styleFrom(
+                  fixedSize: const Size(400, 100),
+                  backgroundColor: const Color(0xff2d2d2d),
+                  side:
+                      const BorderSide(color: Color(0xffaaaaaa), width: 1)),
+                  child: const Text(
+                '블루투스 자동 연결',
+                style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffdddddd)),
+                  ),
                 ),
-                Container(
-                    child: TextButton(
+                TextButton(
                   onPressed: () {
-                    navPage(
-                            context: context,
-                            page: const DeviceListScreen(),
-                            enablePop: true)
-                        .navPageToPage();
+                navPage(
+                        context: context,
+                        page: const FireBaseTestScreen(),
+                        enablePop: true)
+                    .navPageToPage();
                   },
-                  child: Text(
-                    '블루투스 연결',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 40,
-                        color: Color(0xffdddddd)),
-                  ),
                   style: TextButton.styleFrom(
-                      fixedSize: Size(400, 100),
-                      backgroundColor: Color(0xff2d2d2d),
-                      side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
-                ))
+                  fixedSize: const Size(400, 100),
+                  backgroundColor: const Color(0xff2d2d2d),
+                  side:
+                      const BorderSide(color: Color(0xffaaaaaa), width: 1)),
+                  child: const Text(
+                '파이어베이스 테스트',
+                style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffdddddd)),
+                  ),
+                )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                    child: TextButton(
+                TextButton(
                   onPressed: () {
-                    navPage(
-                            context: context,
-                            page: BLEAutoConnect(),
-                            enablePop: true)
-                        .navPageToPage();
+                showTrayDetectorChange(context);
                   },
-                  child: Text(
-                    '블루투스 자동 연결',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 40,
-                        color: Color(0xffdddddd)),
-                  ),
                   style: TextButton.styleFrom(
-                      fixedSize: Size(400, 100),
-                      backgroundColor: Color(0xff2d2d2d),
-                      side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
-                )),
-                Container(
-                    child: TextButton(
+                  fixedSize: const Size(400, 100),
+                  backgroundColor: const Color(0xff2d2d2d),
+                  side:
+                      const BorderSide(color: Color(0xffaaaaaa), width: 1)),
+                  child: const Text(
+                '트레이 디텍터 변경',
+                style: TextStyle(
+                    fontFamily: 'kor',
+                    fontSize: 40,
+                    color: Color(0xffdddddd)),
+                  ),
+                ),
+                TextButton(
                   onPressed: () {
-                    navPage(
-                            context: context,
-                            page: FireBaseTestScreen(),
-                            enablePop: true)
-                        .navPageToPage();
+                navPage(
+                        context: context,
+                        page: const FireBaseTestScreen(),
+                        enablePop: true)
+                    .navPageToPage();
                   },
-                  child: Text(
-                    '파이어베이스 테스트',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 40,
-                        color: Color(0xffdddddd)),
-                  ),
                   style: TextButton.styleFrom(
-                      fixedSize: Size(400, 100),
-                      backgroundColor: Color(0xff2d2d2d),
-                      side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
-                ))
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                    child: TextButton(
-                  onPressed: () {
-                    showTrayDetectorChange(context);
-                  },
-                  child: Text(
-                    '트레이 디텍터 변경',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 40,
-                        color: Color(0xffdddddd)),
+                fixedSize: const Size(400, 100),
+                backgroundColor: Colors.transparent,
+                // side: BorderSide(color: Color(0xffaaaaaa), width: 1)
                   ),
-                  style: TextButton.styleFrom(
-                      fixedSize: Size(400, 100),
-                      backgroundColor: Color(0xff2d2d2d),
-                      side: BorderSide(color: Color(0xffaaaaaa), width: 1)),
-                )),
-                Container(
-                    child: TextButton(
-                  onPressed: () {
-                    navPage(
-                            context: context,
-                            page: FireBaseTestScreen(),
-                            enablePop: true)
-                        .navPageToPage();
-                  },
-                  child: Text(''),
-                  style: TextButton.styleFrom(
-                    fixedSize: Size(400, 100),
-                    backgroundColor: Colors.transparent,
-                    // side: BorderSide(color: Color(0xffaaaaaa), width: 1)
-                  ),
-                ))
+                  child: const Text('')
+                )
               ],
             ),
           ],

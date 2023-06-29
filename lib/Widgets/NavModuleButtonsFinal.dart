@@ -3,7 +3,6 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorPauseModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDestinationModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -157,7 +156,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                     .navPageToPage();
                 _statusProvider.playAd = false;
               } else if (i == 1) {
-                // 추후에는 API 통신을 이용한 충전하러가기 기능 추가
+                // 충전하러가기 기능
                 PostApi(
                     url: startUrl,
                     endadr: chgUrl,
@@ -171,16 +170,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 _statusProvider.playAd = false;
               } else if (i == 2) {
                 // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                navPage(
-                    context: context,
-                    page: const ShippingDestinationNewFinal(),
-                    enablePop: true)
-                    .navPageToPage();
-                // navPage(
-                //     context: context,
-                //     page: const NavigatorProgressModuleFinal(),
-                //     enablePop: false)
-                //     .navPageToPage();
                 _statusProvider.playAd = false;
               } else {
                 // 추후에는 거점으로 복귀

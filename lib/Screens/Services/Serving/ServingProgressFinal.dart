@@ -3,7 +3,6 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -59,7 +58,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                       onPressed: () {
                         navPage(
                             context: context,
-                            page: const MainScreenBLEAutoConnect(),
+                            page: const TrayEquipped(),
                             enablePop: false)
                             .navPageToPage();
                       },

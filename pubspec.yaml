@@ -81,23 +81,15 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/hotel_room_img/
     - assets/images/serving_item_imgs/
-    - assets/images/room_item_imgs/
-    - assets/images/Service_menu_img/
     - assets/fonts/
     - assets/videos/
     - assets/voices/
     - assets/icons/
     - assets/icons/appBar/
-    - assets/icons/decoration/
     - assets/screens/
     - assets/screens/Nav/
     - assets/screens/Serving/
-    - assets/screens/Shipping/
-    - assets/screens/Hotel/
-    - assets/screens/Hotel/BellBoy/
-    - assets/screens/Hotel/RoomService/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -15,6 +15,8 @@ class NetworkModel with ChangeNotifier {
   bool? servingDone;
   bool? shippingDone;
 
+  dynamic getApiData;
+
   String? servTable;
 
   dynamic APIGetData;

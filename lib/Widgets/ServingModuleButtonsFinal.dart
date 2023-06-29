@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:kori_wis_demo/Modals/OrderModules/itemOrderModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -28,7 +26,6 @@ class ServingModuleButtonsFinal extends StatefulWidget {
 
 class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late ServingModel _servingProvider;
-  late OrderModel _orderProvider;
   late NetworkModel _networkProvider;
   late BLEModel _bleProvider;
 
@@ -80,15 +77,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     itemImagesList = [itemImages, itemImages, itemImages];
   }
 
-  void showOrderPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return const ItemOrderModalFinal();
-        });
-  }
-
   void showCountDownPopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -129,7 +117,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _orderProvider = Provider.of<OrderModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
@@ -168,11 +155,11 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     itemName = _servingProvider.menuItem;
 
     if (widget.screens == 0) {
-      // 서빙화면(주문하기 및 서빙시작)
-      buttonPositionWidth = [81.8, 568.6];
-      buttonPositionHeight = [155, 155];
+      // 서빙화면(서빙시작)
+      buttonPositionWidth = [315];
+      buttonPositionHeight = [152];
 
-      buttonSize = [428.3, 160];
+      buttonSize = [450, 168];
 
       buttonRadius = 25;
     } else if (widget.screens == 1) {
@@ -241,26 +228,15 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
             onPressed: widget.screens == 0
                 ? () {
                     _bleProvider.onTraySelectionScreen = false;
-                    if (i == 0) {
-                      setState(() {
-                        _orderProvider.SelectedItemsQT = [
-                          false,
-                          false,
-                          false,
-                          false
-                        ];
-                      });
-                      showOrderPopup(context);
+                    // 서빙만 하는 경우
+                    if ((_servingProvider.table1 != "" ||
+                        _servingProvider.table2 != "") ||
+                        _servingProvider.table3 != "") {
+                      showCountDownPopup(context);
                     } else {
-                      if ((_servingProvider.table1 != "" ||
-                              _servingProvider.table2 != "") ||
-                          _servingProvider.table3 != "") {
-                        showCountDownPopup(context);
-                      } else {
-                        _servingProvider.trayCheckAll = true;
-                        showTableSelectPopup(context);
-                        _servingProvider.menuItem = "상품";
-                      }
+                      _servingProvider.trayCheckAll = true;
+                      showTableSelectPopup(context);
+                      _servingProvider.menuItem = "상품";
                     }
                   }
                 : widget.screens == 1

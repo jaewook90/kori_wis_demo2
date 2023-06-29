@@ -1,39 +1,84 @@
 import 'dart:async';
 import 'dart:convert' show utf8;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:functional_data/functional_data.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
-import 'package:kori_wis_demo/Screens/ServiceScreenFinal.dart';
+import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
+part 'TraySelectionFinal.g.dart';
+
+//ignore_for_file: annotate_overrides
 // 트레이 반응형 UI
 
 class TrayEquipped extends StatelessWidget {
   const TrayEquipped({
-    required this.characteristic,
+    this.characteristic,
     Key? key,
   }) : super(key: key);
-  final QualifiedCharacteristic characteristic;
+  final QualifiedCharacteristic? characteristic;
 
   @override
-  Widget build(BuildContext context) => Consumer<BleDeviceInteractor>(
-      builder: (context, interactor, _) => TraySelectionFinal(
-            characteristic: characteristic,
-            subscribeToCharacteristic: interactor.subScribeToCharacteristic,
-          ));
+  Widget build(BuildContext context) {
+    return Consumer3<BleDeviceInteractor, BleDeviceConnector,
+            ConnectionStateUpdate>(
+        builder: (_, interactor, deviceConnector, connectionStateUpdate, __) =>
+            TraySelectionFinal(
+              characteristic: characteristic,
+              subscribeToCharacteristic: interactor.subScribeToCharacteristic,
+              viewModel: TrayEquippedViewModel(
+                  deviceId: characteristic!.deviceId,
+                  connectionStatus: connectionStateUpdate.connectionState,
+                  deviceConnector: deviceConnector,
+                  discoverServices: () =>
+                      interactor.discoverServices(characteristic!.deviceId)),
+            ));
+  }
+}
+
+class TrayEquippedViewModel extends $TrayEquippedViewModel {
+  const TrayEquippedViewModel({
+    required this.deviceId,
+    required this.connectionStatus,
+    required this.deviceConnector,
+    required this.discoverServices,
+  });
+
+  final String deviceId;
+  final DeviceConnectionState connectionStatus;
+  final BleDeviceConnector deviceConnector;
+  @CustomEquality(Ignore())
+  final Future<List<DiscoveredService>> Function() discoverServices;
+
+  bool get deviceConnected =>
+      connectionStatus == DeviceConnectionState.connected;
+
+  void connect() {
+    deviceConnector.connect(deviceId);
+  }
+
+  void disconnect() {
+    deviceConnector.disconnect(deviceId);
+  }
 }
 
 class TraySelectionFinal extends StatefulWidget {
   const TraySelectionFinal(
-      {this.characteristic, this.subscribeToCharacteristic, Key? key})
+      {this.characteristic,
+      this.subscribeToCharacteristic,
+      this.viewModel,
+      Key? key})
       : super(key: key);
 
   final QualifiedCharacteristic? characteristic;
@@ -41,20 +86,27 @@ class TraySelectionFinal extends StatefulWidget {
   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
       subscribeToCharacteristic;
 
+  final TrayEquippedViewModel? viewModel;
+
   @override
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
 }
 
-class _TraySelectionFinalState extends State<TraySelectionFinal> {
+class _TraySelectionFinalState extends State<TraySelectionFinal>
+    with TickerProviderStateMixin {
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
+  late NetworkModel _networkProvider;
 
   late Timer _timer;
 
-  // late QualifiedCharacteristic? characteristic;
+  dynamic newPoseData;
+  dynamic poseData;
+
+  late List<String> PositioningList;
+  late List<String> PositionList;
 
   late String subscribeOutput;
-  late TextEditingController textEditingController;
   late StreamSubscription<List<int>>? subscribeStream;
 
   // 배경 화면
@@ -85,16 +137,28 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   //디버그
   late bool _debugTray;
 
-  int testtest = 1;
+  late int serviceState;
 
   // late bool receiptModeOn;
+
+  DateTime? currentBackPressTime;
+
+  FToast? fToast;
+
+  final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    print('aaaaaaaaaaaaaaaaaaaaaaa');
+    fToast = FToast();
+    fToast?.init(context);
+
+    PositioningList = [];
+    PositionList = [];
+
+    serviceState = 0;
 
     backgroundImage = "assets/screens/Serving/koriZFinalServing.png";
 
@@ -106,8 +170,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     tray2BLE = "";
     tray3BLE = "";
 
-    // trayDetecting = true;
-
     subscribeOutput = 'init';
 
     Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
@@ -115,14 +177,45 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     if (widget.characteristic == null) {
       subscribeStream = null;
     }
-    textEditingController = TextEditingController();
+
+    if (Provider.of<NetworkModel>(context, listen: false)
+        .getPoseData!
+        .isEmpty) {
+      poseDataUpdate();
+    }
+  }
+
+  void poseDataUpdate() {
+    newPoseData = Provider.of<NetworkModel>(context, listen: false).getApiData;
+    if (newPoseData != null) {
+      poseData = newPoseData;
+      String editPoseData = poseData.toString();
+
+      editPoseData = editPoseData.replaceAll('{', "");
+      editPoseData = editPoseData.replaceAll('}', "");
+      List<String> PositionWithCordList = editPoseData.split("], ");
+
+      for (int i = 0; i < PositionWithCordList.length; i++) {
+        PositioningList = PositionWithCordList[i].split(":");
+        for (int j = 0; j < PositioningList.length; j++) {
+          if (j == 0) {
+            if (!PositioningList[j].contains('[')) {
+              poseData = PositioningList[j];
+              PositionList.add(poseData);
+            }
+          }
+        }
+      }
+      PositionList.sort();
+    } else {
+      PositionList = [];
+    }
   }
 
   // 트레이 디텍팅
 
   Future<void> subscribeCharacteristic() async {
     _timer = Timer(Duration(milliseconds: 500), () {
-
       subscribeStream = widget.subscribeToCharacteristic!
               (widget.characteristic!)
           .listen((event) {
@@ -138,9 +231,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
             }
             _timer.cancel();
           });
-          }
+        }
       });
-      if(mounted){
+      if (mounted) {
         setState(() {
           subscribeOutput = 'Notification set';
           _timer.cancel();
@@ -162,16 +255,32 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
   void dispose() {
     super.dispose();
     subscribeStream!.cancel();
+
   }
 
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     _debugTray = _servingProvider.trayDebug!;
 
     // 트레이 디텍터에 따른 트레이 표시
+
+    if (widget.viewModel!.deviceConnected == false) {
+      widget.viewModel!.connect();
+    }
+
+    if (PositionList.isEmpty) {
+      PositionList = _networkProvider.getPoseData!;
+    } else {
+      _networkProvider.getPoseData = PositionList;
+    }
+
+    if (widget.viewModel!.deviceConnected == false) {
+      widget.viewModel!.connect();
+    }
 
     if (mounted) {
       if (_bleProvider.onTraySelectionScreen == true) {
@@ -222,8 +331,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     servedItem2 = _servingProvider.servedItem2;
     servedItem3 = _servingProvider.servedItem3;
 
-    // receiptModeOn = _servingProvider.receiptModeOn!;
-
     table1 = _servingProvider.table1;
     table2 = _servingProvider.table2;
     table3 = _servingProvider.table3;
@@ -236,12 +343,45 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
     return WillPopScope(
-      onWillPop: () {
-        navPage(
-                context: context,
-                page: const ServiceScreenFinal(),
-                enablePop: false)
-            .navPageToPage();
+      onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (currentBackPressTime == null ||
+            now.difference(currentBackPressTime!) >
+                const Duration(milliseconds: 1300)) {
+          currentBackPressTime = now;
+          fToast?.showToast(
+              toastDuration: const Duration(milliseconds: 1300),
+              child: Material(
+                color: Colors.transparent,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const ImageIcon(
+                          AssetImage('assets/icons/ExaIcon.png'),
+                          size: 35,
+                          color: Color(0xffB7B7B7),
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.01,
+                        ),
+                        Text(
+                          _text,
+                          style: TextStyle(fontFamily: 'kor', fontSize: 35),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.05,
+                    )
+                  ],
+                ),
+              ),
+              gravity: ToastGravity.BOTTOM);
+          return Future.value(false);
+        }
+
         return Future.value(false);
       },
       child: Scaffold(
@@ -255,64 +395,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               height: 108,
               child: Stack(
                 children: [
-                  Positioned(
-                    left: 20,
-                    top: 10,
-                    child: FilledButton(
-                      onPressed: () {
-                        subscribeStream!.cancel();
-                        navPage(
-                                context: context,
-                                page: const ServiceScreenFinal(),
-                                enablePop: false)
-                            .navPageToPage();
-                      },
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(90, 90),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/icons/appBar/appBar_Backward.png',
-                                ),
-                                fit: BoxFit.fill)),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 120,
-                    top: 10,
-                    child: FilledButton(
-                      onPressed: () {
-                        navPage(
-                                context: context,
-                                page: const MainScreenBLEAutoConnect(),
-                                enablePop: false)
-                            .navPageToPage();
-                        subscribeStream!.cancel();
-                      },
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(90, 90),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0)),
-                          backgroundColor: Colors.transparent),
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/icons/appBar/appBar_Home.png',
-                                ),
-                                fit: BoxFit.fill)),
-                      ),
-                    ),
-                  ),
                   Positioned(
                     right: 50,
                     top: 25,
@@ -342,23 +424,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                       iconSize: 70,
                     ),
                   ),
-                  // Positioned(
-                  //   right: 300,
-                  //   top: 10,
-                  //   child: TextButton(
-                  //     onPressed: () {
-                  //       subscribeCharacteristic();
-                  //     },
-                  //     style: TextButton.styleFrom(
-                  //         fixedSize: const Size(90, 90),
-                  //         shape: RoundedRectangleBorder(
-                  //             side: BorderSide(color: Colors.white, width: 1),
-                  //             borderRadius: BorderRadius.circular(0)),
-                  //         backgroundColor: Colors.transparent),
-                  //     child: Text(subscribeOutput),
-                  //     // child: Text(traySubscribeOutput),
-                  //   ),
-                  // ),
                 ],
               ),
             )
@@ -367,12 +432,44 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         ),
         extendBodyBehindAppBar: true,
         body: WillPopScope(
-          onWillPop: () {
-            navPage(
-                    context: context,
-                    page: const ServiceScreenFinal(),
-                    enablePop: false)
-                .navPageToPage();
+          onWillPop: () async {
+            DateTime now = DateTime.now();
+            if (currentBackPressTime == null ||
+                now.difference(currentBackPressTime!) >
+                    const Duration(milliseconds: 1300)) {
+              currentBackPressTime = now;
+              fToast?.showToast(
+                  toastDuration: const Duration(milliseconds: 1300),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const ImageIcon(
+                              AssetImage('assets/icons/ExaIcon.png'),
+                              size: 35,
+                              color: Color(0xffB7B7B7),
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.01,
+                            ),
+                            Text(
+                              _text,
+                              style: TextStyle(fontFamily: 'kor', fontSize: 35),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: screenHeight * 0.05,
+                        )
+                      ],
+                    ),
+                  ),
+                  gravity: ToastGravity.BOTTOM);
+              return Future.value(false);
+            }
             return Future.value(false);
           },
           child: Container(
@@ -466,7 +563,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                         },
                         child: null,
                         style: FilledButton.styleFrom(
-                          foregroundColor: Colors.transparent,
+                            foregroundColor: Colors.transparent,
                             fixedSize: const Size(64, 64),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0)),

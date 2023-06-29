@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class NavigatorProgressModuleFinal extends StatefulWidget {
-  // final String? servGoalPose;
 
   const NavigatorProgressModuleFinal({
-    // this.servGoalPose,
     Key? key,
   }) : super(key: key);
 
@@ -26,7 +20,6 @@ class NavigatorProgressModuleFinal extends StatefulWidget {
 
 class _NavigatorProgressModuleFinalState
     extends State<NavigatorProgressModuleFinal> {
-  late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
@@ -46,7 +39,6 @@ class _NavigatorProgressModuleFinalState
     // TODO: implement initState
     super.initState();
     navStatus = 0;
-    // servTableNum = "";
   }
 
   Future<dynamic> Getting() async {
@@ -73,7 +65,6 @@ class _NavigatorProgressModuleFinalState
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
@@ -81,23 +72,7 @@ class _NavigatorProgressModuleFinalState
 
     servTableNum = _networkProvider.servTable!;
 
-    // if(widget.servGoalPose != null){
-    //   servTableNum = widget.servGoalPose!;
-    // }
-
-    // print('form navCount');
-    // print(widget.servGoalPose);
-    // print('form navCount');
-
-    if (_statusProvider.serviceState == 0) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalShipProgNav.png";
-    } else if (_statusProvider.serviceState == 1) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
-    } else if (_statusProvider.serviceState == 2) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalBellProgNav.png";
-    } else if (_statusProvider.serviceState == 3) {
-      backgroundImageServ = "assets/screens/Nav/koriZFinalRoomProgNav.png";
-    }
+    backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
     if (_servingProvider.targetTableNum != null) {
       targetTableNum = _servingProvider.targetTableNum!;
@@ -154,38 +129,18 @@ class _NavigatorProgressModuleFinalState
 
     WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
 
-    // if (navStatus == 0) {
-    //   PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
-    //       .Posting(context);
-    //   print(Provider.of<NetworkModel>((context), listen: false).APIPostData);
-    // }
+    // navPage(
+    //     context: context,
+    //     page: const ServingProgressFinal(),
+    //     enablePop: false)
+    //     .navPageToPage();
 
     if (navStatus == 3) {
-      if (_statusProvider.serviceState == 0) {
-        navPage(
-                context: context,
-                page: const ShippingDoneFinal(),
-                enablePop: false)
-            .navPageToPage();
-      } else if (_statusProvider.serviceState == 1) {
-        navPage(
-                context: context,
-                page: const ServingProgressFinal(),
-                enablePop: false)
-            .navPageToPage();
-      } else if (_statusProvider.serviceState == 2) {
-        navPage(
-                context: context,
-                page: const BellboyProgressFinal(),
-                enablePop: false)
-            .navPageToPage();
-      } else if (_statusProvider.serviceState == 3) {
-        navPage(
-                context: context,
-                page: const RoomServiceProgressFinal(),
-                enablePop: false)
-            .navPageToPage();
-      }
+      navPage(
+          context: context,
+          page: const ServingProgressFinal(),
+          enablePop: false)
+          .navPageToPage();
     }
     print('navStatus');
     print(navStatus);
@@ -242,31 +197,11 @@ class _NavigatorProgressModuleFinalState
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        if (_statusProvider.serviceState == 0) {
-                          navPage(
-                                  context: context,
-                                  page: const ShippingDoneFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                        } else if (_statusProvider.serviceState == 1) {
-                          navPage(
-                                  context: context,
-                                  page: const ServingProgressFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                        } else if (_statusProvider.serviceState == 2) {
-                          navPage(
-                                  context: context,
-                                  page: const BellboyProgressFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                        } else if (_statusProvider.serviceState == 3) {
-                          navPage(
-                                  context: context,
-                                  page: const RoomServiceProgressFinal(),
-                                  enablePop: false)
-                              .navPageToPage();
-                        }
+                        navPage(
+                            context: context,
+                            page: const ServingProgressFinal(),
+                            enablePop: false)
+                            .navPageToPage();
                       },
                       child: Container(
                           height: 800,

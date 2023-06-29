@@ -6,14 +6,12 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
 import 'package:video_player/video_player.dart';
-
-import 'package:firebase_core/firebase_core.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -28,15 +26,14 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late NetworkModel _networkProvider;
-  late BLEModel _bleProvider;
 
-  FirebaseFirestore microBitDb = FirebaseFirestore.instance;
+  FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
   String positionURL = "";
   String hostAdr = "";
 
   // 블루투스 연결
-  final String robotId = '2';
+  final String robotId = 'serv1';
 
   // 허스키 렌즈
   late Uuid huskyCharacteristicId;
@@ -140,26 +137,26 @@ class _IntroScreenState extends State<IntroScreen>
 
     dynamic getApiData = await network.getAPI();
 
+    Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
+
     navPage(
             context: context,
-            page: MainScreenBLEAutoConnect(
-              parsePoseData: getApiData,
+            page: TrayEquipped(
+              characteristic: QualifiedCharacteristic(
+                  characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                  serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                  deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
             ),
             enablePop: true)
         .navPageToPage();
   }
 
+  // 파이어베이스 서버를 이용한 ble 정보 로드
   void getStarted_readData() async {
     // [START get_started_read_data]
-    await microBitDb.collection("microBit").get().then((event) {
+    await robotDb.collection("servingBot1").get().then((event) {
       for (var doc in event.docs) {
-        print("${doc.id} => ${doc.data()}");
-        if(doc.data()['id'] == robotId){
-          print('1');
-          print(doc.data()['trayDetector']);
-          print(doc.data()['trayDetectorService']);
-          print(doc.data()['trayDetectorCharacteristic']);
-          print('1');
+        if(doc.id == "microBit"){
           Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId = doc.data()['trayDetector'];
           Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId = Uuid.parse(doc.data()['trayDetectorService']);
           Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId = Uuid.parse(doc.data()['trayDetectorCharacteristic']);
@@ -182,17 +179,6 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
-
-    // 허스키 BLE 정보 멀티 ble 구현시 추가 수정
-    // _bleProvider.huskyDeviceId = huskyDeviceId;
-    // _bleProvider.huskyCharacteristicId = huskyCharacteristicId;
-    // _bleProvider.huskyServiceId = huskyServiceId;
-
-    // 트레이디텍터 BLE 정보
-    // _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
-    // _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
-    // _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
 
     hostAdr = _networkProvider.startUrl;
     positionURL = _networkProvider.positionURL;

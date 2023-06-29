@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/BellBoy/BellBoyProgressFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Hotel/RoomService/RoomServiceProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
-import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
-import 'package:provider/provider.dart';
 
 class NavigatorPauseModuleFinal extends StatefulWidget {
   final String? servGoalPose;
@@ -24,26 +17,13 @@ class NavigatorPauseModuleFinal extends StatefulWidget {
 }
 
 class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
-  late MainStatusModel _statusProvider;
-
-  late String backgroundImage;
+    late String backgroundImage;
 
   @override
   Widget build(BuildContext context) {
-    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
-
-    if (_statusProvider.serviceState == 0) {
-      backgroundImage = "assets/screens/Nav/koriZFinalShipPauseNav.png";
-    } else if (_statusProvider.serviceState == 1) {
-      backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
-    } else if (_statusProvider.serviceState == 2) {
-      backgroundImage = "assets/screens/Nav/koriZFinalBellPauseNav.png";
-    } else if (_statusProvider.serviceState == 3) {
-      backgroundImage = "assets/screens/Nav/koriZFinalRoomPauseNav.png";
-    }
+    backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
 
     double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       onWillPop: () {
@@ -95,31 +75,11 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        if (_statusProvider.serviceState == 0) {
-                          navPage(
-                              context: context,
-                              page: const ShippingDoneFinal(),
-                              enablePop: false)
-                              .navPageToPage();
-                        } else if (_statusProvider.serviceState == 1) {
-                          navPage(
-                              context: context,
-                              page: const ServingProgressFinal(),
-                              enablePop: false)
-                              .navPageToPage();
-                        } else if (_statusProvider.serviceState == 2) {
-                          navPage(
-                              context: context,
-                              page: const BellboyProgressFinal(),
-                              enablePop: false)
-                              .navPageToPage();
-                        } else if (_statusProvider.serviceState == 3) {
-                          navPage(
-                              context: context,
-                              page: const RoomServiceProgressFinal(),
-                              enablePop: false)
-                              .navPageToPage();
-                        }
+                        navPage(
+                            context: context,
+                            page: const ServingProgressFinal(),
+                            enablePop: false)
+                            .navPageToPage();
                       },
                       child: Container(
                           height: 800,

@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:typed_data';
-import 'dart:convert' show utf8;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:functional_data/functional_data.dart';
-import 'package:kori_wis_demo/Screens/MainScreenFinal.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
-import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
 part 'ble_auto_test.g.dart';
@@ -144,10 +141,6 @@ class _BLEAutoTestState extends State<BLEAutoTest> {
         .of(context)
         .size
         .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -188,11 +181,11 @@ class _BLEAutoTestState extends State<BLEAutoTest> {
                   top: 10,
                   child: FilledButton(
                     onPressed: () {
-                      navPage(
-                          context: context,
-                          page: const MainScreenBLEAutoConnect(),
-                          enablePop: false)
-                          .navPageToPage();
+                      // navPage(
+                      //     context: context,
+                      //     page: const MainScreenBLEAutoConnect(),
+                      //     enablePop: false)
+                      //     .navPageToPage();
                     },
                     style: FilledButton.styleFrom(
                         fixedSize: const Size(90, 90),

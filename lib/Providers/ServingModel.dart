@@ -22,6 +22,8 @@ class ServingModel with ChangeNotifier {
   bool? receiptModeOn;
   bool? playAd;
 
+  int? servingState;
+
   bool? servingBeginningIsNot;
 
   List<String>? itemImageList;
@@ -49,6 +51,8 @@ class ServingModel with ChangeNotifier {
   bool? trayDebug;
 
   ServingModel({
+    this.servingState,
+
     this.tray1,
     this.tray2,
     this.tray3,

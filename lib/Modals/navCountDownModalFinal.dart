@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +19,6 @@ class NavCountDownModalFinal extends StatefulWidget {
 }
 
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
-  late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
@@ -69,36 +65,23 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
-    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
-
-    if (_statusProvider.serviceState == 0) {
-      countDownPopup = 'assets/screens/Shipping/koriZFinalShipCountdown.png';
-      currentGoal = widget.goalPosition;
-    } else if (_statusProvider.serviceState == 1) {
-      countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
-      if (_servingProvider.trayCheckAll == true) {
-        targetTableNum = _servingProvider.allTable!;
+    countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
+    if (_servingProvider.trayCheckAll == true) {
+      targetTableNum = _servingProvider.allTable!;
+    } else {
+      if (_servingProvider.table1 != "") {
+        targetTableNum = _servingProvider.table1!;
       } else {
-        if (_servingProvider.table1 != "") {
-          targetTableNum = _servingProvider.table1!;
+        if (_servingProvider.table2 != "") {
+          targetTableNum = _servingProvider.table2!;
         } else {
-          if (_servingProvider.table2 != "") {
-            targetTableNum = _servingProvider.table2!;
-          } else {
-            if (_servingProvider.table3 != "") {
-              targetTableNum = _servingProvider.table3!;
-            }
+          if (_servingProvider.table3 != "") {
+            targetTableNum = _servingProvider.table3!;
           }
         }
       }
-      _servingProvider.targetTableNum = targetTableNum;
-    } else if (_statusProvider.serviceState == 2) {
-      countDownPopup =
-          'assets/screens/Hotel/BellBoy/koriZFinalBellCountDown.png';
-    } else if (_statusProvider.serviceState == 3) {
-      countDownPopup =
-          'assets/screens/Hotel/RoomService/koriZFinalRoomCountDown.png';
     }
+    _servingProvider.targetTableNum = targetTableNum;
 
     return Container(
         padding: const EdgeInsets.only(top: 607),
@@ -125,50 +108,20 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
-                    if (_statusProvider.serviceState == 0) {
-                      if (currentGoal != 'chargint_pile') {
-                        PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: currentGoal)
-                            .Posting(context);
-                        navPage(
-                                context: context,
-                                page: NavigatorProgressModuleFinal(),
-                                enablePop: true)
-                            .navPageToPage();
-                      } else {
-                        PostApi(
-                                url: startUrl,
-                                endadr: chgUrl,
-                                keyBody: 'charging_pile')
-                            .Posting(context);
-                        navPage(
-                                context: context,
-                                page: NavigatorProgressModuleFinal(),
-                                enablePop: true)
-                            .navPageToPage();
-                      }
-                    } else if (_statusProvider.serviceState == 1) {
-                      _servingProvider.trayChange = true;
-                      _networkProvider.servTable =
-                          targetTableNum;
-                      // _networkProvider.servTable =
-                      //     _servingProvider.targetTableNum;
-                      PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                          keyBody: targetTableNum)
-                              // keyBody: _servingProvider.targetTableNum)
-                          .Posting(context);
-                      navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(
-                                  // servGoalPose: _servingProvider.targetTableNum,
-                                  ),
-                              enablePop: true)
-                          .navPageToPage();
-                    }
+                    _servingProvider.trayChange = true;
+                    _networkProvider.servTable =
+                        targetTableNum;
+                    PostApi(
+                        url: startUrl,
+                        endadr: navUrl,
+                        keyBody: targetTableNum)
+                        .Posting(context);
+                    navPage(
+                        context: context,
+                        page: const NavigatorProgressModuleFinal(
+                        ),
+                        enablePop: true)
+                        .navPageToPage();
                   },
                 ),
               ),
@@ -190,12 +143,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   });
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  // navPage(context: context, page: TrayEquipped(
-                  //   characteristic: QualifiedCharacteristic(
-                  //       characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                  //       serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                  //       deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                  // ), enablePop: false).navPageToPage();
                 },
                 child: null,
               ),
@@ -211,75 +158,24 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   _controller.pause();
-                  if (_statusProvider.serviceState == 0) {
-                    if (currentGoal != 'chargint_pile') {
-                      PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: currentGoal)
-                          .Posting(context);
-                      navPage(
-                              context: context,
-                              page: NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
-                    } else {
-                      PostApi(
-                              url: startUrl,
-                              endadr: chgUrl,
-                              keyBody: 'charging_pile')
-                          .Posting(context);
-                      navPage(
-                              context: context,
-                              page: NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
-                    }
-                  } else if (_statusProvider.serviceState == 1) {
-                    _servingProvider.trayChange = true;
-                    _networkProvider.servTable =
-                        _servingProvider.targetTableNum;
-                    PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            // keyBody: _servingProvider.targetTableNum)
-                            keyBody: targetTableNum)
-                        .Posting(context);
-                    print('타겟 : $targetTableNum');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
-                    });
-
-                    // if (apiCallFlag == false) {
-                    //   for (int i = 0; i < tableQT+1; i++) {
-                    //     if (targetTableNum == "${i+1}") {
-                    //       print('8888');
-                    //       currentGoal = _networkProvider.getPoseData![i];
-                    //
-                    //       _networkProvider.servTable = currentGoal;
-                    //     }
-                    //   }
-                    //   PostApi(
-                    //           url: startUrl,
-                    //           endadr: navUrl,
-                    //           keyBody: currentGoal)
-                    //       .Posting(context);
-                    //   navPage(
-                    //           context: context,
-                    //           page: const NavigatorProgressModuleFinal(
-                    //             // servGoalPose: currentGoal,
-                    //           ),
-                    //           enablePop: true)
-                    //       .navPageToPage();
-                    //   apiCallFlag = true;
-                    // }
-                  }
+                  _servingProvider.trayChange = true;
+                  _networkProvider.servTable =
+                      _servingProvider.targetTableNum;
+                  PostApi(
+                      url: startUrl,
+                      endadr: navUrl,
+                      keyBody: targetTableNum)
+                      .Posting(context);
+                  print('타겟 : $targetTableNum');
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    navPage(
+                        context: context,
+                        page: const NavigatorProgressModuleFinal(),
+                        enablePop: true)
+                        .navPageToPage();
+                  });
                 },
                 child: null,
               ),

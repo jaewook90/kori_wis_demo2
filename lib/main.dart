@@ -5,9 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Providers/HotelModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/OrderModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:provider/provider.dart';
@@ -84,38 +82,15 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(create: (context)=>MainStatusModel(
-          serviceState: 0,
           playAd: false,
         )),
         ChangeNotifierProvider(create: (context)=>NetworkModel(
-            startUrl: '172.30.1.35'
-
+            startUrl: '172.30.1.35',
+          getPoseData: []
         )),
         ChangeNotifierProvider(
-            create: (context) => HotelModel(
-                trayDebug: false,
-                receiptModeOn: false,
-                attachedTray1: false,
-                attachedTray2: false,
-                attachedTray3: false,
-                servedItem1: true,
-                servedItem2: true,
-                servedItem3: true,
-                tray1Select: false,
-                tray2Select: false,
-                tray3Select: false,
-                item1: '',
-                item2: '',
-                item3: '',
-                room1: "",
-                room2: "",
-                room3: "",
-                itemImageList: ['a', 'b', 'c'],
-                menuItem: "미지정",
-                roomNumber: "10"
-            )),
-        ChangeNotifierProvider(
             create: (context) => ServingModel(
+              servingState: 0,
               waitingPoint: 'wait',
               trayDebug: false,
               receiptModeOn: false,
@@ -137,17 +112,6 @@ void main() async {
               itemImageList: ['a', 'b', 'c'],
               menuItem: "미지정",
             )),
-        ChangeNotifierProvider(create: (context) => OrderModel(
-            orderedChickenPrice: 0,
-            orderedChickenQT: 0,
-            orderedHamburgerPrice: 0,
-            orderedHamburgerQT: 0,
-            orderedHotdogPrice: 0,
-            orderedHotdogQT: 0,
-            orderedRamyeonPrice: 0,
-            orderedRamyeonQT: 0,
-            orderedTotalPrice: 0
-        )),
         ChangeNotifierProvider(create: (context) => BLEModel(
           subscribeOutput: '000',
           // characteristicId: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
