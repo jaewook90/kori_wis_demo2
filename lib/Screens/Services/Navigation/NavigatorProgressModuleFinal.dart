@@ -3,6 +3,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
+import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -124,16 +125,10 @@ class _NavigatorProgressModuleFinalState
     }
     _servingProvider.targetTableNum = targetTableNum;
 
-    print('48465435');
-    print(targetTableNum);
+    // print('48465435');
+    // print(targetTableNum);
 
     WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
-
-    // navPage(
-    //     context: context,
-    //     page: const ServingProgressFinal(),
-    //     enablePop: false)
-    //     .navPageToPage();
 
     if (navStatus == 3) {
       navPage(
@@ -142,11 +137,8 @@ class _NavigatorProgressModuleFinalState
           enablePop: false)
           .navPageToPage();
     }
-    print('navStatus');
-    print(navStatus);
 
     double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
       onWillPop: () {

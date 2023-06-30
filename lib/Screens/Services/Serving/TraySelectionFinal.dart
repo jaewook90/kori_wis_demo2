@@ -10,6 +10,9 @@ import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/AdvertisementScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
@@ -193,6 +196,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       for (var doc in event.docs) {
         if(doc.id == "robotState"){
           Provider.of<ServingModel>(context, listen: false).servingState = doc.data()['serviceState'];
+          if(doc.data()['serviceState'] == 1){
+            // 퇴식 화면 제작 후 이동 함수 추가
+            navPage(context: context, page: const ReturnProgressModuleFinal(), enablePop: true).navPageToPage();
+          }else if(doc.data()['serviceState'] == 2){
+            navPage(context: context, page: const ADScreen(), enablePop: true).navPageToPage();
+          }
         }
       }
     });
@@ -281,20 +290,21 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _debugTray = _servingProvider.trayDebug!;
 
     // 서버에서 로봇 스테이트 읽기
-    getStarted_readData();
+    WidgetsBinding.instance.addPostFrameCallback((_){getStarted_readData();});
 
     serviceState = Provider.of<ServingModel>(context, listen: false).servingState!;
-    //0: 일반 1: 퇴식
+    //0: 일반 1: 퇴식 2: 광고 재생
+
+    // if(Provider.of<ServingModel>(context, listen: false).servingState == 3) {
+    //   const int newState = 0;
+    //   final data = {"serviceState": newState};
+    //   robotDb
+    //       .collection("servingBot1")
+    //       .doc("robotState")
+    //       .set(data, SetOptions(merge: true));
+    // }
 
     print(serviceState);
-
-    if(serviceState == 1){
-      // 퇴식 화면 제작 후 이동 함수 추가
-      print('퇴식화면으로 이동');
-      print('퇴식화면으로 이동');
-      print('퇴식화면으로 이동');
-      print('퇴식화면으로 이동');
-    }
 
     // 트레이 디텍터에 따른 트레이 표시
 

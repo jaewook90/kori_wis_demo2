@@ -92,6 +92,14 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
 
       buttonRadius1 = 40;
       buttonRadius2 = 32;
+    } else if (widget.screens == 2) {
+      // 이동 중
+      buttonPositionWidth = [107];
+      buttonPositionHeight = [1367];
+
+      buttonSize = [866, 173];
+
+      buttonRadius = 40;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -116,12 +124,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                     buttonSize1[buttonWidth], buttonSize1[buttonHeight])
                     : Size(
                     buttonSize2[buttonWidth], buttonSize2[buttonHeight])
-                    : widget.screens == 2
-                    ? i == 0
-                    ? Size(buttonSize1[buttonWidth],
-                    buttonSize1[buttonHeight])
-                    : Size(buttonSize2[buttonWidth],
-                    buttonSize2[buttonHeight])
                     : Size(
                     buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
@@ -186,7 +188,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 _statusProvider.playAd = false;
               }
             }
-                : null,
+                : widget.screens==2 ? (){ Navigator.pop(context);} :null,
             child: null,
           ),
         ),
