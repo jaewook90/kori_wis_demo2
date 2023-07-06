@@ -195,6 +195,14 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
       buttonSize = [866, 160];
 
       buttonRadius = 40;
+    } else if (widget.screens == 4) {
+      // 완료 화면
+      buttonPositionWidth = [107.3];
+      buttonPositionHeight = [1372.5];
+
+      buttonSize = [866, 160];
+
+      buttonRadius = 40;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -230,7 +238,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                     _bleProvider.onTraySelectionScreen = false;
                     // 서빙만 하는 경우
                     if ((_servingProvider.table1 != "" ||
-                        _servingProvider.table2 != "") ||
+                            _servingProvider.table2 != "") ||
                         _servingProvider.table3 != "") {
                       showCountDownPopup(context);
                     } else {
@@ -343,7 +351,36 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                       .navPageToPage();
                                 }
                               }
-                            : null,
+                            : widget.screens == 4
+                                ? () {
+                                    print('Serving Return to waiting point');
+                                    PostApi(
+                                            url: startUrl,
+                                            endadr: navUrl,
+                                            keyBody:
+                                                _servingProvider.waitingPoint)
+                                        .Posting(context);
+                                    navPage(
+                                            context: context,
+                                            page: TrayEquipped(
+                                              characteristic: QualifiedCharacteristic(
+                                                  characteristicId: Provider.of<
+                                                              BLEModel>(context,
+                                                          listen: false)
+                                                      .trayDetectorCharacteristicId!,
+                                                  serviceId: Provider.of<
+                                                              BLEModel>(context,
+                                                          listen: false)
+                                                      .trayDetectorServiceId!,
+                                                  deviceId: Provider.of<
+                                                              BLEModel>(context,
+                                                          listen: false)
+                                                      .trayDetectorDeviceId!),
+                                            ),
+                                            enablePop: false)
+                                        .navPageToPage();
+                                  }
+                                : null,
             child: null,
           ),
         ),

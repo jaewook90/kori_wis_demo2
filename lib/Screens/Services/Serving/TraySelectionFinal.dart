@@ -17,6 +17,7 @@ import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -114,6 +115,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late String subscribeOutput;
   late StreamSubscription<List<int>>? subscribeStream;
 
+  late String targetTableNum;
+
+  String? startUrl;
+  String? navUrl;
+
   // 배경 화면
   late String backgroundImage;
   late String resetIcon;
@@ -179,6 +185,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
 
+    startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
+    navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
+    print(startUrl);
+    print(navUrl);;
+
     if (widget.characteristic == null) {
       subscribeStream = null;
     }
@@ -196,8 +207,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       for (var doc in event.docs) {
         if(doc.id == "robotState"){
           Provider.of<ServingModel>(context, listen: false).servingState = doc.data()['serviceState'];
+          targetTableNum = doc.data()['returnTable'];
           if(doc.data()['serviceState'] == 1){
             // 퇴식 화면 제작 후 이동 함수 추가
+            print('a');
+            print(startUrl);
+            print(navUrl);;
+            PostApi(
+                url: startUrl,
+                endadr: navUrl,
+                keyBody: targetTableNum)
+                .Posting(context);
             navPage(context: context, page: const ReturnProgressModuleFinal(), enablePop: true).navPageToPage();
           }else if(doc.data()['serviceState'] == 2){
             navPage(context: context, page: const ADScreen(), enablePop: true).navPageToPage();
@@ -248,7 +268,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
             tray1BLE = subscribeOutput.split('')[0];
             tray2BLE = subscribeOutput.split('')[1];
             tray3BLE = subscribeOutput.split('')[2];
-
             if (subscribeOutput != 'Notification set') {
               subscribeStream!.cancel();
             }

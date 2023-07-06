@@ -9,8 +9,6 @@ class BLEModel with ChangeNotifier {
   Uuid? trayDetectorCharacteristicId;
   Uuid? trayDetectorServiceId;
 
-
-
   bool? onTraySelectionScreen;
 
   String? subscribeOutput;
