@@ -85,7 +85,7 @@ void main() async {
           playAd: false,
         )),
         ChangeNotifierProvider(create: (context)=>NetworkModel(
-            startUrl: '172.30.1.35',
+            // startUrl: '172.30.1.35',
           getPoseData: []
         )),
         ChangeNotifierProvider(

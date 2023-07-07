@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NetworkModel with ChangeNotifier {
-  String startUrl;
+  String? startUrl;
   String navUrl = "cmd/nav_point";
   String chgUrl = "cmd/charge";
   String stpUrl = "cmd/cancel_goal";
@@ -28,7 +28,7 @@ class NetworkModel with ChangeNotifier {
     this.currentGoal,
     this.servingDone,
     this.shippingDone,
-    required this.startUrl
+    this.startUrl
   });
 
   void hostIP(){

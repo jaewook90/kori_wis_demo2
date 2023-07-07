@@ -128,16 +128,16 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
-    String hostIP = hostUrl;
-    String endPoint = endUrl;
-
-    String apiAddress = hostIP + endPoint;
-
-    NetworkGet network = NetworkGet(apiAddress);
-
-    dynamic getApiData = await network.getAPI();
-
-    Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
+    // String hostIP = hostUrl;
+    // String endPoint = endUrl;
+    //
+    // String apiAddress = hostIP + endPoint;
+    //
+    // NetworkGet network = NetworkGet(apiAddress);
+    //
+    // dynamic getApiData = await network.getAPI();
+    //
+    // Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
 
     navPage(
             context: context,
@@ -160,6 +160,8 @@ class _IntroScreenState extends State<IntroScreen>
           Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId = doc.data()['trayDetector'];
           Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId = Uuid.parse(doc.data()['trayDetectorService']);
           Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId = Uuid.parse(doc.data()['trayDetectorCharacteristic']);
+        }else if(doc.id == "robotState"){
+          Provider.of<NetworkModel>(context, listen: false).startUrl = doc.data()['RobotIp'];
         }
       }
     });
@@ -180,7 +182,7 @@ class _IntroScreenState extends State<IntroScreen>
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
-    hostAdr = _networkProvider.startUrl;
+    hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
 
     double screenWidth = MediaQuery.of(context).size.width;
