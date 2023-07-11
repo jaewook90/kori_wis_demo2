@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
-import 'package:kori_wis_demo/Utills/getAPI.dart';
+// import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:provider/provider.dart';
 
 //api 통신용 라이브러리

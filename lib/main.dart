@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,42 +80,43 @@ void main() async {
             failure: null,
           ),
         ),
-        ChangeNotifierProvider(create: (context)=>MainStatusModel(
-          playAd: false,
-        )),
-        ChangeNotifierProvider(create: (context)=>NetworkModel(
-            // startUrl: '172.30.1.35',
-          getPoseData: []
-        )),
+        ChangeNotifierProvider(
+            create: (context) => MainStatusModel(
+                  playAd: false,
+                )),
+        ChangeNotifierProvider(
+            create: (context) =>
+                NetworkModel(startUrl: '172.30.1.35/', getPoseData: [])),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
-              servingState: 0,
-              waitingPoint: 'wait',
-              trayDebug: false,
-              receiptModeOn: false,
-              attachedTray1: true,
-              attachedTray2: true,
-              attachedTray3: true,
-              servedItem1: true,
-              servedItem2: true,
-              servedItem3: true,
-              tray1Select: false,
-              tray2Select: false,
-              tray3Select: false,
-              item1: '',
-              item2: '',
-              item3: '',
-              table1: "",
-              table2: "",
-              table3: "",
-              itemImageList: ['a', 'b', 'c'],
-              menuItem: "미지정",
-            )),
-        ChangeNotifierProvider(create: (context) => BLEModel(
-          subscribeOutput: '000',
-          // characteristicId: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
-          // deviceId1: 'DF:75:E4:D6:32:63',
-        ))
+                  servingState: 0,
+                  waitingPoint: 'wait',
+                  trayDebug: false,
+                  receiptModeOn: false,
+                  attachedTray1: true,
+                  attachedTray2: true,
+                  attachedTray3: true,
+                  servedItem1: true,
+                  servedItem2: true,
+                  servedItem3: true,
+                  tray1Select: false,
+                  tray2Select: false,
+                  tray3Select: false,
+                  item1: '',
+                  item2: '',
+                  item3: '',
+                  table1: "",
+                  table2: "",
+                  table3: "",
+                  itemImageList: ['a', 'b', 'c'],
+                  menuItem: "미지정",
+                )),
+        ChangeNotifierProvider(
+            create: (context) => BLEModel(
+                  subscribeOutput: '000',
+                  // characteristicId: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
+                  // deviceId1: 'DF:75:E4:D6:32:63',
+                ))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -126,16 +126,16 @@ void main() async {
           // fontFamily: 'kor',
           textTheme: TextTheme(
             //영어폰트용
-            titleLarge:
-            GoogleFonts.roboto(color: const Color(0xffF0F0F0), fontSize: 45),
-            titleMedium:
-            GoogleFonts.roboto(color: const Color(0xffB7B7B7), fontSize: 32),
-            bodyLarge:
-            GoogleFonts.roboto(color: const Color(0xffB7B7B7), fontSize: 28),
-            bodyMedium:
-            GoogleFonts.roboto(color: const Color(0xffB7B7B7), fontSize: 24),
-            bodySmall:
-            GoogleFonts.roboto(color: const Color(0xffB7B7B7), fontSize: 20),
+            titleLarge: GoogleFonts.roboto(
+                color: const Color(0xffF0F0F0), fontSize: 45),
+            titleMedium: GoogleFonts.roboto(
+                color: const Color(0xffB7B7B7), fontSize: 32),
+            bodyLarge: GoogleFonts.roboto(
+                color: const Color(0xffB7B7B7), fontSize: 28),
+            bodyMedium: GoogleFonts.roboto(
+                color: const Color(0xffB7B7B7), fontSize: 24),
+            bodySmall: GoogleFonts.roboto(
+                color: const Color(0xffB7B7B7), fontSize: 20),
 
             //한글폰트용
             displayLarge: const TextStyle(

@@ -14,9 +14,11 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/AdvertisementScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
+import 'package:kori_wis_demo/Utills/ble/KoriViewModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
+import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
@@ -47,34 +49,9 @@ class TrayEquipped extends StatelessWidget {
                   connectionStatus: connectionStateUpdate.connectionState,
                   deviceConnector: deviceConnector,
                   discoverServices: () =>
-                      interactor.discoverServices(characteristic!.deviceId)),
+                      interactor.discoverServices(characteristic!.deviceId)
+              ),
             ));
-  }
-}
-
-class TrayEquippedViewModel extends $TrayEquippedViewModel {
-  const TrayEquippedViewModel({
-    required this.deviceId,
-    required this.connectionStatus,
-    required this.deviceConnector,
-    required this.discoverServices,
-  });
-
-  final String deviceId;
-  final DeviceConnectionState connectionStatus;
-  final BleDeviceConnector deviceConnector;
-  @CustomEquality(Ignore())
-  final Future<List<DiscoveredService>> Function() discoverServices;
-
-  bool get deviceConnected =>
-      connectionStatus == DeviceConnectionState.connected;
-
-  void connect() {
-    deviceConnector.connect(deviceId);
-  }
-
-  void disconnect() {
-    deviceConnector.disconnect(deviceId);
   }
 }
 
@@ -106,6 +83,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   final TextEditingController configController = TextEditingController();
 
   FirebaseFirestore robotDb = FirebaseFirestore.instance;
+
+  late bool bleConnection;
 
   late Timer _timer;
 
@@ -166,6 +145,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     // TODO: implement initState
     super.initState();
 
+    bleConnection = false;
+
     fToast = FToast();
     fToast?.init(context);
 
@@ -192,17 +173,34 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
     print(startUrl);
     print(navUrl);
-    ;
 
     if (widget.characteristic == null) {
       subscribeStream = null;
     }
 
-    if (Provider.of<NetworkModel>(context, listen: false)
-        .getPoseData!
-        .isEmpty) {
+    if (Provider.of<NetworkModel>(context, listen: false).getPoseData!.isEmpty) {
       poseDataUpdate();
     }
+  }
+
+  dynamic getting(String hostUrl, String endUrl) async {
+    String hostIP = hostUrl;
+    String endPoint = endUrl;
+
+    String apiAddress = hostIP + endPoint;
+
+    print('apiAddress : $apiAddress');
+
+    NetworkGet network = NetworkGet(apiAddress);
+
+    dynamic getApiData = await network.getAPI();
+
+    Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
+
+    setState(() {
+      PositionList = [];
+      poseDataUpdate();
+    });
   }
 
   void getStarted_readData() async {
@@ -215,10 +213,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           targetTableNum = doc.data()['returnTable'];
           if (doc.data()['serviceState'] == 1) {
             // 퇴식 화면 제작 후 이동 함수 추가
-            print('a');
-            print(startUrl);
-            print(navUrl);
-            ;
             PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
                 .Posting(context);
             navPage(
@@ -233,6 +227,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         }
       }
     });
+    Future.delayed(Duration(milliseconds: 1));
     // [END get_started_read_data]
   }
 
@@ -290,6 +285,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
       }
     });
+    Future.delayed(Duration(milliseconds: 1));
   }
 
   void showTraySetPopup(context) {
@@ -320,26 +316,30 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       getStarted_readData();
     });
 
+    //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
     serviceState =
         Provider.of<ServingModel>(context, listen: false).servingState!;
-    //0: 일반 1: 퇴식 2: 광고 재생
-
-    print(serviceState);
 
     // 트레이 디텍터에 따른 트레이 표시
 
-    if (widget.viewModel!.deviceConnected == false) {
-      widget.viewModel!.connect();
-    }
+    // print(widget.viewModel!.deviceConnected);
+
+    // if (widget.viewModel!.deviceConnected == false && bleConnection == false) {
+    //   widget.viewModel!.connect();
+    //   setState(() {
+    //     bleConnection = true;
+    //   });
+    //   Future.delayed(Duration(milliseconds: 1));
+    // }
 
     if (PositionList.isEmpty) {
+      print('11111111');
       PositionList = _networkProvider.getPoseData!;
+      Future.delayed(Duration(milliseconds: 1));
     } else {
+      print('2222222222');
       _networkProvider.getPoseData = PositionList;
-    }
-
-    if (widget.viewModel!.deviceConnected == false) {
-      widget.viewModel!.connect();
+      Future.delayed(Duration(milliseconds: 1));
     }
 
     if (mounted) {
@@ -348,10 +348,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       }
     } else {
       subscribeStream!.cancel();
+      Future.delayed(Duration(milliseconds: 1));
     }
 
     if (tray1BLE == "1") {
       _servingProvider.attachedTray1 = false;
+      Future.delayed(Duration(milliseconds: 1));
     } else if (tray1BLE == "0") {
       _servingProvider.attachedTray1 = true;
       if (table1 != "") {
@@ -359,9 +361,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           _servingProvider.clearTray1();
         });
       }
+      Future.delayed(Duration(milliseconds: 1));
     }
     if (tray2BLE == "1") {
       _servingProvider.attachedTray2 = false;
+      Future.delayed(Duration(milliseconds: 1));
     } else if (tray2BLE == "0") {
       _servingProvider.attachedTray2 = true;
       if (table2 != "") {
@@ -370,9 +374,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
         // print('t2');
       }
+      Future.delayed(Duration(milliseconds: 1));
     }
     if (tray3BLE == "1") {
       _servingProvider.attachedTray3 = false;
+      Future.delayed(Duration(milliseconds: 1));
     } else if (tray3BLE == "0") {
       _servingProvider.attachedTray3 = true;
       if (table3 != "") {
@@ -381,6 +387,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
         // print('t3');
       }
+      Future.delayed(Duration(milliseconds: 1));
     }
 
     offStageTray1 = _servingProvider.attachedTray1;
@@ -402,9 +409,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    print(startUrl);
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    print(PositionList);
 
     return WillPopScope(
       onWillPop: () async {
@@ -471,21 +476,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 'assets/icons/appBar/appBar_Battery.png',
                               ),
                               fit: BoxFit.fill)),
-                    ),
-                  ),
-                  Positioned(
-                    right: 150,
-                    top: 10,
-                    child: IconButton(
-                      onPressed: () {
-                        navPage(
-                                context: context,
-                                page: const DeviceListScreen(),
-                                enablePop: true)
-                            .navPageToPage();
-                      },
-                      icon: Icon(Icons.bluetooth),
-                      iconSize: 70,
                     ),
                   ),
                 ],
@@ -560,7 +550,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                             ),
                                           ],
                                         ),
-                                        SizedBox(height: 12,),
+                                        SizedBox(
+                                          height: 12,
+                                        ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -589,33 +581,48 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                   fontSize: 18,
                                                   color: Colors.white),
                                             ),
-                                            SizedBox(width: 160,),
-                                            IconButton(
-                                                onPressed: () {
-                                                  final String newStartUrl = configController.text;
-                                                  final data = {"RobotIp": newStartUrl};
-                                                  robotDb
-                                                      .collection("servingBot1")
-                                                      .doc("robotState")
-                                                      .set(data, SetOptions(merge: true));
-                                                  setState(() {
-                                                    _networkProvider.startUrl = "http://${configController.text}/";
-                                                    startUrl = _networkProvider.startUrl;
-                                                    configController.text = '';
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons.arrow_forward,
-                                                  color: Colors.white,
-                                                ),
-                                              iconSize: 25,
-                                              constraints: BoxConstraints(maxWidth: 25, maxHeight: 25),
-                                              padding: EdgeInsets.all(0),
-                                            )
+                                            SizedBox(
+                                              width: 150,
+                                            ),
+                                            FilledButton(onPressed: () {
+                                              final String newStartUrl =
+                                                  configController.text;
+                                              final data = {
+                                                "RobotIp": newStartUrl
+                                              };
+                                              robotDb
+                                                  .collection("servingBot1")
+                                                  .doc("robotState")
+                                                  .set(
+                                                  data,
+                                                  SetOptions(
+                                                      merge: true));
+                                              setState(() {
+                                                _networkProvider.startUrl =
+                                                "http://${configController.text}/";
+                                                startUrl =
+                                                    _networkProvider.startUrl;
+                                                configController.text = '';
+                                              });
+                                              getting(_networkProvider.startUrl!, _networkProvider.positionURL);
+                                              setState(() {
+                                                // PositionList = [];
+                                                // poseDataUpdate();
+                                              });
+                                            },
+                                                child: Icon(Icons.arrow_forward,
+                                                  color: Colors.white,),
+                                              style: FilledButton.styleFrom(
+                                                backgroundColor: Color.fromRGBO(80, 80, 255, 0.7),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(15),
+                                                )
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         TextField(
-                                          onTap: (){
+                                          onTap: () {
                                             setState(() {
                                               configController.text = '';
                                             });
@@ -625,7 +632,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                               fontFamily: 'kor',
                                               fontSize: 18,
                                               color: Colors.white),
-                                          keyboardType: TextInputType.numberWithOptions(),
+                                          keyboardType:
+                                              TextInputType.numberWithOptions(),
                                           decoration: InputDecoration(
                                               border: UnderlineInputBorder(
                                                 borderSide: BorderSide(
@@ -647,148 +655,186 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           SizedBox(
                             height: 20,
                           ),
-                          ExpansionTile(
-                              title: Row(
-                                children: [
-                                  Icon(Icons.autorenew,
-                                      color: Colors.white, size: 50),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Text(
-                                      'microBit ID 변경',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: Colors.white),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 0),
+                              child: FilledButton(
+                                onPressed: () {
+                                  navPage(
+                                          context: context,
+                                          page: const DeviceListScreen(),
+                                          enablePop: true)
+                                      .navPageToPage();
+                                },
+                                style: FilledButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: Size(370, 58),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(0))),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.bluetooth,
+                                        color: Colors.white, size: 50),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        'microBit ID 변경',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontFamily: 'kor',
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1,
+                                            color: Colors.white),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              initiallyExpanded: false,
-                              backgroundColor: Colors.transparent,
-                              children: <Widget>[
-                                Container(
-                                  width: 370,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Divider(
-                                            height: 20, color: Colors.grey, indent: 15),
-                                        Container(
-                                          // height: 1820,
-                                          width: 370,
-                                          child: Padding(
-                                            padding:
-                                            EdgeInsets.only(left: 50, bottom: 30),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'microBit ID',
-                                                      style: TextStyle(
-                                                          fontFamily: 'kor',
-                                                          fontSize: 18,
-                                                          color: Colors.white),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 12,),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      _bleProvider.trayDetectorDeviceId!,
-                                                      style: TextStyle(
-                                                          fontFamily: 'kor',
-                                                          fontSize: 18,
-                                                          color: Colors.white),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Divider(
-                                                  color: Colors.grey,
-                                                  height: 30,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'new ID',
-                                                      style: TextStyle(
-                                                          fontFamily: 'kor',
-                                                          fontSize: 18,
-                                                          color: Colors.white),
-                                                    ),
-                                                    SizedBox(width: 160,),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        final String newStartUrl = configController.text;
-                                                        final data = {"RobotIp": newStartUrl};
-                                                        robotDb
-                                                            .collection("servingBot1")
-                                                            .doc("robotState")
-                                                            .set(data, SetOptions(merge: true));
-                                                        setState(() {
-                                                          _networkProvider.startUrl = "http://${configController.text}/";
-                                                          startUrl = _networkProvider.startUrl;
-                                                          configController.text = '';
-                                                        });
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.arrow_forward,
-                                                        color: Colors.white,
-                                                      ),
-                                                      iconSize: 25,
-                                                      constraints: BoxConstraints(maxWidth: 25, maxHeight: 25),
-                                                      padding: EdgeInsets.all(0),
-                                                    )
-                                                  ],
-                                                ),
-                                                TextField(
-                                                  onTap: (){
-                                                    setState(() {
-                                                      configController.text = '';
-                                                    });
-                                                  },
-                                                  controller: configController,
-                                                  style: TextStyle(
-                                                      fontFamily: 'kor',
-                                                      fontSize: 18,
-                                                      color: Colors.white),
-                                                  keyboardType: TextInputType.numberWithOptions(),
-                                                  decoration: InputDecoration(
-                                                      border: UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors.grey,
-                                                            width: 1),
-                                                      ),
-                                                      enabledBorder:
-                                                      UnderlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors.white,
-                                                            width: 1),
-                                                      )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  ],
                                 ),
-                              ]),
+                              )),
+                          // ExpansionTile(
+                          //     title: Row(
+                          //       children: [
+                          //         Icon(Icons.autorenew,
+                          //             color: Colors.white, size: 50),
+                          //         Padding(
+                          //           padding: const EdgeInsets.only(left: 15),
+                          //           child: Text(
+                          //             'microBit ID 변경',
+                          //             textAlign: TextAlign.start,
+                          //             style: TextStyle(
+                          //                 fontFamily: 'kor',
+                          //                 fontSize: 24,
+                          //                 fontWeight: FontWeight.bold,
+                          //                 height: 1,
+                          //                 color: Colors.white),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     initiallyExpanded: false,
+                          //     backgroundColor: Colors.transparent,
+                          //     children: <Widget>[
+                          //       Container(
+                          //         width: 370,
+                          //         child: Padding(
+                          //           padding: EdgeInsets.only(left: 0),
+                          //           child: Column(
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.spaceEvenly,
+                          //             children: [
+                          //               Divider(
+                          //                   height: 20, color: Colors.grey, indent: 15),
+                          //               Container(
+                          //                 // height: 1820,
+                          //                 width: 370,
+                          //                 child: Padding(
+                          //                   padding:
+                          //                   EdgeInsets.only(left: 50, bottom: 30),
+                          //                   child: Column(
+                          //                     children: [
+                          //                       Row(
+                          //                         mainAxisAlignment:
+                          //                         MainAxisAlignment.start,
+                          //                         children: [
+                          //                           Text(
+                          //                             'microBit ID',
+                          //                             style: TextStyle(
+                          //                                 fontFamily: 'kor',
+                          //                                 fontSize: 18,
+                          //                                 color: Colors.white),
+                          //                           ),
+                          //                         ],
+                          //                       ),
+                          //                       SizedBox(height: 12,),
+                          //                       Row(
+                          //                         mainAxisAlignment:
+                          //                         MainAxisAlignment.start,
+                          //                         children: [
+                          //                           Text(
+                          //                             _bleProvider.trayDetectorDeviceId!,
+                          //                             style: TextStyle(
+                          //                                 fontFamily: 'kor',
+                          //                                 fontSize: 18,
+                          //                                 color: Colors.white),
+                          //                           ),
+                          //                         ],
+                          //                       ),
+                          //                       Divider(
+                          //                         color: Colors.grey,
+                          //                         height: 30,
+                          //                       ),
+                          //                       Row(
+                          //                         mainAxisAlignment:
+                          //                         MainAxisAlignment.start,
+                          //                         children: [
+                          //                           Text(
+                          //                             'new ID',
+                          //                             style: TextStyle(
+                          //                                 fontFamily: 'kor',
+                          //                                 fontSize: 18,
+                          //                                 color: Colors.white),
+                          //                           ),
+                          //                           SizedBox(width: 160,),
+                          //                           IconButton(
+                          //                             onPressed: () {
+                          //                               final String newMicroBitUrl = configController.text;
+                          //                               final data = {"trayDetector": newMicroBitUrl};
+                          //                               robotDb
+                          //                                   .collection("servingBot1")
+                          //                                   .doc("microBit")
+                          //                                   .set(data, SetOptions(merge: true));
+                          //                               setState(() {
+                          //                                 _bleProvider.trayDetectorDeviceId = configController.text;
+                          //                                 // startUrl = _networkProvider.startUrl;
+                          //                                 configController.text = '';
+                          //                               });
+                          //                             },
+                          //                             icon: Icon(
+                          //                               Icons.arrow_forward,
+                          //                               color: Colors.white,
+                          //                             ),
+                          //                             iconSize: 25,
+                          //                             constraints: BoxConstraints(maxWidth: 25, maxHeight: 25),
+                          //                             padding: EdgeInsets.all(0),
+                          //                           )
+                          //                         ],
+                          //                       ),
+                          //                       TextField(
+                          //                         onTap: (){
+                          //                           setState(() {
+                          //                             configController.text = '';
+                          //                           });
+                          //                         },
+                          //                         controller: configController,
+                          //                         style: TextStyle(
+                          //                             fontFamily: 'kor',
+                          //                             fontSize: 18,
+                          //                             color: Colors.white),
+                          //
+                          //                         keyboardType: TextInputType.text,
+                          //                         textCapitalization: TextCapitalization.characters,
+                          //                         decoration: InputDecoration(
+                          //                             border: UnderlineInputBorder(
+                          //                               borderSide: BorderSide(
+                          //                                   color: Colors.grey,
+                          //                                   width: 1),
+                          //                             ),
+                          //                             enabledBorder:
+                          //                             UnderlineInputBorder(
+                          //                               borderSide: BorderSide(
+                          //                                   color: Colors.white,
+                          //                                   width: 1),
+                          //                             )),
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ]),
                           SizedBox(
                             height: 20,
                           ),

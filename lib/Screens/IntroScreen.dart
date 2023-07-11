@@ -128,16 +128,18 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
-    // String hostIP = hostUrl;
-    // String endPoint = endUrl;
-    //
-    // String apiAddress = hostIP + endPoint;
-    //
-    // NetworkGet network = NetworkGet(apiAddress);
-    //
-    // dynamic getApiData = await network.getAPI();
-    //
-    // Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
+    String hostIP = hostUrl;
+    String endPoint = endUrl;
+
+    String apiAddress = hostIP + endPoint;
+
+    print('apiAddress : $apiAddress');
+
+    NetworkGet network = NetworkGet(apiAddress);
+
+    dynamic getApiData = await network.getAPI();
+
+    Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
 
     navPage(
             context: context,

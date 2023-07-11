@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:functional_data/functional_data.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/ble/KoriViewModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
-part 'device_interaction_tab.g.dart';
+// part 'device_interaction_tab.g.dart';
 //ignore_for_file: annotate_overrides
 
 class DeviceInteractionTab extends StatelessWidget {
@@ -25,47 +26,48 @@ class DeviceInteractionTab extends StatelessWidget {
         builder: (_, deviceConnector, connectionStateUpdate, serviceDiscoverer,
             __) =>
             _DeviceInteractionTab(
-              viewModel: DeviceInteractionViewModel(
+              viewModel: TrayEquippedViewModel(
                   deviceId: device.id,
                   connectionStatus: connectionStateUpdate.connectionState,
                   deviceConnector: deviceConnector,
                   discoverServices: () =>
-                      serviceDiscoverer.discoverServices(device.id)),
+                      serviceDiscoverer.discoverServices(device.id)
+              ),
             ),
       );
 }
 
-@immutable
-@FunctionalData()
-class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
-  const DeviceInteractionViewModel({
-    required this.deviceId,
-    required this.connectionStatus,
-    required this.deviceConnector,
-    required this.discoverServices,
-  });
-
-  final String deviceId;
-  final DeviceConnectionState connectionStatus;
-  final BleDeviceConnector deviceConnector;
-  @CustomEquality(Ignore())
-  final Future<List<DiscoveredService>> Function() discoverServices;
-
-  bool get deviceConnected =>
-      connectionStatus == DeviceConnectionState.connected;
-
-
-
-  void connect() {
-    deviceConnector.connect(deviceId);
-
-    print(deviceId);
-  }
-
-  void disconnect() {
-    deviceConnector.disconnect(deviceId);
-  }
-}
+// @immutable
+// @FunctionalData()
+// class DeviceInteractionViewModel extends $DeviceInteractionViewModel {
+//   const DeviceInteractionViewModel({
+//     required this.deviceId,
+//     required this.connectionStatus,
+//     required this.deviceConnector,
+//     required this.discoverServices,
+//   });
+//
+//   final String deviceId;
+//   final DeviceConnectionState connectionStatus;
+//   final BleDeviceConnector deviceConnector;
+//   @CustomEquality(Ignore())
+//   final Future<List<DiscoveredService>> Function() discoverServices;
+//
+//   bool get deviceConnected =>
+//       connectionStatus == DeviceConnectionState.connected;
+//
+//
+//
+//   void connect() {
+//     deviceConnector.connect(deviceId);
+//
+//     print(deviceId);
+//   }
+//
+//   void disconnect() {
+//     deviceConnector.disconnect(deviceId);
+//   }
+// }
 
 class _DeviceInteractionTab extends StatefulWidget {
   const _DeviceInteractionTab({
@@ -73,7 +75,7 @@ class _DeviceInteractionTab extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final DeviceInteractionViewModel viewModel;
+  final TrayEquippedViewModel viewModel;
 
   @override
   _DeviceInteractionTabState createState() => _DeviceInteractionTabState();
