@@ -49,8 +49,7 @@ class TrayEquipped extends StatelessWidget {
                   connectionStatus: connectionStateUpdate.connectionState,
                   deviceConnector: deviceConnector,
                   discoverServices: () =>
-                      interactor.discoverServices(characteristic!.deviceId)
-              ),
+                      interactor.discoverServices(characteristic!.deviceId)),
             ));
   }
 }
@@ -129,6 +128,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
   //디버그
   late bool _debugTray;
+  late int _debugEncounter;
 
   late int serviceState;
 
@@ -144,6 +144,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _debugEncounter = 0;
+    _debugTray = true;
 
     bleConnection = false;
 
@@ -178,7 +181,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       subscribeStream = null;
     }
 
-    if (Provider.of<NetworkModel>(context, listen: false).getPoseData!.isEmpty) {
+    if (Provider.of<NetworkModel>(context, listen: false)
+        .getPoseData!
+        .isEmpty) {
       poseDataUpdate();
     }
   }
@@ -189,7 +194,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     String apiAddress = hostIP + endPoint;
 
-    print('apiAddress : $apiAddress');
+    // print('apiAddress : $apiAddress');
 
     NetworkGet network = NetworkGet(apiAddress);
 
@@ -309,7 +314,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
-    _debugTray = _servingProvider.trayDebug!;
+    // _debugTray = _servingProvider.trayDebug!;
 
     // 서버에서 로봇 스테이트 읽기
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -333,11 +338,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     // }
 
     if (PositionList.isEmpty) {
-      print('11111111');
+      // print('11111111');
       PositionList = _networkProvider.getPoseData!;
       Future.delayed(Duration(milliseconds: 1));
     } else {
-      print('2222222222');
+      // print('2222222222');
       _networkProvider.getPoseData = PositionList;
       Future.delayed(Duration(milliseconds: 1));
     }
@@ -409,7 +414,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    print(PositionList);
+    // print(PositionList);
 
     return WillPopScope(
       onWillPop: () async {
@@ -502,183 +507,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     Container(
                       width: 370,
                       height: 1820,
-                      child: Column(
-                        children: [
-                          ExpansionTile(
-                              title: Row(
-                                children: [
-                                  Icon(Icons.track_changes,
-                                      color: Colors.white, size: 50),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Text(
-                                      'ip 변경',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              initiallyExpanded: false,
-                              backgroundColor: Colors.transparent,
-                              children: <Widget>[
-                                Divider(
-                                    height: 20, color: Colors.grey, indent: 15),
-                                Container(
-                                  // height: 1820,
-                                  width: 370,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 50, bottom: 30),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '기존 IP',
-                                              style: TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              startUrl!,
-                                              style: TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        Divider(
-                                          color: Colors.grey,
-                                          height: 30,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '변경 할 IP',
-                                              style: TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                            SizedBox(
-                                              width: 150,
-                                            ),
-                                            FilledButton(onPressed: () {
-                                              final String newStartUrl =
-                                                  configController.text;
-                                              final data = {
-                                                "RobotIp": newStartUrl
-                                              };
-                                              robotDb
-                                                  .collection("servingBot1")
-                                                  .doc("robotState")
-                                                  .set(
-                                                  data,
-                                                  SetOptions(
-                                                      merge: true));
-                                              setState(() {
-                                                _networkProvider.startUrl =
-                                                "http://${configController.text}/";
-                                                startUrl =
-                                                    _networkProvider.startUrl;
-                                                configController.text = '';
-                                              });
-                                              getting(_networkProvider.startUrl!, _networkProvider.positionURL);
-                                              setState(() {
-                                                // PositionList = [];
-                                                // poseDataUpdate();
-                                              });
-                                            },
-                                                child: Icon(Icons.arrow_forward,
-                                                  color: Colors.white,),
-                                              style: FilledButton.styleFrom(
-                                                backgroundColor: Color.fromRGBO(80, 80, 255, 0.7),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(15),
-                                                )
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        TextField(
-                                          onTap: () {
-                                            setState(() {
-                                              configController.text = '';
-                                            });
-                                          },
-                                          controller: configController,
-                                          style: TextStyle(
-                                              fontFamily: 'kor',
-                                              fontSize: 18,
-                                              color: Colors.white),
-                                          keyboardType:
-                                              TextInputType.numberWithOptions(),
-                                          decoration: InputDecoration(
-                                              border: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey,
-                                                    width: 1),
-                                              ),
-                                              enabledBorder:
-                                                  UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1),
-                                              )),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.only(left: 0),
-                              child: FilledButton(
-                                onPressed: () {
-                                  navPage(
-                                          context: context,
-                                          page: const DeviceListScreen(),
-                                          enablePop: true)
-                                      .navPageToPage();
-                                },
-                                style: FilledButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize: Size(370, 58),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(0))),
-                                child: Row(
+                      child: Stack(children: [
+                        Column(
+                          children: [
+                            //ip 변경
+                            ExpansionTile(
+                                title: Row(
                                   children: [
-                                    Icon(Icons.bluetooth,
+                                    Icon(Icons.track_changes,
                                         color: Colors.white, size: 50),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Text(
-                                        'microBit ID 변경',
+                                        'ip 변경',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontFamily: 'kor',
@@ -690,251 +531,398 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     ),
                                   ],
                                 ),
-                              )),
-                          // ExpansionTile(
-                          //     title: Row(
-                          //       children: [
-                          //         Icon(Icons.autorenew,
-                          //             color: Colors.white, size: 50),
-                          //         Padding(
-                          //           padding: const EdgeInsets.only(left: 15),
-                          //           child: Text(
-                          //             'microBit ID 변경',
-                          //             textAlign: TextAlign.start,
-                          //             style: TextStyle(
-                          //                 fontFamily: 'kor',
-                          //                 fontSize: 24,
-                          //                 fontWeight: FontWeight.bold,
-                          //                 height: 1,
-                          //                 color: Colors.white),
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     initiallyExpanded: false,
-                          //     backgroundColor: Colors.transparent,
-                          //     children: <Widget>[
-                          //       Container(
-                          //         width: 370,
-                          //         child: Padding(
-                          //           padding: EdgeInsets.only(left: 0),
-                          //           child: Column(
-                          //             mainAxisAlignment:
-                          //                 MainAxisAlignment.spaceEvenly,
-                          //             children: [
-                          //               Divider(
-                          //                   height: 20, color: Colors.grey, indent: 15),
-                          //               Container(
-                          //                 // height: 1820,
-                          //                 width: 370,
-                          //                 child: Padding(
-                          //                   padding:
-                          //                   EdgeInsets.only(left: 50, bottom: 30),
-                          //                   child: Column(
-                          //                     children: [
-                          //                       Row(
-                          //                         mainAxisAlignment:
-                          //                         MainAxisAlignment.start,
-                          //                         children: [
-                          //                           Text(
-                          //                             'microBit ID',
-                          //                             style: TextStyle(
-                          //                                 fontFamily: 'kor',
-                          //                                 fontSize: 18,
-                          //                                 color: Colors.white),
-                          //                           ),
-                          //                         ],
-                          //                       ),
-                          //                       SizedBox(height: 12,),
-                          //                       Row(
-                          //                         mainAxisAlignment:
-                          //                         MainAxisAlignment.start,
-                          //                         children: [
-                          //                           Text(
-                          //                             _bleProvider.trayDetectorDeviceId!,
-                          //                             style: TextStyle(
-                          //                                 fontFamily: 'kor',
-                          //                                 fontSize: 18,
-                          //                                 color: Colors.white),
-                          //                           ),
-                          //                         ],
-                          //                       ),
-                          //                       Divider(
-                          //                         color: Colors.grey,
-                          //                         height: 30,
-                          //                       ),
-                          //                       Row(
-                          //                         mainAxisAlignment:
-                          //                         MainAxisAlignment.start,
-                          //                         children: [
-                          //                           Text(
-                          //                             'new ID',
-                          //                             style: TextStyle(
-                          //                                 fontFamily: 'kor',
-                          //                                 fontSize: 18,
-                          //                                 color: Colors.white),
-                          //                           ),
-                          //                           SizedBox(width: 160,),
-                          //                           IconButton(
-                          //                             onPressed: () {
-                          //                               final String newMicroBitUrl = configController.text;
-                          //                               final data = {"trayDetector": newMicroBitUrl};
-                          //                               robotDb
-                          //                                   .collection("servingBot1")
-                          //                                   .doc("microBit")
-                          //                                   .set(data, SetOptions(merge: true));
-                          //                               setState(() {
-                          //                                 _bleProvider.trayDetectorDeviceId = configController.text;
-                          //                                 // startUrl = _networkProvider.startUrl;
-                          //                                 configController.text = '';
-                          //                               });
-                          //                             },
-                          //                             icon: Icon(
-                          //                               Icons.arrow_forward,
-                          //                               color: Colors.white,
-                          //                             ),
-                          //                             iconSize: 25,
-                          //                             constraints: BoxConstraints(maxWidth: 25, maxHeight: 25),
-                          //                             padding: EdgeInsets.all(0),
-                          //                           )
-                          //                         ],
-                          //                       ),
-                          //                       TextField(
-                          //                         onTap: (){
-                          //                           setState(() {
-                          //                             configController.text = '';
-                          //                           });
-                          //                         },
-                          //                         controller: configController,
-                          //                         style: TextStyle(
-                          //                             fontFamily: 'kor',
-                          //                             fontSize: 18,
-                          //                             color: Colors.white),
-                          //
-                          //                         keyboardType: TextInputType.text,
-                          //                         textCapitalization: TextCapitalization.characters,
-                          //                         decoration: InputDecoration(
-                          //                             border: UnderlineInputBorder(
-                          //                               borderSide: BorderSide(
-                          //                                   color: Colors.grey,
-                          //                                   width: 1),
-                          //                             ),
-                          //                             enabledBorder:
-                          //                             UnderlineInputBorder(
-                          //                               borderSide: BorderSide(
-                          //                                   color: Colors.white,
-                          //                                   width: 1),
-                          //                             )),
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                 ),
-                          //               ),
-                          //             ],
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ]),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ExpansionTile(
-                              title: Row(
-                                children: [
-                                  Icon(Icons.add_circle_outline_outlined,
-                                      color: Colors.white, size: 50),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Text(
-                                      '위치 추가',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              initiallyExpanded: false,
-                              backgroundColor: Colors.transparent,
-                              children: <Widget>[
-                                Divider(
-                                    height: 1, color: Colors.grey, indent: 15),
-                                Container(
-                                  height: 100,
-                                  width: 370,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          '포지션 추가',
-                                          style: TextStyle(
+                                initiallyExpanded: false,
+                                backgroundColor: Colors.transparent,
+                                children: <Widget>[
+                                  Divider(
+                                      height: 20,
+                                      color: Colors.grey,
+                                      indent: 15),
+                                  Container(
+                                    // height: 1820,
+                                    width: 370,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 50, bottom: 30),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '기존 IP',
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                startUrl!,
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(
                                             color: Colors.grey,
-                                            fontSize: 24,
+                                            height: 30,
                                           ),
-                                        ),
-                                      ],
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '변경 할 IP',
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                              SizedBox(
+                                                width: 150,
+                                              ),
+                                              FilledButton(
+                                                onPressed: () {
+                                                  final String newStartUrl =
+                                                      configController.text;
+                                                  final data = {
+                                                    "RobotIp": newStartUrl
+                                                  };
+                                                  robotDb
+                                                      .collection("servingBot1")
+                                                      .doc("robotState")
+                                                      .set(
+                                                          data,
+                                                          SetOptions(
+                                                              merge: true));
+                                                  setState(() {
+                                                    _networkProvider.startUrl =
+                                                        "http://${configController.text}/";
+                                                    startUrl = _networkProvider
+                                                        .startUrl;
+                                                    configController.text = '';
+                                                  });
+                                                  getting(
+                                                      _networkProvider
+                                                          .startUrl!,
+                                                      _networkProvider
+                                                          .positionURL);
+                                                  setState(() {
+                                                    // PositionList = [];
+                                                    // poseDataUpdate();
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                ),
+                                                style: FilledButton.styleFrom(
+                                                    backgroundColor:
+                                                        Color.fromRGBO(
+                                                            80, 80, 255, 0.7),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                    )),
+                                              ),
+                                            ],
+                                          ),
+                                          TextField(
+                                            onTap: () {
+                                              setState(() {
+                                                configController.text = '';
+                                              });
+                                            },
+                                            controller: configController,
+                                            style: TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                            keyboardType: TextInputType
+                                                .numberWithOptions(),
+                                            decoration: InputDecoration(
+                                                border: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1),
+                                                )),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ]),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ExpansionTile(
-                              title: Row(
-                                children: [
-                                  Icon(Icons.remove_circle_outline_outlined,
-                                      color: Colors.white, size: 50),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Text(
-                                      '위치 삭제',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              initiallyExpanded: false,
-                              backgroundColor: Colors.transparent,
-                              children: <Widget>[
-                                Divider(
-                                    height: 1, color: Colors.grey, indent: 15),
-                                Container(
-                                  height: 100,
-                                  width: 370,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          '포지션 제거',
+                                ]),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            //골포지션 새로고침
+                            Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: FilledButton(
+                                  onPressed: () {
+                                    getting(_networkProvider.startUrl!,
+                                        _networkProvider.positionURL);
+                                    setState(() {});
+                                  },
+                                  style: FilledButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(370, 58),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(0))),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.sync,
+                                          color: Colors.white, size: 50),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          'GoalPose 새로고침',
+                                          textAlign: TextAlign.start,
                                           style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24,
+                                              fontFamily: 'kor',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            //블루투스 변경
+                            Offstage(
+                              offstage: _debugTray,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: FilledButton(
+                                    onPressed: () {
+                                      navPage(
+                                              context: context,
+                                              page: const DeviceListScreen(),
+                                              enablePop: true)
+                                          .navPageToPage();
+                                    },
+                                    style: FilledButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        fixedSize: Size(370, 58),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(0))),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.bluetooth,
+                                            color: Colors.white, size: 50),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            'microBit ID 변경',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1,
+                                                color: Colors.white),
                                           ),
                                         ),
                                       ],
                                     ),
+                                  )),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                            //위치 추가 및 변경
+                            Offstage(
+                              offstage: _debugTray,
+                              child: ExpansionTile(
+                                  title: Row(
+                                    children: [
+                                      Icon(Icons.add_circle_outline_outlined,
+                                          color: Colors.white, size: 50),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          '위치 추가',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ]),
-                        ],
-                      ),
+                                  initiallyExpanded: false,
+                                  backgroundColor: Colors.transparent,
+                                  children: <Widget>[
+                                    Divider(
+                                        height: 1,
+                                        color: Colors.grey,
+                                        indent: 15),
+                                    Container(
+                                      height: 100,
+                                      width: 370,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 30),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              '포지션 추가',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: ExpansionTile(
+                                  title: Row(
+                                    children: [
+                                      Icon(Icons.remove_circle_outline_outlined,
+                                          color: Colors.white, size: 50),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          '위치 삭제',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  initiallyExpanded: false,
+                                  backgroundColor: Colors.transparent,
+                                  children: <Widget>[
+                                    Divider(
+                                        height: 1,
+                                        color: Colors.grey,
+                                        indent: 15),
+                                    Container(
+                                      height: 100,
+                                      width: 370,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 30),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              '포지션 제거',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          ],
+                        ),
+                        //투명 디버그 모드 온/오프 스위치
+                        Positioned(
+                          top: 1620,
+                            child:
+                                FilledButton(
+                          onPressed: () {
+                            DateTime now = DateTime.now();
+                            if (currentBackPressTime == null ||
+                                now.difference(currentBackPressTime!) >
+                                    const Duration(milliseconds: 100)) {
+                              if (now.difference(currentBackPressTime!) >
+                                  const Duration(milliseconds: 1300)) {
+                                _debugEncounter = 0;
+                              } else {
+                                setState(() {
+                                  _debugEncounter++;
+                                  print(_debugEncounter);
+                                });
+                                if (_debugEncounter == 5 &&
+                                    _debugTray == true) {
+                                  _debugTray = false;
+                                  print(_debugTray);
+                                  _debugEncounter = 0;
+                                  // setState(() {
+                                  //   _debugTray = false;
+                                  //   print(_debugTray);
+                                  //   _debugEncounter = 0;
+                                  // });
+                                } else if (_debugEncounter == 3 &&
+                                    _debugTray == false) {
+                                  _debugTray = true;
+                                  print(_debugTray);
+                                  _debugEncounter = 0;
+                                  // setState(() {
+                                  // });
+                                }
+                              }
+                              currentBackPressTime = now;
+                            }
+                            Future.delayed(Duration(milliseconds: 2));
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              fixedSize: Size(400, 150)),
+                          child: null,
+                        ))
+                      ]),
                     ),
                   ],
                 ),
@@ -997,22 +985,29 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     screens: 0,
                   ),
                   // 디버그 버튼
-                  Opacity(
-                    opacity: 0.02,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        // 디버그 버튼 트레이 활성화용
-                        Offstage(
-                          offstage: _debugTray,
-                          child: Row(
+                  Offstage(
+                    offstage: _debugTray,
+                    child: Opacity(
+                      opacity: 0.02,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          // 디버그 버튼 트레이 활성화용
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               TextButton(
                                   onPressed: () {
-                                    setState(() {
-                                      _servingProvider.stickTray1();
-                                    });
+                                    if (_servingProvider.attachedTray1 ==
+                                        true) {
+                                      setState(() {
+                                        _servingProvider.stickTray1();
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _servingProvider.dittachedTray1();
+                                      });
+                                    }
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
@@ -1026,9 +1021,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   child: Text('Tray1', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
-                                    setState(() {
-                                      _servingProvider.stickTray2();
-                                    });
+                                    if (_servingProvider.attachedTray2 ==
+                                        true) {
+                                      setState(() {
+                                        _servingProvider.stickTray2();
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _servingProvider.dittachedTray2();
+                                      });
+                                    }
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
@@ -1042,9 +1044,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   child: Text('Tray2', style: buttonFont)),
                               TextButton(
                                   onPressed: () {
-                                    setState(() {
-                                      _servingProvider.stickTray3();
-                                    });
+                                    if (_servingProvider.attachedTray3 ==
+                                        true) {
+                                      setState(() {
+                                        _servingProvider.stickTray3();
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _servingProvider.dittachedTray3();
+                                      });
+                                    }
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: Colors.transparent,
@@ -1058,8 +1067,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   child: Text('Tray3', style: buttonFont)),
                             ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   // 초기화 버튼
