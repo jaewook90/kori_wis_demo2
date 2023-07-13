@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
+import 'package:provider/provider.dart';
 
-class NavigatorPauseModuleFinal extends StatefulWidget {
+class ReturnDishPauseScreen extends StatefulWidget {
   final String? servGoalPose;
 
-  const NavigatorPauseModuleFinal({
+  const ReturnDishPauseScreen({
     this.servGoalPose,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<NavigatorPauseModuleFinal> createState() =>
-      _NavigatorPauseModuleFinalState();
+  State<ReturnDishPauseScreen> createState() => _ReturnDishPauseScreenState();
 }
 
-class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
-    late String backgroundImage;
+class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
+  late String backgroundImage;
+
+  late String targetTable;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    targetTable =
+        Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +37,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
     // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
+    // double screenHeight = 1920;
 
     return WillPopScope(
       onWillPop: () {
@@ -78,7 +91,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                       onTap: () {
                         navPage(
                             context: context,
-                            page: const ServingProgressFinal(),
+                            page: const ReturnDoneScreen(),
                             enablePop: false)
                             .navPageToPage();
                       },
@@ -99,11 +112,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                       //     border: Border.fromBorderSide(
                       //         BorderSide(color: Colors.white, width: 1))),
                       child: Text(
-                        widget.servGoalPose == 'charging_pile'
-                            ? '충전스테이션'
-                            : widget.servGoalPose == 'wait'
-                            ? '대기장소'
-                            : '${widget.servGoalPose!}번 테이블',
+                        '${targetTable}번 테이블',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontFamily: 'kor',
@@ -111,7 +120,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                             color: Color(0xfffffefe)),
                       ),
                     )),
-                const NavModuleButtonsFinal(screens: 1),
+                const NavModuleButtonsFinal(screens: 3),
               ],
             ),
           ),

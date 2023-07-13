@@ -187,8 +187,10 @@ class _IntroScreenState extends State<IntroScreen>
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = 1080;
+    double screenHeight = 1920;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     double videoWidth = _controller.value.size.width;
     double videoHeight = _controller.value.size.height;

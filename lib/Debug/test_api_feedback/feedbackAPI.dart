@@ -23,7 +23,7 @@ class _testAPIFeedbackState extends State<testAPIFeedback> {
 
   Future<dynamic> Getting() async {
     NetworkGet network =
-        NetworkGet("http://172.30.1.35/reeman/movebase_status");
+        NetworkGet("http://192.168.0.155/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 
@@ -92,20 +92,20 @@ class _testAPIFeedbackState extends State<testAPIFeedback> {
               // 출발
               FilledButton(
                   onPressed: () {
-                    Posting('http://172.30.1.35/cmd/nav_point', '출발');
+                    Posting('http://192.168.0.155/cmd/nav_point', '출발');
                   },
                   style: FilledButton.styleFrom(fixedSize: Size(150, 150)),
                   child: Text('출발')),
               // 정지
               FilledButton(
                   onPressed: () {
-                    Posting('http://172.30.1.35/cmd/cancel_goal', '정지');
+                    Posting('http://192.168.0.155/cmd/cancel_goal', '정지');
                   },
                   style: FilledButton.styleFrom(fixedSize: Size(150, 150)),
                   child: Text('정지')),
               FilledButton(
                   onPressed: () {
-                    Posting('http://172.30.1.35/cmd/charge', '충전');
+                    Posting('http://192.168.0.155/cmd/charge', '충전');
                   },
                   style: FilledButton.styleFrom(fixedSize: Size(150, 150)),
                   child: Text('충전'))

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 // import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -30,6 +33,8 @@ class _NavigatorProgressModuleFinalState
 
   late String servTableNum;
 
+  late bool arrivedServingTable;
+
   String? startUrl;
   String? navUrl;
 
@@ -40,11 +45,12 @@ class _NavigatorProgressModuleFinalState
     // TODO: implement initState
     super.initState();
     navStatus = 0;
+    arrivedServingTable = false;
   }
 
   Future<dynamic> Getting() async {
     NetworkGet network =
-    NetworkGet("http://172.30.1.35/reeman/movebase_status");
+    NetworkGet("http://192.168.0.155/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 
@@ -130,15 +136,44 @@ class _NavigatorProgressModuleFinalState
 
     WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
 
-    if (navStatus == 3) {
-      navPage(
-          context: context,
-          page: const ServingProgressFinal(),
-          enablePop: false)
-          .navPageToPage();
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    print(servTableNum);
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
+    if (navStatus == 3 && arrivedServingTable == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_){
+        setState(() {
+          arrivedServingTable = true;
+        });
+        if(servTableNum != 'wait'){
+          navPage(
+              context: context,
+              page: const ServingProgressFinal(),
+              enablePop: false)
+              .navPageToPage();
+        }else if (servTableNum == 'wait'){
+          _servingProvider.clearAllTray();
+          navPage(
+              context: context,
+              page: TrayEquipped(
+                characteristic: QualifiedCharacteristic(
+                    characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                    serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                    deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+              ),
+              enablePop: false)
+              .navPageToPage();
+        }
+      });
+      // navPage(
+      //     context: context,
+      //     page: const ServingProgressFinal(),
+      //     enablePop: false)
+      //     .navPageToPage();
     }
 
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = 1080;
 
     return WillPopScope(
       onWillPop: () {
@@ -189,11 +224,42 @@ class _NavigatorProgressModuleFinalState
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        navPage(
-                            context: context,
-                            page: const ServingProgressFinal(),
-                            enablePop: false)
-                            .navPageToPage();
+                        print('touched');
+                        if (arrivedServingTable == false) {
+                          WidgetsBinding.instance.addPostFrameCallback((_){
+                            setState(() {
+                              arrivedServingTable = true;
+                            });
+                            if(servTableNum != 'wait'){
+                              navPage(
+                                  context: context,
+                                  page: const ServingProgressFinal(),
+                                  enablePop: false)
+                                  .navPageToPage();
+                            }else if (servTableNum == 'wait'){
+                              navPage(
+                                  context: context,
+                                  page: TrayEquipped(
+                                    characteristic: QualifiedCharacteristic(
+                                        characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
+                                        serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
+                                        deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                                  ),
+                                  enablePop: false)
+                                  .navPageToPage();
+                            }
+                          });
+                          // navPage(
+                          //     context: context,
+                          //     page: const ServingProgressFinal(),
+                          //     enablePop: false)
+                          //     .navPageToPage();
+                        }
+                        // navPage(
+                        //     context: context,
+                        //     page: const ServingProgressFinal(),
+                        //     enablePop: false)
+                        //     .navPageToPage();
                       },
                       child: Container(
                           height: 800,
@@ -241,5 +307,6 @@ class _NavigatorProgressModuleFinalState
         ]),
       ),
     );
+
   }
 }

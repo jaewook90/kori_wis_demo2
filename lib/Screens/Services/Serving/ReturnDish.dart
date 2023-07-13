@@ -12,7 +12,6 @@ import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class ReturnProgressModuleFinal extends StatefulWidget {
-
   const ReturnProgressModuleFinal({
     Key? key,
   }) : super(key: key);
@@ -22,9 +21,9 @@ class ReturnProgressModuleFinal extends StatefulWidget {
       _ReturnProgressModuleFinalState();
 }
 
-class _ReturnProgressModuleFinalState
-    extends State<ReturnProgressModuleFinal> {
+class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
+
   // late ServingModel _servingProvider;
 
   FirebaseFirestore robotDb = FirebaseFirestore.instance;
@@ -32,6 +31,10 @@ class _ReturnProgressModuleFinalState
   late String backgroundImageServ;
 
   late String targetTableNum;
+
+  late bool arrivedReturnTable;
+
+  late String currentTargetTable;
 
   // late String servTableNum;
 
@@ -44,56 +47,67 @@ class _ReturnProgressModuleFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
+    arrivedReturnTable = false;
     navStatus = 0;
-    if(Provider.of<ServingModel>(context, listen: false).servingState == 1){
+
+    currentTargetTable = Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
+
+    if (Provider.of<ServingModel>(context, listen: false).servingState == 1) {
       const int newState = 0;
       final data = {"serviceState": newState};
+      const String returnTable = 'hall';
+      final data2 = {"returnTable": returnTable};
       robotDb
           .collection("servingBot1")
           .doc("robotState")
           .set(data, SetOptions(merge: true));
+      robotDb
+          .collection("servingBot1")
+          .doc("robotState")
+          .set(data2, SetOptions(merge: true));
     }
   }
 
-  void getStarted_readData() async {
-    // [START get_started_read_data]
-    await robotDb.collection("servingBot1").get().then((event) {
-      for (var doc in event.docs) {
-        if(doc.id == "robotState"){
-          print(doc.data()['serviceState']);
-          print(doc.data()['returnTable']);
-          setState(() {
-            Provider.of<ServingModel>(context, listen: false).servingState = doc.data()['serviceState'];
-          });
-          if(doc.data()['serviceState']==3){
-            const int newState = 0;
-            const String returnTable = 'hall';
-            final data1 = {"serviceState": newState};
-            final data2 = {"returnTable": returnTable};
-            robotDb
-                .collection("servingBot1")
-                .doc("robotState")
-                .set(data1, SetOptions(merge: true));
-            robotDb
-                .collection("servingBot1")
-                .doc("robotState")
-                .set(data2, SetOptions(merge: true));
-            Navigator.pop(context);
-          }
-        }
-      }
-    });
-    // [END get_started_read_data]
-  }
+  // void getStarted_readData() async {
+  //   // [START get_started_read_data]
+  //   await robotDb.collection("servingBot1").get().then((event) {
+  //     for (var doc in event.docs) {
+  //       if(doc.id == "robotState"){
+  //         print(doc.data()['serviceState']);
+  //         print(doc.data()['returnTable']);
+  //         setState(() {
+  //           Provider.of<ServingModel>(context, listen: false).servingState = doc.data()['serviceState'];
+  //         });
+  //         if(doc.data()['serviceState']==3){
+  //           const int newState = 0;
+  //           const String returnTable = 'hall';
+  //           final data1 = {"serviceState": newState};
+  //           final data2 = {"returnTable": returnTable};
+  //           robotDb
+  //               .collection("servingBot1")
+  //               .doc("robotState")
+  //               .set(data1, SetOptions(merge: true));
+  //           robotDb
+  //               .collection("servingBot1")
+  //               .doc("robotState")
+  //               .set(data2, SetOptions(merge: true));
+  //           Navigator.pop(context);
+  //         }
+  //       }
+  //     }
+  //   });
+  //   // [END get_started_read_data]
+  // }
 
   Future<dynamic> Getting() async {
     NetworkGet network =
-    NetworkGet("http://172.30.1.35/reeman/movebase_status");
+        NetworkGet("http://192.168.0.155/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 
-    if(mounted){
-      Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
+    if (mounted) {
+      Provider.of<NetworkModel>((context), listen: false).APIGetData =
+          getApiData;
       setState(() {
         navStatus = Provider.of<NetworkModel>((context), listen: false)
             .APIGetData['status'];
@@ -110,25 +124,38 @@ class _ReturnProgressModuleFinalState
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    // _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
 
-    // servTableNum = _networkProvider.servTable!;
-
     backgroundImageServ = "assets/screens/Nav/koriZFinalReturnProgNav.png";
 
-    WidgetsBinding.instance.addPostFrameCallback((_){getStarted_readData();});
+    // WidgetsBinding.instance.addPostFrameCallback((_){getStarted_readData();});
 
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = 1080;
+    // double screenHeight = 1920;
 
-    if (navStatus == 3) {
-      navPage(
-          context: context,
-          page: const ServingProgressFinal(), // TODO: 퇴식 해주세요 스크린으로 변경 해야 됨
-          enablePop: false)
-          .navPageToPage();
+    // WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
+    Getting();
+
+    if (navStatus == 3 && arrivedReturnTable == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print('nav Return Done');
+        setState(() {
+          arrivedReturnTable = true;
+        });
+        navPage(
+                context: context,
+                page: const ReturnDoneScreen(),
+                enablePop: false)
+            .navPageToPage();
+      });
+      // navPage(
+      //         context: context,
+      //         page: const ReturnDoneScreen(),
+      //         enablePop: false)
+      //     .navPageToPage();
     }
 
     return WillPopScope(
@@ -176,14 +203,32 @@ class _ReturnProgressModuleFinalState
             child: Stack(
               children: [
                 Positioned(
+                    top: 400,
+                    left: 350,
+                    child: Container(
+                      width: 380,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 70,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 20,),
+                          Text('$currentTargetTable번 테이블', style: TextStyle(fontSize: 48, color: Colors.white),)
+                        ],
+                      ),
+                    )),
+                Positioned(
                   top: 500,
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
                         navPage(
-                            context: context,
-                            page: const ReturnDoneScreen(),
-                            enablePop: false)
+                                context: context,
+                                page: const ReturnDoneScreen(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       child: Container(

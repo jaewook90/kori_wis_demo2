@@ -43,6 +43,7 @@ class ServingModel with ChangeNotifier {
   String? table2;
   String? table3;
   String? allTable;
+  String? returnTargetTable;
   List<String>? tableList;
   bool? trayCheckAll;
 

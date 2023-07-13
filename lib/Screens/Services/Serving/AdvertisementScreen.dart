@@ -195,8 +195,10 @@ class _ADScreenState extends State<ADScreen> with TickerProviderStateMixin {
 //  비디오 플레이어 유ㅣ젯
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = 1080;
+    double screenHeight = 1920;
 
     double videoWidth = _controller.value.size.width;
     double videoHeight = _controller.value.size.height;

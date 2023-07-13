@@ -137,10 +137,11 @@ class _BLEAutoTestState extends State<BLEAutoTest> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    // double screenWidth = MediaQuery
+    //     .of(context)
+    //     .size
+    //     .width;
+    double screenWidth = 1080;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

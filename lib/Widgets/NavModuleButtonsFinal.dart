@@ -3,6 +3,7 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorPauseModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDishPause.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,6 @@ class NavModuleButtonsFinal extends StatefulWidget {
     Key? key,
     this.screens,
     this.servGoalPose,
-
   }) : super(key: key);
 
   @override
@@ -69,7 +69,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
-    if(widget.servGoalPose != null){
+    if (widget.servGoalPose != null) {
       currentGoal = widget.servGoalPose;
     }
 
@@ -100,6 +100,17 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
       buttonSize = [866, 173];
 
       buttonRadius = 40;
+    } else if (widget.screens == 3) {
+      // 서빙 일시 정지
+      buttonPositionWidth = [107, 107, 406, 705];
+      buttonPositionHeight = [1311, 1501, 1501, 1501];
+
+      buttonSize = [];
+      buttonSize1 = [866, 160];
+      buttonSize2 = [268, 205];
+
+      buttonRadius1 = 40;
+      buttonRadius2 = 32;
     }
 
     buttonNumbers = buttonPositionHeight.length;
@@ -115,80 +126,147 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(widget.screens == 1
                         ? i == 0
-                        ? buttonRadius1
-                        : buttonRadius2
-                        : buttonRadius)),
+                            ? buttonRadius1
+                            : buttonRadius2
+                        : widget.screens == 3
+                            ? i == 0
+                                ? buttonRadius1
+                                : buttonRadius2
+                            : buttonRadius)),
                 fixedSize: widget.screens == 1
                     ? i == 0
-                    ? Size(
-                    buttonSize1[buttonWidth], buttonSize1[buttonHeight])
-                    : Size(
-                    buttonSize2[buttonWidth], buttonSize2[buttonHeight])
-                    : Size(
-                    buttonSize[buttonWidth], buttonSize[buttonHeight])),
+                        ? Size(
+                            buttonSize1[buttonWidth], buttonSize1[buttonHeight])
+                        : Size(
+                            buttonSize2[buttonWidth], buttonSize2[buttonHeight])
+                    : widget.screens == 3
+                        ? i == 0
+                            ? Size(buttonSize1[buttonWidth],
+                                buttonSize1[buttonHeight])
+                            : Size(buttonSize2[buttonWidth],
+                                buttonSize2[buttonHeight])
+                        : Size(
+                            buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-              PostApi(
-                  url: startUrl,
-                  endadr: stpUrl,
-                  keyBody: 'stop')
-                  .Posting(context);
-              navPage(
-                  context: context,
-                  page: NavigatorPauseModuleFinal(
-                      servGoalPose: currentGoal
-                  ),
-                  enablePop: false)
-                  .navPageToPage();
-              // 일시정지 명령 추가 필요
-            }
+                    PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
+                        .Posting(context);
+                    navPage(
+                            context: context,
+                            page: NavigatorPauseModuleFinal(
+                                servGoalPose: currentGoal),
+                            enablePop: false)
+                        .navPageToPage();
+                    // 일시정지 명령 추가 필요
+                  }
                 : widget.screens == 1
-                ? () {
-              if (i == 0) {
-                // 재시작 추가 필요
-                PostApi(
-                    url: startUrl,
-                    endadr: rsmUrl,
-                    keyBody: 'stop')
-                    .Posting(context);
-                navPage(
-                    context: context,
-                    page: const NavigatorProgressModuleFinal(),
-                    enablePop: false)
-                    .navPageToPage();
-                _statusProvider.playAd = false;
-              } else if (i == 1) {
-                // 충전하러가기 기능
-                PostApi(
-                    url: startUrl,
-                    endadr: chgUrl,
-                    keyBody: 'charging_pile').Posting(context);
-                _networkProvider.currentGoal = '충전스테이션';
-                navPage(
-                    context: context,
-                    page: const NavigatorProgressModuleFinal(),
-                    enablePop: false)
-                    .navPageToPage();
-                _statusProvider.playAd = false;
-              } else if (i == 2) {
-                // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                _statusProvider.playAd = false;
-              } else {
-                // 추후에는 거점으로 복귀
-                PostApi(
-                    url: startUrl,
-                    endadr: chgUrl,
-                    keyBody: 'charging_pile').Posting(context);
-                _networkProvider.currentGoal = '충전스테이션';
-                navPage(
-                    context: context,
-                    page: const NavigatorProgressModuleFinal(),
-                    enablePop: false)
-                    .navPageToPage();
-                _statusProvider.playAd = false;
-              }
-            }
-                : widget.screens==2 ? (){ Navigator.pop(context);} :null,
+                    ? () {
+                        if (i == 0) {
+                          // 재시작 추가 필요
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: rsmUrl,
+                                  keyBody: 'stop')
+                              .Posting(context);
+                          navPage(
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(),
+                                  enablePop: false)
+                              .navPageToPage();
+                          _statusProvider.playAd = false;
+                        } else if (i == 1) {
+                          // 충전하러가기 기능
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: chgUrl,
+                                  keyBody: 'charging_pile')
+                              .Posting(context);
+                          _networkProvider.currentGoal = '충전스테이션';
+                          navPage(
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(),
+                                  enablePop: false)
+                              .navPageToPage();
+                          _statusProvider.playAd = false;
+                        } else if (i == 2) {
+                          // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                          _statusProvider.playAd = false;
+                        } else {
+                          // 추후에는 거점으로 복귀
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: chgUrl,
+                                  keyBody: 'charging_pile')
+                              .Posting(context);
+                          _networkProvider.currentGoal = '충전스테이션';
+                          navPage(
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(),
+                                  enablePop: false)
+                              .navPageToPage();
+                          _statusProvider.playAd = false;
+                        }
+                      }
+                    : widget.screens == 2
+                        ? () {
+                            navPage(
+                                    context: context,
+                                    page: ReturnDishPauseScreen(),
+                                    enablePop: true)
+                                .navPageToPage();
+                          }
+                        : widget.screens == 1
+                            ? () {
+                                if (i == 0) {
+                                  // 재시작 추가 필요
+                                  PostApi(
+                                          url: startUrl,
+                                          endadr: rsmUrl,
+                                          keyBody: 'stop')
+                                      .Posting(context);
+                                  navPage(
+                                          context: context,
+                                          page:
+                                              const NavigatorProgressModuleFinal(),
+                                          enablePop: false)
+                                      .navPageToPage();
+                                  _statusProvider.playAd = false;
+                                } else if (i == 1) {
+                                  // 충전하러가기 기능
+                                  PostApi(
+                                          url: startUrl,
+                                          endadr: chgUrl,
+                                          keyBody: 'charging_pile')
+                                      .Posting(context);
+                                  _networkProvider.currentGoal = '충전스테이션';
+                                  navPage(
+                                          context: context,
+                                          page:
+                                              const NavigatorProgressModuleFinal(),
+                                          enablePop: false)
+                                      .navPageToPage();
+                                  _statusProvider.playAd = false;
+                                } else if (i == 2) {
+                                  // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                                  _statusProvider.playAd = false;
+                                } else {
+                                  // 추후에는 거점으로 복귀
+                                  PostApi(
+                                          url: startUrl,
+                                          endadr: chgUrl,
+                                          keyBody: 'charging_pile')
+                                      .Posting(context);
+                                  _networkProvider.currentGoal = '충전스테이션';
+                                  navPage(
+                                          context: context,
+                                          page:
+                                              const NavigatorProgressModuleFinal(),
+                                          enablePop: false)
+                                      .navPageToPage();
+                                  _statusProvider.playAd = false;
+                                }
+                              }
+                            : null,
             child: null,
           ),
         ),

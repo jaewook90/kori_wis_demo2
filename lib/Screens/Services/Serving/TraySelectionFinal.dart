@@ -216,6 +216,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           Provider.of<ServingModel>(context, listen: false).servingState =
               doc.data()['serviceState'];
           targetTableNum = doc.data()['returnTable'];
+          Provider.of<ServingModel>(context, listen: false).returnTargetTable = targetTableNum;
           if (doc.data()['serviceState'] == 1) {
             // 퇴식 화면 제작 후 이동 함수 추가
             PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
@@ -407,8 +408,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     table2 = _servingProvider.table2;
     table3 = _servingProvider.table3;
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = 1080;
+    double screenHeight = 1920;
     double textButtonWidth = screenWidth * 0.6;
     double textButtonHeight = screenHeight * 0.08;
 
@@ -883,6 +886,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             if (currentBackPressTime == null ||
                                 now.difference(currentBackPressTime!) >
                                     const Duration(milliseconds: 100)) {
+                              currentBackPressTime = now;
                               if (now.difference(currentBackPressTime!) >
                                   const Duration(milliseconds: 1300)) {
                                 _debugEncounter = 0;
@@ -910,11 +914,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   // });
                                 }
                               }
-                              currentBackPressTime = now;
+                              // currentBackPressTime = now;
                             }
                             Future.delayed(Duration(milliseconds: 2));
                           },
                           style: FilledButton.styleFrom(
+                            foregroundColor: Colors.transparent,
                             backgroundColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),

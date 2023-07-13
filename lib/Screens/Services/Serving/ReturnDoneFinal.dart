@@ -34,8 +34,10 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
     
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = 1080;
+    double screenHeight = 1920;
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;

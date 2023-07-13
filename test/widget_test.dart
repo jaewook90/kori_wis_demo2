@@ -117,7 +117,9 @@ class _IsolateTestScreenState extends State<IsolateTestScreen> {
     } else if (tray3BLE == "0") {
     }
 
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = 1080;
+    // double screenHeight = 1920;
 
     if (_bleProvider.onTraySelectionScreen == true) {
       subscribeCharacteristic();

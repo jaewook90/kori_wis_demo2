@@ -5,12 +5,12 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+
 // import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
-
 
 class ServingProgressFinal extends StatefulWidget {
   const ServingProgressFinal({Key? key}) : super(key: key);
@@ -33,9 +33,11 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
-    
-    double screenWidth = MediaQuery.of(context).size.width;
+
+    // double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = 1080;
+    double screenHeight = 1920;
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -57,9 +59,9 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                            context: context,
-                            page: const TrayEquipped(),
-                            enablePop: false)
+                                context: context,
+                                page: const TrayEquipped(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
@@ -112,46 +114,52 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 child: GestureDetector(
                     onTap: () {
                       if (_servingProvider.targetTableNum != 'none') {
-                        _servingProvider.trayChange = true;
-                        _networkProvider.servTable =
-                            _servingProvider.targetTableNum;
+                        setState(() {
+                          _servingProvider.trayChange = true;
+                          _networkProvider.servTable =
+                              _servingProvider.targetTableNum;
+                        });
                         PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody:
-                            _servingProvider.targetTableNum)
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
-                        WidgetsBinding.instance
-                            .addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(
-                                // servGoalPose: _servingProvider.targetTableNum,
-                              ),
-                              enablePop: true)
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(
+                                      // servGoalPose: _servingProvider.targetTableNum,
+                                      ),
+                                  enablePop: true)
                               .navPageToPage();
                         });
                       } else {
                         _servingProvider.clearAllTray();
                         print('Serving Return to waiting point');
                         PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody:
-                            _servingProvider.waitingPoint)
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
                         setState(() {
                           _bleProvider.onTraySelectionScreen = true;
                         });
                         navPage(
-                            context: context,
-                            page: TrayEquipped(
-                              characteristic: QualifiedCharacteristic(
-                                  characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                                  serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                                  deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                            ),
-                            enablePop: false)
+                                context: context,
+                                page: TrayEquipped(
+                                  characteristic: QualifiedCharacteristic(
+                                      characteristicId: Provider.of<BLEModel>(
+                                              context,
+                                              listen: false)
+                                          .trayDetectorCharacteristicId!,
+                                      serviceId: Provider.of<BLEModel>(context,
+                                              listen: false)
+                                          .trayDetectorServiceId!,
+                                      deviceId: Provider.of<BLEModel>(context,
+                                              listen: false)
+                                          .trayDetectorDeviceId!),
+                                ),
+                                enablePop: false)
                             .navPageToPage();
                       }
                     },
@@ -159,8 +167,8 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                         height: 1200,
                         width: 1080,
                         decoration: const BoxDecoration(
-                            border: Border.fromBorderSide(
-                                BorderSide(color: Colors.transparent, width: 1))))),
+                            border: Border.fromBorderSide(BorderSide(
+                                color: Colors.transparent, width: 1))))),
               ),
               Container(
                 child: const ServingModuleButtonsFinal(screens: 3),
