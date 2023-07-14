@@ -215,58 +215,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                                     enablePop: true)
                                 .navPageToPage();
                           }
-                        : widget.screens == 1
-                            ? () {
-                                if (i == 0) {
-                                  // 재시작 추가 필요
-                                  PostApi(
-                                          url: startUrl,
-                                          endadr: rsmUrl,
-                                          keyBody: 'stop')
-                                      .Posting(context);
-                                  navPage(
-                                          context: context,
-                                          page:
-                                              const NavigatorProgressModuleFinal(),
-                                          enablePop: false)
-                                      .navPageToPage();
-                                  _statusProvider.playAd = false;
-                                } else if (i == 1) {
-                                  // 충전하러가기 기능
-                                  PostApi(
-                                          url: startUrl,
-                                          endadr: chgUrl,
-                                          keyBody: 'charging_pile')
-                                      .Posting(context);
-                                  _networkProvider.currentGoal = '충전스테이션';
-                                  navPage(
-                                          context: context,
-                                          page:
-                                              const NavigatorProgressModuleFinal(),
-                                          enablePop: false)
-                                      .navPageToPage();
-                                  _statusProvider.playAd = false;
-                                } else if (i == 2) {
-                                  // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                                  _statusProvider.playAd = false;
-                                } else {
-                                  // 추후에는 거점으로 복귀
-                                  PostApi(
-                                          url: startUrl,
-                                          endadr: chgUrl,
-                                          keyBody: 'charging_pile')
-                                      .Posting(context);
-                                  _networkProvider.currentGoal = '충전스테이션';
-                                  navPage(
-                                          context: context,
-                                          page:
-                                              const NavigatorProgressModuleFinal(),
-                                          enablePop: false)
-                                      .navPageToPage();
-                                  _statusProvider.playAd = false;
-                                }
-                              }
-                            : null,
+                        : null,
             child: null,
           ),
         ),

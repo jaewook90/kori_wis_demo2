@@ -124,7 +124,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 endadr: navUrl,
                                 keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                        // WidgetsBinding.instance.addPostFrameCallback((_) {
                           navPage(
                                   context: context,
                                   page: const NavigatorProgressModuleFinal(
@@ -132,7 +132,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                       ),
                                   enablePop: true)
                               .navPageToPage();
-                        });
+                        // });
                       } else {
                         _servingProvider.clearAllTray();
                         print('Serving Return to waiting point');

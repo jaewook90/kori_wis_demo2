@@ -6,13 +6,13 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
+
 // import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class NavigatorProgressModuleFinal extends StatefulWidget {
-
   const NavigatorProgressModuleFinal({
     Key? key,
   }) : super(key: key);
@@ -40,26 +40,61 @@ class _NavigatorProgressModuleFinalState
 
   late int navStatus;
 
+  late bool initNavStatus;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    initNavStatus = true;
     navStatus = 0;
     arrivedServingTable = false;
   }
 
   Future<dynamic> Getting() async {
     NetworkGet network =
-    NetworkGet("http://192.168.0.155/reeman/movebase_status");
+        NetworkGet("http://192.168.0.155/reeman/movebase_status");
 
     dynamic getApiData = await network.getAPI();
 
-    if(mounted){
-      Provider.of<NetworkModel>((context), listen: false).APIGetData = getApiData;
-      setState(() {
-        navStatus = Provider.of<NetworkModel>((context), listen: false)
-            .APIGetData['status'];
-      });
+    print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
+    print(initNavStatus);
+    print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
+
+    if (initNavStatus == true) {
+      if (getApiData == 3) {
+        while (getApiData != 3) {
+          if (mounted) {
+            Provider.of<NetworkModel>((context), listen: false).APIGetData =
+                getApiData;
+            setState(() {
+              navStatus = Provider.of<NetworkModel>((context), listen: false)
+                  .APIGetData['status'];
+              initNavStatus = false;
+            });
+          }
+        }
+      } else {
+        if (mounted) {
+          Provider.of<NetworkModel>((context), listen: false).APIGetData =
+              getApiData;
+          setState(() {
+            navStatus = Provider.of<NetworkModel>((context), listen: false)
+                .APIGetData['status'];
+            initNavStatus = false;
+          });
+        }
+      }
+    } else {
+      if (mounted) {
+        Provider.of<NetworkModel>((context), listen: false).APIGetData =
+            getApiData;
+        setState(() {
+          navStatus = Provider.of<NetworkModel>((context), listen: false)
+              .APIGetData['status'];
+          initNavStatus = false;
+        });
+      }
     }
   }
 
@@ -118,10 +153,10 @@ class _NavigatorProgressModuleFinalState
             targetTableNum = _servingProvider.table3!;
             _servingProvider.trayChange = false;
           } else {
-            if(targetTableNum == 'wait'){
+            if (targetTableNum == 'wait') {
               targetTableNum = 'none';
               _servingProvider.trayChange = false;
-            }else{
+            } else {
               targetTableNum = 'wait';
               _servingProvider.trayChange = false;
             }
@@ -134,43 +169,50 @@ class _NavigatorProgressModuleFinalState
     // print('48465435');
     // print(targetTableNum);
 
-    WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
-
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    print(servTableNum);
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
-    if (navStatus == 3 && arrivedServingTable == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 500), (){
+        Getting();
+      });
+      if (navStatus == 3 && arrivedServingTable == false) {
         setState(() {
           arrivedServingTable = true;
+          navStatus = 0;
         });
-        if(servTableNum != 'wait'){
+        if (servTableNum != 'wait') {
           navPage(
-              context: context,
-              page: const ServingProgressFinal(),
-              enablePop: false)
+                  context: context,
+                  page: const ServingProgressFinal(),
+                  enablePop: false)
               .navPageToPage();
-        }else if (servTableNum == 'wait'){
+        } else if (servTableNum == 'wait') {
           _servingProvider.clearAllTray();
           navPage(
-              context: context,
-              page: TrayEquipped(
-                characteristic: QualifiedCharacteristic(
-                    characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                    serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                    deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-              ),
-              enablePop: false)
+                  context: context,
+                  page: TrayEquipped(
+                    characteristic: QualifiedCharacteristic(
+                        characteristicId:
+                            Provider.of<BLEModel>(context, listen: false)
+                                .trayDetectorCharacteristicId!,
+                        serviceId: Provider.of<BLEModel>(context, listen: false)
+                            .trayDetectorServiceId!,
+                        deviceId: Provider.of<BLEModel>(context, listen: false)
+                            .trayDetectorDeviceId!),
+                  ),
+                  enablePop: false)
               .navPageToPage();
         }
-      });
-      // navPage(
-      //     context: context,
-      //     page: const ServingProgressFinal(),
-      //     enablePop: false)
-      //     .navPageToPage();
-    }
+
+        // navPage(
+        //     context: context,
+        //     page: const ServingProgressFinal(),
+        //     enablePop: false)
+        //     .navPageToPage();
+      }
+    });
+
+    // print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    // print(servTableNum);
+    // print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
     // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
@@ -226,26 +268,35 @@ class _NavigatorProgressModuleFinalState
                       onTap: () {
                         print('touched');
                         if (arrivedServingTable == false) {
-                          WidgetsBinding.instance.addPostFrameCallback((_){
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() {
                               arrivedServingTable = true;
                             });
-                            if(servTableNum != 'wait'){
+                            if (servTableNum != 'wait') {
                               navPage(
-                                  context: context,
-                                  page: const ServingProgressFinal(),
-                                  enablePop: false)
+                                      context: context,
+                                      page: const ServingProgressFinal(),
+                                      enablePop: false)
                                   .navPageToPage();
-                            }else if (servTableNum == 'wait'){
+                            } else if (servTableNum == 'wait') {
                               navPage(
-                                  context: context,
-                                  page: TrayEquipped(
-                                    characteristic: QualifiedCharacteristic(
-                                        characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                                        serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                                        deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                                  ),
-                                  enablePop: false)
+                                      context: context,
+                                      page: TrayEquipped(
+                                        characteristic: QualifiedCharacteristic(
+                                            characteristicId: Provider.of<
+                                                        BLEModel>(context,
+                                                    listen: false)
+                                                .trayDetectorCharacteristicId!,
+                                            serviceId: Provider.of<BLEModel>(
+                                                    context,
+                                                    listen: false)
+                                                .trayDetectorServiceId!,
+                                            deviceId: Provider.of<BLEModel>(
+                                                    context,
+                                                    listen: false)
+                                                .trayDetectorDeviceId!),
+                                      ),
+                                      enablePop: false)
                                   .navPageToPage();
                             }
                           });
@@ -299,7 +350,7 @@ class _NavigatorProgressModuleFinalState
                 // )),
                 NavModuleButtonsFinal(
                   screens: 0,
-                    servGoalPose: servTableNum,
+                  servGoalPose: servTableNum,
                 )
               ],
             ),
@@ -307,6 +358,5 @@ class _NavigatorProgressModuleFinalState
         ]),
       ),
     );
-
   }
 }

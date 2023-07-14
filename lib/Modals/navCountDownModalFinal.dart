@@ -110,18 +110,28 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   onFinished: () {
                     _servingProvider.trayChange = true;
                     _networkProvider.servTable =
-                        targetTableNum;
+                        _servingProvider.targetTableNum;
                     PostApi(
                         url: startUrl,
                         endadr: navUrl,
                         keyBody: targetTableNum)
                         .Posting(context);
+                    print('타겟 : $targetTableNum');
                     navPage(
                         context: context,
                         page: const NavigatorProgressModuleFinal(
                         ),
                         enablePop: true)
                         .navPageToPage();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      navPage(
+                          context: context,
+                          page: const NavigatorProgressModuleFinal(),
+                          enablePop: true)
+                          .navPageToPage();
+                    });
                   },
                 ),
               ),

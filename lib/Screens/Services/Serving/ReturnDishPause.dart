@@ -120,7 +120,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                             color: Color(0xfffffefe)),
                       ),
                     )),
-                const NavModuleButtonsFinal(screens: 3),
+                const NavModuleButtonsFinal(screens: 1),
               ],
             ),
           ),

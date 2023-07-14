@@ -42,6 +42,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   String? navUrl;
 
   late int navStatus;
+  late bool initNavStatus;
 
   @override
   void initState() {
@@ -49,8 +50,10 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
     super.initState();
     arrivedReturnTable = false;
     navStatus = 0;
+    initNavStatus = true;
 
-    currentTargetTable = Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
+    currentTargetTable =
+        Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
 
     if (Provider.of<ServingModel>(context, listen: false).servingState == 1) {
       const int newState = 0;
@@ -105,13 +108,40 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     dynamic getApiData = await network.getAPI();
 
-    if (mounted) {
-      Provider.of<NetworkModel>((context), listen: false).APIGetData =
-          getApiData;
-      setState(() {
-        navStatus = Provider.of<NetworkModel>((context), listen: false)
-            .APIGetData['status'];
-      });
+    if (initNavStatus == true) {
+      if (getApiData == 3) {
+        while (getApiData != 3) {
+          if (mounted) {
+            Provider.of<NetworkModel>((context), listen: false).APIGetData =
+                getApiData;
+            setState(() {
+              navStatus = Provider.of<NetworkModel>((context), listen: false)
+                  .APIGetData['status'];
+              initNavStatus = false;
+            });
+          }
+        }
+      } else {
+        if (mounted) {
+          Provider.of<NetworkModel>((context), listen: false).APIGetData =
+              getApiData;
+          setState(() {
+            navStatus = Provider.of<NetworkModel>((context), listen: false)
+                .APIGetData['status'];
+            initNavStatus = false;
+          });
+        }
+      }
+    } else {
+      if (mounted) {
+        Provider.of<NetworkModel>((context), listen: false).APIGetData =
+            getApiData;
+        setState(() {
+          navStatus = Provider.of<NetworkModel>((context), listen: false)
+              .APIGetData['status'];
+          initNavStatus = false;
+        });
+      }
     }
   }
 
@@ -136,27 +166,50 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
     double screenWidth = 1080;
     // double screenHeight = 1920;
 
-    // WidgetsBinding.instance.addPostFrameCallback((_){Getting();});
-    Getting();
-
-    if (navStatus == 3 && arrivedReturnTable == false) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        print('nav Return Done');
-        setState(() {
-          arrivedReturnTable = true;
-        });
-        navPage(
-                context: context,
-                page: const ReturnDoneScreen(),
-                enablePop: false)
-            .navPageToPage();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 500), (){
+        Getting();
       });
-      // navPage(
-      //         context: context,
-      //         page: const ReturnDoneScreen(),
-      //         enablePop: false)
-      //     .navPageToPage();
-    }
+      if (navStatus == 3 && arrivedReturnTable == false) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          print('nav Return Done');
+          setState(() {
+            navStatus = 0;
+            arrivedReturnTable = true;
+          });
+          navPage(
+                  context: context,
+                  page: const ReturnDoneScreen(),
+                  enablePop: false)
+              .navPageToPage();
+        });
+        // navPage(
+        //         context: context,
+        //         page: const ReturnDoneScreen(),
+        //         enablePop: false)
+        //     .navPageToPage();
+      }
+    });
+    // Getting();
+
+    // if (navStatus == 3 && arrivedReturnTable == false) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     print('nav Return Done');
+    //     setState(() {
+    //       arrivedReturnTable = true;
+    //     });
+    //     navPage(
+    //             context: context,
+    //             page: const ReturnDoneScreen(),
+    //             enablePop: false)
+    //         .navPageToPage();
+    //   });
+    //   // navPage(
+    //   //         context: context,
+    //   //         page: const ReturnDoneScreen(),
+    //   //         enablePop: false)
+    //   //     .navPageToPage();
+    // }
 
     return WillPopScope(
       onWillPop: () {
@@ -215,8 +268,13 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                             size: 70,
                             color: Colors.white,
                           ),
-                          SizedBox(width: 20,),
-                          Text('$currentTargetTable번 테이블', style: TextStyle(fontSize: 48, color: Colors.white),)
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            '$currentTargetTable번 테이블',
+                            style: TextStyle(fontSize: 48, color: Colors.white),
+                          )
                         ],
                       ),
                     )),

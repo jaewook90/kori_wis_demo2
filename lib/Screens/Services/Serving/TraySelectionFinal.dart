@@ -233,7 +233,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         }
       }
     });
-    Future.delayed(Duration(milliseconds: 1));
+    await Future.delayed(Duration(milliseconds: 1));
     // [END get_started_read_data]
   }
 
@@ -291,7 +291,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
       }
     });
-    Future.delayed(Duration(milliseconds: 1));
+    await Future.delayed(Duration(milliseconds: 1));
   }
 
   void showTraySetPopup(context) {
@@ -341,11 +341,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     if (PositionList.isEmpty) {
       // print('11111111');
       PositionList = _networkProvider.getPoseData!;
-      Future.delayed(Duration(milliseconds: 1));
     } else {
       // print('2222222222');
       _networkProvider.getPoseData = PositionList;
-      Future.delayed(Duration(milliseconds: 1));
     }
 
     if (mounted) {
@@ -354,12 +352,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       }
     } else {
       subscribeStream!.cancel();
-      Future.delayed(Duration(milliseconds: 1));
     }
 
     if (tray1BLE == "1") {
       _servingProvider.attachedTray1 = false;
-      Future.delayed(Duration(milliseconds: 1));
     } else if (tray1BLE == "0") {
       _servingProvider.attachedTray1 = true;
       if (table1 != "") {
@@ -367,11 +363,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           _servingProvider.clearTray1();
         });
       }
-      Future.delayed(Duration(milliseconds: 1));
     }
     if (tray2BLE == "1") {
       _servingProvider.attachedTray2 = false;
-      Future.delayed(Duration(milliseconds: 1));
     } else if (tray2BLE == "0") {
       _servingProvider.attachedTray2 = true;
       if (table2 != "") {
@@ -380,11 +374,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
         // print('t2');
       }
-      Future.delayed(Duration(milliseconds: 1));
     }
     if (tray3BLE == "1") {
       _servingProvider.attachedTray3 = false;
-      Future.delayed(Duration(milliseconds: 1));
     } else if (tray3BLE == "0") {
       _servingProvider.attachedTray3 = true;
       if (table3 != "") {
@@ -393,7 +385,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
         // print('t3');
       }
-      Future.delayed(Duration(milliseconds: 1));
     }
 
     offStageTray1 = _servingProvider.attachedTray1;
@@ -916,7 +907,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               }
                               // currentBackPressTime = now;
                             }
-                            Future.delayed(Duration(milliseconds: 2));
                           },
                           style: FilledButton.styleFrom(
                             foregroundColor: Colors.transparent,

@@ -157,7 +157,7 @@ class _ADScreenState extends State<ADScreen> with TickerProviderStateMixin {
         }
       }
     });
-    Future.delayed(Duration(microseconds: 100));
+    await Future.delayed(Duration(microseconds: 100));
     // [END get_started_read_data]
   }
 
