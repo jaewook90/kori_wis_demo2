@@ -8,6 +8,7 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:functional_data/functional_data.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/menuBookModalFinal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -78,6 +79,15 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
+
+  void showMenuBookPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const MenuBookModalFinal();
+        });
+  }
 
   final TextEditingController configController = TextEditingController();
 
@@ -216,7 +226,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           Provider.of<ServingModel>(context, listen: false).servingState =
               doc.data()['serviceState'];
           targetTableNum = doc.data()['returnTable'];
-          Provider.of<ServingModel>(context, listen: false).returnTargetTable = targetTableNum;
+          Provider.of<ServingModel>(context, listen: false).returnTargetTable =
+              targetTableNum;
           if (doc.data()['serviceState'] == 1) {
             // 퇴식 화면 제작 후 이동 함수 추가
             PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
@@ -325,18 +336,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
     serviceState =
         Provider.of<ServingModel>(context, listen: false).servingState!;
-
-    // 트레이 디텍터에 따른 트레이 표시
-
-    // print(widget.viewModel!.deviceConnected);
-
-    // if (widget.viewModel!.deviceConnected == false && bleConnection == false) {
-    //   widget.viewModel!.connect();
-    //   setState(() {
-    //     bleConnection = true;
-    //   });
-    //   Future.delayed(Duration(milliseconds: 1));
-    // }
 
     if (PositionList.isEmpty) {
       // print('11111111');
@@ -477,6 +476,21 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  Positioned(
+                      left: 50,
+                      top: 25,
+                      child: FilledButton(
+                        onPressed: () {
+                          showMenuBookPopup(context);
+                        },
+                        child: Icon(Icons.menu_book, size: 50),
+                        style: FilledButton.styleFrom(
+                            fixedSize: Size(60, 60),
+                            padding: EdgeInsets.only(right: 0),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0))),
+                      )),
                 ],
               ),
             )
@@ -764,7 +778,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       Icon(Icons.add_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 15),
+                                        padding:
+                                            const EdgeInsets.only(left: 15),
                                         child: Text(
                                           '위치 추가',
                                           textAlign: TextAlign.start,
@@ -869,54 +884,53 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                         ),
                         //투명 디버그 모드 온/오프 스위치
                         Positioned(
-                          top: 1620,
-                            child:
-                                FilledButton(
-                          onPressed: () {
-                            DateTime now = DateTime.now();
-                            if (currentBackPressTime == null ||
-                                now.difference(currentBackPressTime!) >
-                                    const Duration(milliseconds: 100)) {
-                              currentBackPressTime = now;
-                              if (now.difference(currentBackPressTime!) >
-                                  const Duration(milliseconds: 1300)) {
-                                _debugEncounter = 0;
-                              } else {
-                                setState(() {
-                                  _debugEncounter++;
-                                  print(_debugEncounter);
-                                });
-                                if (_debugEncounter == 5 &&
-                                    _debugTray == true) {
-                                  _debugTray = false;
-                                  print(_debugTray);
-                                  _debugEncounter = 0;
-                                  // setState(() {
-                                  //   _debugTray = false;
-                                  //   print(_debugTray);
-                                  //   _debugEncounter = 0;
-                                  // });
-                                } else if (_debugEncounter == 3 &&
-                                    _debugTray == false) {
-                                  _debugTray = true;
-                                  print(_debugTray);
-                                  _debugEncounter = 0;
-                                  // setState(() {
-                                  // });
+                            top: 1620,
+                            child: FilledButton(
+                              onPressed: () {
+                                DateTime now = DateTime.now();
+                                if (currentBackPressTime == null ||
+                                    now.difference(currentBackPressTime!) >
+                                        const Duration(milliseconds: 100)) {
+                                  currentBackPressTime = now;
+                                  if (now.difference(currentBackPressTime!) >
+                                      const Duration(milliseconds: 1300)) {
+                                    _debugEncounter = 0;
+                                  } else {
+                                    setState(() {
+                                      _debugEncounter++;
+                                      print(_debugEncounter);
+                                    });
+                                    if (_debugEncounter == 5 &&
+                                        _debugTray == true) {
+                                      _debugTray = false;
+                                      print(_debugTray);
+                                      _debugEncounter = 0;
+                                      // setState(() {
+                                      //   _debugTray = false;
+                                      //   print(_debugTray);
+                                      //   _debugEncounter = 0;
+                                      // });
+                                    } else if (_debugEncounter == 3 &&
+                                        _debugTray == false) {
+                                      _debugTray = true;
+                                      print(_debugTray);
+                                      _debugEncounter = 0;
+                                      // setState(() {
+                                      // });
+                                    }
+                                  }
+                                  // currentBackPressTime = now;
                                 }
-                              }
-                              // currentBackPressTime = now;
-                            }
-                          },
-                          style: FilledButton.styleFrom(
-                            foregroundColor: Colors.transparent,
-                            backgroundColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              fixedSize: Size(400, 150)),
-                          child: null,
-                        ))
+                              },
+                              style: FilledButton.styleFrom(
+                                  foregroundColor: Colors.transparent,
+                                  backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  ),
+                                  fixedSize: Size(400, 150)),
+                              child: null,
+                            ))
                       ]),
                     ),
                   ],
