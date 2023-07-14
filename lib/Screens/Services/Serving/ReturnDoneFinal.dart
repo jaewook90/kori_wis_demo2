@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+
 // import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
-
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class ReturnDoneScreen extends StatefulWidget {
   const ReturnDoneScreen({Key? key}) : super(key: key);
@@ -24,6 +27,18 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
 
+  void showCountDownPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ChangingCountDownModalFinal(modeState: 'return',);
+        });
+  }
+
+  final CountdownController _controller =
+      new CountdownController(autoStart: true);
+
   String backgroundImage = "assets/screens/Serving/koriZFinalReturn.png";
   String? startUrl;
   String? navUrl;
@@ -33,7 +48,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
-    
+
     // double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = 1080;
@@ -59,9 +74,9 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                     child: FilledButton(
                       onPressed: () {
                         navPage(
-                            context: context,
-                            page: const TrayEquipped(),
-                            enablePop: false)
+                                context: context,
+                                page: const TrayEquipped(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       style: FilledButton.styleFrom(
@@ -108,36 +123,77 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                 image: DecorationImage(
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(children: [
+              Countdown(
+                controller: _controller,
+                seconds: 5, // 60초로 변경 필요
+                build: (_, double time){
+                  // if(time.toInt()<30){
+                  //   return Container(); // 30초 후 출발 모달 팝업
+                  // }
+                  return Container();
+                },
+                interval: const Duration(seconds: 1),
+                onFinished: () {
+                  showCountDownPopup(context);
+                  // print('countDown Finish!!!!');
+                  // PostApi(
+                  //         url: startUrl,
+                  //         endadr: navUrl,
+                  //         keyBody: _servingProvider.waitingPoint)
+                  //     .Posting(context);
+                  // navPage(
+                  //         context: context,
+                  //         page: TrayEquipped(
+                  //           characteristic: QualifiedCharacteristic(
+                  //               characteristicId: Provider.of<BLEModel>(context,
+                  //                       listen: false)
+                  //                   .trayDetectorCharacteristicId!,
+                  //               serviceId: Provider.of<BLEModel>(context,
+                  //                       listen: false)
+                  //                   .trayDetectorServiceId!,
+                  //               deviceId: Provider.of<BLEModel>(context,
+                  //                       listen: false)
+                  //                   .trayDetectorDeviceId!),
+                  //         ),
+                  //         enablePop: false)
+                  //     .navPageToPage();
+                },
+              ),
               Positioned(
                 top: 450,
                 left: 0,
                 child: GestureDetector(
                     onTap: () {
-                        print('Serving Return to waiting point');
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody:
-                            _servingProvider.waitingPoint)
-                            .Posting(context);
-                        navPage(
-                            context: context,
-                            page: TrayEquipped(
-                              characteristic: QualifiedCharacteristic(
-                                  characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                                  serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                                  deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
-                            ),
-                            enablePop: false)
-                            .navPageToPage();
-
+                      print('Serving Return to waiting point');
+                      PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.waitingPoint)
+                          .Posting(context);
+                      navPage(
+                              context: context,
+                              page: TrayEquipped(
+                                characteristic: QualifiedCharacteristic(
+                                    characteristicId: Provider.of<BLEModel>(
+                                            context,
+                                            listen: false)
+                                        .trayDetectorCharacteristicId!,
+                                    serviceId: Provider.of<BLEModel>(context,
+                                            listen: false)
+                                        .trayDetectorServiceId!,
+                                    deviceId: Provider.of<BLEModel>(context,
+                                            listen: false)
+                                        .trayDetectorDeviceId!),
+                              ),
+                              enablePop: false)
+                          .navPageToPage();
                     },
                     child: Container(
                         height: 1200,
                         width: 1080,
                         decoration: const BoxDecoration(
-                            border: Border.fromBorderSide(
-                                BorderSide(color: Colors.transparent, width: 1))))),
+                            border: Border.fromBorderSide(BorderSide(
+                                color: Colors.transparent, width: 1))))),
               ),
               Container(
                 child: const ServingModuleButtonsFinal(screens: 4),
