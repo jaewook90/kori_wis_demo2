@@ -29,20 +29,24 @@ class _IntroScreenState extends State<IntroScreen>
 
   FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
+  final TextEditingController configController = TextEditingController();
+
   String positionURL = "";
   String hostAdr = "";
 
   // 블루투스 연결
   final String robotId = 'serv1';
 
-  // 허스키 렌즈
-  late Uuid huskyCharacteristicId;
-  late Uuid huskyServiceId;
-  late String huskyDeviceId;
+  late bool robotInit;
 
-  // 트레이
-  late Uuid trayDetectorCharacteristicId;
-  late Uuid trayDetectorServiceId;
+  // // 허스키 렌즈
+  // late Uuid huskyCharacteristicId;
+  // late Uuid huskyServiceId;
+  // late String huskyDeviceId;
+  //
+  // // 트레이
+  // late Uuid trayDetectorCharacteristicId;
+  // late Uuid trayDetectorServiceId;
   // late String trayDetectorDeviceId;
 
   late VideoPlayerController _controller;
@@ -86,9 +90,9 @@ class _IntroScreenState extends State<IntroScreen>
 
     getStarted_readData();
 
-    huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    huskyDeviceId = 'F0:52:FD:5C:8D:73';
+    // huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    // huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    // huskyDeviceId = 'F0:52:FD:5C:8D:73';
 
     // trayDetectorCharacteristicId =
     //     Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
@@ -145,9 +149,13 @@ class _IntroScreenState extends State<IntroScreen>
             context: context,
             page: TrayEquipped(
               characteristic: QualifiedCharacteristic(
-                  characteristicId: Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId!,
-                  serviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId!,
-                  deviceId: Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId!),
+                  characteristicId:
+                      Provider.of<BLEModel>(context, listen: false)
+                          .trayDetectorCharacteristicId!,
+                  serviceId: Provider.of<BLEModel>(context, listen: false)
+                      .trayDetectorServiceId!,
+                  deviceId: Provider.of<BLEModel>(context, listen: false)
+                      .trayDetectorDeviceId!),
             ),
             enablePop: true)
         .navPageToPage();
@@ -158,13 +166,19 @@ class _IntroScreenState extends State<IntroScreen>
     // [START get_started_read_data]
     await robotDb.collection("servingBot1").get().then((event) {
       for (var doc in event.docs) {
-        if(doc.id == "microBit"){
-          Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId = doc.data()['trayDetector'];
-          Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId = Uuid.parse(doc.data()['trayDetectorService']);
-          Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId = Uuid.parse(doc.data()['trayDetectorCharacteristic']);
-        }else if(doc.id == "robotState"){
-          Provider.of<NetworkModel>(context, listen: false).startUrl = doc.data()['RobotIp'];
-          // if(doc.data()['robotInit']==true){
+        if (doc.id == "microBit") {
+          Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId =
+              doc.data()['trayDetector'];
+          Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId =
+              Uuid.parse(doc.data()['trayDetectorService']);
+          Provider.of<BLEModel>(context, listen: false)
+                  .trayDetectorCharacteristicId =
+              Uuid.parse(doc.data()['trayDetectorCharacteristic']);
+        } else if (doc.id == "robotState") {
+          Provider.of<NetworkModel>(context, listen: false).startUrl =
+              doc.data()['RobotIp'];
+          robotInit = doc.data()['robotInit'];
+          // if(robotInit==true){
           //   Provider.of<NetworkModel>(context, listen: false).startUrl = doc.data()['RobotIp'];
           // }else{
           //   print('ip is not Init');
@@ -198,8 +212,6 @@ class _IntroScreenState extends State<IntroScreen>
 
     double screenWidth = 1080;
     double screenHeight = 1920;
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
 
     double videoWidth = _controller.value.size.width;
     double videoHeight = _controller.value.size.height;
@@ -258,185 +270,184 @@ class _IntroScreenState extends State<IntroScreen>
           body: GestureDetector(
             // 스크린 터치시 화면 이동을 위한 위젯
             onTap: () {
-              updateComplete == true ? getting(hostAdr, positionURL) : null;
+              if (robotInit == true) {
+                // setState(() {
+                //   robotInit = false;
+                //   final robotInitChange = {"robotInit": robotInit};
+                //   robotDb
+                //       .collection("servingBot1")
+                //       .doc("robotState")
+                //       .set(robotInitChange, SetOptions(merge: true));
+                // });
+                if (updateComplete == true) {
+                  getting(hostAdr, positionURL);
+                }
+              }
             },
             child: Center(
               child: Scaffold(
-                body: Stack(children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
+                body: SingleChildScrollView(
+                  child: Stack(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 108),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: screenWidth,
-                            height: screenHeight * 0.8,
-                            child: FittedBox(
-                              fit: BoxFit.cover,
-                              child: SizedBox(
-                                width: videoWidth,
-                                height: videoHeight,
-                                child: _controller.value.isInitialized
-                                    ? AspectRatio(
-                                        aspectRatio:
-                                            _controller.value.aspectRatio,
-                                        child: VideoPlayer(
-                                          _controller,
-                                        ),
-                                      )
-                                    : Container(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: screenWidth,
+                                height: screenHeight * 0.8,
+                                child: FittedBox(
+                                  fit: BoxFit.cover,
+                                  child: SizedBox(
+                                    width: videoWidth,
+                                    height: videoHeight,
+                                    child: _controller.value.isInitialized
+                                        ? AspectRatio(
+                                            aspectRatio:
+                                                _controller.value.aspectRatio,
+                                            child: VideoPlayer(
+                                              _controller,
+                                            ),
+                                          )
+                                        : Container(),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 1000),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          if (updateComplete == true)
-                            FadeTransition(
-                              opacity: _animation,
-                              child: Text("화면을 터치해 주세요",
-                                  style:
-                                      Theme.of(context).textTheme.titleLarge),
-                            )
-                          else
-                            const SizedBox(),
-                          SizedBox(
-                            height: screenHeight * 0.4,
-                          )
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (updateComplete == true)
+                                Stack(children: [
+                                  Offstage(
+                                    offstage: !robotInit,
+                                    child: FadeTransition(
+                                      opacity: _animation,
+                                      child: Text("화면을 터치해 주세요",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge),
+                                    ),
+                                  ),
+                                  Offstage(
+                                      offstage: robotInit,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'IP 입력',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge,
+                                                ),
+                                                SizedBox(
+                                                  width: 150,
+                                                ),
+                                                FilledButton(
+                                                  onPressed: () {
+                                                    final String newStartUrl =
+                                                        configController.text;
+                                                    final data = {
+                                                      "RobotIp": newStartUrl
+                                                    };
+                                                    robotDb
+                                                        .collection("servingBot1")
+                                                        .doc("robotState")
+                                                        .set(data,
+                                                            SetOptions(merge: true));
+                                                    setState(() {
+                                                      _networkProvider.startUrl =
+                                                          "http://${configController.text}/";
+                                                      hostAdr =
+                                                          _networkProvider.startUrl!;
+                                                      configController.text = '';
+                                                    });
+                                                    getting(hostAdr, positionURL);
+                                                    setState(() {
+                                                      robotInit = true;
+                                                      final robotInitChange = {"robotInit": robotInit};
+                                                      robotDb
+                                                          .collection("servingBot1")
+                                                          .doc("robotState")
+                                                          .set(robotInitChange, SetOptions(merge: true));
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                    Icons.arrow_forward,
+                                                    color: Colors.white,
+                                                    size: 50,
+                                                  ),
+                                                  style: FilledButton.styleFrom(
+                                                    fixedSize: Size(100, 70),
+                                                      backgroundColor: Color.fromRGBO(
+                                                          80, 80, 255, 0.7),
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(15),
+                                                      )),
+                                                ),
+                                              ]),
+                                          Container(
+                                            width: 500,
+                                            child: TextField(
+                                              onTap: () {
+                                                setState(() {
+                                                  configController.text = '';
+                                                });
+                                              },
+                                              controller: configController,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge,
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(),
+                                              decoration: InputDecoration(
+                                                  border: UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.grey,
+                                                        width: 1),
+                                                  ),
+                                                  enabledBorder:
+                                                  UnderlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Colors.white,
+                                                        width: 1),
+                                                  )),
+                                            ),
+                                          ),
+                                        ],
+                                      ))
+                                ])
+                              else
+                                const SizedBox(),
+                              SizedBox(
+                                height: screenHeight * 0.4,
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  )
-                ]),
+                    )
+                  ]),
+                ),
               ),
             ),
           ),
-        )
-
-        // child: WillPopScope(
-        //   onWillPop: () async {
-        //     DateTime now = DateTime.now();
-        //     if (updateComplete == true) {
-        //       if (currentBackPressTime == null ||
-        //           now.difference(currentBackPressTime!) >
-        //               const Duration(milliseconds: 1300)) {
-        //         currentBackPressTime = now;
-        //         fToast?.showToast(
-        //             toastDuration: const Duration(milliseconds: 1300),
-        //             child: Material(
-        //               color: Colors.transparent,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     mainAxisSize: MainAxisSize.min,
-        //                     children: [
-        //                       const ImageIcon(
-        //                         AssetImage('assets/icons/ExaIcon.png'),
-        //                         size: 35,
-        //                         color: Color(0xffB7B7B7),
-        //                       ),
-        //                       SizedBox(
-        //                         width: screenWidth * 0.01,
-        //                       ),
-        //                       Text(
-        //                         _text,
-        //                         style: TextStyle(fontFamily: 'kor', fontSize: 35),
-        //                       )
-        //                     ],
-        //                   ),
-        //                   SizedBox(
-        //                     height: screenHeight * 0.05,
-        //                   )
-        //                 ],
-        //               ),
-        //             ),
-        //             gravity: ToastGravity.BOTTOM);
-        //         return Future.value(false);
-        //       }
-        //       return Future.value(true);
-        //     }
-        //     return Future.value(false);
-        //   },
-        //   child: Scaffold(
-        //     appBar: AppBar(
-        //       backgroundColor: Colors.transparent,
-        //       foregroundColor: Colors.transparent,
-        //     ),
-        //     body: GestureDetector(
-        //       // 스크린 터치시 화면 이동을 위한 위젯
-        //       onTap: () {
-        //         updateComplete == true
-        //             ? getting(hostAdr, positionURL)
-        //             : null;
-        //       },
-        //       child: Center(
-        //         child: Scaffold(
-        //           body: Stack(children: [
-        //             Column(
-        //               mainAxisAlignment: MainAxisAlignment.center,
-        //               children: [
-        //                 Row(
-        //                   mainAxisAlignment: MainAxisAlignment.center,
-        //                   children: [
-        //                     SizedBox(
-        //                       width: screenWidth,
-        //                       height: screenHeight * 0.8,
-        //                       child: FittedBox(
-        //                         fit: BoxFit.cover,
-        //                         child: SizedBox(
-        //                           width: videoWidth,
-        //                           height: videoHeight,
-        //                           child: _controller.value.isInitialized
-        //                               ? AspectRatio(
-        //                                   aspectRatio:
-        //                                       _controller.value.aspectRatio,
-        //                                   child: VideoPlayer(
-        //                                     _controller,
-        //                                   ),
-        //                                 )
-        //                               : Container(),
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ],
-        //             ),
-        //             Column(
-        //               mainAxisAlignment: MainAxisAlignment.end,
-        //               children: [
-        //                 Row(
-        //                   mainAxisAlignment: MainAxisAlignment.center,
-        //                   children: [
-        //                     if (updateComplete == true)
-        //                       FadeTransition(
-        //                         opacity: _animation,
-        //                         child: Text("화면을 터치해 주세요",
-        //                             style: Theme.of(context).textTheme.titleLarge),
-        //                       )
-        //                     else
-        //                       const SizedBox(),
-        //                     SizedBox(
-        //                       height: screenHeight * 0.4,
-        //                     )
-        //                   ],
-        //                 ),
-        //               ],
-        //             )
-        //           ]),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        );
+        ));
   }
 }

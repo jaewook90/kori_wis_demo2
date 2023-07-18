@@ -417,7 +417,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    // print(PositionList);
+    print(PositionList);
+    print(PositionList);
+    print(PositionList);
+    print(PositionList);
 
     return WillPopScope(
       onWillPop: () async {
