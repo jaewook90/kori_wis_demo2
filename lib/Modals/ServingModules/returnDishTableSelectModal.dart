@@ -58,21 +58,21 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
 
-    buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
+    buttonPositionWidth = [190, 190, 190, 190, 590, 590, 590, 590];
     buttonPositionHeight = [
-      245.5,
-      565.6,
-      870.7,
-      1178,
-      245.5,
-      565.6,
-      870.7,
-      1178
+      387,
+      723,
+      1044,
+      1368,
+      387,
+      723,
+      1044,
+      1368
     ];
 
     buttonNumbers = buttonPositionHeight.length;
 
-    buttonSize = [208, 118];
+    buttonSize = [218, 124];
 
     buttonRadius = 0;
 
@@ -84,15 +84,15 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
               borderSide: const BorderSide()),
           child: Stack(children: [
             Container(
-              height: 1536,
+              height: 1920,
               decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(tableSelectBG), fit: BoxFit.cover),
               ),
             ),
             Positioned(
-                left: 836,
-                top: 18,
+                left: 855,
+                top: 147,
                 child: Container(
                   width: 48,
                   height: 48,
@@ -117,8 +117,8 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(color: Colors.tealAccent, width: 5),
+                            // side:
+                            //     BorderSide(color: Colors.tealAccent, width: 5),
                             borderRadius: BorderRadius.circular(buttonRadius)),
                         fixedSize: Size(buttonSize[0], buttonSize[1])),
                     onPressed: () {
