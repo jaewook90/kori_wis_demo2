@@ -27,18 +27,6 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
 
-  void showCountDownPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return const ChangingCountDownModalFinal(modeState: 'return',);
-        });
-  }
-
-  final CountdownController _controller =
-      new CountdownController(autoStart: true);
-
   String backgroundImage = "assets/screens/Serving/koriZFinalReturn.png";
   String? startUrl;
   String? navUrl;
@@ -123,42 +111,6 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                 image: DecorationImage(
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(children: [
-              Countdown(
-                controller: _controller,
-                seconds: 5, // 60초로 변경 필요
-                build: (_, double time){
-                  // if(time.toInt()<30){
-                  //   return Container(); // 30초 후 출발 모달 팝업
-                  // }
-                  return Container();
-                },
-                interval: const Duration(seconds: 1),
-                onFinished: () {
-                  showCountDownPopup(context);
-                  // print('countDown Finish!!!!');
-                  // PostApi(
-                  //         url: startUrl,
-                  //         endadr: navUrl,
-                  //         keyBody: _servingProvider.waitingPoint)
-                  //     .Posting(context);
-                  // navPage(
-                  //         context: context,
-                  //         page: TrayEquipped(
-                  //           characteristic: QualifiedCharacteristic(
-                  //               characteristicId: Provider.of<BLEModel>(context,
-                  //                       listen: false)
-                  //                   .trayDetectorCharacteristicId!,
-                  //               serviceId: Provider.of<BLEModel>(context,
-                  //                       listen: false)
-                  //                   .trayDetectorServiceId!,
-                  //               deviceId: Provider.of<BLEModel>(context,
-                  //                       listen: false)
-                  //                   .trayDetectorDeviceId!),
-                  //         ),
-                  //         enablePop: false)
-                  //     .navPageToPage();
-                },
-              ),
               Positioned(
                 top: 450,
                 left: 0,
@@ -196,7 +148,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                                 color: Colors.transparent, width: 1))))),
               ),
               Container(
-                child: const ServingModuleButtonsFinal(screens: 4),
+                child: const ServingModuleButtonsFinal(screens: 3),
               ),
             ])));
   }

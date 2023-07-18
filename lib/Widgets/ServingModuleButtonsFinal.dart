@@ -130,26 +130,26 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     }
 
     // 서빙 완료화면 출력 시 다음 목표 지점으로 타겟 변경
-    if (widget.screens == 3) {
-      if (_servingProvider.table1 != "") {
-        print('aaa');
-        targetTableNum = _servingProvider.table1!;
-      } else {
-        if (_servingProvider.table2 != "") {
-          print('bbb');
-          targetTableNum = _servingProvider.table2!;
-        } else {
-          if (_servingProvider.table3 != "") {
-            print('ccc');
-            targetTableNum = _servingProvider.table3!;
-          } else {
-            targetTableNum = 'none';
-          }
-        }
-      }
-      print('48465435');
-      print(targetTableNum);
-    }
+    // if (widget.screens == 3) {
+    //   if (_servingProvider.table1 != "") {
+    //     print('aaa');
+    //     targetTableNum = _servingProvider.table1!;
+    //   } else {
+    //     if (_servingProvider.table2 != "") {
+    //       print('bbb');
+    //       targetTableNum = _servingProvider.table2!;
+    //     } else {
+    //       if (_servingProvider.table3 != "") {
+    //         print('ccc');
+    //         targetTableNum = _servingProvider.table3!;
+    //       } else {
+    //         targetTableNum = 'none';
+    //       }
+    //     }
+    //   }
+    //   print('48465435');
+    //   print(targetTableNum);
+    // }
 
     // 트레이 상품 정의
     itemName = _servingProvider.menuItem;
@@ -188,14 +188,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
       buttonRadius = 0;
     } else if (widget.screens == 3) {
-      // 완료 화면
-      buttonPositionWidth = [107.3];
-      buttonPositionHeight = [1372.5];
-
-      buttonSize = [866, 160];
-
-      buttonRadius = 40;
-    } else if (widget.screens == 4) {
       // 완료 화면
       buttonPositionWidth = [107.3];
       buttonPositionHeight = [1372.5];
@@ -296,62 +288,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             });
                           }
                         : widget.screens == 3
-                            ? () {
-                                if (_servingProvider.targetTableNum != 'none') {
-                                  _servingProvider.trayChange = true;
-                                  _networkProvider.servTable =
-                                      _servingProvider.targetTableNum;
-                                  PostApi(
-                                          url: startUrl,
-                                          endadr: navUrl,
-                                          keyBody:
-                                              _servingProvider.targetTableNum)
-                                      .Posting(context);
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    navPage(
-                                            context: context,
-                                            page: const NavigatorProgressModuleFinal(
-                                                // servGoalPose: _servingProvider.targetTableNum,
-                                                ),
-                                            enablePop: true)
-                                        .navPageToPage();
-                                  });
-                                } else {
-                                  _servingProvider.clearAllTray();
-                                  print('Serving Return to waiting point');
-                                  PostApi(
-                                          url: startUrl,
-                                          endadr: navUrl,
-                                          keyBody:
-                                              _servingProvider.waitingPoint)
-                                      .Posting(context);
-                                  setState(() {
-                                    _bleProvider.onTraySelectionScreen = true;
-                                  });
-                                  navPage(
-                                          context: context,
-                                          page: TrayEquipped(
-                                            characteristic: QualifiedCharacteristic(
-                                                characteristicId: Provider.of<
-                                                            BLEModel>(context,
-                                                        listen: false)
-                                                    .trayDetectorCharacteristicId!,
-                                                serviceId:
-                                                    Provider.of<BLEModel>(
-                                                            context,
-                                                            listen: false)
-                                                        .trayDetectorServiceId!,
-                                                deviceId: Provider.of<BLEModel>(
-                                                        context,
-                                                        listen: false)
-                                                    .trayDetectorDeviceId!),
-                                          ),
-                                          enablePop: false)
-                                      .navPageToPage();
-                                }
-                              }
-                            : widget.screens == 4
                                 ? () {
                                     print('Serving Return to waiting point');
                                     PostApi(

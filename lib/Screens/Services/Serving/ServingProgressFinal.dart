@@ -32,16 +32,34 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return const ChangingCountDownModalFinal(modeState: 'serving',);
+          return const ChangingCountDownModalFinal(
+            modeState: 'serving',
+          );
         });
   }
 
   final CountdownController _controller =
-  new CountdownController(autoStart: true);
+      new CountdownController(autoStart: true);
 
   String backgroundImage = "assets/screens/Serving/koriZFinalServingDone.png";
   String? startUrl;
   String? navUrl;
+
+  late String targetTableNum;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.pause();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.pause();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +67,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = 1080;
     double screenHeight = 1920;
 
@@ -125,7 +141,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
             child: Stack(children: [
               Countdown(
                 controller: _controller,
-                seconds: 10,
+                seconds: 15,
                 build: (_, double time){
                   return Container();
                 },
@@ -140,6 +156,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 left: 0,
                 child: GestureDetector(
                     onTap: () {
+                      _controller.pause();
                       if (_servingProvider.targetTableNum != 'none') {
                         setState(() {
                           _servingProvider.trayChange = true;
@@ -152,13 +169,13 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
                         // WidgetsBinding.instance.addPostFrameCallback((_) {
-                          navPage(
-                                  context: context,
-                                  page: const NavigatorProgressModuleFinal(
-                                      // servGoalPose: _servingProvider.targetTableNum,
-                                      ),
-                                  enablePop: true)
-                              .navPageToPage();
+                        navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(
+                                    // servGoalPose: _servingProvider.targetTableNum,
+                                    ),
+                                enablePop: true)
+                            .navPageToPage();
                         // });
                       } else {
                         _servingProvider.clearAllTray();
@@ -198,7 +215,70 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 color: Colors.transparent, width: 1))))),
               ),
               Container(
-                child: const ServingModuleButtonsFinal(screens: 3),
+                child: Positioned(
+                  left: 107.3,
+                  top: 1372.5,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            // side: BorderSide(color: Colors.white, width: 10),
+                            borderRadius: BorderRadius.circular(40)),
+                        fixedSize: Size(866, 160)),
+                    child: Container(),
+                    onPressed: () {
+                      _controller.pause();
+                      if (_servingProvider.targetTableNum != 'none') {
+                        _servingProvider.trayChange = true;
+                        _networkProvider.servTable =
+                            _servingProvider.targetTableNum;
+                        PostApi(
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          navPage(
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(
+                                      // servGoalPose: _servingProvider.targetTableNum,
+                                      ),
+                                  enablePop: true)
+                              .navPageToPage();
+                        });
+                      } else {
+                        _servingProvider.clearAllTray();
+                        print('Serving Return to waiting point');
+                        PostApi(
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: _servingProvider.waitingPoint)
+                            .Posting(context);
+                        setState(() {
+                          _bleProvider.onTraySelectionScreen = true;
+                        });
+                        navPage(
+                                context: context,
+                                page: TrayEquipped(
+                                  characteristic: QualifiedCharacteristic(
+                                      characteristicId: Provider.of<BLEModel>(
+                                              context,
+                                              listen: false)
+                                          .trayDetectorCharacteristicId!,
+                                      serviceId: Provider.of<BLEModel>(context,
+                                              listen: false)
+                                          .trayDetectorServiceId!,
+                                      deviceId: Provider.of<BLEModel>(context,
+                                              listen: false)
+                                          .trayDetectorDeviceId!),
+                                ),
+                                enablePop: false)
+                            .navPageToPage();
+                      }
+                    },
+                  ),
+                ),
+                // child: const ServingModuleButtonsFinal(screens: 3,),
               ),
             ])));
   }

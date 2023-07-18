@@ -14,14 +14,16 @@ import 'package:timer_count_down/timer_count_down.dart';
 class ChangingCountDownModalFinal extends StatefulWidget {
   final String? modeState;
 
-  const ChangingCountDownModalFinal({Key? key, this.modeState}) : super(key: key);
+  const ChangingCountDownModalFinal({Key? key, this.modeState})
+      : super(key: key);
 
   @override
-  State<ChangingCountDownModalFinal> createState() => _ChangingCountDownModalFinalState();
+  State<ChangingCountDownModalFinal> createState() =>
+      _ChangingCountDownModalFinalState();
 }
 
-class _ChangingCountDownModalFinalState extends State<ChangingCountDownModalFinal> {
-
+class _ChangingCountDownModalFinalState
+    extends State<ChangingCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
   late BLEModel _bleProvider;
@@ -80,84 +82,59 @@ class _ChangingCountDownModalFinalState extends State<ChangingCountDownModalFina
                     textAlign: TextAlign.end,
                     style: const TextStyle(
                         fontFamily: 'kor',
-
                         fontSize: 80,
                         fontWeight: FontWeight.bold),
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
-                    if(widget.modeState == 'return'){
+                    if (_servingProvider.targetTableNum != 'none') {
+                      setState(() {
+                        _servingProvider.trayChange = true;
+                        _networkProvider.servTable =
+                            _servingProvider.targetTableNum;
+                      });
                       PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: _servingProvider.waitingPoint)
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.targetTableNum)
                           .Posting(context);
+                      // WidgetsBinding.instance.addPostFrameCallback((_) {
                       navPage(
-                          context: context,
-                          page: TrayEquipped(
-                            characteristic: QualifiedCharacteristic(
-                                characteristicId: Provider.of<BLEModel>(context,
-                                    listen: false)
-                                    .trayDetectorCharacteristicId!,
-                                serviceId: Provider.of<BLEModel>(context,
-                                    listen: false)
-                                    .trayDetectorServiceId!,
-                                deviceId: Provider.of<BLEModel>(context,
-                                    listen: false)
-                                    .trayDetectorDeviceId!),
-                          ),
-                          enablePop: false)
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(
+                                  // servGoalPose: _servingProvider.targetTableNum,
+                                  ),
+                              enablePop: true)
                           .navPageToPage();
-                    }else if(widget.modeState == 'serving'){
-                      if (_servingProvider.targetTableNum != 'none') {
-                        setState(() {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                        });
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        // WidgetsBinding.instance.addPostFrameCallback((_) {
-                        navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(
-                              // servGoalPose: _servingProvider.targetTableNum,
-                            ),
-                            enablePop: true)
-                            .navPageToPage();
-                        // });
-                      } else {
-                        _servingProvider.clearAllTray();
-                        print('Serving Return to waiting point');
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.waitingPoint)
-                            .Posting(context);
-                        setState(() {
-                          _bleProvider.onTraySelectionScreen = true;
-                        });
-                        navPage(
-                            context: context,
-                            page: TrayEquipped(
-                              characteristic: QualifiedCharacteristic(
-                                  characteristicId: Provider.of<BLEModel>(
-                                      context,
-                                      listen: false)
-                                      .trayDetectorCharacteristicId!,
-                                  serviceId: Provider.of<BLEModel>(context,
-                                      listen: false)
-                                      .trayDetectorServiceId!,
-                                  deviceId: Provider.of<BLEModel>(context,
-                                      listen: false)
-                                      .trayDetectorDeviceId!),
-                            ),
-                            enablePop: false)
-                            .navPageToPage();
-                      }
+                      // });
+                    } else {
+                      _servingProvider.clearAllTray();
+                      print('Serving Return to waiting point');
+                      PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.waitingPoint)
+                          .Posting(context);
+                      setState(() {
+                        _bleProvider.onTraySelectionScreen = true;
+                      });
+                      navPage(
+                              context: context,
+                              page: TrayEquipped(
+                                characteristic: QualifiedCharacteristic(
+                                    characteristicId: Provider.of<BLEModel>(
+                                            context,
+                                            listen: false)
+                                        .trayDetectorCharacteristicId!,
+                                    serviceId: Provider.of<BLEModel>(context,
+                                            listen: false)
+                                        .trayDetectorServiceId!,
+                                    deviceId: Provider.of<BLEModel>(context,
+                                            listen: false)
+                                        .trayDetectorDeviceId!),
+                              ),
+                              enablePop: false)
+                          .navPageToPage();
                     }
                   },
                 ),
@@ -195,29 +172,30 @@ class _ChangingCountDownModalFinalState extends State<ChangingCountDownModalFina
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   _controller.pause();
-                  if(widget.modeState == 'return'){
+                  if (widget.modeState == 'return') {
                     PostApi(
-                        url: startUrl,
-                        endadr: navUrl,
-                        keyBody: _servingProvider.waitingPoint)
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.waitingPoint)
                         .Posting(context);
                     navPage(
-                        context: context,
-                        page: TrayEquipped(
-                          characteristic: QualifiedCharacteristic(
-                              characteristicId: Provider.of<BLEModel>(context,
-                                  listen: false)
-                                  .trayDetectorCharacteristicId!,
-                              serviceId: Provider.of<BLEModel>(context,
-                                  listen: false)
-                                  .trayDetectorServiceId!,
-                              deviceId: Provider.of<BLEModel>(context,
-                                  listen: false)
-                                  .trayDetectorDeviceId!),
-                        ),
-                        enablePop: false)
+                            context: context,
+                            page: TrayEquipped(
+                              characteristic: QualifiedCharacteristic(
+                                  characteristicId: Provider.of<BLEModel>(
+                                          context,
+                                          listen: false)
+                                      .trayDetectorCharacteristicId!,
+                                  serviceId: Provider.of<BLEModel>(context,
+                                          listen: false)
+                                      .trayDetectorServiceId!,
+                                  deviceId: Provider.of<BLEModel>(context,
+                                          listen: false)
+                                      .trayDetectorDeviceId!),
+                            ),
+                            enablePop: false)
                         .navPageToPage();
-                  }else if(widget.modeState == 'serving'){
+                  } else if (widget.modeState == 'serving') {
                     if (_servingProvider.targetTableNum != 'none') {
                       setState(() {
                         _servingProvider.trayChange = true;
@@ -225,46 +203,46 @@ class _ChangingCountDownModalFinalState extends State<ChangingCountDownModalFina
                             _servingProvider.targetTableNum;
                       });
                       PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: _servingProvider.targetTableNum)
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.targetTableNum)
                           .Posting(context);
                       // WidgetsBinding.instance.addPostFrameCallback((_) {
                       navPage(
-                          context: context,
-                          page: const NavigatorProgressModuleFinal(
-                            // servGoalPose: _servingProvider.targetTableNum,
-                          ),
-                          enablePop: true)
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(
+                                  // servGoalPose: _servingProvider.targetTableNum,
+                                  ),
+                              enablePop: true)
                           .navPageToPage();
                       // });
                     } else {
                       _servingProvider.clearAllTray();
                       print('Serving Return to waiting point');
                       PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: _servingProvider.waitingPoint)
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
                       setState(() {
                         _bleProvider.onTraySelectionScreen = true;
                       });
                       navPage(
-                          context: context,
-                          page: TrayEquipped(
-                            characteristic: QualifiedCharacteristic(
-                                characteristicId: Provider.of<BLEModel>(
-                                    context,
-                                    listen: false)
-                                    .trayDetectorCharacteristicId!,
-                                serviceId: Provider.of<BLEModel>(context,
-                                    listen: false)
-                                    .trayDetectorServiceId!,
-                                deviceId: Provider.of<BLEModel>(context,
-                                    listen: false)
-                                    .trayDetectorDeviceId!),
-                          ),
-                          enablePop: false)
+                              context: context,
+                              page: TrayEquipped(
+                                characteristic: QualifiedCharacteristic(
+                                    characteristicId: Provider.of<BLEModel>(
+                                            context,
+                                            listen: false)
+                                        .trayDetectorCharacteristicId!,
+                                    serviceId: Provider.of<BLEModel>(context,
+                                            listen: false)
+                                        .trayDetectorServiceId!,
+                                    deviceId: Provider.of<BLEModel>(context,
+                                            listen: false)
+                                        .trayDetectorDeviceId!),
+                              ),
+                              enablePop: false)
                           .navPageToPage();
                     }
                   }
