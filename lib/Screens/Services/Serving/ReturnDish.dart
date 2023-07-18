@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
@@ -24,8 +23,6 @@ class ReturnProgressModuleFinal extends StatefulWidget {
 class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
 
-  // late ServingModel _servingProvider;
-
   FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
   late String backgroundImageServ;
@@ -35,8 +32,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late bool arrivedReturnTable;
 
   late String currentTargetTable;
-
-  // late String servTableNum;
 
   String? startUrl;
   String? navUrl;
@@ -70,37 +65,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
           .set(data2, SetOptions(merge: true));
     }
   }
-
-  // void getStarted_readData() async {
-  //   // [START get_started_read_data]
-  //   await robotDb.collection("servingBot1").get().then((event) {
-  //     for (var doc in event.docs) {
-  //       if(doc.id == "robotState"){
-  //         print(doc.data()['serviceState']);
-  //         print(doc.data()['returnTable']);
-  //         setState(() {
-  //           Provider.of<ServingModel>(context, listen: false).servingState = doc.data()['serviceState'];
-  //         });
-  //         if(doc.data()['serviceState']==3){
-  //           const int newState = 0;
-  //           const String returnTable = 'hall';
-  //           final data1 = {"serviceState": newState};
-  //           final data2 = {"returnTable": returnTable};
-  //           robotDb
-  //               .collection("servingBot1")
-  //               .doc("robotState")
-  //               .set(data1, SetOptions(merge: true));
-  //           robotDb
-  //               .collection("servingBot1")
-  //               .doc("robotState")
-  //               .set(data2, SetOptions(merge: true));
-  //           Navigator.pop(context);
-  //         }
-  //       }
-  //     }
-  //   });
-  //   // [END get_started_read_data]
-  // }
 
   Future<dynamic> Getting() async {
     NetworkGet network =
@@ -160,11 +124,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalReturnProgNav.png";
 
-    // WidgetsBinding.instance.addPostFrameCallback((_){getStarted_readData();});
-
-    // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
-    // double screenHeight = 1920;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(Duration(milliseconds: 500), (){
@@ -183,33 +143,8 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                   enablePop: false)
               .navPageToPage();
         });
-        // navPage(
-        //         context: context,
-        //         page: const ReturnDoneScreen(),
-        //         enablePop: false)
-        //     .navPageToPage();
       }
     });
-    // Getting();
-
-    // if (navStatus == 3 && arrivedReturnTable == false) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     print('nav Return Done');
-    //     setState(() {
-    //       arrivedReturnTable = true;
-    //     });
-    //     navPage(
-    //             context: context,
-    //             page: const ReturnDoneScreen(),
-    //             enablePop: false)
-    //         .navPageToPage();
-    //   });
-    //   // navPage(
-    //   //         context: context,
-    //   //         page: const ReturnDoneScreen(),
-    //   //         enablePop: false)
-    //   //     .navPageToPage();
-    // }
 
     return WillPopScope(
       onWillPop: () {

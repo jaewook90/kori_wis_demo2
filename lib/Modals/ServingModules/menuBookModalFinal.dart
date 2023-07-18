@@ -3,14 +3,14 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
-class MenuBookModalFinal extends StatefulWidget {
-  const MenuBookModalFinal({Key? key}) : super(key: key);
+class MenuBookScreen extends StatefulWidget {
+  const MenuBookScreen({Key? key}) : super(key: key);
 
   @override
-  State<MenuBookModalFinal> createState() => _MenuBookModalFinalState();
+  State<MenuBookScreen> createState() => _MenuBookScreenState();
 }
 
-class _MenuBookModalFinalState extends State<MenuBookModalFinal> {
+class _MenuBookScreenState extends State<MenuBookScreen> {
   late final WebViewController _controller;
 
   @override
@@ -84,7 +84,7 @@ class _MenuBookModalFinalState extends State<MenuBookModalFinal> {
       AndroidWebViewController.enableDebugging(true);
 
       (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
+          .setMediaPlaybackRequiresUserGesture(true);
     }
 
     _controller = controller;
@@ -92,31 +92,55 @@ class _MenuBookModalFinalState extends State<MenuBookModalFinal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 90),
-      child: Dialog(
-          backgroundColor: Colors.transparent,
-          shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0),
-              borderSide: const BorderSide()),
-          child: Stack(children: [
-            Positioned(
-                right: 10,
-                top: 40,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      Icons.cancel_outlined,
-                      color: Colors.white,
-                    ),
-                  iconSize: 60,
-                )),
-            Container(
-                margin: EdgeInsets.only(top: 150, bottom: 300),
-                child: WebViewWidget(controller: _controller)),
-          ])),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+        actions: [
+          Container(
+            width: 1080,
+            child: Stack(
+              children: [Positioned(
+                left: 20,
+                top: 10,
+                child: FilledButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: FilledButton.styleFrom(
+                      fixedSize: const Size(90, 90),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0)),
+                      backgroundColor: Colors.transparent),
+                  child: Container(
+                    height: 60,
+                    width: 60,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                              'assets/icons/appBar/appBar_Backward.png',
+                            ),
+                            fit: BoxFit.fill)),
+                  ),
+                ),
+              ),]
+            ),
+          ),
+        ],
+        toolbarHeight: 110,
+      ),
+      extendBodyBehindAppBar: true,
+      body: Container(
+        padding: const EdgeInsets.only(top: 90),
+        child: Stack(children: [
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            width: 1080,
+              height: 1920,
+              child: WebViewWidget(controller: _controller)),
+        ]),
+      ),
     );
   }
 }

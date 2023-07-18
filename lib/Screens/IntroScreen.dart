@@ -164,6 +164,15 @@ class _IntroScreenState extends State<IntroScreen>
           Provider.of<BLEModel>(context, listen: false).trayDetectorCharacteristicId = Uuid.parse(doc.data()['trayDetectorCharacteristic']);
         }else if(doc.id == "robotState"){
           Provider.of<NetworkModel>(context, listen: false).startUrl = doc.data()['RobotIp'];
+          // if(doc.data()['robotInit']==true){
+          //   Provider.of<NetworkModel>(context, listen: false).startUrl = doc.data()['RobotIp'];
+          // }else{
+          //   print('ip is not Init');
+          //   print('ip is not Init');
+          //   print('ip is not Init');
+          //   print('ip is not Init');
+          //   print('ip is not Init');
+          // }
         }
       }
     });

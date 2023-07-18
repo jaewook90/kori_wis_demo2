@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:functional_data/functional_data.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/menuBookModalFinal.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -80,14 +81,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
 
-  void showMenuBookPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return const MenuBookModalFinal();
-        });
-  }
+  // void showMenuBookPopup(context) {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) {
+  //         return const MenuBookModalFinal();
+  //       });
+  // }
 
   final TextEditingController configController = TextEditingController();
 
@@ -314,6 +315,15 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
   }
 
+  void showReturnSelectPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ReturnDishTableModal();
+        });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -477,11 +487,27 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     ),
                   ),
                   Positioned(
+                    right: 150,
+                    top: 25,
+                    child: FilledButton(
+                      onPressed: () {
+                        showReturnSelectPopup(context);
+                      },
+                      child: Icon(Icons.shopping_cart_checkout, size: 50),
+                      style: FilledButton.styleFrom(
+                          fixedSize: Size(60, 60),
+                          padding: EdgeInsets.only(right: 0),
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0))),
+                    ),
+                  ),
+                  Positioned(
                       left: 50,
                       top: 25,
                       child: FilledButton(
                         onPressed: () {
-                          showMenuBookPopup(context);
+                          navPage(context: context, page: MenuBookScreen(), enablePop: true).navPageToPage();
                         },
                         child: Icon(Icons.menu_book, size: 50),
                         style: FilledButton.styleFrom(
