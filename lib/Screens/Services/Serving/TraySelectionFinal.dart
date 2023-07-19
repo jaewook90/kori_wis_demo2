@@ -30,45 +30,58 @@ part 'TraySelectionFinal.g.dart';
 //ignore_for_file: annotate_overrides
 // 트레이 반응형 UI
 
-class TrayEquipped extends StatelessWidget {
-  const TrayEquipped({
-    this.characteristic,
-    Key? key,
-  }) : super(key: key);
-  final QualifiedCharacteristic? characteristic;
+// // BLE 모듈 사용 시 필요한 상위 위젯
+// class TrayEquipped extends StatelessWidget {
+//   const TrayEquipped({
+//     this.characteristic,
+//     Key? key,
+//   }) : super(key: key);
+//   final QualifiedCharacteristic? characteristic;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer3<BleDeviceInteractor, BleDeviceConnector,
+//             ConnectionStateUpdate>(
+//         builder: (_, interactor, deviceConnector, connectionStateUpdate, __) =>
+//             TraySelectionFinal(
+//               characteristic: characteristic,
+//               subscribeToCharacteristic: interactor.subScribeToCharacteristic,
+//               viewModel: TrayEquippedViewModel(
+//                   deviceId: characteristic!.deviceId,
+//                   connectionStatus: connectionStateUpdate.connectionState,
+//                   deviceConnector: deviceConnector,
+//                   discoverServices: () =>
+//                       interactor.discoverServices(characteristic!.deviceId)),
+//             ));
+//   }
+// }
+//
 
-  @override
-  Widget build(BuildContext context) {
-    return Consumer3<BleDeviceInteractor, BleDeviceConnector,
-            ConnectionStateUpdate>(
-        builder: (_, interactor, deviceConnector, connectionStateUpdate, __) =>
-            TraySelectionFinal(
-              characteristic: characteristic,
-              subscribeToCharacteristic: interactor.subScribeToCharacteristic,
-              viewModel: TrayEquippedViewModel(
-                  deviceId: characteristic!.deviceId,
-                  connectionStatus: connectionStateUpdate.connectionState,
-                  deviceConnector: deviceConnector,
-                  discoverServices: () =>
-                      interactor.discoverServices(characteristic!.deviceId)),
-            ));
-  }
-}
+// // BLE 모듈 사용
+// class TraySelectionFinal extends StatefulWidget {
+//   const TraySelectionFinal(
+//       {this.characteristic,
+//       this.subscribeToCharacteristic,
+//       this.viewModel,
+//       Key? key})
+//       : super(key: key);
+//
+//   final QualifiedCharacteristic? characteristic;
+//
+//   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
+//       subscribeToCharacteristic;
+//
+//   final TrayEquippedViewModel? viewModel;
+//
+//   @override
+//   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
+// }
 
+// BLE 모듈 미사용
 class TraySelectionFinal extends StatefulWidget {
   const TraySelectionFinal(
-      {this.characteristic,
-      this.subscribeToCharacteristic,
-      this.viewModel,
-      Key? key})
+      {Key? key})
       : super(key: key);
-
-  final QualifiedCharacteristic? characteristic;
-
-  final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
-      subscribeToCharacteristic;
-
-  final TrayEquippedViewModel? viewModel;
 
   @override
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
@@ -77,16 +90,16 @@ class TraySelectionFinal extends StatefulWidget {
 class _TraySelectionFinalState extends State<TraySelectionFinal>
     with TickerProviderStateMixin {
   late ServingModel _servingProvider;
-  late BLEModel _bleProvider;
+  // late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
 
   final TextEditingController configController = TextEditingController();
 
-  FirebaseFirestore robotDb = FirebaseFirestore.instance;
+  // FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
-  late bool bleConnection;
+  // late bool bleConnection;
 
-  late Timer _timer;
+  // late Timer _timer;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -94,8 +107,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late List<String> PositioningList;
   late List<String> PositionList;
 
-  late String subscribeOutput;
-  late StreamSubscription<List<int>>? subscribeStream;
+  // ble 데이터 변수
+  // late String subscribeOutput;
+  // late StreamSubscription<List<int>>? subscribeStream;
 
   late String targetTableNum;
 
@@ -121,11 +135,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   String? table2;
   String? table3;
 
-  //트레이 BLE시그널
-  // late bool trayDetecting;
-  late String tray1BLE;
-  late String tray2BLE;
-  late String tray3BLE;
+  // //트레이 BLE시그널
+  // // late bool trayDetecting;
+  // late String tray1BLE;
+  // late String tray2BLE;
+  // late String tray3BLE;
 
   //디버그
   late bool _debugTray;
@@ -147,8 +161,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _debugEncounter = 0;
     _debugTray = true;
 
-    bleConnection = false;
-
     fToast = FToast();
     fToast?.init(context);
 
@@ -163,20 +175,24 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     table2 = "";
     table3 = "";
 
-    tray1BLE = "";
-    tray2BLE = "";
-    tray3BLE = "";
+    // // BLE 사용시 이용
+    // bleConnection = false;
 
-    subscribeOutput = 'init';
+    // tray1BLE = "";
+    // tray2BLE = "";
+    // tray3BLE = "";
+    //
+    // subscribeOutput = 'init';
 
-    Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
+    // Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
 
-    if (widget.characteristic == null) {
-      subscribeStream = null;
-    }
+    // // BLE 사용시 사용
+    // if (widget.characteristic == null) {
+    //   subscribeStream = null;
+    // }
 
     if (Provider.of<NetworkModel>(context, listen: false)
         .getPoseData!
@@ -232,35 +248,34 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     }
   }
 
-  // 트레이 디텍팅
-
-  Future<void> subscribeCharacteristic() async {
-    _timer = Timer(Duration(milliseconds: 500), () {
-      subscribeStream = widget.subscribeToCharacteristic!
-              (widget.characteristic!)
-          .listen((event) {
-        if (mounted) {
-          setState(() {
-            subscribeOutput = utf8.decode(event);
-            tray1BLE = subscribeOutput.split('')[0];
-            tray2BLE = subscribeOutput.split('')[1];
-            tray3BLE = subscribeOutput.split('')[2];
-            if (subscribeOutput != 'Notification set') {
-              subscribeStream!.cancel();
-            }
-            _timer.cancel();
-          });
-        }
-      });
-      if (mounted) {
-        setState(() {
-          subscribeOutput = 'Notification set';
-          _timer.cancel();
-        });
-      }
-    });
-    await Future.delayed(Duration(milliseconds: 1));
-  }
+  // // 트레이 디텍팅 (BLE 사용)
+  // Future<void> subscribeCharacteristic() async {
+  //   _timer = Timer(Duration(milliseconds: 500), () {
+  //     subscribeStream = widget.subscribeToCharacteristic!
+  //             (widget.characteristic!)
+  //         .listen((event) {
+  //       if (mounted) {
+  //         setState(() {
+  //           subscribeOutput = utf8.decode(event);
+  //           tray1BLE = subscribeOutput.split('')[0];
+  //           tray2BLE = subscribeOutput.split('')[1];
+  //           tray3BLE = subscribeOutput.split('')[2];
+  //           if (subscribeOutput != 'Notification set') {
+  //             subscribeStream!.cancel();
+  //           }
+  //           _timer.cancel();
+  //         });
+  //       }
+  //     });
+  //     if (mounted) {
+  //       setState(() {
+  //         subscribeOutput = 'Notification set';
+  //         _timer.cancel();
+  //       });
+  //     }
+  //   });
+  //   await Future.delayed(Duration(milliseconds: 1));
+  // }
 
   void showTraySetPopup(context) {
     showDialog(
@@ -283,13 +298,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   @override
   void dispose() {
     super.dispose();
-    subscribeStream!.cancel();
+    // BLE 이용시 디스포즈
+    // subscribeStream!.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
+    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     // _debugTray = _servingProvider.trayDebug!;
@@ -308,46 +324,48 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       _networkProvider.getPoseData = PositionList;
     }
 
-    if (mounted) {
-      if (_bleProvider.onTraySelectionScreen == true) {
-        subscribeCharacteristic();
-      }
-    } else {
-      subscribeStream!.cancel();
-    }
+    // // BLE 사용시 데이터 리드
+    // if (mounted) {
+    //   if (_bleProvider.onTraySelectionScreen == true) {
+    //     subscribeCharacteristic();
+    //   }
+    // } else {
+    //   subscribeStream!.cancel();
+    // }
 
-    if (tray1BLE == "1") {
-      _servingProvider.attachedTray1 = false;
-    } else if (tray1BLE == "0") {
-      _servingProvider.attachedTray1 = true;
-      if (table1 != "") {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _servingProvider.clearTray1();
-        });
-      }
-    }
-    if (tray2BLE == "1") {
-      _servingProvider.attachedTray2 = false;
-    } else if (tray2BLE == "0") {
-      _servingProvider.attachedTray2 = true;
-      if (table2 != "") {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _servingProvider.clearTray2();
-        });
-        // print('t2');
-      }
-    }
-    if (tray3BLE == "1") {
-      _servingProvider.attachedTray3 = false;
-    } else if (tray3BLE == "0") {
-      _servingProvider.attachedTray3 = true;
-      if (table3 != "") {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _servingProvider.clearTray3();
-        });
-        // print('t3');
-      }
-    }
+    // BLE 트레이 장착 유무 판독
+    // if (tray1BLE == "1") {
+    //   _servingProvider.attachedTray1 = false;
+    // } else if (tray1BLE == "0") {
+    //   _servingProvider.attachedTray1 = true;
+    //   if (table1 != "") {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       _servingProvider.clearTray1();
+    //     });
+    //   }
+    // }
+    // if (tray2BLE == "1") {
+    //   _servingProvider.attachedTray2 = false;
+    // } else if (tray2BLE == "0") {
+    //   _servingProvider.attachedTray2 = true;
+    //   if (table2 != "") {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       _servingProvider.clearTray2();
+    //     });
+    //     // print('t2');
+    //   }
+    // }
+    // if (tray3BLE == "1") {
+    //   _servingProvider.attachedTray3 = false;
+    // } else if (tray3BLE == "0") {
+    //   _servingProvider.attachedTray3 = true;
+    //   if (table3 != "") {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       _servingProvider.clearTray3();
+    //     });
+    //     // print('t3');
+    //   }
+    // }
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -582,16 +600,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                 onPressed: () {
                                                   final String newStartUrl =
                                                       configController.text;
-                                                  final data = {
-                                                    "RobotIp": newStartUrl
-                                                  };
-                                                  robotDb
-                                                      .collection("servingBot1")
-                                                      .doc("robotState")
-                                                      .set(
-                                                          data,
-                                                          SetOptions(
-                                                              merge: true));
+                                                  // IP 변경 정보 데이터 베이스에 업데이트
+                                                  // final data = {
+                                                  //   "RobotIp": newStartUrl
+                                                  // };
+                                                  // robotDb
+                                                  //     .collection("servingBot1")
+                                                  //     .doc("robotState")
+                                                  //     .set(
+                                                  //         data,
+                                                  //         SetOptions(
+                                                  //             merge: true));
                                                   setState(() {
                                                     _networkProvider.startUrl =
                                                         "http://${configController.text}/";
@@ -1158,7 +1177,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             height: 171.8,
                             child: TextButton(
                                 onPressed: () {
-                                  _bleProvider.onTraySelectionScreen = false;
+                                  // _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = true;
                                   _servingProvider.tray2Select = false;
                                   _servingProvider.tray3Select = false;
@@ -1229,7 +1248,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             height: 171.8,
                             child: TextButton(
                                 onPressed: () {
-                                  _bleProvider.onTraySelectionScreen = false;
+                                  // _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = false;
                                   _servingProvider.tray2Select = true;
                                   _servingProvider.tray3Select = false;
@@ -1300,7 +1319,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             height: 293 * 0.75,
                             child: TextButton(
                                 onPressed: () {
-                                  _bleProvider.onTraySelectionScreen = false;
+                                  // _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = false;
                                   _servingProvider.tray2Select = false;
                                   _servingProvider.tray3Select = true;

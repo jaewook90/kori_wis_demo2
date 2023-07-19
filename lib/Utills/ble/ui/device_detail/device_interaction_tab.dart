@@ -214,7 +214,7 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
   Widget _characteristicTile(DiscoveredCharacteristic characteristic,
       String deviceId) =>
       ListTile(
-        onTap:
+        onTap:(){},
         // (){print(QualifiedCharacteristic(
         //     characteristicId: characteristic.characteristicId,
         //     serviceId: characteristic.serviceId,
@@ -233,6 +233,8 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
           // Navigator.pop(context);
           // Navigator.pop(context);
         // },
+
+        /* BLE 모듈 사용시 아이디 변경때 사용 //
         () => navPage(
             context: context,
             page: TrayEquipped(
@@ -243,6 +245,7 @@ class _ServiceDiscoveryListState extends State<_ServiceDiscoveryList> {
             ),
             enablePop: false)
         .navPageToPage(),
+        */
         // () => showDialog<void>(
         // context: context,
         // builder: (context) => CharacteristicInteractionDialog(

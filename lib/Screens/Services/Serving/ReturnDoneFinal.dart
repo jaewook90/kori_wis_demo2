@@ -25,7 +25,7 @@ class ReturnDoneScreen extends StatefulWidget {
 class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  late BLEModel _bleProvider;
+  // late BLEModel _bleProvider;
 
   String backgroundImage = "assets/screens/Serving/koriZFinalReturn.png";
   String? startUrl;
@@ -35,7 +35,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
+    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     // double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
@@ -63,7 +63,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                       onPressed: () {
                         navPage(
                                 context: context,
-                                page: const TrayEquipped(),
+                                page: const TraySelectionFinal(),
                                 enablePop: false)
                             .navPageToPage();
                       },
@@ -124,19 +124,21 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                           .Posting(context);
                       navPage(
                               context: context,
-                              page: TrayEquipped(
-                                characteristic: QualifiedCharacteristic(
-                                    characteristicId: Provider.of<BLEModel>(
-                                            context,
-                                            listen: false)
-                                        .trayDetectorCharacteristicId!,
-                                    serviceId: Provider.of<BLEModel>(context,
-                                            listen: false)
-                                        .trayDetectorServiceId!,
-                                    deviceId: Provider.of<BLEModel>(context,
-                                            listen: false)
-                                        .trayDetectorDeviceId!),
-                              ),
+                              page: TraySelectionFinal(),
+                              // // BLE 사용시
+                              // page: TrayEquipped(
+                              //   characteristic: QualifiedCharacteristic(
+                              //       characteristicId: Provider.of<BLEModel>(
+                              //               context,
+                              //               listen: false)
+                              //           .trayDetectorCharacteristicId!,
+                              //       serviceId: Provider.of<BLEModel>(context,
+                              //               listen: false)
+                              //           .trayDetectorServiceId!,
+                              //       deviceId: Provider.of<BLEModel>(context,
+                              //               listen: false)
+                              //           .trayDetectorDeviceId!),
+                              // ),
                               enablePop: false)
                           .navPageToPage();
                     },

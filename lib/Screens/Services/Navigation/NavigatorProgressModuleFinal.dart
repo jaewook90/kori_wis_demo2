@@ -189,16 +189,18 @@ class _NavigatorProgressModuleFinalState
           _servingProvider.clearAllTray();
           navPage(
                   context: context,
-                  page: TrayEquipped(
-                    characteristic: QualifiedCharacteristic(
-                        characteristicId:
-                            Provider.of<BLEModel>(context, listen: false)
-                                .trayDetectorCharacteristicId!,
-                        serviceId: Provider.of<BLEModel>(context, listen: false)
-                            .trayDetectorServiceId!,
-                        deviceId: Provider.of<BLEModel>(context, listen: false)
-                            .trayDetectorDeviceId!),
-                  ),
+                  page:TraySelectionFinal(),
+                  // // BLE 미사용시
+                  // page: TrayEquipped(
+                  //   characteristic: QualifiedCharacteristic(
+                  //       characteristicId:
+                  //           Provider.of<BLEModel>(context, listen: false)
+                  //               .trayDetectorCharacteristicId!,
+                  //       serviceId: Provider.of<BLEModel>(context, listen: false)
+                  //           .trayDetectorServiceId!,
+                  //       deviceId: Provider.of<BLEModel>(context, listen: false)
+                  //           .trayDetectorDeviceId!),
+                  // ),
                   enablePop: false)
               .navPageToPage();
         }
@@ -271,21 +273,23 @@ class _NavigatorProgressModuleFinalState
                             } else if (servTableNum == 'wait') {
                               navPage(
                                       context: context,
-                                      page: TrayEquipped(
-                                        characteristic: QualifiedCharacteristic(
-                                            characteristicId: Provider.of<
-                                                        BLEModel>(context,
-                                                    listen: false)
-                                                .trayDetectorCharacteristicId!,
-                                            serviceId: Provider.of<BLEModel>(
-                                                    context,
-                                                    listen: false)
-                                                .trayDetectorServiceId!,
-                                            deviceId: Provider.of<BLEModel>(
-                                                    context,
-                                                    listen: false)
-                                                .trayDetectorDeviceId!),
-                                      ),
+                                      page: TraySelectionFinal(),
+                                      // // BLE 미사용시
+                                      // page: TrayEquipped(
+                                      //   characteristic: QualifiedCharacteristic(
+                                      //       characteristicId: Provider.of<
+                                      //                   BLEModel>(context,
+                                      //               listen: false)
+                                      //           .trayDetectorCharacteristicId!,
+                                      //       serviceId: Provider.of<BLEModel>(
+                                      //               context,
+                                      //               listen: false)
+                                      //           .trayDetectorServiceId!,
+                                      //       deviceId: Provider.of<BLEModel>(
+                                      //               context,
+                                      //               listen: false)
+                                      //           .trayDetectorDeviceId!),
+                                      // ),
                                       enablePop: false)
                                   .navPageToPage();
                             }

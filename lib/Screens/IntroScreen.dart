@@ -90,7 +90,7 @@ class _IntroScreenState extends State<IntroScreen>
       });
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
 
-    robotInit = false;
+    // robotInit = false;
     navTrigger = true;
 
     fToast = FToast();
@@ -159,6 +159,8 @@ class _IntroScreenState extends State<IntroScreen>
   // 추후 로딩 시 데이터 업데이트 및 로딩시 사용할 함수 현재는 임의로 2초의 시간 딜레이로 지정
 
   void _updateData() async {
+    _networkProvider.hostIP();
+    getting(_networkProvider.startUrl!, _networkProvider.positionURL!);
     // print('-------------VIDEO START-------------');
     Duration mediaDuration = _controller.value.duration;
     Duration introDuration = mediaDuration + const Duration(milliseconds: 2000);
@@ -166,7 +168,6 @@ class _IntroScreenState extends State<IntroScreen>
     // print('-------------VIDEO END-------------');
     _playAudio();
     await Future.delayed(const Duration(milliseconds: 500));
-    _networkProvider.hostIP();
     setState(() {
       updateComplete = true;
     });
@@ -178,7 +179,7 @@ class _IntroScreenState extends State<IntroScreen>
 
     String apiAddress = hostIP + endPoint;
 
-    // print('apiAddress : $apiAddress');
+    print('apiAddress : $apiAddress');
 
     NetworkGet network = NetworkGet(apiAddress);
 
@@ -207,7 +208,7 @@ class _IntroScreenState extends State<IntroScreen>
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
 
-    getting(hostAdr, positionURL);
+    // getting(hostAdr, positionURL);
 
     double screenWidth = 1080;
     double screenHeight = 1920;
@@ -234,19 +235,26 @@ class _IntroScreenState extends State<IntroScreen>
         if (navTrigger != robotInit) {
           navPage(
               context: context,
-              page: TrayEquipped(
-                characteristic: QualifiedCharacteristic(
-                    characteristicId:
-                    _bleProvider.trayDetectorCharacteristicId!,
-                    serviceId: _bleProvider.trayDetectorServiceId!,
-                    deviceId: _bleProvider.trayDetectorDeviceId!),
-              ),
+              // BLE 미사용시
+              page: const TraySelectionFinal(),
+              // BLE 사용시
+              // page: TrayEquipped(
+              //   characteristic: QualifiedCharacteristic(
+              //       characteristicId:
+              //       _bleProvider.trayDetectorCharacteristicId!,
+              //       serviceId: _bleProvider.trayDetectorServiceId!,
+              //       deviceId: _bleProvider.trayDetectorDeviceId!),
+              // ),
               enablePop: true)
               .navPageToPage();
           setState(() {
             navTrigger = robotInit;
           });
         }
+      }else{
+        setState(() {
+          robotInit = false;
+        });
       }
     });
 
@@ -306,16 +314,19 @@ class _IntroScreenState extends State<IntroScreen>
                 if (updateComplete == true) {
                   navPage(
                           context: context,
-                          page: TrayEquipped(
-                            characteristic: QualifiedCharacteristic(
-                                characteristicId:
-                                    Provider.of<BLEModel>(context, listen: false)
-                                        .trayDetectorCharacteristicId!,
-                                serviceId: Provider.of<BLEModel>(context, listen: false)
-                                    .trayDetectorServiceId!,
-                                deviceId: Provider.of<BLEModel>(context, listen: false)
-                                    .trayDetectorDeviceId!),
-                          ),
+                          // BLE 미사용시
+                          page: TraySelectionFinal(),
+                          // BLE 사용시
+                          // page: TrayEquipped(
+                          //   characteristic: QualifiedCharacteristic(
+                          //       characteristicId:
+                          //           Provider.of<BLEModel>(context, listen: false)
+                          //               .trayDetectorCharacteristicId!,
+                          //       serviceId: Provider.of<BLEModel>(context, listen: false)
+                          //           .trayDetectorServiceId!,
+                          //       deviceId: Provider.of<BLEModel>(context, listen: false)
+                          //           .trayDetectorDeviceId!),
+                          // ),
                           enablePop: true)
                       .navPageToPage();
                 }

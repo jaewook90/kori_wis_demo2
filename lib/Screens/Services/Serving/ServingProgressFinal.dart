@@ -25,7 +25,7 @@ class ServingProgressFinal extends StatefulWidget {
 class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  late BLEModel _bleProvider;
+  // late BLEModel _bleProvider;
 
   void showCountDownPopup(context) {
     showDialog(
@@ -65,7 +65,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
+    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     double screenWidth = 1080;
     double screenHeight = 1920;
@@ -91,7 +91,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                       onPressed: () {
                         navPage(
                                 context: context,
-                                page: const TrayEquipped(),
+                                page: const TraySelectionFinal(),
                                 enablePop: false)
                             .navPageToPage();
                       },
@@ -186,23 +186,26 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
                         setState(() {
-                          _bleProvider.onTraySelectionScreen = true;
+                          // _bleProvider.onTraySelectionScreen = true;
                         });
                         navPage(
                                 context: context,
-                                page: TrayEquipped(
-                                  characteristic: QualifiedCharacteristic(
-                                      characteristicId: Provider.of<BLEModel>(
-                                              context,
-                                              listen: false)
-                                          .trayDetectorCharacteristicId!,
-                                      serviceId: Provider.of<BLEModel>(context,
-                                              listen: false)
-                                          .trayDetectorServiceId!,
-                                      deviceId: Provider.of<BLEModel>(context,
-                                              listen: false)
-                                          .trayDetectorDeviceId!),
-                                ),
+                                // BLE 미사용시
+                                page: TraySelectionFinal(),
+                                // // BLE 사용시
+                                // page: TrayEquipped(
+                                //   characteristic: QualifiedCharacteristic(
+                                //       characteristicId: Provider.of<BLEModel>(
+                                //               context,
+                                //               listen: false)
+                                //           .trayDetectorCharacteristicId!,
+                                //       serviceId: Provider.of<BLEModel>(context,
+                                //               listen: false)
+                                //           .trayDetectorServiceId!,
+                                //       deviceId: Provider.of<BLEModel>(context,
+                                //               listen: false)
+                                //           .trayDetectorDeviceId!),
+                                // ),
                                 enablePop: false)
                             .navPageToPage();
                       }
@@ -255,23 +258,26 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
                         setState(() {
-                          _bleProvider.onTraySelectionScreen = true;
+                          // _bleProvider.onTraySelectionScreen = true;
                         });
                         navPage(
                                 context: context,
-                                page: TrayEquipped(
-                                  characteristic: QualifiedCharacteristic(
-                                      characteristicId: Provider.of<BLEModel>(
-                                              context,
-                                              listen: false)
-                                          .trayDetectorCharacteristicId!,
-                                      serviceId: Provider.of<BLEModel>(context,
-                                              listen: false)
-                                          .trayDetectorServiceId!,
-                                      deviceId: Provider.of<BLEModel>(context,
-                                              listen: false)
-                                          .trayDetectorDeviceId!),
-                                ),
+                                // BLE 미사용시
+                                page: TraySelectionFinal(),
+                                // // BLE 사용시
+                                // page: TrayEquipped(
+                                //   characteristic: QualifiedCharacteristic(
+                                //       characteristicId: Provider.of<BLEModel>(
+                                //               context,
+                                //               listen: false)
+                                //           .trayDetectorCharacteristicId!,
+                                //       serviceId: Provider.of<BLEModel>(context,
+                                //               listen: false)
+                                //           .trayDetectorServiceId!,
+                                //       deviceId: Provider.of<BLEModel>(context,
+                                //               listen: false)
+                                //           .trayDetectorDeviceId!),
+                                // ),
                                 enablePop: false)
                             .navPageToPage();
                       }

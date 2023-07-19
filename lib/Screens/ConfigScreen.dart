@@ -174,7 +174,7 @@ class _ConfigScreenState extends State<ConfigScreen> {
             onPressed: () {
               navPage(
                       context: context,
-                      page: const TrayEquipped(),
+                      page: const TraySelectionFinal(),
                       enablePop: false)
                   .navPageToPage();
             },
