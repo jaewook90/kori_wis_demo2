@@ -93,52 +93,27 @@ class _MenuBookScreenState extends State<MenuBookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        automaticallyImplyLeading: false,
-        actions: [
+      body: Container(
+        // padding: const EdgeInsets.only(top: 90),
+        child: Stack(children: [
           Container(
-            width: 1080,
-            child: Stack(
-              children: [Positioned(
-                left: 20,
-                top: 10,
-                child: FilledButton(
+              // margin: EdgeInsets.only(top: 50),
+              width: 1080,
+              height: 1920,
+              child: WebViewWidget(controller: _controller)),
+          Positioned(
+            right: 50,
+              top: 20,
+              child: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  style: FilledButton.styleFrom(
-                      fixedSize: const Size(90, 90),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0)),
-                      backgroundColor: Colors.transparent),
-                  child: Container(
-                    height: 60,
-                    width: 60,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Backward.png',
-                            ),
-                            fit: BoxFit.fill)),
+                  icon: Icon(
+                    Icons.close,
                   ),
-                ),
-              ),]
-            ),
-          ),
-        ],
-        toolbarHeight: 110,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Container(
-        padding: const EdgeInsets.only(top: 90),
-        child: Stack(children: [
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            width: 1080,
-              height: 1920,
-              child: WebViewWidget(controller: _controller)),
+                iconSize: 60,
+                color: Color.fromRGBO(0, 0, 0, 0.4),
+              ))
         ]),
       ),
     );
