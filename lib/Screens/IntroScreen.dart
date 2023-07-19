@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +10,7 @@ import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -26,10 +27,13 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late NetworkModel _networkProvider;
+  late BLEModel _bleProvider;
 
-  FirebaseFirestore robotDb = FirebaseFirestore.instance;
+  // FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
   final TextEditingController configController = TextEditingController();
+
+  dynamic apiData;
 
   String positionURL = "";
   String hostAdr = "";
@@ -38,16 +42,20 @@ class _IntroScreenState extends State<IntroScreen>
   final String robotId = 'serv1';
 
   late bool robotInit;
+  late bool navTrigger;
+
+  // Ip주소, MicroBit주소, 서비스 상태등 데이터 저장을 위한 객체
+  late SharedPreferences _prefs;
 
   // // 허스키 렌즈
   // late Uuid huskyCharacteristicId;
   // late Uuid huskyServiceId;
   // late String huskyDeviceId;
   //
-  // // 트레이
-  // late Uuid trayDetectorCharacteristicId;
-  // late Uuid trayDetectorServiceId;
-  // late String trayDetectorDeviceId;
+  // 트레이
+  late Uuid trayDetectorCharacteristicId;
+  late Uuid trayDetectorServiceId;
+  late String trayDetectorDeviceId;
 
   late VideoPlayerController _controller;
   late AudioPlayer _audioPlayer;
@@ -75,6 +83,7 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   void initState() {
     super.initState();
+    // _initSharedPreferences();
     _controller = VideoPlayerController.asset(introVideo)
       ..initialize().then((_) {
         _controller.setLooping(false);
@@ -83,22 +92,60 @@ class _IntroScreenState extends State<IntroScreen>
       });
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
 
+    robotInit = false;
+    navTrigger = true;
+
     fToast = FToast();
     fToast?.init(context);
 
+    // getStarted_readData();
+
     _playVideo();
 
-    getStarted_readData();
+    // _saveMicroBitData();
+
+    // getStarted_readData();
 
     // huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     // huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     // huskyDeviceId = 'F0:52:FD:5C:8D:73';
-
-    // trayDetectorCharacteristicId =
-    //     Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    // trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    // trayDetectorDeviceId = 'DF:75:E4:D6:32:63';
+    //
+    trayDetectorCharacteristicId =
+        Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+    trayDetectorDeviceId = 'DF:75:E4:D6:32:63';
   }
+
+  //
+  // Future<void> _initSharedPreferences() async {
+  //   _prefs = await SharedPreferences.getInstance();
+  // }
+  //
+  // Future<void> _saveMicroBitData() async {
+  //   _prefs.setString('trayDetectorCharacteristicId', '6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+  //   _prefs.setString('trayDetectorServiceId', '6e400002-b5a3-f393-e0a9-e50e24dcca9e');
+  //   _prefs.setString('trayDetectorDeviceId', 'DF:75:E4:D6:32:63');
+  //   setState(() {
+  //
+  //   });
+  // }
+  //
+  // Future<void> _saveIPData() async {
+  //   _prefs.setString('robotIp', configController.text);  // 'myData' 키에 데이터 저장
+  // }
+  //
+  // // 데이터를 로드하는 함수
+  // Future<void> _loadData() async {
+  //   Provider.of<NetworkModel>(context, listen: false).startUrl = _prefs.getString('robotIp'); // 'myData' 키에 저장된 데이터 로드
+  //   final deviceId = _prefs.getString('trayDetectorDeviceId');
+  //   final serviceId = _prefs.getString('trayDetectorServiceId');
+  //   final characteristicId = _prefs.getString('trayDetectorCharacteristicId');
+  //
+  //   trayDetectorCharacteristicId =
+  //       Uuid.parse(characteristicId!);
+  //   trayDetectorServiceId = Uuid.parse(serviceId!);
+  //   trayDetectorDeviceId = deviceId!;
+  // }
 
   void _playVideo() async {
     await Future.delayed(const Duration(seconds: 1));
@@ -145,53 +192,42 @@ class _IntroScreenState extends State<IntroScreen>
 
     Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
 
-    navPage(
-            context: context,
-            page: TrayEquipped(
-              characteristic: QualifiedCharacteristic(
-                  characteristicId:
-                      Provider.of<BLEModel>(context, listen: false)
-                          .trayDetectorCharacteristicId!,
-                  serviceId: Provider.of<BLEModel>(context, listen: false)
-                      .trayDetectorServiceId!,
-                  deviceId: Provider.of<BLEModel>(context, listen: false)
-                      .trayDetectorDeviceId!),
-            ),
-            enablePop: true)
-        .navPageToPage();
+    setState(() {});
+
+    // navPage(
+    //         context: context,
+    //         page: TrayEquipped(
+    //           characteristic: QualifiedCharacteristic(
+    //               characteristicId:
+    //                   Provider.of<BLEModel>(context, listen: false)
+    //                       .trayDetectorCharacteristicId!,
+    //               serviceId: Provider.of<BLEModel>(context, listen: false)
+    //                   .trayDetectorServiceId!,
+    //               deviceId: Provider.of<BLEModel>(context, listen: false)
+    //                   .trayDetectorDeviceId!),
+    //         ),
+    //         enablePop: true)
+    //     .navPageToPage();
   }
 
   // 파이어베이스 서버를 이용한 ble 정보 로드
-  void getStarted_readData() async {
-    // [START get_started_read_data]
-    await robotDb.collection("servingBot1").get().then((event) {
-      for (var doc in event.docs) {
-        if (doc.id == "microBit") {
-          Provider.of<BLEModel>(context, listen: false).trayDetectorDeviceId =
-              doc.data()['trayDetector'];
-          Provider.of<BLEModel>(context, listen: false).trayDetectorServiceId =
-              Uuid.parse(doc.data()['trayDetectorService']);
-          Provider.of<BLEModel>(context, listen: false)
-                  .trayDetectorCharacteristicId =
-              Uuid.parse(doc.data()['trayDetectorCharacteristic']);
-        } else if (doc.id == "robotState") {
-          Provider.of<NetworkModel>(context, listen: false).startUrl =
-              doc.data()['RobotIp'];
-          robotInit = doc.data()['robotInit'];
-          // if(robotInit==true){
-          //   Provider.of<NetworkModel>(context, listen: false).startUrl = doc.data()['RobotIp'];
-          // }else{
-          //   print('ip is not Init');
-          //   print('ip is not Init');
-          //   print('ip is not Init');
-          //   print('ip is not Init');
-          //   print('ip is not Init');
-          // }
-        }
-      }
-    });
-    // [END get_started_read_data]
-  }
+  // void getStarted_readData() async {
+  //   // [START get_started_read_data]
+  //   await robotDb.collection("servingBot1").get().then((event) {
+  //     for (var doc in event.docs) {
+  //       if (doc.id == "robotState") {
+  //         robotInit = doc.data()['robotInit'];
+  //         print('b');
+  //         print(robotInit);
+  //         if (robotInit == true) {
+  //           Provider.of<NetworkModel>(context, listen: false).startUrl =
+  //               doc.data()['RobotIp'];
+  //         }
+  //       }
+  //     }
+  //   });
+  //   // [END get_started_read_data]
+  // }
 
   @override
   void dispose() {
@@ -206,9 +242,12 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
+
+    getting(hostAdr, positionURL);
 
     double screenWidth = 1080;
     double screenHeight = 1920;
@@ -216,7 +255,46 @@ class _IntroScreenState extends State<IntroScreen>
     double videoWidth = _controller.value.size.width;
     double videoHeight = _controller.value.size.height;
 
-    print(Provider.of<MainStatusModel>(context, listen: false).testFire);
+    apiData = Provider.of<NetworkModel>(context, listen: false).getApiData;
+
+    // _loadData();
+
+    // 파이어 베이스 미 사용 시 트레이 데이터 입력
+    _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
+    _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
+    _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
+
+
+    // 파이어 베이스 기반 아이피 등 정보 연동
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (apiData != null && apiData != []) {
+        setState(() {
+          print('c');
+          print(robotInit);
+          robotInit = true;
+        });
+        if (navTrigger != robotInit) {
+          navPage(
+              context: context,
+              page: TrayEquipped(
+                characteristic: QualifiedCharacteristic(
+                    characteristicId:
+                    _bleProvider.trayDetectorCharacteristicId!,
+                    serviceId: _bleProvider.trayDetectorServiceId!,
+                    deviceId: _bleProvider.trayDetectorDeviceId!),
+              ),
+              enablePop: true)
+              .navPageToPage();
+          setState(() {
+            navTrigger = robotInit;
+          });
+        }
+      }
+    });
+
+    print('a');
+    print(robotInit);
+    // print(apiData);
 
     return WillPopScope(
         onWillPop: () async {
@@ -271,16 +349,21 @@ class _IntroScreenState extends State<IntroScreen>
             // 스크린 터치시 화면 이동을 위한 위젯
             onTap: () {
               if (robotInit == true) {
-                // setState(() {
-                //   robotInit = false;
-                //   final robotInitChange = {"robotInit": robotInit};
-                //   robotDb
-                //       .collection("servingBot1")
-                //       .doc("robotState")
-                //       .set(robotInitChange, SetOptions(merge: true));
-                // });
                 if (updateComplete == true) {
-                  getting(hostAdr, positionURL);
+                  navPage(
+                          context: context,
+                          page: TrayEquipped(
+                            characteristic: QualifiedCharacteristic(
+                                characteristicId:
+                                    Provider.of<BLEModel>(context, listen: false)
+                                        .trayDetectorCharacteristicId!,
+                                serviceId: Provider.of<BLEModel>(context, listen: false)
+                                    .trayDetectorServiceId!,
+                                deviceId: Provider.of<BLEModel>(context, listen: false)
+                                    .trayDetectorDeviceId!),
+                          ),
+                          enablePop: true)
+                      .navPageToPage();
                 }
               }
             },
@@ -362,30 +445,63 @@ class _IntroScreenState extends State<IntroScreen>
                                                   onPressed: () {
                                                     final String newStartUrl =
                                                         configController.text;
-                                                    final data = {
-                                                      "RobotIp": newStartUrl
-                                                    };
-                                                    robotDb
-                                                        .collection("servingBot1")
-                                                        .doc("robotState")
-                                                        .set(data,
-                                                            SetOptions(merge: true));
+                                                    // 파이어베이스 새 IP 업데이트
+                                                    // final data = {
+                                                    //   "RobotIp": newStartUrl
+                                                    // };
+                                                    // robotDb
+                                                    //     .collection(
+                                                    //         "servingBot1")
+                                                    //     .doc("robotState")
+                                                    //     .set(
+                                                    //         data,
+                                                    //         SetOptions(
+                                                    //             merge: true));
                                                     setState(() {
-                                                      _networkProvider.startUrl =
+                                                      _networkProvider
+                                                              .startUrl =
                                                           "http://${configController.text}/";
-                                                      hostAdr =
-                                                          _networkProvider.startUrl!;
-                                                      configController.text = '';
+                                                      hostAdr = _networkProvider
+                                                          .startUrl!;
+                                                      configController.text =
+                                                          '';
+                                                      navTrigger = false;
                                                     });
-                                                    getting(hostAdr, positionURL);
-                                                    setState(() {
-                                                      robotInit = true;
-                                                      final robotInitChange = {"robotInit": robotInit};
-                                                      robotDb
-                                                          .collection("servingBot1")
-                                                          .doc("robotState")
-                                                          .set(robotInitChange, SetOptions(merge: true));
-                                                    });
+                                                    getting(
+                                                        hostAdr, positionURL);
+
+                                                    // // 파이어 베이스 기반 아이피 등 정보 연동
+                                                    // WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                    //   if (apiData != null && apiData != []) {
+                                                    //     setState(() {
+                                                    //       print('c');
+                                                    //       print(robotInit);
+                                                    //       robotInit = true;
+                                                    //       // 로봇 아이피 입력 초기화 정보 파이어베이스 연동
+                                                    //       // final robotInitChange = {"robotInit": robotInit};
+                                                    //       // robotDb
+                                                    //       //     .collection("servingBot1")
+                                                    //       //     .doc("robotState")
+                                                    //       //     .set(robotInitChange, SetOptions(merge: true));
+                                                    //     });
+                                                    //     if (navTrigger != robotInit) {
+                                                    //       navPage(
+                                                    //               context: context,
+                                                    //               page: TrayEquipped(
+                                                    //                 characteristic: QualifiedCharacteristic(
+                                                    //                     characteristicId:
+                                                    //                         _bleProvider.trayDetectorCharacteristicId!,
+                                                    //                     serviceId: _bleProvider.trayDetectorServiceId!,
+                                                    //                     deviceId: _bleProvider.trayDetectorDeviceId!),
+                                                    //               ),
+                                                    //               enablePop: true)
+                                                    //           .navPageToPage();
+                                                    //       setState(() {
+                                                    //         navTrigger = robotInit;
+                                                    //       });
+                                                    //     }
+                                                    //   }
+                                                    // });
                                                   },
                                                   child: Icon(
                                                     Icons.arrow_forward,
@@ -393,12 +509,15 @@ class _IntroScreenState extends State<IntroScreen>
                                                     size: 50,
                                                   ),
                                                   style: FilledButton.styleFrom(
-                                                    fixedSize: Size(100, 70),
-                                                      backgroundColor: Color.fromRGBO(
-                                                          80, 80, 255, 0.7),
-                                                      shape: RoundedRectangleBorder(
+                                                      fixedSize: Size(100, 70),
+                                                      backgroundColor:
+                                                          Color.fromRGBO(
+                                                              80, 80, 255, 0.7),
+                                                      shape:
+                                                          RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius.circular(15),
+                                                            BorderRadius
+                                                                .circular(15),
                                                       )),
                                                 ),
                                               ]),
@@ -423,7 +542,7 @@ class _IntroScreenState extends State<IntroScreen>
                                                         width: 1),
                                                   ),
                                                   enabledBorder:
-                                                  UnderlineInputBorder(
+                                                      UnderlineInputBorder(
                                                     borderSide: BorderSide(
                                                         color: Colors.white,
                                                         width: 1),
