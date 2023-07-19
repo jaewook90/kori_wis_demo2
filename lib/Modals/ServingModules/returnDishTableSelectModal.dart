@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class ReturnDishTableModal extends StatefulWidget {
@@ -19,8 +16,6 @@ class ReturnDishTableModal extends StatefulWidget {
 class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-
-  FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
   late String returnTable;
   late int serviceState;
@@ -125,17 +120,6 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                       setState(() {
                         returnTable = _networkProvider.getPoseData![i];
                         _servingProvider.returnTargetTable = returnTable;
-                        // serviceState = 1;
-                        // final newServiceState = {"serviceState": serviceState};
-                        // final returnData = {"returnTable": returnTable};
-                        // robotDb
-                        //     .collection("servingBot1")
-                        //     .doc("robotState")
-                        //     .set(newServiceState, SetOptions(merge: true));
-                        // robotDb
-                        //     .collection("servingBot1")
-                        //     .doc("robotState")
-                        //     .set(returnData, SetOptions(merge: true));
                       });
                       PostApi(url: startUrl, endadr: navUrl, keyBody: returnTable)
                           .Posting(context);

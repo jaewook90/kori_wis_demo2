@@ -81,15 +81,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
 
-  // void showMenuBookPopup(context) {
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //         return const MenuBookModalFinal();
-  //       });
-  // }
-
   final TextEditingController configController = TextEditingController();
 
   FirebaseFirestore robotDb = FirebaseFirestore.instance;
@@ -143,8 +134,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
   late int serviceState;
 
-  // late bool receiptModeOn;
-
   DateTime? currentBackPressTime;
 
   FToast? fToast;
@@ -185,8 +174,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
-    print(startUrl);
-    print(navUrl);
 
     if (widget.characteristic == null) {
       subscribeStream = null;
@@ -217,36 +204,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       PositionList = [];
       poseDataUpdate();
     });
-  }
-
-  void getStarted_readData() async {
-    // [START get_started_read_data]
-    await robotDb.collection("servingBot1").get().then((event) {
-      for (var doc in event.docs) {
-        if (doc.id == "robotState") {
-          Provider.of<ServingModel>(context, listen: false).servingState =
-              doc.data()['serviceState'];
-          targetTableNum = doc.data()['returnTable'];
-          Provider.of<ServingModel>(context, listen: false).returnTargetTable =
-              targetTableNum;
-          if (doc.data()['serviceState'] == 1) {
-            // 퇴식 화면 제작 후 이동 함수 추가
-            PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
-                .Posting(context);
-            navPage(
-                    context: context,
-                    page: const ReturnProgressModuleFinal(),
-                    enablePop: true)
-                .navPageToPage();
-          } else if (doc.data()['serviceState'] == 2) {
-            navPage(context: context, page: const ADScreen(), enablePop: true)
-                .navPageToPage();
-          }
-        }
-      }
-    });
-    await Future.delayed(Duration(milliseconds: 1));
-    // [END get_started_read_data]
   }
 
   void poseDataUpdate() {
@@ -338,11 +295,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     // _debugTray = _servingProvider.trayDebug!;
 
-    // 서버에서 로봇 스테이트 읽기
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getStarted_readData();
-    });
-
     //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
     serviceState =
         Provider.of<ServingModel>(context, listen: false).servingState!;
@@ -416,11 +368,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     double textButtonHeight = screenHeight * 0.08;
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
-
-    print(PositionList);
-    print(PositionList);
-    print(PositionList);
-    print(PositionList);
 
     return WillPopScope(
       onWillPop: () async {

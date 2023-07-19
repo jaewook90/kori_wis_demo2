@@ -29,8 +29,6 @@ class _IntroScreenState extends State<IntroScreen>
   late NetworkModel _networkProvider;
   late BLEModel _bleProvider;
 
-  // FirebaseFirestore robotDb = FirebaseFirestore.instance;
-
   final TextEditingController configController = TextEditingController();
 
   dynamic apiData;
@@ -98,13 +96,9 @@ class _IntroScreenState extends State<IntroScreen>
     fToast = FToast();
     fToast?.init(context);
 
-    // getStarted_readData();
-
     _playVideo();
 
     // _saveMicroBitData();
-
-    // getStarted_readData();
 
     // huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
     // huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
@@ -184,7 +178,7 @@ class _IntroScreenState extends State<IntroScreen>
 
     String apiAddress = hostIP + endPoint;
 
-    print('apiAddress : $apiAddress');
+    // print('apiAddress : $apiAddress');
 
     NetworkGet network = NetworkGet(apiAddress);
 
@@ -193,41 +187,7 @@ class _IntroScreenState extends State<IntroScreen>
     Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
 
     setState(() {});
-
-    // navPage(
-    //         context: context,
-    //         page: TrayEquipped(
-    //           characteristic: QualifiedCharacteristic(
-    //               characteristicId:
-    //                   Provider.of<BLEModel>(context, listen: false)
-    //                       .trayDetectorCharacteristicId!,
-    //               serviceId: Provider.of<BLEModel>(context, listen: false)
-    //                   .trayDetectorServiceId!,
-    //               deviceId: Provider.of<BLEModel>(context, listen: false)
-    //                   .trayDetectorDeviceId!),
-    //         ),
-    //         enablePop: true)
-    //     .navPageToPage();
   }
-
-  // 파이어베이스 서버를 이용한 ble 정보 로드
-  // void getStarted_readData() async {
-  //   // [START get_started_read_data]
-  //   await robotDb.collection("servingBot1").get().then((event) {
-  //     for (var doc in event.docs) {
-  //       if (doc.id == "robotState") {
-  //         robotInit = doc.data()['robotInit'];
-  //         print('b');
-  //         print(robotInit);
-  //         if (robotInit == true) {
-  //           Provider.of<NetworkModel>(context, listen: false).startUrl =
-  //               doc.data()['RobotIp'];
-  //         }
-  //       }
-  //     }
-  //   });
-  //   // [END get_started_read_data]
-  // }
 
   @override
   void dispose() {
@@ -269,8 +229,6 @@ class _IntroScreenState extends State<IntroScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (apiData != null && apiData != []) {
         setState(() {
-          print('c');
-          print(robotInit);
           robotInit = true;
         });
         if (navTrigger != robotInit) {
@@ -291,10 +249,6 @@ class _IntroScreenState extends State<IntroScreen>
         }
       }
     });
-
-    print('a');
-    print(robotInit);
-    // print(apiData);
 
     return WillPopScope(
         onWillPop: () async {

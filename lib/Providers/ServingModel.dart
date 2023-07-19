@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ServingModel with ChangeNotifier {
+  int? servBotState;
+
   bool? tray1;
   bool? tray2;
   bool? tray3;
