@@ -14,7 +14,6 @@ import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/AdvertisementScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Utills/ble/KoriViewModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
@@ -294,6 +293,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     // _debugTray = _servingProvider.trayDebug!;
+
+    // print(PositionList);
 
     //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
     serviceState =
@@ -874,12 +875,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   } else {
                                     setState(() {
                                       _debugEncounter++;
-                                      print(_debugEncounter);
+                                      // print(_debugEncounter);
                                     });
                                     if (_debugEncounter == 5 &&
                                         _debugTray == true) {
                                       _debugTray = false;
-                                      print(_debugTray);
+                                      // print(_debugTray);
                                       _debugEncounter = 0;
                                       // setState(() {
                                       //   _debugTray = false;
@@ -889,7 +890,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     } else if (_debugEncounter == 3 &&
                                         _debugTray == false) {
                                       _debugTray = true;
-                                      print(_debugTray);
+                                      // print(_debugTray);
                                       _debugEncounter = 0;
                                       // setState(() {
                                       // });

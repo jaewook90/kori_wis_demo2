@@ -109,7 +109,7 @@ class _ChangingCountDownModalFinalState
                       // });
                     } else {
                       _servingProvider.clearAllTray();
-                      print('Serving Return to waiting point');
+                      // print('Serving Return to waiting point');
                       PostApi(
                               url: startUrl,
                               endadr: navUrl,
@@ -218,7 +218,7 @@ class _ChangingCountDownModalFinalState
                       // });
                     } else {
                       _servingProvider.clearAllTray();
-                      print('Serving Return to waiting point');
+                      // print('Serving Return to waiting point');
                       PostApi(
                               url: startUrl,
                               endadr: navUrl,

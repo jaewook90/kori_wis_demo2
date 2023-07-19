@@ -57,9 +57,9 @@ class _NavigatorProgressModuleFinalState
 
     dynamic getApiData = await network.getAPI();
 
-    print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
-    print(initNavStatus);
-    print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
+    // print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
+    // print(initNavStatus);
+    // print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
 
     if (initNavStatus == true) {
       if (getApiData == 3) {
@@ -122,34 +122,34 @@ class _NavigatorProgressModuleFinalState
 
     setState(() {
       if (targetTableNum == _servingProvider.table1) {
-        print('table1');
+        // print('table1');
         _servingProvider.table1 = "";
         _servingProvider.item1 = '';
       } else if (targetTableNum == _servingProvider.table2) {
-        print('table2');
+        // print('table2');
         _servingProvider.table2 = "";
       } else if (targetTableNum == _servingProvider.table3) {
-        print('table3');
+        // print('table3');
         _servingProvider.table3 = "";
       }
     });
     if (_servingProvider.trayChange == true) {
       if (_servingProvider.table1 != "" &&
           _servingProvider.trayChange == true) {
-        print('aaa');
+        // print('aaa');
         targetTableNum = _servingProvider.table1!;
         _servingProvider.trayChange = false;
       } else {
         if (_servingProvider.table2 != "" &&
             _servingProvider.trayChange == true) {
-          print('bbb');
-          print(_servingProvider.table2);
+          // print('bbb');
+          // print(_servingProvider.table2);
           targetTableNum = _servingProvider.table2!;
           _servingProvider.trayChange = false;
         } else {
           if (_servingProvider.table3 != "" &&
               _servingProvider.trayChange == true) {
-            print('ccc');
+            // print('ccc');
             targetTableNum = _servingProvider.table3!;
             _servingProvider.trayChange = false;
           } else {
@@ -166,11 +166,8 @@ class _NavigatorProgressModuleFinalState
     }
     _servingProvider.targetTableNum = targetTableNum;
 
-    // print('48465435');
-    // print(targetTableNum);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 500), (){
+      Future.delayed(Duration(milliseconds: 1000), (){
         Getting();
       });
       if (navStatus == 3 && arrivedServingTable == false) {
@@ -201,20 +198,9 @@ class _NavigatorProgressModuleFinalState
                   enablePop: false)
               .navPageToPage();
         }
-
-        // navPage(
-        //     context: context,
-        //     page: const ServingProgressFinal(),
-        //     enablePop: false)
-        //     .navPageToPage();
       }
     });
 
-    // print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    // print(servTableNum);
-    // print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
-    // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
 
     return WillPopScope(
@@ -266,7 +252,7 @@ class _NavigatorProgressModuleFinalState
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        print('touched');
+                        // print('touched');
                         if (arrivedServingTable == false) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() {
@@ -300,17 +286,7 @@ class _NavigatorProgressModuleFinalState
                                   .navPageToPage();
                             }
                           });
-                          // navPage(
-                          //     context: context,
-                          //     page: const ServingProgressFinal(),
-                          //     enablePop: false)
-                          //     .navPageToPage();
                         }
-                        // navPage(
-                        //     context: context,
-                        //     page: const ServingProgressFinal(),
-                        //     enablePop: false)
-                        //     .navPageToPage();
                       },
                       child: Container(
                           height: 800,
@@ -341,13 +317,6 @@ class _NavigatorProgressModuleFinalState
                             color: Color(0xfffffefe)),
                       ),
                     )),
-                // Positioned(
-                //   top: 150,
-                //   left: 100,
-                //     child: Text(
-                //   '$navStatus',
-                //   style: TextStyle(fontSize: 30),
-                // )),
                 NavModuleButtonsFinal(
                   screens: 0,
                   servGoalPose: servTableNum,

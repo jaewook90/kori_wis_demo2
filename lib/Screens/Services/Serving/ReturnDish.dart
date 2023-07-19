@@ -132,7 +132,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
       });
       if (navStatus == 3 && arrivedReturnTable == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          print('nav Return Done');
+          // print('nav Return Done');
           setState(() {
             navStatus = 0;
             arrivedReturnTable = true;

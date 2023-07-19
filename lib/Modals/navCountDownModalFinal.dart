@@ -116,7 +116,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         endadr: navUrl,
                         keyBody: targetTableNum)
                         .Posting(context);
-                    print('타겟 : $targetTableNum');
+                    // print('타겟 : $targetTableNum');
                     navPage(
                         context: context,
                         page: const NavigatorProgressModuleFinal(
@@ -176,7 +176,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                       endadr: navUrl,
                       keyBody: targetTableNum)
                       .Posting(context);
-                  print('타겟 : $targetTableNum');
+                  // print('타겟 : $targetTableNum');
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pop(context);
                     Navigator.pop(context);

@@ -147,7 +147,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 },
                 interval: const Duration(seconds: 1),
                 onFinished: () {
-                  print('countDown Finish!!!!');
+                  // print('countDown Finish!!!!');
                  showCountDownPopup(context);
                 },
               ),
@@ -179,7 +179,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                         // });
                       } else {
                         _servingProvider.clearAllTray();
-                        print('Serving Return to waiting point');
+                        // print('Serving Return to waiting point');
                         PostApi(
                                 url: startUrl,
                                 endadr: navUrl,
@@ -248,7 +248,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                         });
                       } else {
                         _servingProvider.clearAllTray();
-                        print('Serving Return to waiting point');
+                        // print('Serving Return to waiting point');
                         PostApi(
                                 url: startUrl,
                                 endadr: navUrl,

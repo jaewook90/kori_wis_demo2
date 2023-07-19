@@ -399,18 +399,6 @@ class _IntroScreenState extends State<IntroScreen>
                                                   onPressed: () {
                                                     final String newStartUrl =
                                                         configController.text;
-                                                    // 파이어베이스 새 IP 업데이트
-                                                    // final data = {
-                                                    //   "RobotIp": newStartUrl
-                                                    // };
-                                                    // robotDb
-                                                    //     .collection(
-                                                    //         "servingBot1")
-                                                    //     .doc("robotState")
-                                                    //     .set(
-                                                    //         data,
-                                                    //         SetOptions(
-                                                    //             merge: true));
                                                     setState(() {
                                                       _networkProvider
                                                               .startUrl =
@@ -423,39 +411,6 @@ class _IntroScreenState extends State<IntroScreen>
                                                     });
                                                     getting(
                                                         hostAdr, positionURL);
-
-                                                    // // 파이어 베이스 기반 아이피 등 정보 연동
-                                                    // WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                    //   if (apiData != null && apiData != []) {
-                                                    //     setState(() {
-                                                    //       print('c');
-                                                    //       print(robotInit);
-                                                    //       robotInit = true;
-                                                    //       // 로봇 아이피 입력 초기화 정보 파이어베이스 연동
-                                                    //       // final robotInitChange = {"robotInit": robotInit};
-                                                    //       // robotDb
-                                                    //       //     .collection("servingBot1")
-                                                    //       //     .doc("robotState")
-                                                    //       //     .set(robotInitChange, SetOptions(merge: true));
-                                                    //     });
-                                                    //     if (navTrigger != robotInit) {
-                                                    //       navPage(
-                                                    //               context: context,
-                                                    //               page: TrayEquipped(
-                                                    //                 characteristic: QualifiedCharacteristic(
-                                                    //                     characteristicId:
-                                                    //                         _bleProvider.trayDetectorCharacteristicId!,
-                                                    //                     serviceId: _bleProvider.trayDetectorServiceId!,
-                                                    //                     deviceId: _bleProvider.trayDetectorDeviceId!),
-                                                    //               ),
-                                                    //               enablePop: true)
-                                                    //           .navPageToPage();
-                                                    //       setState(() {
-                                                    //         navTrigger = robotInit;
-                                                    //       });
-                                                    //     }
-                                                    //   }
-                                                    // });
                                                   },
                                                   child: Icon(
                                                     Icons.arrow_forward,

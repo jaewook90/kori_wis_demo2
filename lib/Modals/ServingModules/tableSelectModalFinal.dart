@@ -28,7 +28,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    print(_servingProvider.trayCheckAll);
+    // print(_servingProvider.trayCheckAll);
 
     return Container(
       padding: const EdgeInsets.only(top: 90),
