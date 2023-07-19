@@ -35,6 +35,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
   String? startUrl;
   String? navUrl;
+  String? moveBaseStatusUrl;
 
   late int navStatus;
   late bool initNavStatus;
@@ -66,9 +67,11 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
     }
   }
 
-  Future<dynamic> Getting() async {
+  Future<dynamic> Getting(String hostUrl, String endUrl) async {
+    final apiAdr = hostUrl+endUrl;
+
     NetworkGet network =
-        NetworkGet("http://192.168.0.155/reeman/movebase_status");
+        NetworkGet(apiAdr);
 
     dynamic getApiData = await network.getAPI();
 
@@ -121,6 +124,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
+    moveBaseStatusUrl = _networkProvider.moveBaseStatusUrl;
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalReturnProgNav.png";
 
@@ -128,7 +132,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(Duration(milliseconds: 500), (){
-        Getting();
+        Getting(startUrl!, moveBaseStatusUrl!);
       });
       if (navStatus == 3 && arrivedReturnTable == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {

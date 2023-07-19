@@ -37,6 +37,7 @@ class _NavigatorProgressModuleFinalState
 
   String? startUrl;
   String? navUrl;
+  String? moveBaseStatusUrl;
 
   late int navStatus;
 
@@ -51,9 +52,11 @@ class _NavigatorProgressModuleFinalState
     arrivedServingTable = false;
   }
 
-  Future<dynamic> Getting() async {
+  Future<dynamic> Getting(String hostUrl, String endUrl) async {
+    final apiAdr = hostUrl+endUrl;
+
     NetworkGet network =
-        NetworkGet("http://192.168.0.155/reeman/movebase_status");
+    NetworkGet(apiAdr);
 
     dynamic getApiData = await network.getAPI();
 
@@ -111,6 +114,7 @@ class _NavigatorProgressModuleFinalState
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
+    moveBaseStatusUrl = _networkProvider.moveBaseStatusUrl;
 
     servTableNum = _networkProvider.servTable!;
 
@@ -168,7 +172,7 @@ class _NavigatorProgressModuleFinalState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(Duration(milliseconds: 1000), (){
-        Getting();
+        Getting(startUrl!, moveBaseStatusUrl!);
       });
       if (navStatus == 3 && arrivedServingTable == false) {
         setState(() {

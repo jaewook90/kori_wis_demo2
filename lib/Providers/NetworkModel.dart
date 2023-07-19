@@ -7,6 +7,7 @@ class NetworkModel with ChangeNotifier {
   String stpUrl = "cmd/cancel_goal";
   String rsmUrl = "cmd/resume_nav";
   String positionURL = "reeman/android_target";
+  String moveBaseStatusUrl = 'reeman/movebase_status';
   List<String>? getPoseData;
   List<String> goalPosition = [];
   List<String> servingPosition = [];
