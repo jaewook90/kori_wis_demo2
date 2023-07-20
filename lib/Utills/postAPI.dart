@@ -27,8 +27,10 @@ class PostApi{
       postData = {};
       print('apiB');
     } else {
-      postData = {"type": 0, "point": apiKeyBody};
+      postData = {"type": 1, "point": apiKeyBody};
       print('apiC');
+      print(apiAddress);
+      print(postData);
     }
 
     var postBody = json.encode(postData);

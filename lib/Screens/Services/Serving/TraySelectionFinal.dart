@@ -14,6 +14,7 @@ import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Utills/ble/KoriViewModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
@@ -115,6 +116,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
   String? startUrl;
   String? navUrl;
+  String? chgUrl;
 
   // 배경 화면
   late String backgroundImage;
@@ -188,6 +190,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
+    chgUrl = Provider.of<NetworkModel>(context, listen: false).chgUrl;
 
     // // BLE 사용시 사용
     // if (widget.characteristic == null) {
@@ -718,47 +721,91 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             SizedBox(
                               height: 20,
                             ),
-                            //블루투스 변경
-                            Offstage(
-                              offstage: _debugTray,
-                              child: Padding(
-                                  padding: const EdgeInsets.only(left: 0),
-                                  child: FilledButton(
-                                    onPressed: () {
-                                      navPage(
-                                              context: context,
-                                              page: const DeviceListScreen(),
-                                              enablePop: true)
-                                          .navPageToPage();
-                                    },
-                                    style: FilledButton.styleFrom(
-                                        backgroundColor: Colors.transparent,
-                                        fixedSize: Size(370, 58),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(0))),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.bluetooth,
-                                            color: Colors.white, size: 50),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: Text(
-                                            'microBit ID 변경',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                fontFamily: 'kor',
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                                height: 1,
-                                                color: Colors.white),
-                                          ),
+                            Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: FilledButton(
+                                  onPressed: () {
+                                    _networkProvider.servTable = 'charging_pile';
+                                    PostApi(
+                                        url: startUrl,
+                                        endadr: chgUrl,
+                                        keyBody: 'charging_pile')
+                                        .Posting(context);
+                                    _networkProvider.currentGoal = '충전스테이션';
+                                    navPage(
+                                        context: context,
+                                        page: const NavigatorProgressModuleFinal(),
+                                        enablePop: false)
+                                        .navPageToPage();
+                                  },
+                                  style: FilledButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: Size(370, 58),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(0))),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.ev_station_outlined,
+                                          color: Colors.white, size: 50),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          '충전 스테이션 이동',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: Colors.white),
                                         ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            // //블루투스 변경
+                            // Offstage(
+                            //   offstage: _debugTray,
+                            //   child: Padding(
+                            //       padding: const EdgeInsets.only(left: 0),
+                            //       child: FilledButton(
+                            //         onPressed: () {
+                            //           navPage(
+                            //                   context: context,
+                            //                   page: const DeviceListScreen(),
+                            //                   enablePop: true)
+                            //               .navPageToPage();
+                            //         },
+                            //         style: FilledButton.styleFrom(
+                            //             backgroundColor: Colors.transparent,
+                            //             fixedSize: Size(370, 58),
+                            //             shape: RoundedRectangleBorder(
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(0))),
+                            //         child: Row(
+                            //           children: [
+                            //             Icon(Icons.bluetooth,
+                            //                 color: Colors.white, size: 50),
+                            //             Padding(
+                            //               padding:
+                            //                   const EdgeInsets.only(left: 15),
+                            //               child: Text(
+                            //                 'microBit ID 변경',
+                            //                 textAlign: TextAlign.start,
+                            //                 style: TextStyle(
+                            //                     fontFamily: 'kor',
+                            //                     fontSize: 24,
+                            //                     fontWeight: FontWeight.bold,
+                            //                     height: 1,
+                            //                     color: Colors.white),
+                            //               ),
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       )),
+                            // ),
                             Offstage(
                               offstage: _debugTray,
                               child: SizedBox(

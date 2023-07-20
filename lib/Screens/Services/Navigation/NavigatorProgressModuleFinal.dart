@@ -50,6 +50,7 @@ class _NavigatorProgressModuleFinalState
     initNavStatus = true;
     navStatus = 0;
     arrivedServingTable = false;
+    targetTableNum = "";
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -179,29 +180,39 @@ class _NavigatorProgressModuleFinalState
           arrivedServingTable = true;
           navStatus = 0;
         });
-        if (servTableNum != 'wait') {
+        if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
           navPage(
-                  context: context,
-                  page: const ServingProgressFinal(),
-                  enablePop: false)
+              context: context,
+              page: const ServingProgressFinal(),
+              enablePop: false)
               .navPageToPage();
         } else if (servTableNum == 'wait') {
-          _servingProvider.clearAllTray();
           navPage(
-                  context: context,
-                  page:TraySelectionFinal(),
-                  // // BLE 미사용시
-                  // page: TrayEquipped(
-                  //   characteristic: QualifiedCharacteristic(
-                  //       characteristicId:
-                  //           Provider.of<BLEModel>(context, listen: false)
-                  //               .trayDetectorCharacteristicId!,
-                  //       serviceId: Provider.of<BLEModel>(context, listen: false)
-                  //           .trayDetectorServiceId!,
-                  //       deviceId: Provider.of<BLEModel>(context, listen: false)
-                  //           .trayDetectorDeviceId!),
-                  // ),
-                  enablePop: false)
+              context: context,
+              page: TraySelectionFinal(),
+              // // BLE 미사용시
+              // page: TrayEquipped(
+              //   characteristic: QualifiedCharacteristic(
+              //       characteristicId: Provider.of<
+              //                   BLEModel>(context,
+              //               listen: false)
+              //           .trayDetectorCharacteristicId!,
+              //       serviceId: Provider.of<BLEModel>(
+              //               context,
+              //               listen: false)
+              //           .trayDetectorServiceId!,
+              //       deviceId: Provider.of<BLEModel>(
+              //               context,
+              //               listen: false)
+              //           .trayDetectorDeviceId!),
+              // ),
+              enablePop: false)
+              .navPageToPage();
+        } else if (servTableNum == 'charging_pile'){
+          navPage(
+              context: context,
+              page: TraySelectionFinal(),
+              enablePop: false)
               .navPageToPage();
         }
       }
@@ -264,7 +275,7 @@ class _NavigatorProgressModuleFinalState
                             setState(() {
                               arrivedServingTable = true;
                             });
-                            if (servTableNum != 'wait') {
+                            if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
                               navPage(
                                       context: context,
                                       page: const ServingProgressFinal(),
@@ -291,6 +302,12 @@ class _NavigatorProgressModuleFinalState
                                       //           .trayDetectorDeviceId!),
                                       // ),
                                       enablePop: false)
+                                  .navPageToPage();
+                            } else if (servTableNum == 'charging_pile'){
+                              navPage(
+                                  context: context,
+                                  page: TraySelectionFinal(),
+                                  enablePop: false)
                                   .navPageToPage();
                             }
                           });
