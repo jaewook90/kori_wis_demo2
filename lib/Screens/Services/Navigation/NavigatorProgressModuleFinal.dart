@@ -187,6 +187,7 @@ class _NavigatorProgressModuleFinalState
               enablePop: false)
               .navPageToPage();
         } else if (servTableNum == 'wait') {
+          _servingProvider.clearAllTray();
           navPage(
               context: context,
               page: TraySelectionFinal(),
@@ -282,6 +283,7 @@ class _NavigatorProgressModuleFinalState
                                       enablePop: false)
                                   .navPageToPage();
                             } else if (servTableNum == 'wait') {
+                              _servingProvider.clearAllTray();
                               navPage(
                                       context: context,
                                       page: TraySelectionFinal(),
