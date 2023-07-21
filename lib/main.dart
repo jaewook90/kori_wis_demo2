@@ -86,7 +86,7 @@ void main() async {
                 )),
         ChangeNotifierProvider(
             create: (context) =>
-                NetworkModel(startUrl: '192.168.0.140', getPoseData: [])),
+                NetworkModel(startUrl: '', getPoseData: [])),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
                   servingState: 0,

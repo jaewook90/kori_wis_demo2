@@ -30,6 +30,7 @@ class _IntroScreenState extends State<IntroScreen>
   late BLEModel _bleProvider;
 
   final TextEditingController configController = TextEditingController();
+  late SharedPreferences _prefs;
 
   dynamic apiData;
 
@@ -41,9 +42,6 @@ class _IntroScreenState extends State<IntroScreen>
 
   late bool robotInit;
   late bool navTrigger;
-
-  // Ip주소, MicroBit주소, 서비스 상태등 데이터 저장을 위한 객체
-  late SharedPreferences _prefs;
 
   // // 허스키 렌즈
   // late Uuid huskyCharacteristicId;
@@ -81,7 +79,7 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   void initState() {
     super.initState();
-    // _initSharedPreferences();
+    _initSharedPreferences();
     _controller = VideoPlayerController.asset(introVideo)
       ..initialize().then((_) {
         _controller.setLooping(false);
@@ -90,7 +88,7 @@ class _IntroScreenState extends State<IntroScreen>
       });
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
 
-    // robotInit = false;
+    robotInit = true;
     navTrigger = true;
 
     fToast = FToast();
@@ -110,36 +108,15 @@ class _IntroScreenState extends State<IntroScreen>
     trayDetectorDeviceId = 'DF:75:E4:D6:32:63';
   }
 
-  //
-  // Future<void> _initSharedPreferences() async {
-  //   _prefs = await SharedPreferences.getInstance();
-  // }
-  //
-  // Future<void> _saveMicroBitData() async {
-  //   _prefs.setString('trayDetectorCharacteristicId', '6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-  //   _prefs.setString('trayDetectorServiceId', '6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-  //   _prefs.setString('trayDetectorDeviceId', 'DF:75:E4:D6:32:63');
-  //   setState(() {
-  //
-  //   });
-  // }
-  //
-  // Future<void> _saveIPData() async {
-  //   _prefs.setString('robotIp', configController.text);  // 'myData' 키에 데이터 저장
-  // }
-  //
-  // // 데이터를 로드하는 함수
-  // Future<void> _loadData() async {
-  //   Provider.of<NetworkModel>(context, listen: false).startUrl = _prefs.getString('robotIp'); // 'myData' 키에 저장된 데이터 로드
-  //   final deviceId = _prefs.getString('trayDetectorDeviceId');
-  //   final serviceId = _prefs.getString('trayDetectorServiceId');
-  //   final characteristicId = _prefs.getString('trayDetectorCharacteristicId');
-  //
-  //   trayDetectorCharacteristicId =
-  //       Uuid.parse(characteristicId!);
-  //   trayDetectorServiceId = Uuid.parse(serviceId!);
-  //   trayDetectorDeviceId = deviceId!;
-  // }
+  // SharedPreferences 초기화 함수
+  Future<void> _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  // 데이터를 저장하는 함수
+  Future<void> _saveData() async {
+    _prefs.setString('robotIp', configController.text); // 'robotIp' 키에 데이터 저장
+  }
 
   void _playVideo() async {
     await Future.delayed(const Duration(seconds: 1));
@@ -159,6 +136,12 @@ class _IntroScreenState extends State<IntroScreen>
   // 추후 로딩 시 데이터 업데이트 및 로딩시 사용할 함수 현재는 임의로 2초의 시간 딜레이로 지정
 
   void _updateData() async {
+    // print('aaaaaaaaaaaaaaaaaaaaaa');
+    // print(_prefs.getString('robotIp'));
+    // print('aaaaaaaaaaaaaaaaaaaaaa');
+    if (_prefs.getString('robotIp') != null) {
+      _networkProvider.startUrl = _prefs.getString('robotIp');
+    }
     _networkProvider.hostIP();
     getting(_networkProvider.startUrl!, _networkProvider.positionURL!);
     // print('-------------VIDEO START-------------');
@@ -208,6 +191,8 @@ class _IntroScreenState extends State<IntroScreen>
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
 
+    // print(hostAdr);
+    // print(_prefs.getString('robotIp'));
     // getting(hostAdr, positionURL);
 
     double screenWidth = 1080;
@@ -225,36 +210,65 @@ class _IntroScreenState extends State<IntroScreen>
     _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
     _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
 
+    // // 파이어 베이스 기반 아이피 등 정보 연동
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (apiData != null && apiData != []) {
+    //     setState(() {
+    //       robotInit = true;
+    //     });
+    //     if (navTrigger != robotInit) {
+    //       navPage(
+    //               context: context,
+    //               // BLE 미사용시
+    //               page: const TraySelectionFinal(),
+    //               // BLE 사용시
+    //               // page: TrayEquipped(
+    //               //   characteristic: QualifiedCharacteristic(
+    //               //       characteristicId:
+    //               //       _bleProvider.trayDetectorCharacteristicId!,
+    //               //       serviceId: _bleProvider.trayDetectorServiceId!,
+    //               //       deviceId: _bleProvider.trayDetectorDeviceId!),
+    //               // ),
+    //               enablePop: true)
+    //           .navPageToPage();
+    //       setState(() {
+    //         navTrigger = robotInit;
+    //       });
+    //     }
+    //   } else {
+    //     setState(() {
+    //       robotInit = false;
+    //     });
+    //   }
+    // });
 
-    // 파이어 베이스 기반 아이피 등 정보 연동
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (apiData != null && apiData != []) {
-        setState(() {
-          robotInit = true;
-        });
-        if (navTrigger != robotInit) {
-          navPage(
-              context: context,
-              // BLE 미사용시
-              page: const TraySelectionFinal(),
-              // BLE 사용시
-              // page: TrayEquipped(
-              //   characteristic: QualifiedCharacteristic(
-              //       characteristicId:
-              //       _bleProvider.trayDetectorCharacteristicId!,
-              //       serviceId: _bleProvider.trayDetectorServiceId!,
-              //       deviceId: _bleProvider.trayDetectorDeviceId!),
-              // ),
-              enablePop: true)
-              .navPageToPage();
+      if (navTrigger == false) {
+        getting(_networkProvider.startUrl!, _networkProvider.positionURL!);
+        if (apiData != null && apiData != []) {
           setState(() {
-            navTrigger = robotInit;
+            // robotInit = true;
+            navTrigger = true;
+          });
+          navPage(
+                  context: context,
+                  // BLE 미사용시
+                  page: const TraySelectionFinal(),
+                  // BLE 사용시
+                  // page: TrayEquipped(
+                  //   characteristic: QualifiedCharacteristic(
+                  //       characteristicId:
+                  //       _bleProvider.trayDetectorCharacteristicId!,
+                  //       serviceId: _bleProvider.trayDetectorServiceId!,
+                  //       deviceId: _bleProvider.trayDetectorDeviceId!),
+                  // ),
+                  enablePop: true)
+              .navPageToPage();
+        } else {
+          setState(() {
+            navTrigger = true;
           });
         }
-      }else{
-        setState(() {
-          robotInit = false;
-        });
       }
     });
 
@@ -309,28 +323,79 @@ class _IntroScreenState extends State<IntroScreen>
           ),
           body: GestureDetector(
             // 스크린 터치시 화면 이동을 위한 위젯
-            onTap: () {
-              if (robotInit == true) {
-                if (updateComplete == true) {
+            onTap: () async {
+              print('aaaaaaaaaaaaaaaaaaaaaaaaaaa');
+              print(_prefs.getString('robotIp'));
+              print(apiData);
+              print('aaaaaaaaaaaaaaaaaaaaaaaaaaa');
+              if (_prefs.getString('robotIp') == null) {
+                setState(() {
+                  robotInit = false;
+                });
+              } else {
+                getting(
+                    _networkProvider.startUrl!, _networkProvider.positionURL!);
+                if (apiData != null && apiData != []) {
+                  setState(() {
+                    // robotInit = true;
+                    navTrigger = true;
+                  });
                   navPage(
                           context: context,
                           // BLE 미사용시
-                          page: TraySelectionFinal(),
+                          page: const TraySelectionFinal(),
                           // BLE 사용시
                           // page: TrayEquipped(
                           //   characteristic: QualifiedCharacteristic(
                           //       characteristicId:
-                          //           Provider.of<BLEModel>(context, listen: false)
-                          //               .trayDetectorCharacteristicId!,
-                          //       serviceId: Provider.of<BLEModel>(context, listen: false)
-                          //           .trayDetectorServiceId!,
-                          //       deviceId: Provider.of<BLEModel>(context, listen: false)
-                          //           .trayDetectorDeviceId!),
+                          //       _bleProvider.trayDetectorCharacteristicId!,
+                          //       serviceId: _bleProvider.trayDetectorServiceId!,
+                          //       deviceId: _bleProvider.trayDetectorDeviceId!),
                           // ),
                           enablePop: true)
                       .navPageToPage();
+                } else {
+                  setState(() {
+                    robotInit = false;
+                    navTrigger = true;
+                  });
                 }
+
+                // setState(() {
+                //   navTrigger = false;
+                // });
+                // // print('로드 성공 시 메인화면 실패 시 아이피 입력');
+                //
+                // _networkProvider.startUrl = _prefs.getString('robotIp');
+                //
+                // _networkProvider.hostIP();
+                // getting(
+                //     _networkProvider.startUrl!, _networkProvider.positionURL!);
+                // setState(() {
+                //   robotInit = false;
+                // });
               }
+              // if (robotInit == true) {
+              //   if (updateComplete == true) {
+              //     navPage(
+              //             context: context,
+              //             // BLE 미사용시
+              //             page: TraySelectionFinal(),
+              //             // BLE 사용시
+              //             // page: TrayEquipped(
+              //             //   characteristic: QualifiedCharacteristic(
+              //             //       characteristicId:
+              //             //           Provider.of<BLEModel>(context, listen: false)
+              //             //               .trayDetectorCharacteristicId!,
+              //             //       serviceId: Provider.of<BLEModel>(context, listen: false)
+              //             //           .trayDetectorServiceId!,
+              //             //       deviceId: Provider.of<BLEModel>(context, listen: false)
+              //             //           .trayDetectorDeviceId!),
+              //             // ),
+              //             enablePop: true)
+              //         .navPageToPage();
+              //   }
+              // }
             },
             child: Center(
               child: Scaffold(
@@ -370,7 +435,7 @@ class _IntroScreenState extends State<IntroScreen>
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 1000),
+                      padding: const EdgeInsets.only(top: 1050),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -408,20 +473,65 @@ class _IntroScreenState extends State<IntroScreen>
                                                 ),
                                                 FilledButton(
                                                   onPressed: () {
-                                                    final String newStartUrl =
-                                                        configController.text;
+                                                    _prefs.setString('robotIp',
+                                                        configController.text);
+                                                    // print(navTrigger);
                                                     setState(() {
                                                       _networkProvider
                                                               .startUrl =
-                                                          "http://${configController.text}/";
-                                                      hostAdr = _networkProvider
-                                                          .startUrl!;
-                                                      configController.text =
-                                                          '';
+                                                          _prefs.getString(
+                                                              'robotIp');
+                                                      _networkProvider.hostIP();
                                                       navTrigger = false;
                                                     });
-                                                    getting(
-                                                        hostAdr, positionURL);
+                                                    // getting(
+                                                    //     _networkProvider
+                                                    //         .startUrl!,
+                                                    //     _networkProvider
+                                                    //         .positionURL!);
+                                                    // print(navTrigger);
+                                                    // print(
+                                                    //     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                                                    // print(Provider.of<
+                                                    //             NetworkModel>(
+                                                    //         context,
+                                                    //         listen: false)
+                                                    //     .getApiData);
+                                                    // print(
+                                                    //     'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+                                                    // print(apiData);
+                                                    // print(
+                                                    //     'ccccccccccccccccccccccccccccccccccccccccccccccccccc1');
+                                                    // if (apiData != null &&
+                                                    //     apiData != []) {
+                                                    //   navPage(
+                                                    //           context: context,
+                                                    //           // BLE 미사용시
+                                                    //           page:
+                                                    //               const TraySelectionFinal(),
+                                                    //           // BLE 사용시
+                                                    //           // page: TrayEquipped(
+                                                    //           //   characteristic: QualifiedCharacteristic(
+                                                    //           //       characteristicId:
+                                                    //           //       _bleProvider.trayDetectorCharacteristicId!,
+                                                    //           //       serviceId: _bleProvider.trayDetectorServiceId!,
+                                                    //           //       deviceId: _bleProvider.trayDetectorDeviceId!),
+                                                    //           // ),
+                                                    //           enablePop: true)
+                                                    //       .navPageToPage();
+                                                    // }
+                                                    // final String newStartUrl =
+                                                    //     configController.text;
+                                                    // setState(() {
+                                                    //   _networkProvider
+                                                    //           .startUrl =
+                                                    //       "http://${configController.text}/";
+                                                    //   hostAdr = _networkProvider
+                                                    //       .startUrl!;
+                                                    //   configController.text =
+                                                    //       '';
+                                                    //   navTrigger = false;
+                                                    // });
                                                   },
                                                   child: Icon(
                                                     Icons.arrow_forward,
@@ -441,14 +551,12 @@ class _IntroScreenState extends State<IntroScreen>
                                                       )),
                                                 ),
                                               ]),
+                                          SizedBox(
+                                            height: 50,
+                                          ),
                                           Container(
-                                            width: 500,
+                                            width: 400,
                                             child: TextField(
-                                              onTap: () {
-                                                setState(() {
-                                                  configController.text = '';
-                                                });
-                                              },
                                               controller: configController,
                                               style: Theme.of(context)
                                                   .textTheme
@@ -456,17 +564,50 @@ class _IntroScreenState extends State<IntroScreen>
                                               keyboardType: TextInputType
                                                   .numberWithOptions(),
                                               decoration: InputDecoration(
-                                                  border: UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.grey,
-                                                        width: 1),
-                                                  ),
-                                                  enabledBorder:
-                                                      UnderlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.white,
-                                                        width: 1),
-                                                  )),
+                                                fillColor: Color.fromRGBO(
+                                                    30, 30, 30, 0.5),
+                                                filled: true,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                // focusedBorder: UnderlineInputBorder(
+                                                //   borderSide: BorderSide(
+                                                //       color: Colors.white,
+                                                //       width: 5),
+                                                // ),
+                                                contentPadding: EdgeInsets.only(
+                                                    left: 20,
+                                                    top: 10,
+                                                    bottom: 10),
+                                              ),
+                                              showCursor: true,
+                                              cursorColor: Colors.white,
+                                              onSubmitted: (value) {
+                                                _prefs.setString('robotIp',
+                                                    value);
+                                                // print(navTrigger);
+                                                setState(() {
+                                                  _networkProvider
+                                                      .startUrl =
+                                                      _prefs.getString(
+                                                          'robotIp');
+                                                  _networkProvider.hostIP();
+                                                  navTrigger = false;
+                                                });
+                                              },
                                             ),
                                           ),
                                         ],

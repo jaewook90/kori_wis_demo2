@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:functional_data/functional_data.dart';
+import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/menuBookModalFinal.dart';
+import 'package:kori_wis_demo/Screens/IntroScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
@@ -16,6 +18,8 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
+import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
+import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
 import 'package:kori_wis_demo/Utills/ble/KoriViewModel.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
 import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
@@ -25,6 +29,7 @@ import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'TraySelectionFinal.g.dart';
 
@@ -80,9 +85,7 @@ part 'TraySelectionFinal.g.dart';
 
 // BLE 모듈 미사용
 class TraySelectionFinal extends StatefulWidget {
-  const TraySelectionFinal(
-      {Key? key})
-      : super(key: key);
+  const TraySelectionFinal({Key? key}) : super(key: key);
 
   @override
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
@@ -91,10 +94,12 @@ class TraySelectionFinal extends StatefulWidget {
 class _TraySelectionFinalState extends State<TraySelectionFinal>
     with TickerProviderStateMixin {
   late ServingModel _servingProvider;
+
   // late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
 
   final TextEditingController configController = TextEditingController();
+  late SharedPreferences _prefs;
 
   // FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
@@ -155,10 +160,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
 
+  late String _testText;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _initSharedPreferences();
+    // _testText = _prefs.getString('myData')!;
+    // _testText = 'asdf';
 
     _debugEncounter = 0;
     _debugTray = true;
@@ -202,6 +213,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         .isEmpty) {
       poseDataUpdate();
     }
+  }
+
+  Future<void> _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
@@ -475,18 +490,81 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     ),
                   ),
                   Positioned(
-                      left: 50,
+                      left: 20,
                       top: 25,
-                      child: FilledButton(
+                      child: TextButton(
                         onPressed: () {
-                          navPage(context: context, page: MenuBookScreen(), enablePop: true).navPageToPage();
+                          navPage(
+                                  context: context,
+                                  page: WebviewPage1(),
+                                  enablePop: true)
+                              .navPageToPage();
                         },
-                        child: Icon(Icons.menu_book, size: 50),
-                        style: FilledButton.styleFrom(
+                        child: Text(
+                          '1',
+                          style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 40,
+                              color: Colors.white),
+                        ),
+                        style: TextButton.styleFrom(
                             fixedSize: Size(60, 60),
-                            padding: EdgeInsets.only(right: 0),
+                            padding: EdgeInsets.only(right: 0, bottom: 2),
                             backgroundColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.white, width: 3),
+                                borderRadius: BorderRadius.circular(0))),
+                      )),
+                  Positioned(
+                      left: 100,
+                      top: 25,
+                      child: TextButton(
+                        onPressed: () {
+                          navPage(
+                              context: context,
+                              page: WebviewPage2(),
+                              enablePop: true)
+                              .navPageToPage();
+                        },
+                        child: Text(
+                          '2',
+                          style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 40,
+                              color: Colors.white),
+                        ),
+                        style: TextButton.styleFrom(
+                            fixedSize: Size(60, 60),
+                            padding: EdgeInsets.only(right: 0, bottom: 2),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.white, width: 3),
+                                borderRadius: BorderRadius.circular(0))),
+                      )),
+                  Positioned(
+                      left: 180,
+                      top: 25,
+                      child: TextButton(
+                        onPressed: () {
+                          navPage(
+                              context: context,
+                              page: WebviewPage3(),
+                              enablePop: true)
+                              .navPageToPage();
+                        },
+                        child: Text(
+                          '3',
+                          style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 40,
+                              color: Colors.white),
+                        ),
+                        style: TextButton.styleFrom(
+                            fixedSize: Size(60, 60),
+                            padding: EdgeInsets.only(right: 0, bottom: 2),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.white, width: 3),
                                 borderRadius: BorderRadius.circular(0))),
                       )),
                 ],
@@ -600,9 +678,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                 width: 150,
                                               ),
                                               FilledButton(
-                                                onPressed: () {
-                                                  final String newStartUrl =
-                                                      configController.text;
+                                                onPressed: () async {
                                                   // IP 변경 정보 데이터 베이스에 업데이트
                                                   // final data = {
                                                   //   "RobotIp": newStartUrl
@@ -614,6 +690,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                   //         data,
                                                   //         SetOptions(
                                                   //             merge: true));
+                                                  _prefs.setString('robotIp',
+                                                      configController.text);
                                                   setState(() {
                                                     _networkProvider.startUrl =
                                                         "http://${configController.text}/";
@@ -725,17 +803,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 padding: const EdgeInsets.only(left: 0),
                                 child: FilledButton(
                                   onPressed: () {
-                                    _networkProvider.servTable = 'charging_pile';
+                                    _networkProvider.servTable =
+                                        'charging_pile';
                                     PostApi(
-                                        url: startUrl,
-                                        endadr: chgUrl,
-                                        keyBody: 'charging_pile')
+                                            url: startUrl,
+                                            endadr: chgUrl,
+                                            keyBody: 'charging_pile')
                                         .Posting(context);
                                     _networkProvider.currentGoal = '충전스테이션';
                                     navPage(
-                                        context: context,
-                                        page: const NavigatorProgressModuleFinal(),
-                                        enablePop: false)
+                                            context: context,
+                                            page:
+                                                const NavigatorProgressModuleFinal(),
+                                            enablePop: false)
                                         .navPageToPage();
                                   },
                                   style: FilledButton.styleFrom(
@@ -743,14 +823,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       fixedSize: Size(370, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(0))),
+                                              BorderRadius.circular(0))),
                                   child: Row(
                                     children: [
                                       Icon(Icons.ev_station_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
                                         padding:
-                                        const EdgeInsets.only(left: 15),
+                                            const EdgeInsets.only(left: 15),
                                         child: Text(
                                           '충전 스테이션 이동',
                                           textAlign: TextAlign.start,
@@ -859,6 +939,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                 fontSize: 24,
                                               ),
                                             ),
+                                            // Text(
+                                            //   _testText,
+                                            //   style: TextStyle(
+                                            //     color: Colors.grey,
+                                            //     fontSize: 24,
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                       ),
@@ -922,6 +1009,99 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       ),
                                     ),
                                   ]),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: FilledButton(
+                                    onPressed: () async {
+                                      _prefs.clear();
+                                      navPage(context: context, page: IntroScreen(), enablePop: false).navPageToPage();
+                                      setState(() {
+                                        _networkProvider.getApiData = [];
+                                        _networkProvider.startUrl = "";
+                                      });
+                                    },
+                                    style: FilledButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        fixedSize: Size(370, 58),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(0))),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.autorenew,
+                                            color: Colors.white, size: 50),
+                                        Padding(
+                                          padding:
+                                          const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            '기본정보 초기화',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: FilledButton(
+                                    onPressed: () {
+                                      navPage(
+                                              context: context,
+                                              page: TestPagesScreen(),
+                                              enablePop: true)
+                                          .navPageToPage();
+                                    },
+                                    style: FilledButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        fixedSize: Size(370, 58),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(0))),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.request_page,
+                                            color: Colors.white, size: 50),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            '테스트 페이지 이동',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
                             ),
                           ],
                         ),

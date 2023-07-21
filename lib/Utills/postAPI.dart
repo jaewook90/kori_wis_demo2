@@ -21,9 +21,11 @@ class PostApi{
 
     if (apiKeyBody != 'charging_pile') {
       postData = {"point": apiKeyBody};
-      print(apiKeyBody);
+      print(postData);
       print('apiA');
+      print(apiAddress);
     } else if (apiKeyBody == 'stop' || apiKeyBody == 'resume') {
+      print(apiAddress);
       postData = {};
       print('apiB');
     } else {
