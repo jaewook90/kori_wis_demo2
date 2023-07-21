@@ -1,29 +1,16 @@
 import 'dart:async';
-import 'dart:convert' show utf8;
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:functional_data/functional_data.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/ConfigScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
-import 'package:kori_wis_demo/Utills/ble/KoriViewModel.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
-import 'package:kori_wis_demo/Utills/ble/ui/device_list.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -31,59 +18,6 @@ import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'TraySelectionFinal.g.dart';
-
-//ignore_for_file: annotate_overrides
-// 트레이 반응형 UI
-
-// // BLE 모듈 사용 시 필요한 상위 위젯
-// class TrayEquipped extends StatelessWidget {
-//   const TrayEquipped({
-//     this.characteristic,
-//     Key? key,
-//   }) : super(key: key);
-//   final QualifiedCharacteristic? characteristic;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer3<BleDeviceInteractor, BleDeviceConnector,
-//             ConnectionStateUpdate>(
-//         builder: (_, interactor, deviceConnector, connectionStateUpdate, __) =>
-//             TraySelectionFinal(
-//               characteristic: characteristic,
-//               subscribeToCharacteristic: interactor.subScribeToCharacteristic,
-//               viewModel: TrayEquippedViewModel(
-//                   deviceId: characteristic!.deviceId,
-//                   connectionStatus: connectionStateUpdate.connectionState,
-//                   deviceConnector: deviceConnector,
-//                   discoverServices: () =>
-//                       interactor.discoverServices(characteristic!.deviceId)),
-//             ));
-//   }
-// }
-//
-
-// // BLE 모듈 사용
-// class TraySelectionFinal extends StatefulWidget {
-//   const TraySelectionFinal(
-//       {this.characteristic,
-//       this.subscribeToCharacteristic,
-//       this.viewModel,
-//       Key? key})
-//       : super(key: key);
-//
-//   final QualifiedCharacteristic? characteristic;
-//
-//   final Stream<List<int>> Function(QualifiedCharacteristic characteristic)?
-//       subscribeToCharacteristic;
-//
-//   final TrayEquippedViewModel? viewModel;
-//
-//   @override
-//   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
-// }
-
-// BLE 모듈 미사용
 class TraySelectionFinal extends StatefulWidget {
   const TraySelectionFinal({Key? key}) : super(key: key);
 
@@ -95,27 +29,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     with TickerProviderStateMixin {
   late ServingModel _servingProvider;
 
-  // late BLEModel _bleProvider;
   late NetworkModel _networkProvider;
 
   final TextEditingController configController = TextEditingController();
   late SharedPreferences _prefs;
 
-  // FirebaseFirestore robotDb = FirebaseFirestore.instance;
-
-  // late bool bleConnection;
-
-  // late Timer _timer;
-
   dynamic newPoseData;
   dynamic poseData;
 
-  late List<String> PositioningList;
-  late List<String> PositionList;
-
-  // ble 데이터 변수
-  // late String subscribeOutput;
-  // late StreamSubscription<List<int>>? subscribeStream;
+  late List<String> positioningList;
+  late List<String> positionList;
 
   late String targetTableNum;
 
@@ -142,12 +65,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   String? table2;
   String? table3;
 
-  // //트레이 BLE시그널
-  // // late bool trayDetecting;
-  // late String tray1BLE;
-  // late String tray2BLE;
-  // late String tray3BLE;
-
   //디버그
   late bool _debugTray;
   late int _debugEncounter;
@@ -160,16 +77,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
 
-  late String _testText;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     _initSharedPreferences();
-    // _testText = _prefs.getString('myData')!;
-    // _testText = 'asdf';
 
     _debugEncounter = 0;
     _debugTray = true;
@@ -177,8 +90,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     fToast = FToast();
     fToast?.init(context);
 
-    PositioningList = [];
-    PositionList = [];
+    positioningList = [];
+    positionList = [];
 
     serviceState = 0;
 
@@ -188,25 +101,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     table2 = "";
     table3 = "";
 
-    // // BLE 사용시 이용
-    // bleConnection = false;
-
-    // tray1BLE = "";
-    // tray2BLE = "";
-    // tray3BLE = "";
-    //
-    // subscribeOutput = 'init';
-
-    // Provider.of<BLEModel>(context, listen: false).onTraySelectionScreen = true;
-
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
     chgUrl = Provider.of<NetworkModel>(context, listen: false).chgUrl;
-
-    // // BLE 사용시 사용
-    // if (widget.characteristic == null) {
-    //   subscribeStream = null;
-    // }
 
     if (Provider.of<NetworkModel>(context, listen: false)
         .getPoseData!
@@ -225,8 +122,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     String apiAddress = hostIP + endPoint;
 
-    // print('apiAddress : $apiAddress');
-
     NetworkGet network = NetworkGet(apiAddress);
 
     dynamic getApiData = await network.getAPI();
@@ -234,7 +129,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     Provider.of<NetworkModel>(context, listen: false).getApiData = getApiData;
 
     setState(() {
-      PositionList = [];
+      positionList = [];
       poseDataUpdate();
     });
   }
@@ -247,53 +142,24 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
       editPoseData = editPoseData.replaceAll('{', "");
       editPoseData = editPoseData.replaceAll('}', "");
-      List<String> PositionWithCordList = editPoseData.split("], ");
+      List<String> positionWithCordList = editPoseData.split("], ");
 
-      for (int i = 0; i < PositionWithCordList.length; i++) {
-        PositioningList = PositionWithCordList[i].split(":");
-        for (int j = 0; j < PositioningList.length; j++) {
+      for (int i = 0; i < positionWithCordList.length; i++) {
+        positioningList = positionWithCordList[i].split(":");
+        for (int j = 0; j < positioningList.length; j++) {
           if (j == 0) {
-            if (!PositioningList[j].contains('[')) {
-              poseData = PositioningList[j];
-              PositionList.add(poseData);
+            if (!positioningList[j].contains('[')) {
+              poseData = positioningList[j];
+              positionList.add(poseData);
             }
           }
         }
       }
-      PositionList.sort();
+      positionList.sort();
     } else {
-      PositionList = [];
+      positionList = [];
     }
   }
-
-  // // 트레이 디텍팅 (BLE 사용)
-  // Future<void> subscribeCharacteristic() async {
-  //   _timer = Timer(Duration(milliseconds: 500), () {
-  //     subscribeStream = widget.subscribeToCharacteristic!
-  //             (widget.characteristic!)
-  //         .listen((event) {
-  //       if (mounted) {
-  //         setState(() {
-  //           subscribeOutput = utf8.decode(event);
-  //           tray1BLE = subscribeOutput.split('')[0];
-  //           tray2BLE = subscribeOutput.split('')[1];
-  //           tray3BLE = subscribeOutput.split('')[2];
-  //           if (subscribeOutput != 'Notification set') {
-  //             subscribeStream!.cancel();
-  //           }
-  //           _timer.cancel();
-  //         });
-  //       }
-  //     });
-  //     if (mounted) {
-  //       setState(() {
-  //         subscribeOutput = 'Notification set';
-  //         _timer.cancel();
-  //       });
-  //     }
-  //   });
-  //   await Future.delayed(Duration(milliseconds: 1));
-  // }
 
   void showTraySetPopup(context) {
     showDialog(
@@ -314,76 +180,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    // BLE 이용시 디스포즈
-    // subscribeStream!.cancel();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-
-    // _debugTray = _servingProvider.trayDebug!;
-
-    // print(PositionList);
 
     //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
     serviceState =
         Provider.of<ServingModel>(context, listen: false).servingState!;
 
-    if (PositionList.isEmpty) {
-      // print('11111111');
-      PositionList = _networkProvider.getPoseData!;
+    if (positionList.isEmpty) {
+      positionList = _networkProvider.getPoseData!;
     } else {
-      // print('2222222222');
-      _networkProvider.getPoseData = PositionList;
+      _networkProvider.getPoseData = positionList;
     }
-
-    // // BLE 사용시 데이터 리드
-    // if (mounted) {
-    //   if (_bleProvider.onTraySelectionScreen == true) {
-    //     subscribeCharacteristic();
-    //   }
-    // } else {
-    //   subscribeStream!.cancel();
-    // }
-
-    // BLE 트레이 장착 유무 판독
-    // if (tray1BLE == "1") {
-    //   _servingProvider.attachedTray1 = false;
-    // } else if (tray1BLE == "0") {
-    //   _servingProvider.attachedTray1 = true;
-    //   if (table1 != "") {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       _servingProvider.clearTray1();
-    //     });
-    //   }
-    // }
-    // if (tray2BLE == "1") {
-    //   _servingProvider.attachedTray2 = false;
-    // } else if (tray2BLE == "0") {
-    //   _servingProvider.attachedTray2 = true;
-    //   if (table2 != "") {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       _servingProvider.clearTray2();
-    //     });
-    //     // print('t2');
-    //   }
-    // }
-    // if (tray3BLE == "1") {
-    //   _servingProvider.attachedTray3 = false;
-    // } else if (tray3BLE == "0") {
-    //   _servingProvider.attachedTray3 = true;
-    //   if (table3 != "") {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       _servingProvider.clearTray3();
-    //     });
-    //     // print('t3');
-    //   }
-    // }
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -397,8 +206,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     table2 = _servingProvider.table2;
     table3 = _servingProvider.table3;
 
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = 1080;
     double screenHeight = 1920;
     double textButtonWidth = screenWidth * 0.6;
@@ -432,7 +239,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                         ),
                         Text(
                           _text,
-                          style: TextStyle(fontFamily: 'kor', fontSize: 35),
+                          style:
+                              const TextStyle(fontFamily: 'kor', fontSize: 35),
                         )
                       ],
                     ),
@@ -480,13 +288,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       onPressed: () {
                         showReturnSelectPopup(context);
                       },
-                      child: Icon(Icons.shopping_cart_checkout, size: 50),
                       style: FilledButton.styleFrom(
-                          fixedSize: Size(60, 60),
-                          padding: EdgeInsets.only(right: 0),
+                          fixedSize: const Size(60, 60),
+                          padding: const EdgeInsets.only(right: 0),
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0))),
+                      child: const Icon(Icons.shopping_cart_checkout, size: 50),
                     ),
                   ),
                   Positioned(
@@ -496,24 +304,25 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                         onPressed: () {
                           navPage(
                                   context: context,
-                                  page: WebviewPage1(),
+                                  page: const WebviewPage1(),
                                   enablePop: true)
                               .navPageToPage();
                         },
-                        child: Text(
+                        style: TextButton.styleFrom(
+                            fixedSize: const Size(60, 60),
+                            padding: const EdgeInsets.only(right: 0, bottom: 2),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    color: Colors.white, width: 3),
+                                borderRadius: BorderRadius.circular(0))),
+                        child: const Text(
                           '1',
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 40,
                               color: Colors.white),
                         ),
-                        style: TextButton.styleFrom(
-                            fixedSize: Size(60, 60),
-                            padding: EdgeInsets.only(right: 0, bottom: 2),
-                            backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(0))),
                       )),
                   Positioned(
                       left: 100,
@@ -521,25 +330,26 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       child: TextButton(
                         onPressed: () {
                           navPage(
-                              context: context,
-                              page: WebviewPage2(),
-                              enablePop: true)
+                                  context: context,
+                                  page: const WebviewPage2(),
+                                  enablePop: true)
                               .navPageToPage();
                         },
-                        child: Text(
+                        style: TextButton.styleFrom(
+                            fixedSize: const Size(60, 60),
+                            padding: const EdgeInsets.only(right: 0, bottom: 2),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    color: Colors.white, width: 3),
+                                borderRadius: BorderRadius.circular(0))),
+                        child: const Text(
                           '2',
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 40,
                               color: Colors.white),
                         ),
-                        style: TextButton.styleFrom(
-                            fixedSize: Size(60, 60),
-                            padding: EdgeInsets.only(right: 0, bottom: 2),
-                            backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(0))),
                       )),
                   Positioned(
                       left: 180,
@@ -547,42 +357,43 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       child: TextButton(
                         onPressed: () {
                           navPage(
-                              context: context,
-                              page: WebviewPage3(),
-                              enablePop: true)
+                                  context: context,
+                                  page: const WebviewPage3(),
+                                  enablePop: true)
                               .navPageToPage();
                         },
-                        child: Text(
+                        style: TextButton.styleFrom(
+                            fixedSize: const Size(60, 60),
+                            padding: const EdgeInsets.only(right: 0, bottom: 2),
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                    color: Colors.white, width: 3),
+                                borderRadius: BorderRadius.circular(0))),
+                        child: const Text(
                           '3',
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 40,
                               color: Colors.white),
                         ),
-                        style: TextButton.styleFrom(
-                            fixedSize: Size(60, 60),
-                            padding: EdgeInsets.only(right: 0, bottom: 2),
-                            backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(0))),
                       )),
                 ],
               ),
             )
           ],
           toolbarHeight: 110,
-          iconTheme: IconThemeData(size: 70, color: Color(0xfffefeff)),
+          iconTheme: const IconThemeData(size: 70, color: Color(0xfffefeff)),
         ),
         extendBodyBehindAppBar: true,
         drawerEdgeDragWidth: 70,
         endDrawerEnableOpenDragGesture: true,
         endDrawer: Drawer(
-          backgroundColor: Color(0xff292929),
-          shadowColor: Color(0xff191919),
+          backgroundColor: const Color(0xff292929),
+          shadowColor: const Color(0xff191919),
           width: 400,
           child: Container(
-            padding: EdgeInsets.only(top: 100, left: 15),
+            padding: const EdgeInsets.only(top: 100, left: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -596,12 +407,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           children: [
                             //ip 변경
                             ExpansionTile(
-                                title: Row(
+                                title: const Row(
                                   children: [
                                     Icon(Icons.track_changes,
                                         color: Colors.white, size: 50),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 15),
+                                      padding: EdgeInsets.only(left: 15),
                                       child: Text(
                                         'ip 변경',
                                         textAlign: TextAlign.start,
@@ -618,19 +429,18 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 initiallyExpanded: false,
                                 backgroundColor: Colors.transparent,
                                 children: <Widget>[
-                                  Divider(
+                                  const Divider(
                                       height: 20,
                                       color: Colors.grey,
                                       indent: 15),
                                   Container(
-                                    // height: 1820,
                                     width: 370,
                                     child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 50, bottom: 30),
+                                      padding: const EdgeInsets.only(
+                                          left: 50, bottom: 30),
                                       child: Column(
                                         children: [
-                                          Row(
+                                          const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
@@ -643,7 +453,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                               ),
                                             ],
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 12,
                                           ),
                                           Row(
@@ -652,14 +462,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                             children: [
                                               Text(
                                                 startUrl!,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontFamily: 'kor',
                                                     fontSize: 18,
                                                     color: Colors.white),
                                               ),
                                             ],
                                           ),
-                                          Divider(
+                                          const Divider(
                                             color: Colors.grey,
                                             height: 30,
                                           ),
@@ -667,29 +477,18 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 '변경 할 IP',
                                                 style: TextStyle(
                                                     fontFamily: 'kor',
                                                     fontSize: 18,
                                                     color: Colors.white),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 150,
                                               ),
                                               FilledButton(
                                                 onPressed: () async {
-                                                  // IP 변경 정보 데이터 베이스에 업데이트
-                                                  // final data = {
-                                                  //   "RobotIp": newStartUrl
-                                                  // };
-                                                  // robotDb
-                                                  //     .collection("servingBot1")
-                                                  //     .doc("robotState")
-                                                  //     .set(
-                                                  //         data,
-                                                  //         SetOptions(
-                                                  //             merge: true));
                                                   _prefs.setString('robotIp',
                                                       configController.text);
                                                   setState(() {
@@ -704,18 +503,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                           .startUrl!,
                                                       _networkProvider
                                                           .positionURL);
-                                                  setState(() {
-                                                    // PositionList = [];
-                                                    // poseDataUpdate();
-                                                  });
                                                 },
-                                                child: Icon(
-                                                  Icons.arrow_forward,
-                                                  color: Colors.white,
-                                                ),
                                                 style: FilledButton.styleFrom(
                                                     backgroundColor:
-                                                        Color.fromRGBO(
+                                                        const Color.fromRGBO(
                                                             80, 80, 255, 0.7),
                                                     shape:
                                                         RoundedRectangleBorder(
@@ -723,6 +514,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                           BorderRadius.circular(
                                                               15),
                                                     )),
+                                                child: const Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -733,13 +528,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                               });
                                             },
                                             controller: configController,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontFamily: 'kor',
                                                 fontSize: 18,
                                                 color: Colors.white),
-                                            keyboardType: TextInputType
+                                            keyboardType: const TextInputType
                                                 .numberWithOptions(),
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                                 border: UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: Colors.grey,
@@ -757,7 +552,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     ),
                                   ),
                                 ]),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             //골포지션 새로고침
@@ -767,21 +562,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   onPressed: () {
                                     getting(_networkProvider.startUrl!,
                                         _networkProvider.positionURL);
-                                    setState(() {});
                                   },
                                   style: FilledButton.styleFrom(
                                       backgroundColor: Colors.transparent,
-                                      fixedSize: Size(370, 58),
+                                      fixedSize: const Size(370, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(0))),
-                                  child: Row(
+                                  child: const Row(
                                     children: [
                                       Icon(Icons.sync,
                                           color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           'GoalPose 새로고침',
                                           textAlign: TextAlign.start,
@@ -796,7 +589,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     ],
                                   ),
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Padding(
@@ -820,17 +613,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   },
                                   style: FilledButton.styleFrom(
                                       backgroundColor: Colors.transparent,
-                                      fixedSize: Size(370, 58),
+                                      fixedSize: const Size(370, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(0))),
-                                  child: Row(
+                                  child: const Row(
                                     children: [
                                       Icon(Icons.ev_station_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '충전 스테이션 이동',
                                           textAlign: TextAlign.start,
@@ -845,50 +637,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     ],
                                   ),
                                 )),
-                            // //블루투스 변경
-                            // Offstage(
-                            //   offstage: _debugTray,
-                            //   child: Padding(
-                            //       padding: const EdgeInsets.only(left: 0),
-                            //       child: FilledButton(
-                            //         onPressed: () {
-                            //           navPage(
-                            //                   context: context,
-                            //                   page: const DeviceListScreen(),
-                            //                   enablePop: true)
-                            //               .navPageToPage();
-                            //         },
-                            //         style: FilledButton.styleFrom(
-                            //             backgroundColor: Colors.transparent,
-                            //             fixedSize: Size(370, 58),
-                            //             shape: RoundedRectangleBorder(
-                            //                 borderRadius:
-                            //                     BorderRadius.circular(0))),
-                            //         child: Row(
-                            //           children: [
-                            //             Icon(Icons.bluetooth,
-                            //                 color: Colors.white, size: 50),
-                            //             Padding(
-                            //               padding:
-                            //                   const EdgeInsets.only(left: 15),
-                            //               child: Text(
-                            //                 'microBit ID 변경',
-                            //                 textAlign: TextAlign.start,
-                            //                 style: TextStyle(
-                            //                     fontFamily: 'kor',
-                            //                     fontSize: 24,
-                            //                     fontWeight: FontWeight.bold,
-                            //                     height: 1,
-                            //                     color: Colors.white),
-                            //               ),
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       )),
-                            // ),
                             Offstage(
                               offstage: _debugTray,
-                              child: SizedBox(
+                              child: const SizedBox(
                                 height: 20,
                               ),
                             ),
@@ -896,13 +647,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             Offstage(
                               offstage: _debugTray,
                               child: ExpansionTile(
-                                  title: Row(
+                                  title: const Row(
                                     children: [
                                       Icon(Icons.add_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '위치 추가',
                                           textAlign: TextAlign.start,
@@ -919,14 +669,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
                                   children: <Widget>[
-                                    Divider(
+                                    const Divider(
                                         height: 1,
                                         color: Colors.grey,
                                         indent: 15),
                                     Container(
                                       height: 100,
                                       width: 370,
-                                      child: Padding(
+                                      child: const Padding(
                                         padding: EdgeInsets.only(left: 30),
                                         child: Column(
                                           mainAxisAlignment:
@@ -939,13 +689,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                 fontSize: 24,
                                               ),
                                             ),
-                                            // Text(
-                                            //   _testText,
-                                            //   style: TextStyle(
-                                            //     color: Colors.grey,
-                                            //     fontSize: 24,
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       ),
@@ -954,20 +697,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             ),
                             Offstage(
                               offstage: _debugTray,
-                              child: SizedBox(
+                              child: const SizedBox(
                                 height: 20,
                               ),
                             ),
                             Offstage(
                               offstage: _debugTray,
                               child: ExpansionTile(
-                                  title: Row(
+                                  title: const Row(
                                     children: [
                                       Icon(Icons.remove_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '위치 삭제',
                                           textAlign: TextAlign.start,
@@ -984,14 +726,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
                                   children: <Widget>[
-                                    Divider(
+                                    const Divider(
                                         height: 1,
                                         color: Colors.grey,
                                         indent: 15),
                                     Container(
                                       height: 100,
                                       width: 370,
-                                      child: Padding(
+                                      child: const Padding(
                                         padding: EdgeInsets.only(left: 30),
                                         child: Column(
                                           mainAxisAlignment:
@@ -1012,7 +754,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             ),
                             Offstage(
                               offstage: _debugTray,
-                              child: SizedBox(
+                              child: const SizedBox(
                                 height: 20,
                               ),
                             ),
@@ -1023,7 +765,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   child: FilledButton(
                                     onPressed: () async {
                                       _prefs.clear();
-                                      navPage(context: context, page: IntroScreen(), enablePop: false).navPageToPage();
+                                      navPage(
+                                              context: context,
+                                              page: const IntroScreen(),
+                                              enablePop: false)
+                                          .navPageToPage();
                                       setState(() {
                                         _networkProvider.getApiData = [];
                                         _networkProvider.startUrl = "";
@@ -1031,17 +777,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     },
                                     style: FilledButton.styleFrom(
                                         backgroundColor: Colors.transparent,
-                                        fixedSize: Size(370, 58),
+                                        fixedSize: const Size(370, 58),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(0))),
-                                    child: Row(
+                                                BorderRadius.circular(0))),
+                                    child: const Row(
                                       children: [
                                         Icon(Icons.autorenew,
                                             color: Colors.white, size: 50),
                                         Padding(
-                                          padding:
-                                          const EdgeInsets.only(left: 15),
+                                          padding: EdgeInsets.only(left: 15),
                                           child: Text(
                                             '기본정보 초기화',
                                             textAlign: TextAlign.start,
@@ -1059,7 +804,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             ),
                             Offstage(
                               offstage: _debugTray,
-                              child: SizedBox(
+                              child: const SizedBox(
                                 height: 20,
                               ),
                             ),
@@ -1071,23 +816,22 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     onPressed: () {
                                       navPage(
                                               context: context,
-                                              page: TestPagesScreen(),
+                                              page: const TestPagesScreen(),
                                               enablePop: true)
                                           .navPageToPage();
                                     },
                                     style: FilledButton.styleFrom(
                                         backgroundColor: Colors.transparent,
-                                        fixedSize: Size(370, 58),
+                                        fixedSize: const Size(370, 58),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(0))),
-                                    child: Row(
+                                    child: const Row(
                                       children: [
                                         Icon(Icons.request_page,
                                             color: Colors.white, size: 50),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
+                                          padding: EdgeInsets.only(left: 15),
                                           child: Text(
                                             '테스트 페이지 이동',
                                             textAlign: TextAlign.start,
@@ -1121,28 +865,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   } else {
                                     setState(() {
                                       _debugEncounter++;
-                                      // print(_debugEncounter);
                                     });
                                     if (_debugEncounter == 5 &&
                                         _debugTray == true) {
                                       _debugTray = false;
-                                      // print(_debugTray);
                                       _debugEncounter = 0;
-                                      // setState(() {
-                                      //   _debugTray = false;
-                                      //   print(_debugTray);
-                                      //   _debugEncounter = 0;
-                                      // });
                                     } else if (_debugEncounter == 3 &&
                                         _debugTray == false) {
                                       _debugTray = true;
-                                      // print(_debugTray);
                                       _debugEncounter = 0;
-                                      // setState(() {
-                                      // });
                                     }
                                   }
-                                  // currentBackPressTime = now;
                                 }
                               },
                               style: FilledButton.styleFrom(
@@ -1151,7 +884,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(0),
                                   ),
-                                  fixedSize: Size(400, 150)),
+                                  fixedSize: const Size(400, 150)),
                               child: null,
                             ))
                       ]),
@@ -1188,7 +921,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             ),
                             Text(
                               _text,
-                              style: TextStyle(fontFamily: 'kor', fontSize: 35),
+                              style: const TextStyle(
+                                  fontFamily: 'kor', fontSize: 35),
                             )
                           ],
                         ),
@@ -1404,7 +1138,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             height: 171.8,
                             child: TextButton(
                                 onPressed: () {
-                                  // _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = true;
                                   _servingProvider.tray2Select = false;
                                   _servingProvider.tray3Select = false;
@@ -1475,7 +1208,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             height: 171.8,
                             child: TextButton(
                                 onPressed: () {
-                                  // _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = false;
                                   _servingProvider.tray2Select = true;
                                   _servingProvider.tray3Select = false;
@@ -1546,7 +1278,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             height: 293 * 0.75,
                             child: TextButton(
                                 onPressed: () {
-                                  // _bleProvider.onTraySelectionScreen = false;
                                   _servingProvider.tray1Select = false;
                                   _servingProvider.tray2Select = false;
                                   _servingProvider.tray3Select = true;

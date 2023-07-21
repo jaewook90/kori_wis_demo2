@@ -28,7 +28,7 @@ class _DataSavingTestState extends State<DataSavingTest> {
   Future<void> _saveData() async {
     _prefs.setString('myData', _textEditingController.text);  // 'myData' 키에 데이터 저장
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('저장완료')),  // 저장 완료 메시지 출력
+      const SnackBar(content: Text('저장완료')),  // 저장 완료 메시지 출력
     );
   }
 
@@ -36,14 +36,14 @@ class _DataSavingTestState extends State<DataSavingTest> {
   Future<void> _loadData() async {
     final myData = _prefs.getString('myData'); // 'myData' 키에 저장된 데이터 로드
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('로드완료: $myData', style: TextStyle(fontSize: 60),)), // 로드 완료 메시지와 함께 데이터 출력
+      SnackBar(content: Text('로드완료: $myData', style: const TextStyle(fontSize: 60),)), // 로드 완료 메시지와 함께 데이터 출력
     );
   }
 
   Future<void> _resetData() async {
     _prefs.clear(); // 'myData' 키에 저장된 데이터 로드
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('초기화 완료', style: TextStyle(fontSize: 60),)), // 로드 완료 메시지와 함께 데이터 출력
+      const SnackBar(content: Text('초기화 완료', style: TextStyle(fontSize: 60),)), // 로드 완료 메시지와 함께 데이터 출력
     );
   }
 
@@ -103,7 +103,7 @@ class _DataSavingTestState extends State<DataSavingTest> {
           )
         ],
         toolbarHeight: 110,
-        iconTheme: IconThemeData(size: 70, color: Color(0xfffefeff)),
+        iconTheme: const IconThemeData(size: 70, color: Color(0xfffefeff)),
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -114,25 +114,25 @@ class _DataSavingTestState extends State<DataSavingTest> {
           children: [
             TextField(
               controller: _textEditingController, // 입력한 데이터를 가져오기 위한 컨트롤러
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '저장할 데이터를 입력하세요.', // 힌트 텍스트
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: _saveData, // 데이터 저장 버튼
-                  child: Text('저장하기'),
+                  child: const Text('저장하기'),
                 ),
                 ElevatedButton(
                   onPressed: _loadData, // 데이터 로드 버튼
-                  child: Text('불러오기'),
+                  child: const Text('불러오기'),
                 ),
                 ElevatedButton(
                   onPressed: _resetData, // 데이터 로드 버튼
-                  child: Text('초기화'),
+                  child: const Text('초기화'),
                 ),
               ],
             ),

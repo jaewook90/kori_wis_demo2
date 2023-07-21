@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +12,8 @@ class SelectItemModalFinal extends StatefulWidget {
 
 class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
   late ServingModel _servingProvider;
-  late BLEModel _bleProvider;
 
   String itemSelectBG = 'assets/screens/Serving/koriZFinalItemSelect.png';
-
 
   @override
   void initState() {
@@ -27,8 +24,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
-
 
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 90, 0, 180),
@@ -44,8 +39,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                 height: 1536,
                 decoration: BoxDecoration(
                     color: Colors.transparent,
-                    image: DecorationImage(
-                        image: AssetImage(itemSelectBG))),
+                    image: DecorationImage(image: AssetImage(itemSelectBG))),
               ),
               // 아이템 선택 종료 X버튼
               Positioned(
@@ -62,7 +56,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
                         setState(() {
-                          _bleProvider.onTraySelectionScreen = true;
                           _servingProvider.item1 = "";
                           _servingProvider.item2 = "";
                           _servingProvider.item3 = "";

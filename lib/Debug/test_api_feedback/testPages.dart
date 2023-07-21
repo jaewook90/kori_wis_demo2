@@ -31,7 +31,7 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
                     onPressed: () {
                       navPage(
                               context: context,
-                              page: TraySelectionFinal(),
+                              page: const TraySelectionFinal(),
                               enablePop: false)
                           .navPageToPage();
                     },
@@ -71,7 +71,7 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
           )
         ],
         toolbarHeight: 110,
-        iconTheme: IconThemeData(size: 70, color: Color(0xfffefeff)),
+        iconTheme: const IconThemeData(size: 70, color: Color(0xfffefeff)),
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -85,19 +85,19 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
               children: [
                 TextButton(
                     onPressed: () {
-                      navPage(context: context, page: DataSavingTest(), enablePop: true).navPageToPage();
+                      navPage(context: context, page: const DataSavingTest(), enablePop: true).navPageToPage();
                     },
-                    child: Text(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(30),
+                  side: const BorderSide(
+                    color: Colors.white, width: 3
+                  )
+                ),
+                    child: const Text(
                       '데이터 저장 테스트',
                       style: TextStyle(
                           fontFamily: 'kor', fontSize: 40, color: Colors.white),
-                    ),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.all(30),
-                  side: BorderSide(
-                    color: Colors.white, width: 3
-                  )
-                ),)
+                    ),)
               ],
             )
           ],

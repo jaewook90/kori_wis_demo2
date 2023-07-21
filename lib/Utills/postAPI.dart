@@ -5,7 +5,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:provider/provider.dart';
 
-class PostApi{
+class PostApi {
   final String? url;
   final String? endadr;
   final String? keyBody;
@@ -21,32 +21,17 @@ class PostApi{
 
     if (apiKeyBody != 'charging_pile') {
       postData = {"point": apiKeyBody};
-      print(postData);
-      print('apiA');
-      print(apiAddress);
     } else if (apiKeyBody == 'stop' || apiKeyBody == 'resume') {
-      print(apiAddress);
       postData = {};
-      print('apiB');
     } else {
       postData = {"type": 1, "point": apiKeyBody};
-      print('apiC');
-      print(apiAddress);
-      print(postData);
     }
 
     var postBody = json.encode(postData);
 
     NetworkPost network = NetworkPost(apiAddress, postBody);
 
-    Provider.of<NetworkModel>((context), listen: false).APIPostData = await network.postAPI();
-
-    // var postResponse = await network.postAPI();
-
-    // print('apiKeyBody : $apiKeyBody');
-    // print('apiAddress : $apiAddress');
-
-    // print("postResponse : $postResponse");
+    Provider.of<NetworkModel>((context), listen: false).APIPostData =
+        await network.postAPI();
   }
-
 }

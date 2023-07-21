@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -27,7 +24,6 @@ class ServingModuleButtonsFinal extends StatefulWidget {
 class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
-  // late BLEModel _bleProvider;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -118,7 +114,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -128,28 +123,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     if (_servingProvider.targetTableNum != null) {
       targetTableNum = _servingProvider.targetTableNum!;
     }
-
-    // 서빙 완료화면 출력 시 다음 목표 지점으로 타겟 변경
-    // if (widget.screens == 3) {
-    //   if (_servingProvider.table1 != "") {
-    //     print('aaa');
-    //     targetTableNum = _servingProvider.table1!;
-    //   } else {
-    //     if (_servingProvider.table2 != "") {
-    //       print('bbb');
-    //       targetTableNum = _servingProvider.table2!;
-    //     } else {
-    //       if (_servingProvider.table3 != "") {
-    //         print('ccc');
-    //         targetTableNum = _servingProvider.table3!;
-    //       } else {
-    //         targetTableNum = 'none';
-    //       }
-    //     }
-    //   }
-    //   print('48465435');
-    //   print(targetTableNum);
-    // }
 
     // 트레이 상품 정의
     itemName = _servingProvider.menuItem;
@@ -227,7 +200,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                     Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
             onPressed: widget.screens == 0
                 ? () {
-                    // _bleProvider.onTraySelectionScreen = false;
                     // 서빙만 하는 경우
                     if ((_servingProvider.table1 != "" ||
                             _servingProvider.table2 != "") ||
@@ -260,27 +232,9 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                 }
                                 uploadTableNumberNItemImg();
 
-                                // _bleProvider.onTraySelectionScreen = true;
-
                                 navPage(
                                         context: context,
-                                        page: TraySelectionFinal(),
-                                        //  // BLE 미사용시
-                                        // page: TrayEquipped(
-                                        //   characteristic: QualifiedCharacteristic(
-                                        //       characteristicId: Provider.of<
-                                        //                   BLEModel>(context,
-                                        //               listen: false)
-                                        //           .trayDetectorCharacteristicId!,
-                                        //       serviceId: Provider.of<BLEModel>(
-                                        //               context,
-                                        //               listen: false)
-                                        //           .trayDetectorServiceId!,
-                                        //       deviceId: Provider.of<BLEModel>(
-                                        //               context,
-                                        //               listen: false)
-                                        //           .trayDetectorDeviceId!),
-                                        // ),
+                                        page: const TraySelectionFinal(),
                                         enablePop: false)
                                     .navPageToPage();
                               } else {
@@ -290,37 +244,19 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             });
                           }
                         : widget.screens == 3
-                                ? () {
-                                    // print('Serving Return to waiting point');
-                                    PostApi(
-                                            url: startUrl,
-                                            endadr: navUrl,
-                                            keyBody:
-                                                _servingProvider.waitingPoint)
-                                        .Posting(context);
-                                    navPage(
-                                            context: context,
-                                            page: TraySelectionFinal(),
-                                            // BLE 사용시
-                                            // page: TrayEquipped(
-                                            //   characteristic: QualifiedCharacteristic(
-                                            //       characteristicId: Provider.of<
-                                            //                   BLEModel>(context,
-                                            //               listen: false)
-                                            //           .trayDetectorCharacteristicId!,
-                                            //       serviceId: Provider.of<
-                                            //                   BLEModel>(context,
-                                            //               listen: false)
-                                            //           .trayDetectorServiceId!,
-                                            //       deviceId: Provider.of<
-                                            //                   BLEModel>(context,
-                                            //               listen: false)
-                                            //           .trayDetectorDeviceId!),
-                                            // ),
-                                            enablePop: false)
-                                        .navPageToPage();
-                                  }
-                                : null,
+                            ? () {
+                                PostApi(
+                                        url: startUrl,
+                                        endadr: navUrl,
+                                        keyBody: _servingProvider.waitingPoint)
+                                    .Posting(context);
+                                navPage(
+                                        context: context,
+                                        page: const TraySelectionFinal(),
+                                        enablePop: false)
+                                    .navPageToPage();
+                              }
+                            : null,
             child: null,
           ),
         ),

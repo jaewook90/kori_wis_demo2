@@ -23,18 +23,16 @@ class NetworkModel with ChangeNotifier {
   dynamic APIGetData;
   dynamic APIPostData;
 
-  NetworkModel({
-    this.serviceState,
-    this.getPoseData,
-    this.currentGoal,
-    this.servingDone,
-    this.shippingDone,
-    this.startUrl
-  });
+  NetworkModel(
+      {this.serviceState,
+      this.getPoseData,
+      this.currentGoal,
+      this.servingDone,
+      this.shippingDone,
+      this.startUrl});
 
-  void hostIP(){
+  void hostIP() {
     startUrl = "http://$startUrl/";
     notifyListeners();
   }
-
 }

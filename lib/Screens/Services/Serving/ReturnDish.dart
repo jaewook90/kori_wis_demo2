@@ -1,6 +1,3 @@
-// import 'dart:js_interop';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -22,8 +19,6 @@ class ReturnProgressModuleFinal extends StatefulWidget {
 
 class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
-
-  FirebaseFirestore robotDb = FirebaseFirestore.instance;
 
   late String backgroundImageServ;
 
@@ -50,28 +45,12 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     currentTargetTable =
         Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
-
-    if (Provider.of<ServingModel>(context, listen: false).servingState == 1) {
-      const int newState = 0;
-      final data = {"serviceState": newState};
-      const String returnTable = 'hall';
-      final data2 = {"returnTable": returnTable};
-      robotDb
-          .collection("servingBot1")
-          .doc("robotState")
-          .set(data, SetOptions(merge: true));
-      robotDb
-          .collection("servingBot1")
-          .doc("robotState")
-          .set(data2, SetOptions(merge: true));
-    }
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
-    final apiAdr = hostUrl+endUrl;
+    final apiAdr = hostUrl + endUrl;
 
-    NetworkGet network =
-        NetworkGet(apiAdr);
+    NetworkGet network = NetworkGet(apiAdr);
 
     dynamic getApiData = await network.getAPI();
 
@@ -131,12 +110,11 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
     double screenWidth = 1080;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 500), (){
+      Future.delayed(const Duration(milliseconds: 500), () {
         Getting(startUrl!, moveBaseStatusUrl!);
       });
       if (navStatus == 3 && arrivedReturnTable == false) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          // print('nav Return Done');
           setState(() {
             navStatus = 0;
             arrivedReturnTable = true;
@@ -202,17 +180,18 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.location_on,
                             size: 70,
                             color: Colors.white,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Text(
                             '$currentTargetTable번 테이블',
-                            style: TextStyle(fontSize: 48, color: Colors.white),
+                            style: const TextStyle(
+                                fontSize: 48, color: Colors.white),
                           )
                         ],
                       ),

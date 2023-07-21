@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -21,10 +20,9 @@ class NavCountDownModalFinal extends StatefulWidget {
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  late BLEModel _bleProvider;
 
   final CountdownController _controller =
-      new CountdownController(autoStart: true);
+      CountdownController(autoStart: true);
 
   String? currentGoal;
 
@@ -59,7 +57,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -112,24 +109,22 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     _networkProvider.servTable =
                         _servingProvider.targetTableNum;
                     PostApi(
-                        url: startUrl,
-                        endadr: navUrl,
-                        keyBody: targetTableNum)
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: targetTableNum)
                         .Posting(context);
-                    // print('타겟 : $targetTableNum');
                     navPage(
-                        context: context,
-                        page: const NavigatorProgressModuleFinal(
-                        ),
-                        enablePop: true)
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                            enablePop: true)
                         .navPageToPage();
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       navPage(
-                          context: context,
-                          page: const NavigatorProgressModuleFinal(),
-                          enablePop: true)
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(),
+                              enablePop: true)
                           .navPageToPage();
                     });
                   },
@@ -148,11 +143,14 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 onPressed: () {
                   _controller.pause();
                   _networkProvider.servingPosition = [];
-                  setState(() {
-                    _bleProvider.onTraySelectionScreen = true;
-                  });
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  if (_servingProvider.table1 != "" ||
+                      (_servingProvider.table2 != "" ||
+                          _servingProvider.table3 != "")) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
                 },
                 child: null,
               ),
@@ -169,21 +167,19 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 onPressed: () {
                   _controller.pause();
                   _servingProvider.trayChange = true;
-                  _networkProvider.servTable =
-                      _servingProvider.targetTableNum;
+                  _networkProvider.servTable = _servingProvider.targetTableNum;
                   PostApi(
-                      url: startUrl,
-                      endadr: navUrl,
-                      keyBody: targetTableNum)
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: targetTableNum)
                       .Posting(context);
-                  // print('타겟 : $targetTableNum');
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     navPage(
-                        context: context,
-                        page: const NavigatorProgressModuleFinal(),
-                        enablePop: true)
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                            enablePop: true)
                         .navPageToPage();
                   });
                 },

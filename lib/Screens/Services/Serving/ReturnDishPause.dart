@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -35,9 +34,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   Widget build(BuildContext context) {
     backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
 
-    // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
-    // double screenHeight = 1920;
 
     return WillPopScope(
       onWillPop: () {
@@ -90,9 +87,9 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                   child: GestureDetector(
                       onTap: () {
                         navPage(
-                            context: context,
-                            page: const ReturnDoneScreen(),
-                            enablePop: false)
+                                context: context,
+                                page: const ReturnDoneScreen(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       child: Container(
@@ -108,13 +105,10 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                     child: Container(
                       width: 300,
                       height: 90,
-                      // decoration: BoxDecoration(
-                      //     border: Border.fromBorderSide(
-                      //         BorderSide(color: Colors.white, width: 1))),
                       child: Text(
-                        '${targetTable}번 테이블',
+                        '$targetTable번 테이블',
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'kor',
                             fontSize: 55,
                             color: Color(0xfffffefe)),

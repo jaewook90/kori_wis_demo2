@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 
-// import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -25,7 +21,6 @@ class ServingProgressFinal extends StatefulWidget {
 class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  // late BLEModel _bleProvider;
 
   void showCountDownPopup(context) {
     showDialog(
@@ -39,7 +34,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   }
 
   final CountdownController _controller =
-      new CountdownController(autoStart: true);
+      CountdownController(autoStart: true);
 
   String backgroundImage = "assets/screens/Serving/koriZFinalServingDone.png";
   String? startUrl;
@@ -65,10 +60,8 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     double screenWidth = 1080;
-    double screenHeight = 1920;
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -142,13 +135,12 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
               Countdown(
                 controller: _controller,
                 seconds: 15,
-                build: (_, double time){
+                build: (_, double time) {
                   return Container();
                 },
                 interval: const Duration(seconds: 1),
                 onFinished: () {
-                  // print('countDown Finish!!!!');
-                 showCountDownPopup(context);
+                  showCountDownPopup(context);
                 },
               ),
               Positioned(
@@ -168,44 +160,21 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 endadr: navUrl,
                                 keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
-                        // WidgetsBinding.instance.addPostFrameCallback((_) {
                         navPage(
                                 context: context,
-                                page: const NavigatorProgressModuleFinal(
-                                    // servGoalPose: _servingProvider.targetTableNum,
-                                    ),
+                                page: const NavigatorProgressModuleFinal(),
                                 enablePop: true)
                             .navPageToPage();
-                        // });
                       } else {
                         _servingProvider.clearAllTray();
-                        // print('Serving Return to waiting point');
                         PostApi(
                                 url: startUrl,
                                 endadr: navUrl,
                                 keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
-                        setState(() {
-                          // _bleProvider.onTraySelectionScreen = true;
-                        });
                         navPage(
                                 context: context,
-                                // BLE 미사용시
-                                page: TraySelectionFinal(),
-                                // // BLE 사용시
-                                // page: TrayEquipped(
-                                //   characteristic: QualifiedCharacteristic(
-                                //       characteristicId: Provider.of<BLEModel>(
-                                //               context,
-                                //               listen: false)
-                                //           .trayDetectorCharacteristicId!,
-                                //       serviceId: Provider.of<BLEModel>(context,
-                                //               listen: false)
-                                //           .trayDetectorServiceId!,
-                                //       deviceId: Provider.of<BLEModel>(context,
-                                //               listen: false)
-                                //           .trayDetectorDeviceId!),
-                                // ),
+                                page: const TraySelectionFinal(),
                                 enablePop: false)
                             .navPageToPage();
                       }
@@ -225,9 +194,8 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                            // side: BorderSide(color: Colors.white, width: 10),
                             borderRadius: BorderRadius.circular(40)),
-                        fixedSize: Size(866, 160)),
+                        fixedSize: const Size(866, 160)),
                     child: Container(),
                     onPressed: () {
                       _controller.pause();
@@ -243,48 +211,26 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           navPage(
                                   context: context,
-                                  page: const NavigatorProgressModuleFinal(
-                                      // servGoalPose: _servingProvider.targetTableNum,
-                                      ),
+                                  page: const NavigatorProgressModuleFinal(),
                                   enablePop: true)
                               .navPageToPage();
                         });
                       } else {
                         _servingProvider.clearAllTray();
-                        // print('Serving Return to waiting point');
                         PostApi(
                                 url: startUrl,
                                 endadr: navUrl,
                                 keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
-                        setState(() {
-                          // _bleProvider.onTraySelectionScreen = true;
-                        });
                         navPage(
                                 context: context,
-                                // BLE 미사용시
-                                page: TraySelectionFinal(),
-                                // // BLE 사용시
-                                // page: TrayEquipped(
-                                //   characteristic: QualifiedCharacteristic(
-                                //       characteristicId: Provider.of<BLEModel>(
-                                //               context,
-                                //               listen: false)
-                                //           .trayDetectorCharacteristicId!,
-                                //       serviceId: Provider.of<BLEModel>(context,
-                                //               listen: false)
-                                //           .trayDetectorServiceId!,
-                                //       deviceId: Provider.of<BLEModel>(context,
-                                //               listen: false)
-                                //           .trayDetectorDeviceId!),
-                                // ),
+                                page: const TraySelectionFinal(),
                                 enablePop: false)
                             .navPageToPage();
                       }
                     },
                   ),
                 ),
-                // child: const ServingModuleButtonsFinal(screens: 3,),
               ),
             ])));
   }

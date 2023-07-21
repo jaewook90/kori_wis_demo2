@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -26,10 +24,9 @@ class _ChangingCountDownModalFinalState
     extends State<ChangingCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  // late BLEModel _bleProvider;
 
   final CountdownController _controller =
-      new CountdownController(autoStart: true);
+      CountdownController(autoStart: true);
 
   late bool countDownNav;
 
@@ -51,12 +48,6 @@ class _ChangingCountDownModalFinalState
 
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
-
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = 1080;
-    double screenHeight = 1920;
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -98,43 +89,21 @@ class _ChangingCountDownModalFinalState
                               endadr: navUrl,
                               keyBody: _servingProvider.targetTableNum)
                           .Posting(context);
-                      // WidgetsBinding.instance.addPostFrameCallback((_) {
                       navPage(
                               context: context,
-                              page: const NavigatorProgressModuleFinal(
-                                  // servGoalPose: _servingProvider.targetTableNum,
-                                  ),
+                              page: const NavigatorProgressModuleFinal(),
                               enablePop: true)
                           .navPageToPage();
-                      // });
                     } else {
                       _servingProvider.clearAllTray();
-                      // print('Serving Return to waiting point');
                       PostApi(
                               url: startUrl,
                               endadr: navUrl,
                               keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
-                      setState(() {
-                        // _bleProvider.onTraySelectionScreen = true;
-                      });
                       navPage(
                               context: context,
-                              page: TraySelectionFinal(),
-                              // BLE 사용시
-                              // page: TrayEquipped(
-                              //   characteristic: QualifiedCharacteristic(
-                              //       characteristicId: Provider.of<BLEModel>(
-                              //               context,
-                              //               listen: false)
-                              //           .trayDetectorCharacteristicId!,
-                              //       serviceId: Provider.of<BLEModel>(context,
-                              //               listen: false)
-                              //           .trayDetectorServiceId!,
-                              //       deviceId: Provider.of<BLEModel>(context,
-                              //               listen: false)
-                              //           .trayDetectorDeviceId!),
-                              // ),
+                              page: const TraySelectionFinal(),
                               enablePop: false)
                           .navPageToPage();
                     }
@@ -154,9 +123,6 @@ class _ChangingCountDownModalFinalState
                 onPressed: () {
                   _controller.pause();
                   _networkProvider.servingPosition = [];
-                  setState(() {
-                    // _bleProvider.onTraySelectionScreen = true;
-                  });
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
@@ -182,21 +148,7 @@ class _ChangingCountDownModalFinalState
                         .Posting(context);
                     navPage(
                             context: context,
-                            page: TraySelectionFinal(),
-                            // BLE 사용시
-                            // page: TrayEquipped(
-                            //   characteristic: QualifiedCharacteristic(
-                            //       characteristicId: Provider.of<BLEModel>(
-                            //               context,
-                            //               listen: false)
-                            //           .trayDetectorCharacteristicId!,
-                            //       serviceId: Provider.of<BLEModel>(context,
-                            //               listen: false)
-                            //           .trayDetectorServiceId!,
-                            //       deviceId: Provider.of<BLEModel>(context,
-                            //               listen: false)
-                            //           .trayDetectorDeviceId!),
-                            // ),
+                            page: const TraySelectionFinal(),
                             enablePop: false)
                         .navPageToPage();
                   } else if (widget.modeState == 'serving') {
@@ -211,43 +163,21 @@ class _ChangingCountDownModalFinalState
                               endadr: navUrl,
                               keyBody: _servingProvider.targetTableNum)
                           .Posting(context);
-                      // WidgetsBinding.instance.addPostFrameCallback((_) {
                       navPage(
                               context: context,
-                              page: const NavigatorProgressModuleFinal(
-                                  // servGoalPose: _servingProvider.targetTableNum,
-                                  ),
+                              page: const NavigatorProgressModuleFinal(),
                               enablePop: true)
                           .navPageToPage();
-                      // });
                     } else {
                       _servingProvider.clearAllTray();
-                      // print('Serving Return to waiting point');
                       PostApi(
                               url: startUrl,
                               endadr: navUrl,
                               keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
-                      setState(() {
-                        // _bleProvider.onTraySelectionScreen = true;
-                      });
                       navPage(
                               context: context,
-                              page: TraySelectionFinal(),
-                              // // BLE 미사용시
-                              // page: TrayEquipped(
-                              //   characteristic: QualifiedCharacteristic(
-                              //       characteristicId: Provider.of<BLEModel>(
-                              //               context,
-                              //               listen: false)
-                              //           .trayDetectorCharacteristicId!,
-                              //       serviceId: Provider.of<BLEModel>(context,
-                              //               listen: false)
-                              //           .trayDetectorServiceId!,
-                              //       deviceId: Provider.of<BLEModel>(context,
-                              //               listen: false)
-                              //           .trayDetectorDeviceId!),
-                              // ),
+                              page: const TraySelectionFinal(),
                               enablePop: false)
                           .navPageToPage();
                     }

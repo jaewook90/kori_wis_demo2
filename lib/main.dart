@@ -2,91 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-
-//BLE 모듈 헤더
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_device_connector.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_device_interactor.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_logger.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_scanner.dart';
-import 'package:kori_wis_demo/Utills/ble/module/ble_status_monitor.dart';
 
 //허가 유틸 헤더
 import 'package:permission_handler/permission_handler.dart';
 
-final navigatorKey = GlobalKey<NavigatorState>();
-// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  await Firebase.initializeApp();
 
   await initializeDateFormatting();
 
-  final _ble = FlutterReactiveBle();
-  final _bleLogger = BleLogger(ble: _ble);
-  final _scanner = BleScanner(ble: _ble, logMessage: _bleLogger.addToLog);
-  final _monitor = BleStatusMonitor(_ble);
-  final _connector = BleDeviceConnector(
-    ble: _ble,
-    logMessage: _bleLogger.addToLog,
-  );
-  final _serviceDiscoverer = BleDeviceInteractor(
-    bleDiscoverServices: _ble.discoverServices,
-    readCharacteristic: _ble.readCharacteristic,
-    writeWithResponse: _ble.writeCharacteristicWithResponse,
-    writeWithOutResponse: _ble.writeCharacteristicWithoutResponse,
-    subscribeToCharacteristic: _ble.subscribeToCharacteristic,
-    logMessage: _bleLogger.addToLog,
-  );
-
-  Permission.bluetooth.request();
   Permission.location.request();
 
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(
     MultiProvider(
       providers: [
-        Provider.value(value: _scanner),
-        Provider.value(value: _monitor),
-        Provider.value(value: _connector),
-        Provider.value(value: _serviceDiscoverer),
-        Provider.value(value: _bleLogger),
-        StreamProvider<BleScannerState?>(
-          create: (_) => _scanner.state,
-          initialData: const BleScannerState(
-            discoveredDevices: [],
-            scanIsInProgress: false,
-          ),
-        ),
-        StreamProvider<BleStatus?>(
-          create: (_) => _monitor.state,
-          initialData: BleStatus.unknown,
-        ),
-        StreamProvider<ConnectionStateUpdate>(
-          create: (_) => _connector.state,
-          initialData: const ConnectionStateUpdate(
-            deviceId: 'Unknown device',
-            connectionState: DeviceConnectionState.disconnected,
-            failure: null,
-          ),
-        ),
         ChangeNotifierProvider(
             create: (context) => MainStatusModel(
                   playAd: false,
                 )),
         ChangeNotifierProvider(
-            create: (context) =>
-                NetworkModel(startUrl: '', getPoseData: [])),
+            create: (context) => NetworkModel(startUrl: '', getPoseData: [])),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
                   servingState: 0,
@@ -111,19 +52,12 @@ void main() async {
                   itemImageList: ['a', 'b', 'c'],
                   menuItem: "미지정",
                 )),
-        ChangeNotifierProvider(
-            create: (context) => BLEModel(
-                  subscribeOutput: '000',
-                  // characteristicId: '6e400002-b5a3-f393-e0a9-e50e24dcca9e',
-                  // deviceId1: 'DF:75:E4:D6:32:63',
-                ))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'KORi-Z Robot App',
         theme: ThemeData(
           scaffoldBackgroundColor: const Color(0xff191919),
-          // fontFamily: 'kor',
           textTheme: TextTheme(
             //영어폰트용
             titleLarge: GoogleFonts.roboto(
@@ -177,8 +111,7 @@ void main() async {
                 color: Color(0xffF0F0F0)),
           ),
         ),
-        home: IntroScreen(),
-        navigatorKey: navigatorKey,
+        home: const IntroScreen(),
       ),
     ),
   );

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
-// import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:provider/provider.dart';
 
 //api 통신용 라이브러리
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class testAPIFeedback extends StatefulWidget {
@@ -51,8 +49,6 @@ class _testAPIFeedbackState extends State<testAPIFeedback> {
       postData = {};
     }
 
-    print(postData);
-
     var postBody = json.encode(postData);
 
     NetworkPost network = NetworkPost(apiAddress, postBody);
@@ -74,17 +70,15 @@ class _testAPIFeedbackState extends State<testAPIFeedback> {
     testAPIDataPost =
         Provider.of<NetworkModel>((context), listen: false).APIPostData;
 
-    // print(testAPIDataPost);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('api 피드백 테스트'),
+        title: const Text('api 피드백 테스트'),
       ),
       body: Column(
         children: [
           Text(
-            '${testAPIData}',
-            style: TextStyle(fontSize: 150),
+            '$testAPIData',
+            style: const TextStyle(fontSize: 150),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -94,26 +88,26 @@ class _testAPIFeedbackState extends State<testAPIFeedback> {
                   onPressed: () {
                     Posting('http://192.168.0.155/cmd/nav_point', '출발');
                   },
-                  style: FilledButton.styleFrom(fixedSize: Size(150, 150)),
-                  child: Text('출발')),
+                  style: FilledButton.styleFrom(fixedSize: const Size(150, 150)),
+                  child: const Text('출발')),
               // 정지
               FilledButton(
                   onPressed: () {
                     Posting('http://192.168.0.155/cmd/cancel_goal', '정지');
                   },
-                  style: FilledButton.styleFrom(fixedSize: Size(150, 150)),
-                  child: Text('정지')),
+                  style: FilledButton.styleFrom(fixedSize: const Size(150, 150)),
+                  child: const Text('정지')),
               FilledButton(
                   onPressed: () {
                     Posting('http://192.168.0.155/cmd/charge', '충전');
                   },
-                  style: FilledButton.styleFrom(fixedSize: Size(150, 150)),
-                  child: Text('충전'))
+                  style: FilledButton.styleFrom(fixedSize: const Size(150, 150)),
+                  child: const Text('충전'))
             ],
           ),
           Text(
-            '${testAPIDataPost}',
-            style: TextStyle(fontSize: 130),
+            '$testAPIDataPost',
+            style: const TextStyle(fontSize: 130),
           ),
         ],
       ),

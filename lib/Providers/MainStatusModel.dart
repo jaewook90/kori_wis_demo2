@@ -9,14 +9,13 @@ class MainStatusModel with ChangeNotifier {
   });
 
   // 서빙 이송 중 광고 재생 => 메인 프로바이더로 변경
-  void playAD(){
-    if(playAd == true){
+  void playAD() {
+    if (playAd == true) {
       playAd = false;
-    }else{
+    } else {
       playAd = true;
     }
     notifyListeners();
   }
 // 서빙 이송 중 광고 재생
-
 }

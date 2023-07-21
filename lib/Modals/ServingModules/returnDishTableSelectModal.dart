@@ -20,7 +20,6 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
   late String returnTable;
   late int serviceState;
 
-
   String tableSelectBG = 'assets/screens/Serving/koriZFinalTableSelect.png';
 
   String positionURL = "";
@@ -49,21 +48,11 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
-
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
 
     buttonPositionWidth = [190, 190, 190, 190, 590, 590, 590, 590];
-    buttonPositionHeight = [
-      387,
-      723,
-      1044,
-      1368,
-      387,
-      723,
-      1044,
-      1368
-    ];
+    buttonPositionHeight = [387, 723, 1044, 1368, 387, 723, 1044, 1368];
 
     buttonNumbers = buttonPositionHeight.length;
 
@@ -112,8 +101,6 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                     style: FilledButton.styleFrom(
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                            // side:
-                            //     BorderSide(color: Colors.tealAccent, width: 5),
                             borderRadius: BorderRadius.circular(buttonRadius)),
                         fixedSize: Size(buttonSize[0], buttonSize[1])),
                     onPressed: () {
@@ -121,13 +108,16 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                         returnTable = _networkProvider.getPoseData![i];
                         _servingProvider.returnTargetTable = returnTable;
                       });
-                      PostApi(url: startUrl, endadr: navUrl, keyBody: returnTable)
+                      PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: returnTable)
                           .Posting(context);
                       Navigator.pop(context);
                       navPage(
-                          context: context,
-                          page: const ReturnProgressModuleFinal(),
-                          enablePop: true)
+                              context: context,
+                              page: const ReturnProgressModuleFinal(),
+                              enablePop: true)
                           .navPageToPage();
                     },
                     child: null,

@@ -17,13 +17,12 @@ class NavigatorPauseModuleFinal extends StatefulWidget {
 }
 
 class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
-    late String backgroundImage;
+  late String backgroundImage;
 
   @override
   Widget build(BuildContext context) {
     backgroundImage = "assets/screens/Nav/koriZFinalServPauseNav.png";
 
-    // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
 
     return WillPopScope(
@@ -77,9 +76,9 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                   child: GestureDetector(
                       onTap: () {
                         navPage(
-                            context: context,
-                            page: const ServingProgressFinal(),
-                            enablePop: false)
+                                context: context,
+                                page: const ServingProgressFinal(),
+                                enablePop: false)
                             .navPageToPage();
                       },
                       child: Container(
@@ -95,17 +94,14 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                     child: Container(
                       width: 300,
                       height: 90,
-                      // decoration: BoxDecoration(
-                      //     border: Border.fromBorderSide(
-                      //         BorderSide(color: Colors.white, width: 1))),
                       child: Text(
                         widget.servGoalPose == 'charging_pile'
                             ? '충전스테이션'
                             : widget.servGoalPose == 'wait'
-                            ? '대기장소'
-                            : '${widget.servGoalPose!}번 테이블',
+                                ? '대기장소'
+                                : '${widget.servGoalPose!}번 테이블',
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'kor',
                             fontSize: 55,
                             color: Color(0xfffffefe)),

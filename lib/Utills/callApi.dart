@@ -30,7 +30,6 @@ class NetworkPost {
 }
 
 class NetworkGet {
-
   final String apiAddress;
 
   NetworkGet(this.apiAddress);

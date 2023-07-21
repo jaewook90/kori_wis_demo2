@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 
-// import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
-import 'package:timer_count_down/timer_controller.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 
 class ReturnDoneScreen extends StatefulWidget {
   const ReturnDoneScreen({Key? key}) : super(key: key);
@@ -25,7 +18,6 @@ class ReturnDoneScreen extends StatefulWidget {
 class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  // late BLEModel _bleProvider;
 
   String backgroundImage = "assets/screens/Serving/koriZFinalReturn.png";
   String? startUrl;
@@ -35,12 +27,8 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    // _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = 1080;
-    double screenHeight = 1920;
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -116,7 +104,6 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                 left: 0,
                 child: GestureDetector(
                     onTap: () {
-                      // print('Serving Return to waiting point');
                       PostApi(
                               url: startUrl,
                               endadr: navUrl,
@@ -124,21 +111,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                           .Posting(context);
                       navPage(
                               context: context,
-                              page: TraySelectionFinal(),
-                              // // BLE 사용시
-                              // page: TrayEquipped(
-                              //   characteristic: QualifiedCharacteristic(
-                              //       characteristicId: Provider.of<BLEModel>(
-                              //               context,
-                              //               listen: false)
-                              //           .trayDetectorCharacteristicId!,
-                              //       serviceId: Provider.of<BLEModel>(context,
-                              //               listen: false)
-                              //           .trayDetectorServiceId!,
-                              //       deviceId: Provider.of<BLEModel>(context,
-                              //               listen: false)
-                              //           .trayDetectorDeviceId!),
-                              // ),
+                              page: const TraySelectionFinal(),
                               enablePop: false)
                           .navPageToPage();
                     },

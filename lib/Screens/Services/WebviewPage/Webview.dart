@@ -76,8 +76,8 @@ class _WebviewPage1State extends State<WebviewPage1> {
           );
         },
       )
-      ..loadRequest(
-          Uri.parse('http://192.168.0.111/connector/client/material/?sid=1&cid=1'));
+      ..loadRequest(Uri.parse(
+          'http://192.168.0.111/connector/client/material/?sid=1&cid=1'));
     // ..loadRequest(Uri.parse('http://172.30.1.35/'));
 
     if (controller.platform is AndroidWebViewController) {
@@ -102,17 +102,17 @@ class _WebviewPage1State extends State<WebviewPage1> {
               height: 1920,
               child: WebViewWidget(controller: _controller)),
           Positioned(
-            right: 50,
+              right: 50,
               top: 20,
               child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.close,
-                  ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.close,
+                ),
                 iconSize: 60,
-                color: Color.fromRGBO(0, 0, 0, 0.4),
+                color: const Color.fromRGBO(0, 0, 0, 0.4),
               ))
         ]),
       ),

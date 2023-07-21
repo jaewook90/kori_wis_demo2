@@ -211,7 +211,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                         ? () {
                             navPage(
                                     context: context,
-                                    page: ReturnDishPauseScreen(),
+                                    page: const ReturnDishPauseScreen(),
                                     enablePop: true)
                                 .navPageToPage();
                           }

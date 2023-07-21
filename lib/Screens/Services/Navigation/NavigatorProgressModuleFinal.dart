@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 
-// import 'package:kori_wis_demo/Utills/getAPI.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -54,16 +51,11 @@ class _NavigatorProgressModuleFinalState
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
-    final apiAdr = hostUrl+endUrl;
+    final apiAdr = hostUrl + endUrl;
 
-    NetworkGet network =
-    NetworkGet(apiAdr);
+    NetworkGet network = NetworkGet(apiAdr);
 
     dynamic getApiData = await network.getAPI();
-
-    // print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
-    // print(initNavStatus);
-    // print('initNavStatusinitNavStatusinitNavStatusinitNavStatusinitNavStatus');
 
     if (initNavStatus == true) {
       if (getApiData == 3) {
@@ -127,34 +119,27 @@ class _NavigatorProgressModuleFinalState
 
     setState(() {
       if (targetTableNum == _servingProvider.table1) {
-        // print('table1');
         _servingProvider.table1 = "";
         _servingProvider.item1 = '';
       } else if (targetTableNum == _servingProvider.table2) {
-        // print('table2');
         _servingProvider.table2 = "";
       } else if (targetTableNum == _servingProvider.table3) {
-        // print('table3');
         _servingProvider.table3 = "";
       }
     });
     if (_servingProvider.trayChange == true) {
       if (_servingProvider.table1 != "" &&
           _servingProvider.trayChange == true) {
-        // print('aaa');
         targetTableNum = _servingProvider.table1!;
         _servingProvider.trayChange = false;
       } else {
         if (_servingProvider.table2 != "" &&
             _servingProvider.trayChange == true) {
-          // print('bbb');
-          // print(_servingProvider.table2);
           targetTableNum = _servingProvider.table2!;
           _servingProvider.trayChange = false;
         } else {
           if (_servingProvider.table3 != "" &&
               _servingProvider.trayChange == true) {
-            // print('ccc');
             targetTableNum = _servingProvider.table3!;
             _servingProvider.trayChange = false;
           } else {
@@ -172,7 +157,7 @@ class _NavigatorProgressModuleFinalState
     _servingProvider.targetTableNum = targetTableNum;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 1000), (){
+      Future.delayed(const Duration(milliseconds: 1000), () {
         Getting(startUrl!, moveBaseStatusUrl!);
       });
       if (navStatus == 3 && arrivedServingTable == false) {
@@ -182,38 +167,22 @@ class _NavigatorProgressModuleFinalState
         });
         if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
           navPage(
-              context: context,
-              page: const ServingProgressFinal(),
-              enablePop: false)
+                  context: context,
+                  page: const ServingProgressFinal(),
+                  enablePop: false)
               .navPageToPage();
         } else if (servTableNum == 'wait') {
           _servingProvider.clearAllTray();
           navPage(
-              context: context,
-              page: TraySelectionFinal(),
-              // // BLE 미사용시
-              // page: TrayEquipped(
-              //   characteristic: QualifiedCharacteristic(
-              //       characteristicId: Provider.of<
-              //                   BLEModel>(context,
-              //               listen: false)
-              //           .trayDetectorCharacteristicId!,
-              //       serviceId: Provider.of<BLEModel>(
-              //               context,
-              //               listen: false)
-              //           .trayDetectorServiceId!,
-              //       deviceId: Provider.of<BLEModel>(
-              //               context,
-              //               listen: false)
-              //           .trayDetectorDeviceId!),
-              // ),
-              enablePop: false)
+                  context: context,
+                  page: const TraySelectionFinal(),
+                  enablePop: false)
               .navPageToPage();
-        } else if (servTableNum == 'charging_pile'){
+        } else if (servTableNum == 'charging_pile') {
           navPage(
-              context: context,
-              page: TraySelectionFinal(),
-              enablePop: false)
+                  context: context,
+                  page: const TraySelectionFinal(),
+                  enablePop: false)
               .navPageToPage();
         }
       }
@@ -270,13 +239,13 @@ class _NavigatorProgressModuleFinalState
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        // print('touched');
                         if (arrivedServingTable == false) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             setState(() {
                               arrivedServingTable = true;
                             });
-                            if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
+                            if (servTableNum != 'wait' &&
+                                servTableNum != 'charging_pile') {
                               navPage(
                                       context: context,
                                       page: const ServingProgressFinal(),
@@ -286,30 +255,14 @@ class _NavigatorProgressModuleFinalState
                               _servingProvider.clearAllTray();
                               navPage(
                                       context: context,
-                                      page: TraySelectionFinal(),
-                                      // // BLE 미사용시
-                                      // page: TrayEquipped(
-                                      //   characteristic: QualifiedCharacteristic(
-                                      //       characteristicId: Provider.of<
-                                      //                   BLEModel>(context,
-                                      //               listen: false)
-                                      //           .trayDetectorCharacteristicId!,
-                                      //       serviceId: Provider.of<BLEModel>(
-                                      //               context,
-                                      //               listen: false)
-                                      //           .trayDetectorServiceId!,
-                                      //       deviceId: Provider.of<BLEModel>(
-                                      //               context,
-                                      //               listen: false)
-                                      //           .trayDetectorDeviceId!),
-                                      // ),
+                                      page: const TraySelectionFinal(),
                                       enablePop: false)
                                   .navPageToPage();
-                            } else if (servTableNum == 'charging_pile'){
+                            } else if (servTableNum == 'charging_pile') {
                               navPage(
-                                  context: context,
-                                  page: TraySelectionFinal(),
-                                  enablePop: false)
+                                      context: context,
+                                      page: const TraySelectionFinal(),
+                                      enablePop: false)
                                   .navPageToPage();
                             }
                           });
@@ -328,9 +281,6 @@ class _NavigatorProgressModuleFinalState
                     child: Container(
                       width: 300,
                       height: 90,
-                      // decoration: BoxDecoration(
-                      //     border: Border.fromBorderSide(
-                      //         BorderSide(color: Colors.white, width: 1))),
                       child: Text(
                         servTableNum == 'charging_pile'
                             ? '충전스테이션'
@@ -338,7 +288,7 @@ class _NavigatorProgressModuleFinalState
                                 ? '대기장소'
                                 : '$servTableNum번 테이블',
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'kor',
                             fontSize: 55,
                             color: Color(0xfffffefe)),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class navPage{
+class navPage {
   final BuildContext context;
   final Widget page;
   final bool enablePop;
@@ -20,7 +20,7 @@ class navPage{
               var curve = Curves.easeOutSine;
 
               var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               return FadeTransition(
                 opacity: animation.drive(tween),
                 child: page,
@@ -39,7 +39,7 @@ class navPage{
               var curve = Curves.easeOutSine;
 
               var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
               return FadeTransition(
                 opacity: animation.drive(tween),
                 child: page,

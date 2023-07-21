@@ -1,10 +1,6 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -27,7 +23,6 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late NetworkModel _networkProvider;
-  late BLEModel _bleProvider;
 
   final TextEditingController configController = TextEditingController();
   late SharedPreferences _prefs;
@@ -42,16 +37,6 @@ class _IntroScreenState extends State<IntroScreen>
 
   late bool robotInit;
   late bool navTrigger;
-
-  // // 허스키 렌즈
-  // late Uuid huskyCharacteristicId;
-  // late Uuid huskyServiceId;
-  // late String huskyDeviceId;
-  //
-  // 트레이
-  late Uuid trayDetectorCharacteristicId;
-  late Uuid trayDetectorServiceId;
-  late String trayDetectorDeviceId;
 
   late VideoPlayerController _controller;
   late AudioPlayer _audioPlayer;
@@ -95,27 +80,11 @@ class _IntroScreenState extends State<IntroScreen>
     fToast?.init(context);
 
     _playVideo();
-
-    // _saveMicroBitData();
-
-    // huskyCharacteristicId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    // huskyServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    // huskyDeviceId = 'F0:52:FD:5C:8D:73';
-    //
-    trayDetectorCharacteristicId =
-        Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    trayDetectorServiceId = Uuid.parse('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-    trayDetectorDeviceId = 'DF:75:E4:D6:32:63';
   }
 
   // SharedPreferences 초기화 함수
   Future<void> _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
-  }
-
-  // 데이터를 저장하는 함수
-  Future<void> _saveData() async {
-    _prefs.setString('robotIp', configController.text); // 'robotIp' 키에 데이터 저장
   }
 
   void _playVideo() async {
@@ -136,19 +105,14 @@ class _IntroScreenState extends State<IntroScreen>
   // 추후 로딩 시 데이터 업데이트 및 로딩시 사용할 함수 현재는 임의로 2초의 시간 딜레이로 지정
 
   void _updateData() async {
-    // print('aaaaaaaaaaaaaaaaaaaaaa');
-    // print(_prefs.getString('robotIp'));
-    // print('aaaaaaaaaaaaaaaaaaaaaa');
     if (_prefs.getString('robotIp') != null) {
       _networkProvider.startUrl = _prefs.getString('robotIp');
     }
     _networkProvider.hostIP();
-    getting(_networkProvider.startUrl!, _networkProvider.positionURL!);
-    // print('-------------VIDEO START-------------');
+    getting(_networkProvider.startUrl!, _networkProvider.positionURL);
     Duration mediaDuration = _controller.value.duration;
     Duration introDuration = mediaDuration + const Duration(milliseconds: 2000);
     await Future.delayed(introDuration);
-    // print('-------------VIDEO END-------------');
     _playAudio();
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
@@ -161,8 +125,6 @@ class _IntroScreenState extends State<IntroScreen>
     String endPoint = endUrl;
 
     String apiAddress = hostIP + endPoint;
-
-    print('apiAddress : $apiAddress');
 
     NetworkGet network = NetworkGet(apiAddress);
 
@@ -186,14 +148,9 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
 
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
-
-    // print(hostAdr);
-    // print(_prefs.getString('robotIp'));
-    // getting(hostAdr, positionURL);
 
     double screenWidth = 1080;
     double screenHeight = 1920;
@@ -203,65 +160,16 @@ class _IntroScreenState extends State<IntroScreen>
 
     apiData = Provider.of<NetworkModel>(context, listen: false).getApiData;
 
-    // _loadData();
-
-    // 파이어 베이스 미 사용 시 트레이 데이터 입력
-    _bleProvider.trayDetectorDeviceId = trayDetectorDeviceId;
-    _bleProvider.trayDetectorCharacteristicId = trayDetectorCharacteristicId;
-    _bleProvider.trayDetectorServiceId = trayDetectorServiceId;
-
-    // // 파이어 베이스 기반 아이피 등 정보 연동
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (apiData != null && apiData != []) {
-    //     setState(() {
-    //       robotInit = true;
-    //     });
-    //     if (navTrigger != robotInit) {
-    //       navPage(
-    //               context: context,
-    //               // BLE 미사용시
-    //               page: const TraySelectionFinal(),
-    //               // BLE 사용시
-    //               // page: TrayEquipped(
-    //               //   characteristic: QualifiedCharacteristic(
-    //               //       characteristicId:
-    //               //       _bleProvider.trayDetectorCharacteristicId!,
-    //               //       serviceId: _bleProvider.trayDetectorServiceId!,
-    //               //       deviceId: _bleProvider.trayDetectorDeviceId!),
-    //               // ),
-    //               enablePop: true)
-    //           .navPageToPage();
-    //       setState(() {
-    //         navTrigger = robotInit;
-    //       });
-    //     }
-    //   } else {
-    //     setState(() {
-    //       robotInit = false;
-    //     });
-    //   }
-    // });
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (navTrigger == false) {
-        getting(_networkProvider.startUrl!, _networkProvider.positionURL!);
+        getting(_networkProvider.startUrl!, _networkProvider.positionURL);
         if (apiData != null && apiData != []) {
           setState(() {
-            // robotInit = true;
             navTrigger = true;
           });
           navPage(
                   context: context,
-                  // BLE 미사용시
                   page: const TraySelectionFinal(),
-                  // BLE 사용시
-                  // page: TrayEquipped(
-                  //   characteristic: QualifiedCharacteristic(
-                  //       characteristicId:
-                  //       _bleProvider.trayDetectorCharacteristicId!,
-                  //       serviceId: _bleProvider.trayDetectorServiceId!,
-                  //       deviceId: _bleProvider.trayDetectorDeviceId!),
-                  // ),
                   enablePop: true)
               .navPageToPage();
         } else {
@@ -299,7 +207,7 @@ class _IntroScreenState extends State<IntroScreen>
                             ),
                             Text(
                               _text,
-                              style: TextStyle(fontFamily: 'kor', fontSize: 35),
+                              style: const TextStyle(fontFamily: 'kor', fontSize: 35),
                             )
                           ],
                         ),
@@ -324,34 +232,20 @@ class _IntroScreenState extends State<IntroScreen>
           body: GestureDetector(
             // 스크린 터치시 화면 이동을 위한 위젯
             onTap: () async {
-              print('aaaaaaaaaaaaaaaaaaaaaaaaaaa');
-              print(_prefs.getString('robotIp'));
-              print(apiData);
-              print('aaaaaaaaaaaaaaaaaaaaaaaaaaa');
               if (_prefs.getString('robotIp') == null) {
                 setState(() {
                   robotInit = false;
                 });
               } else {
                 getting(
-                    _networkProvider.startUrl!, _networkProvider.positionURL!);
+                    _networkProvider.startUrl!, _networkProvider.positionURL);
                 if (apiData != null && apiData != []) {
                   setState(() {
-                    // robotInit = true;
                     navTrigger = true;
                   });
                   navPage(
                           context: context,
-                          // BLE 미사용시
                           page: const TraySelectionFinal(),
-                          // BLE 사용시
-                          // page: TrayEquipped(
-                          //   characteristic: QualifiedCharacteristic(
-                          //       characteristicId:
-                          //       _bleProvider.trayDetectorCharacteristicId!,
-                          //       serviceId: _bleProvider.trayDetectorServiceId!,
-                          //       deviceId: _bleProvider.trayDetectorDeviceId!),
-                          // ),
                           enablePop: true)
                       .navPageToPage();
                 } else {
@@ -360,42 +254,7 @@ class _IntroScreenState extends State<IntroScreen>
                     navTrigger = true;
                   });
                 }
-
-                // setState(() {
-                //   navTrigger = false;
-                // });
-                // // print('로드 성공 시 메인화면 실패 시 아이피 입력');
-                //
-                // _networkProvider.startUrl = _prefs.getString('robotIp');
-                //
-                // _networkProvider.hostIP();
-                // getting(
-                //     _networkProvider.startUrl!, _networkProvider.positionURL!);
-                // setState(() {
-                //   robotInit = false;
-                // });
               }
-              // if (robotInit == true) {
-              //   if (updateComplete == true) {
-              //     navPage(
-              //             context: context,
-              //             // BLE 미사용시
-              //             page: TraySelectionFinal(),
-              //             // BLE 사용시
-              //             // page: TrayEquipped(
-              //             //   characteristic: QualifiedCharacteristic(
-              //             //       characteristicId:
-              //             //           Provider.of<BLEModel>(context, listen: false)
-              //             //               .trayDetectorCharacteristicId!,
-              //             //       serviceId: Provider.of<BLEModel>(context, listen: false)
-              //             //           .trayDetectorServiceId!,
-              //             //       deviceId: Provider.of<BLEModel>(context, listen: false)
-              //             //           .trayDetectorDeviceId!),
-              //             // ),
-              //             enablePop: true)
-              //         .navPageToPage();
-              //   }
-              // }
             },
             child: Center(
               child: Scaffold(
@@ -468,14 +327,13 @@ class _IntroScreenState extends State<IntroScreen>
                                                       .textTheme
                                                       .titleLarge,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 150,
                                                 ),
                                                 FilledButton(
                                                   onPressed: () {
                                                     _prefs.setString('robotIp',
                                                         configController.text);
-                                                    // print(navTrigger);
                                                     setState(() {
                                                       _networkProvider
                                                               .startUrl =
@@ -484,64 +342,11 @@ class _IntroScreenState extends State<IntroScreen>
                                                       _networkProvider.hostIP();
                                                       navTrigger = false;
                                                     });
-                                                    // getting(
-                                                    //     _networkProvider
-                                                    //         .startUrl!,
-                                                    //     _networkProvider
-                                                    //         .positionURL!);
-                                                    // print(navTrigger);
-                                                    // print(
-                                                    //     'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                                                    // print(Provider.of<
-                                                    //             NetworkModel>(
-                                                    //         context,
-                                                    //         listen: false)
-                                                    //     .getApiData);
-                                                    // print(
-                                                    //     'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
-                                                    // print(apiData);
-                                                    // print(
-                                                    //     'ccccccccccccccccccccccccccccccccccccccccccccccccccc1');
-                                                    // if (apiData != null &&
-                                                    //     apiData != []) {
-                                                    //   navPage(
-                                                    //           context: context,
-                                                    //           // BLE 미사용시
-                                                    //           page:
-                                                    //               const TraySelectionFinal(),
-                                                    //           // BLE 사용시
-                                                    //           // page: TrayEquipped(
-                                                    //           //   characteristic: QualifiedCharacteristic(
-                                                    //           //       characteristicId:
-                                                    //           //       _bleProvider.trayDetectorCharacteristicId!,
-                                                    //           //       serviceId: _bleProvider.trayDetectorServiceId!,
-                                                    //           //       deviceId: _bleProvider.trayDetectorDeviceId!),
-                                                    //           // ),
-                                                    //           enablePop: true)
-                                                    //       .navPageToPage();
-                                                    // }
-                                                    // final String newStartUrl =
-                                                    //     configController.text;
-                                                    // setState(() {
-                                                    //   _networkProvider
-                                                    //           .startUrl =
-                                                    //       "http://${configController.text}/";
-                                                    //   hostAdr = _networkProvider
-                                                    //       .startUrl!;
-                                                    //   configController.text =
-                                                    //       '';
-                                                    //   navTrigger = false;
-                                                    // });
                                                   },
-                                                  child: Icon(
-                                                    Icons.arrow_forward,
-                                                    color: Colors.white,
-                                                    size: 50,
-                                                  ),
                                                   style: FilledButton.styleFrom(
-                                                      fixedSize: Size(100, 70),
+                                                      fixedSize: const Size(100, 70),
                                                       backgroundColor:
-                                                          Color.fromRGBO(
+                                                          const Color.fromRGBO(
                                                               80, 80, 255, 0.7),
                                                       shape:
                                                           RoundedRectangleBorder(
@@ -549,9 +354,14 @@ class _IntroScreenState extends State<IntroScreen>
                                                             BorderRadius
                                                                 .circular(15),
                                                       )),
+                                                  child: const Icon(
+                                                    Icons.arrow_forward,
+                                                    color: Colors.white,
+                                                    size: 50,
+                                                  ),
                                                 ),
                                               ]),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 50,
                                           ),
                                           Container(
@@ -561,15 +371,15 @@ class _IntroScreenState extends State<IntroScreen>
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleLarge,
-                                              keyboardType: TextInputType
+                                              keyboardType: const TextInputType
                                                   .numberWithOptions(),
                                               decoration: InputDecoration(
-                                                fillColor: Color.fromRGBO(
+                                                fillColor: const Color.fromRGBO(
                                                     30, 30, 30, 0.5),
                                                 filled: true,
                                                 enabledBorder:
                                                     OutlineInputBorder(
-                                                  borderSide: BorderSide(
+                                                  borderSide: const BorderSide(
                                                       color: Colors.white,
                                                       width: 2),
                                                   borderRadius:
@@ -577,18 +387,13 @@ class _IntroScreenState extends State<IntroScreen>
                                                 ),
                                                 focusedBorder:
                                                     OutlineInputBorder(
-                                                  borderSide: BorderSide(
+                                                  borderSide: const BorderSide(
                                                       color: Colors.white,
                                                       width: 2),
                                                   borderRadius:
                                                       BorderRadius.circular(15),
                                                 ),
-                                                // focusedBorder: UnderlineInputBorder(
-                                                //   borderSide: BorderSide(
-                                                //       color: Colors.white,
-                                                //       width: 5),
-                                                // ),
-                                                contentPadding: EdgeInsets.only(
+                                                contentPadding: const EdgeInsets.only(
                                                     left: 20,
                                                     top: 10,
                                                     bottom: 10),
@@ -596,14 +401,12 @@ class _IntroScreenState extends State<IntroScreen>
                                               showCursor: true,
                                               cursorColor: Colors.white,
                                               onSubmitted: (value) {
-                                                _prefs.setString('robotIp',
-                                                    value);
-                                                // print(navTrigger);
+                                                _prefs.setString(
+                                                    'robotIp', value);
                                                 setState(() {
-                                                  _networkProvider
-                                                      .startUrl =
-                                                      _prefs.getString(
-                                                          'robotIp');
+                                                  _networkProvider.startUrl =
+                                                      _prefs
+                                                          .getString('robotIp');
                                                   _networkProvider.hostIP();
                                                   navTrigger = false;
                                                 });

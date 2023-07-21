@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/BLEModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +12,6 @@ class SelectTableModalFinal extends StatefulWidget {
 
 class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   late ServingModel _servingProvider;
-  late BLEModel _bleProvider;
 
   String tableSelectBG = 'assets/screens/Serving/koriZFinalTableSelect.png';
 
@@ -26,16 +24,14 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
-    _bleProvider = Provider.of<BLEModel>(context, listen: false);
-
-    // print(_servingProvider.trayCheckAll);
 
     return Container(
       padding: const EdgeInsets.only(top: 90),
       child: Dialog(
           backgroundColor: Colors.transparent,
           shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0), borderSide: const BorderSide()),
+              borderRadius: BorderRadius.circular(0),
+              borderSide: const BorderSide()),
           child: Stack(children: [
             Container(
               height: 1536,
@@ -58,15 +54,9 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                           borderRadius: BorderRadius.circular(0),
                         )),
                     onPressed: () {
-                      if(_servingProvider.trayCheckAll == true){
-                        setState(() {
-                          _bleProvider.onTraySelectionScreen = true;
-                        });
+                      if (_servingProvider.trayCheckAll == true) {
                         Navigator.pop(context);
-                      }else{
-                        setState(() {
-                          _bleProvider.onTraySelectionScreen = true;
-                        });
+                      } else {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       }
