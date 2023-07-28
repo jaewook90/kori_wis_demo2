@@ -1,9 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
+import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
@@ -14,7 +19,6 @@ import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,11 +32,23 @@ class TraySelectionFinal extends StatefulWidget {
 class _TraySelectionFinalState extends State<TraySelectionFinal>
     with TickerProviderStateMixin {
   late ServingModel _servingProvider;
-
   late NetworkModel _networkProvider;
+  late MainStatusModel _mainStatusProvider;
+
+  late bool mainInit;
 
   final TextEditingController configController = TextEditingController();
   late SharedPreferences _prefs;
+
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/voices/koriServingMain2nd.mp3';
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
+
+  late Timer _timer;
+
+  dynamic powerInfo;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -84,6 +100,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     _initSharedPreferences();
 
+    // _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    // _audioPlayer.setVolume(1);
+
     _debugEncounter = 0;
     _debugTray = true;
 
@@ -95,7 +114,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     serviceState = 0;
 
-    backgroundImage = "assets/screens/Serving/koriZFinalServing.png";
+    backgroundImage = "assets/screens/Serving/KoriServingMain.png";
 
     table1 = "";
     table2 = "";
@@ -110,10 +129,36 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         .isEmpty) {
       poseDataUpdate();
     }
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    //   Future.delayed(Duration(milliseconds: 1500), () {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       _audioPlayer.play();
+    //     });
+    //   });
+    // });
+    _initAudio();
+    Future.delayed(Duration(milliseconds: 1500), () {
+      _audioPlayer.play();
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   _audioPlayer.play();
+      // });
+    });
+    // _timer = Timer.periodic(Duration(milliseconds: 14000), (timer) {
+    //   _audioPlayer.seek(Duration(seconds: 0));
+    // });
   }
 
   Future<void> _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
+  }
+
+  void _initAudio() {
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _audioPlayer.setVolume(1);
+    _effectPlayer.setVolume(1);
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
@@ -161,6 +206,24 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     }
   }
 
+  void showCountDownPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const NavCountDownModalFinal();
+        });
+  }
+
+  void showTableSelectPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const SelectTableModalFinal();
+        });
+  }
+
   void showTraySetPopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -180,9 +243,38 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer.cancel();
+    _audioPlayer.dispose();
+    _effectPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
+
+    mainInit = _servingProvider.mainInit!;
+
+    if (mainInit == true) {
+      // if (_servingProvider.table1 != "" ||
+      //     (_servingProvider.table2 != "" ||
+      //         _servingProvider.table3 != "")) {
+      //   print('tts!!!!!!!!!!!!!!!!!!!!!!!!! stop!!!!!!!!!!!!!!!!!!');
+      //   _audioPlayer.stop();
+      // }else{
+      // _audioPlayer.play();
+      _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+        _audioPlayer.seek(Duration(seconds: 0));
+      });
+      // }
+    } else {
+      _audioPlayer.dispose();
+      // _timer.cancel();
+    }
 
     //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
     serviceState =
@@ -205,6 +297,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     table1 = _servingProvider.table1;
     table2 = _servingProvider.table2;
     table3 = _servingProvider.table3;
+
+    _debugTray = _mainStatusProvider.debugMode!;
 
     double screenWidth = 1080;
     double screenHeight = 1920;
@@ -286,10 +380,20 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     top: 25,
                     child: FilledButton(
                       onPressed: () {
-                        showReturnSelectPopup(context);
+                        setState(() {
+                          _servingProvider.mainInit = false;
+                        });
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.play();
+                          showReturnSelectPopup(context);
+                        });
+                        // Future.delayed(const Duration(milliseconds: 500), () {
+                        //   showReturnSelectPopup(context);
+                        // });
                       },
                       style: FilledButton.styleFrom(
                           fixedSize: const Size(60, 60),
+                          enableFeedback: false,
                           padding: const EdgeInsets.only(right: 0),
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
@@ -298,18 +402,44 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     ),
                   ),
                   Positioned(
+                    right: 250,
+                    top: 25,
+                    child: Offstage(
+                      offstage: _debugTray,
+                      child: SizedBox(
+                        height: 60,
+                        width: 60,
+                        child: Icon(Icons.bug_report, size: 50),
+                      ),
+                    ),
+                  ),
+                  Positioned(
                       left: 20,
                       top: 25,
                       child: TextButton(
                         onPressed: () {
-                          navPage(
-                                  context: context,
-                                  page: const WebviewPage1(),
-                                  enablePop: true)
-                              .navPageToPage();
+                          setState(() {
+                            _servingProvider.mainInit = false;
+                          });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.play();
+                            navPage(
+                              context: context,
+                              page: const WebviewPage1(),
+                            ).navPageToPage();
+                          });
+
+                          // Future.delayed(const Duration(milliseconds: 500), () {
+                          //   // _audioPlayer.stop();
+                          //   navPage(
+                          //     context: context,
+                          //     page: const WebviewPage1(),
+                          //   ).navPageToPage();
+                          // });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(60, 60),
+                            enableFeedback: false,
                             padding: const EdgeInsets.only(right: 0, bottom: 2),
                             backgroundColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
@@ -329,14 +459,27 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       top: 25,
                       child: TextButton(
                         onPressed: () {
-                          navPage(
-                                  context: context,
-                                  page: const WebviewPage2(),
-                                  enablePop: true)
-                              .navPageToPage();
+                          setState(() {
+                            _servingProvider.mainInit = false;
+                          });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.play();
+                            navPage(
+                              context: context,
+                              page: const WebviewPage2(),
+                            ).navPageToPage();
+                          });
+
+                          // Future.delayed(const Duration(milliseconds: 500), () {
+                          //   navPage(
+                          //     context: context,
+                          //     page: const WebviewPage2(),
+                          //   ).navPageToPage();
+                          // });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(60, 60),
+                            enableFeedback: false,
                             padding: const EdgeInsets.only(right: 0, bottom: 2),
                             backgroundColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
@@ -356,14 +499,27 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       top: 25,
                       child: TextButton(
                         onPressed: () {
-                          navPage(
-                                  context: context,
-                                  page: const WebviewPage3(),
-                                  enablePop: true)
-                              .navPageToPage();
+                          setState(() {
+                            _servingProvider.mainInit = false;
+                          });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.play();
+                            navPage(
+                              context: context,
+                              page: const WebviewPage3(),
+                            ).navPageToPage();
+                          });
+
+                          // Future.delayed(const Duration(milliseconds: 500), () {
+                          //   navPage(
+                          //     context: context,
+                          //     page: const WebviewPage3(),
+                          //   ).navPageToPage();
+                          // });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(60, 60),
+                            enableFeedback: false,
                             padding: const EdgeInsets.only(right: 0, bottom: 2),
                             backgroundColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
@@ -414,7 +570,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     Padding(
                                       padding: EdgeInsets.only(left: 15),
                                       child: Text(
-                                        'ip 변경',
+                                        'IP 변경',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontFamily: 'kor',
@@ -489,22 +645,31 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                               ),
                                               FilledButton(
                                                 onPressed: () async {
-                                                  _prefs.setString('robotIp',
-                                                      configController.text);
-                                                  setState(() {
-                                                    _networkProvider.startUrl =
-                                                        "http://${configController.text}/";
-                                                    startUrl = _networkProvider
-                                                        .startUrl;
-                                                    configController.text = '';
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                    _effectPlayer.play();
+                                                    _prefs.setString('robotIp',
+                                                        configController.text);
+                                                    setState(() {
+                                                      _networkProvider
+                                                              .startUrl =
+                                                          "http://${configController.text}/";
+                                                      startUrl =
+                                                          _networkProvider
+                                                              .startUrl;
+                                                      configController.text =
+                                                          '';
+                                                    });
+                                                    getting(
+                                                        _networkProvider
+                                                            .startUrl!,
+                                                        _networkProvider
+                                                            .positionURL);
                                                   });
-                                                  getting(
-                                                      _networkProvider
-                                                          .startUrl!,
-                                                      _networkProvider
-                                                          .positionURL);
                                                 },
                                                 style: FilledButton.styleFrom(
+                                                    enableFeedback: false,
                                                     backgroundColor:
                                                         const Color.fromRGBO(
                                                             80, 80, 255, 0.7),
@@ -560,11 +725,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 padding: const EdgeInsets.only(left: 0),
                                 child: FilledButton(
                                   onPressed: () {
-                                    getting(_networkProvider.startUrl!,
-                                        _networkProvider.positionURL);
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _effectPlayer.play();
+                                      getting(_networkProvider.startUrl!,
+                                          _networkProvider.positionURL);
+                                    });
                                   },
                                   style: FilledButton.styleFrom(
                                       backgroundColor: Colors.transparent,
+                                      enableFeedback: false,
                                       fixedSize: const Size(370, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -576,7 +746,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       Padding(
                                         padding: EdgeInsets.only(left: 15),
                                         child: Text(
-                                          'GoalPose 새로고침',
+                                          '목적지설정 초기화',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
@@ -596,22 +766,46 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 padding: const EdgeInsets.only(left: 0),
                                 child: FilledButton(
                                   onPressed: () {
-                                    _networkProvider.servTable =
-                                        'charging_pile';
-                                    PostApi(
-                                            url: startUrl,
-                                            endadr: chgUrl,
-                                            keyBody: 'charging_pile')
-                                        .Posting(context);
-                                    _networkProvider.currentGoal = '충전스테이션';
-                                    navPage(
-                                            context: context,
-                                            page:
-                                                const NavigatorProgressModuleFinal(),
-                                            enablePop: false)
-                                        .navPageToPage();
+                                    setState(() {
+                                      _servingProvider.mainInit = false;
+                                    });
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _effectPlayer.play();
+                                      _networkProvider.servTable =
+                                          'charging_pile';
+                                      PostApi(
+                                              url: startUrl,
+                                              endadr: chgUrl,
+                                              keyBody: 'charging_pile')
+                                          .Posting(context);
+                                      _networkProvider.currentGoal = '충전스테이션';
+                                      navPage(
+                                        context: context,
+                                        page:
+                                            const NavigatorProgressModuleFinal(),
+                                      ).navPageToPage();
+                                    });
+
+                                    // Future.delayed(
+                                    //     const Duration(milliseconds: 500), () {
+                                    //   _networkProvider.servTable =
+                                    //       'charging_pile';
+                                    //   PostApi(
+                                    //           url: startUrl,
+                                    //           endadr: chgUrl,
+                                    //           keyBody: 'charging_pile')
+                                    //       .Posting(context);
+                                    //   _networkProvider.currentGoal = '충전스테이션';
+                                    //   navPage(
+                                    //     context: context,
+                                    //     page:
+                                    //         const NavigatorProgressModuleFinal(),
+                                    //   ).navPageToPage();
+                                    // });
                                   },
                                   style: FilledButton.styleFrom(
+                                      enableFeedback: false,
                                       backgroundColor: Colors.transparent,
                                       fixedSize: const Size(370, 58),
                                       shape: RoundedRectangleBorder(
@@ -624,7 +818,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       Padding(
                                         padding: EdgeInsets.only(left: 15),
                                         child: Text(
-                                          '충전 스테이션 이동',
+                                          '충전 스테이션으로 이동',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
@@ -764,18 +958,25 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   padding: const EdgeInsets.only(left: 0),
                                   child: FilledButton(
                                     onPressed: () async {
-                                      _prefs.clear();
-                                      navPage(
-                                              context: context,
-                                              page: const IntroScreen(),
-                                              enablePop: false)
-                                          .navPageToPage();
                                       setState(() {
-                                        _networkProvider.getApiData = [];
-                                        _networkProvider.startUrl = "";
+                                        _servingProvider.mainInit = false;
+                                      });
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer.play();
+                                        _prefs.clear();
+                                        navPage(
+                                          context: context,
+                                          page: const IntroScreen(),
+                                        ).navPageToPage();
+                                        setState(() {
+                                          _networkProvider.getApiData = [];
+                                          _networkProvider.startUrl = "";
+                                        });
                                       });
                                     },
                                     style: FilledButton.styleFrom(
+                                        enableFeedback: false,
                                         backgroundColor: Colors.transparent,
                                         fixedSize: const Size(370, 58),
                                         shape: RoundedRectangleBorder(
@@ -814,13 +1015,29 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   padding: const EdgeInsets.only(left: 0),
                                   child: FilledButton(
                                     onPressed: () {
-                                      navPage(
-                                              context: context,
-                                              page: const TestPagesScreen(),
-                                              enablePop: true)
-                                          .navPageToPage();
+                                      setState(() {
+                                        _servingProvider.mainInit = false;
+                                      });
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer.play();
+                                        navPage(
+                                          context: context,
+                                          page: const TestPagesScreen(),
+                                        ).navPageToPage();
+                                      });
+
+                                      // Future.delayed(
+                                      //     const Duration(milliseconds: 500),
+                                      //     () {
+                                      //   navPage(
+                                      //     context: context,
+                                      //     page: const TestPagesScreen(),
+                                      //   ).navPageToPage();
+                                      // });
                                     },
                                     style: FilledButton.styleFrom(
+                                        enableFeedback: false,
                                         backgroundColor: Colors.transparent,
                                         fixedSize: const Size(370, 58),
                                         shape: RoundedRectangleBorder(
@@ -834,6 +1051,67 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                           padding: EdgeInsets.only(left: 15),
                                           child: Text(
                                             '테스트 페이지 이동',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: const SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: FilledButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _servingProvider.mainInit = false;
+                                      });
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer.play();
+                                        navPage(
+                                          context: context,
+                                          page: const NavigationPatrol(),
+                                        ).navPageToPage();
+                                      });
+
+                                      // Future.delayed(
+                                      //     const Duration(milliseconds: 500),
+                                      //     () {
+                                      //   navPage(
+                                      //     context: context,
+                                      //     page: const NavigationPatrol(),
+                                      //   ).navPageToPage();
+                                      // });
+                                    },
+                                    style: FilledButton.styleFrom(
+                                        enableFeedback: false,
+                                        backgroundColor: Colors.transparent,
+                                        fixedSize: const Size(370, 58),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(0))),
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.repeat,
+                                            color: Colors.white, size: 50),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            '순찰 기동',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 fontFamily: 'kor',
@@ -868,11 +1146,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                     if (_debugEncounter == 5 &&
                                         _debugTray == true) {
-                                      _debugTray = false;
+                                      // _debugTray = false;
+                                      _mainStatusProvider.debugMode = false;
                                       _debugEncounter = 0;
                                     } else if (_debugEncounter == 3 &&
                                         _debugTray == false) {
-                                      _debugTray = true;
+                                      // _debugTray = true;
+                                      _mainStatusProvider.debugMode = true;
                                       _debugEncounter = 0;
                                     }
                                   }
@@ -942,367 +1222,551 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
-            child: Stack(
-              children: [
-                //기능적 부분
-                Stack(children: [
-                  // 상단 2버튼
-                  const ServingModuleButtonsFinal(
-                    screens: 0,
-                  ),
-                  // 디버그 버튼
-                  Offstage(
-                    offstage: _debugTray,
-                    child: Opacity(
-                      opacity: 0.02,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+            child: Stack(children: [
+              //서빙 버튼
+              Positioned(
+                  left: 315,
+                  top: 152,
+                  child: FilledButton(
+                      style: FilledButton.styleFrom(
+                          enableFeedback: false,
+                          backgroundColor: const Color(0xff3a46f0),
+                          shape: RoundedRectangleBorder(
+                              // side: const BorderSide(color: Colors.white, width: 2),
+                              borderRadius: BorderRadius.circular(25)),
+                          fixedSize: const Size(450, 168)),
+                      onPressed: () {
+                        setState(() {
+                          _servingProvider.mainInit = false;
+                        });
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.play();
+                          if ((_servingProvider.table1 != "" ||
+                                  _servingProvider.table2 != "") ||
+                              _servingProvider.table3 != "") {
+                            showCountDownPopup(context);
+                          } else {
+                            _servingProvider.trayCheckAll = true;
+                            showTableSelectPopup(context);
+                            _servingProvider.menuItem = "상품";
+                          }
+                        });
+
+                        // Future.delayed(const Duration(milliseconds: 500), () {
+                        //   if ((_servingProvider.table1 != "" ||
+                        //           _servingProvider.table2 != "") ||
+                        //       _servingProvider.table3 != "") {
+                        //     showCountDownPopup(context);
+                        //   } else {
+                        //     _servingProvider.trayCheckAll = true;
+                        //     showTableSelectPopup(context);
+                        //     _servingProvider.menuItem = "상품";
+                        //   }
+                        // });
+                      },
+                      child: const Text(
+                        '서빙시작',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'kor',
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold),
+                      ))),
+              const Positioned(
+                  top: 345,
+                  child: SizedBox(
+                    width: 1080,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '트레이를 선택 후 상품을 담아주세요.',
+                          style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  )),
+              Offstage(
+                offstage: _debugTray,
+                child: Opacity(
+                  opacity: 0.02,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // 디버그 버튼 트레이 활성화용
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          // 디버그 버튼 트레이 활성화용
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    if (_servingProvider.attachedTray1 ==
-                                        true) {
-                                      setState(() {
-                                        _servingProvider.stickTray1();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _servingProvider.dittachedTray1();
-                                      });
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      fixedSize: Size(textButtonWidth * 0.2,
-                                          textButtonHeight * 0.5),
-                                      shape: const RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color(0xFFB7B7B7),
-                                              style: BorderStyle.solid,
-                                              width: 10))),
-                                  child: Text('Tray1', style: buttonFont)),
-                              TextButton(
-                                  onPressed: () {
-                                    if (_servingProvider.attachedTray2 ==
-                                        true) {
-                                      setState(() {
-                                        _servingProvider.stickTray2();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _servingProvider.dittachedTray2();
-                                      });
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      fixedSize: Size(textButtonWidth * 0.2,
-                                          textButtonHeight * 0.5),
-                                      shape: const RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color(0xFFB7B7B7),
-                                              style: BorderStyle.solid,
-                                              width: 10))),
-                                  child: Text('Tray2', style: buttonFont)),
-                              TextButton(
-                                  onPressed: () {
-                                    if (_servingProvider.attachedTray3 ==
-                                        true) {
-                                      setState(() {
-                                        _servingProvider.stickTray3();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        _servingProvider.dittachedTray3();
-                                      });
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      fixedSize: Size(textButtonWidth * 0.2,
-                                          textButtonHeight * 0.5),
-                                      shape: const RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color(0xFFB7B7B7),
-                                              style: BorderStyle.solid,
-                                              width: 10))),
-                                  child: Text('Tray3', style: buttonFont)),
-                            ],
-                          ),
+                          TextButton(
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  _effectPlayer.play();
+                                  if (_servingProvider.attachedTray1 == true) {
+                                    setState(() {
+                                      _servingProvider.stickTray1();
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _servingProvider.dittachedTray1();
+                                    });
+                                  }
+                                });
+
+                                // Future.delayed(
+                                //     const Duration(milliseconds: 500), () {
+                                //   if (_servingProvider.attachedTray1 == true) {
+                                //     setState(() {
+                                //       _servingProvider.stickTray1();
+                                //     });
+                                //   } else {
+                                //     setState(() {
+                                //       _servingProvider.dittachedTray1();
+                                //     });
+                                //   }
+                                // });
+                              },
+                              style: TextButton.styleFrom(
+                                  enableFeedback: false,
+                                  backgroundColor: Colors.transparent,
+                                  fixedSize: Size(textButtonWidth * 0.2,
+                                      textButtonHeight * 0.5),
+                                  shape: const RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Color(0xFFB7B7B7),
+                                          style: BorderStyle.solid,
+                                          width: 10))),
+                              child: Text('Tray1', style: buttonFont)),
+                          TextButton(
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  _effectPlayer.play();
+                                  if (_servingProvider.attachedTray2 == true) {
+                                    setState(() {
+                                      _servingProvider.stickTray2();
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _servingProvider.dittachedTray2();
+                                    });
+                                  }
+                                });
+
+                                // Future.delayed(
+                                //     const Duration(milliseconds: 500), () {
+                                //   if (_servingProvider.attachedTray2 == true) {
+                                //     setState(() {
+                                //       _servingProvider.stickTray2();
+                                //     });
+                                //   } else {
+                                //     setState(() {
+                                //       _servingProvider.dittachedTray2();
+                                //     });
+                                //   }
+                                // });
+                              },
+                              style: TextButton.styleFrom(
+                                  enableFeedback: false,
+                                  backgroundColor: Colors.transparent,
+                                  fixedSize: Size(textButtonWidth * 0.2,
+                                      textButtonHeight * 0.5),
+                                  shape: const RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Color(0xFFB7B7B7),
+                                          style: BorderStyle.solid,
+                                          width: 10))),
+                              child: Text('Tray2', style: buttonFont)),
+                          TextButton(
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  _effectPlayer.play();
+                                  if (_servingProvider.attachedTray3 == true) {
+                                    setState(() {
+                                      _servingProvider.stickTray3();
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _servingProvider.dittachedTray3();
+                                    });
+                                  }
+                                });
+
+                                // Future.delayed(
+                                //     const Duration(milliseconds: 500), () {
+                                //   if (_servingProvider.attachedTray3 == true) {
+                                //     setState(() {
+                                //       _servingProvider.stickTray3();
+                                //     });
+                                //   } else {
+                                //     setState(() {
+                                //       _servingProvider.dittachedTray3();
+                                //     });
+                                //   }
+                                // });
+                              },
+                              style: TextButton.styleFrom(
+                                  enableFeedback: false,
+                                  backgroundColor: Colors.transparent,
+                                  fixedSize: Size(textButtonWidth * 0.2,
+                                      textButtonHeight * 0.5),
+                                  shape: const RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Color(0xFFB7B7B7),
+                                          style: BorderStyle.solid,
+                                          width: 10))),
+                              child: Text('Tray3', style: buttonFont)),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                  // 초기화 버튼
-                  Positioned(
-                      right: 188,
-                      top: 812,
-                      child: FilledButton(
-                        onPressed: () {
-                          setState(() {
-                            _servingProvider.clearTray1();
-                          });
-                        },
-                        child: null,
-                        style: FilledButton.styleFrom(
-                            foregroundColor: Colors.transparent,
-                            fixedSize: const Size(64, 64),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                            backgroundColor: Colors.transparent),
-                      )),
-                  Positioned(
-                      right: 188,
-                      top: 1030,
-                      child: FilledButton(
-                        onPressed: () {
-                          setState(() {
-                            _servingProvider.clearTray2();
-                          });
-                        },
-                        child: null,
-                        style: FilledButton.styleFrom(
-                            foregroundColor: Colors.transparent,
-                            fixedSize: const Size(64, 64),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                            backgroundColor: Colors.transparent),
-                      )),
-                  Positioned(
-                      right: 188,
-                      top: 1296,
-                      child: FilledButton(
-                        onPressed: () {
-                          setState(() {
-                            _servingProvider.clearTray3();
-                          });
-                        },
-                        child: null,
-                        style: FilledButton.styleFrom(
-                            foregroundColor: Colors.transparent,
-                            fixedSize: const Size(64, 64),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                            backgroundColor: Colors.transparent),
-                      )),
-                  //트레이1
-                  Positioned(
-                    top: 757,
-                    left: 394,
-                    child: Offstage(
-                      offstage: offStageTray1!,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 32,
-                            top: 120,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              width: 50,
-                              height: 30,
-                              child: Offstage(
-                                  offstage: servedItem1!,
-                                  child: Center(
-                                    child: Text(
-                                      '$table1 번',
-                                      style: buttonFont,
-                                    ),
-                                  )),
-                            ),
+                ),
+              ),
+              // 초기화 버튼
+              Positioned(
+                  right: 188,
+                  top: 812,
+                  child: FilledButton(
+                    onPressed: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.play();
+                        setState(() {
+                          _servingProvider.clearTray1();
+                        });
+                      });
+
+                      // Future.delayed(const Duration(milliseconds: 500), () {
+                      //   setState(() {
+                      //     _servingProvider.clearTray1();
+                      //   });
+                      // });
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        enableFeedback: false,
+                        foregroundColor: Colors.transparent,
+                        fixedSize: const Size(64, 64),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  )),
+              Positioned(
+                  right: 188,
+                  top: 1030,
+                  child: FilledButton(
+                    onPressed: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.play();
+                        setState(() {
+                          _servingProvider.clearTray2();
+                        });
+                      });
+
+                      // Future.delayed(const Duration(milliseconds: 500), () {
+                      //   setState(() {
+                      //     _servingProvider.clearTray2();
+                      //   });
+                      // });
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        enableFeedback: false,
+                        foregroundColor: Colors.transparent,
+                        fixedSize: const Size(64, 64),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  )),
+              Positioned(
+                  right: 188,
+                  top: 1296,
+                  child: FilledButton(
+                    onPressed: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.play();
+                        setState(() {
+                          _servingProvider.clearTray3();
+                        });
+                      });
+
+                      // Future.delayed(const Duration(milliseconds: 500), () {
+                      //   setState(() {
+                      //     _servingProvider.clearTray3();
+                      //   });
+                      // });
+                    },
+                    child: null,
+                    style: FilledButton.styleFrom(
+                        enableFeedback: false,
+                        foregroundColor: Colors.transparent,
+                        fixedSize: const Size(64, 64),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        backgroundColor: Colors.transparent),
+                  )),
+              //트레이1
+              Positioned(
+                top: 757,
+                left: 394,
+                child: Offstage(
+                  offstage: offStageTray1!,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 32,
+                        top: 120,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
                           ),
-                          Positioned(
-                            left: 145.5,
-                            top: 25.9,
-                            child: Offstage(
+                          width: 50,
+                          height: 30,
+                          child: Offstage(
                               offstage: servedItem1!,
-                              child: Container(
-                                  width: 146,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          _servingProvider.itemImageList![0]),
-                                    ),
-                                    borderRadius: BorderRadius.circular(0),
-                                  )),
-                            ),
-                          ),
-                          Container(
-                            width: 388.5,
-                            height: 171.8,
-                            child: TextButton(
-                                onPressed: () {
-                                  _servingProvider.tray1Select = true;
-                                  _servingProvider.tray2Select = false;
-                                  _servingProvider.tray3Select = false;
-                                  _servingProvider.trayCheckAll = false;
-                                  showTraySetPopup(context);
-                                },
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.tealAccent,
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            color: Colors.green, width: 10),
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                child: Container()),
-                          ),
-                        ],
+                              child: Center(
+                                child: Text(
+                                  '$table1 번',
+                                  style: buttonFont,
+                                ),
+                              )),
+                        ),
                       ),
-                    ),
-                  ),
-                  //트레이2
-                  Positioned(
-                    top: 975.8,
-                    left: 394,
-                    child: Offstage(
-                      offstage: offStageTray2!,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 32,
-                            top: 120,
-                            child: Container(
-                              width: 50,
-                              height: 30,
+                      Positioned(
+                        left: 145.5,
+                        top: 25.9,
+                        child: Offstage(
+                          offstage: servedItem1!,
+                          child: Container(
+                              width: 146,
+                              height: 120,
                               decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      _servingProvider.itemImageList![0]),
+                                ),
                                 borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: Offstage(
-                                  offstage: servedItem2!,
-                                  child: Center(
-                                    child: Text(
-                                      '$table2 번',
-                                      style: buttonFont,
-                                    ),
-                                  )),
-                            ),
+                              )),
+                        ),
+                      ),
+                      Container(
+                        width: 388.5,
+                        height: 171.8,
+                        child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _servingProvider.mainInit = false;
+                                // _audioPlayer.stop();
+                              });
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.play();
+                                _servingProvider.tray1Select = true;
+                                _servingProvider.tray2Select = false;
+                                _servingProvider.tray3Select = false;
+                                _servingProvider.trayCheckAll = false;
+                                showTraySetPopup(context);
+                              });
+
+                              // Future.delayed(const Duration(milliseconds: 500),
+                              //     () {
+                              //   _servingProvider.tray1Select = true;
+                              //   _servingProvider.tray2Select = false;
+                              //   _servingProvider.tray3Select = false;
+                              //   _servingProvider.trayCheckAll = false;
+                              //   showTraySetPopup(context);
+                              // });
+                            },
+                            style: TextButton.styleFrom(
+                                enableFeedback: false,
+                                foregroundColor: Colors.tealAccent,
+                                backgroundColor: Colors.transparent,
+                                fixedSize:
+                                    Size(textButtonWidth, textButtonHeight),
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.green, width: 10),
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Container()),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              //트레이2
+              Positioned(
+                top: 975.8,
+                left: 394,
+                child: Offstage(
+                  offstage: offStageTray2!,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 32,
+                        top: 120,
+                        child: Container(
+                          width: 50,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
                           ),
-                          Positioned(
-                            left: 145.5,
-                            top: 25.9,
-                            child: Offstage(
+                          child: Offstage(
                               offstage: servedItem2!,
-                              child: Container(
-                                  width: 146,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(_servingProvider
-                                            .itemImageList![1])),
-                                    borderRadius: BorderRadius.circular(0),
-                                  )),
-                            ),
-                          ),
-                          Container(
-                            width: 388.5,
-                            height: 171.8,
-                            child: TextButton(
-                                onPressed: () {
-                                  _servingProvider.tray1Select = false;
-                                  _servingProvider.tray2Select = true;
-                                  _servingProvider.tray3Select = false;
-                                  _servingProvider.trayCheckAll = false;
-                                  showTraySetPopup(context);
-                                },
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.tealAccent,
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            color: Colors.green, width: 10),
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                child: Container()),
-                          ),
-                        ],
+                              child: Center(
+                                child: Text(
+                                  '$table2 번',
+                                  style: buttonFont,
+                                ),
+                              )),
+                        ),
                       ),
-                    ),
-                  ),
-                  //트레이3
-                  Positioned(
-                    top: 1217.6,
-                    left: 394,
-                    child: Offstage(
-                      offstage: offStageTray3!,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: 32,
-                            top: 145,
-                            child: Container(
+                      Positioned(
+                        left: 145.5,
+                        top: 25.9,
+                        child: Offstage(
+                          offstage: servedItem2!,
+                          child: Container(
+                              width: 146,
+                              height: 120,
                               decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        _servingProvider.itemImageList![1])),
                                 borderRadius: BorderRadius.circular(0),
-                              ),
-                              width: 50,
-                              height: 30,
-                              child: Offstage(
-                                  offstage: servedItem3!,
-                                  child: Center(
-                                    child: Text(
-                                      '$table3 번',
-                                      style: buttonFont,
-                                    ),
-                                  )),
-                            ),
-                          ),
-                          Positioned(
-                            left: 145.5,
-                            top: 51,
-                            child: Offstage(
-                              offstage: servedItem3!,
-                              child: Container(
-                                  width: 146,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(_servingProvider
-                                            .itemImageList![2])),
-                                    borderRadius: BorderRadius.circular(0),
-                                  )),
-                            ),
-                          ),
-                          Container(
-                            width: 518 * 0.75,
-                            height: 293 * 0.75,
-                            child: TextButton(
-                                onPressed: () {
-                                  _servingProvider.tray1Select = false;
-                                  _servingProvider.tray2Select = false;
-                                  _servingProvider.tray3Select = true;
-                                  _servingProvider.trayCheckAll = false;
-                                  showTraySetPopup(context);
-                                },
-                                style: TextButton.styleFrom(
-                                    foregroundColor: Colors.tealAccent,
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize:
-                                        Size(textButtonWidth, textButtonHeight),
-                                    shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                            color: Colors.green, width: 10),
-                                        borderRadius:
-                                            BorderRadius.circular(20))),
-                                child: Container()),
-                          ),
-                        ],
+                              )),
+                        ),
                       ),
-                    ),
+                      Container(
+                        width: 388.5,
+                        height: 171.8,
+                        child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _servingProvider.mainInit = false;
+                              });
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.play();
+                                _servingProvider.tray1Select = false;
+                                _servingProvider.tray2Select = true;
+                                _servingProvider.tray3Select = false;
+                                _servingProvider.trayCheckAll = false;
+                                showTraySetPopup(context);
+                              });
+
+                              // Future.delayed(const Duration(milliseconds: 500),
+                              //     () {
+                              //   _servingProvider.tray1Select = false;
+                              //   _servingProvider.tray2Select = true;
+                              //   _servingProvider.tray3Select = false;
+                              //   _servingProvider.trayCheckAll = false;
+                              //   showTraySetPopup(context);
+                              // });
+                            },
+                            style: TextButton.styleFrom(
+                                enableFeedback: false,
+                                foregroundColor: Colors.tealAccent,
+                                backgroundColor: Colors.transparent,
+                                fixedSize:
+                                    Size(textButtonWidth, textButtonHeight),
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.green, width: 10),
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Container()),
+                      ),
+                    ],
                   ),
-                ]),
-              ],
-            ),
+                ),
+              ),
+              //트레이3
+              Positioned(
+                top: 1217.6,
+                left: 394,
+                child: Offstage(
+                  offstage: offStageTray3!,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 32,
+                        top: 145,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          width: 50,
+                          height: 30,
+                          child: Offstage(
+                              offstage: servedItem3!,
+                              child: Center(
+                                child: Text(
+                                  '$table3 번',
+                                  style: buttonFont,
+                                ),
+                              )),
+                        ),
+                      ),
+                      Positioned(
+                        left: 145.5,
+                        top: 51,
+                        child: Offstage(
+                          offstage: servedItem3!,
+                          child: Container(
+                              width: 146,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        _servingProvider.itemImageList![2])),
+                                borderRadius: BorderRadius.circular(0),
+                              )),
+                        ),
+                      ),
+                      Container(
+                        width: 518 * 0.75,
+                        height: 293 * 0.75,
+                        child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                _servingProvider.mainInit = false;
+                              });
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.play();
+                                _servingProvider.tray1Select = false;
+                                _servingProvider.tray2Select = false;
+                                _servingProvider.tray3Select = true;
+                                _servingProvider.trayCheckAll = false;
+                                showTraySetPopup(context);
+                              });
+
+                              // Future.delayed(const Duration(milliseconds: 500),
+                              //     () {
+                              //       _servingProvider.tray1Select = false;
+                              //       _servingProvider.tray2Select = false;
+                              //       _servingProvider.tray3Select = true;
+                              //       _servingProvider.trayCheckAll = false;
+                              //       showTraySetPopup(context);
+                              // });
+                            },
+                            style: TextButton.styleFrom(
+                                enableFeedback: false,
+                                foregroundColor: Colors.tealAccent,
+                                backgroundColor: Colors.transparent,
+                                fixedSize:
+                                    Size(textButtonWidth, textButtonHeight),
+                                shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.green, width: 10),
+                                    borderRadius: BorderRadius.circular(20))),
+                            child: Container()),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
           ),
         ),
       ),

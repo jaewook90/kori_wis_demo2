@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/saveDataTest.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:provider/provider.dart';
 
 class TestPagesScreen extends StatefulWidget {
   const TestPagesScreen({Key? key}) : super(key: key);
@@ -11,8 +13,18 @@ class TestPagesScreen extends StatefulWidget {
 }
 
 class _TestPagesScreenState extends State<TestPagesScreen> {
+  late ServingModel _servingProvider;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _servingProvider = Provider.of<ServingModel>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -29,10 +41,12 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
                   top: 10,
                   child: FilledButton(
                     onPressed: () {
+                      setState(() {
+                        _servingProvider.mainInit = true;
+                      });
                       navPage(
                               context: context,
-                              page: const TraySelectionFinal(),
-                              enablePop: false)
+                              page: const TraySelectionFinal(),)
                           .navPageToPage();
                     },
                     style: FilledButton.styleFrom(
@@ -85,7 +99,7 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
               children: [
                 TextButton(
                     onPressed: () {
-                      navPage(context: context, page: const DataSavingTest(), enablePop: true).navPageToPage();
+                      navPage(context: context, page: const DataSavingTest(), ).navPageToPage();
                     },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(30),

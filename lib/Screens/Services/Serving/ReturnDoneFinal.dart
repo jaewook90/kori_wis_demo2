@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -22,6 +23,32 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   String backgroundImage = "assets/screens/Serving/koriZFinalReturn.png";
   String? startUrl;
   String? navUrl;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+    _initAudio();
+
+  }
+
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _effectPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +76,22 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                     top: 10,
                     child: FilledButton(
                       onPressed: () {
-                        navPage(
-                                context: context,
-                                page: const TraySelectionFinal(),
-                                enablePop: false)
-                            .navPageToPage();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.play();
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        });
+                        // Future.delayed(Duration(milliseconds: 500), () {
+                        //   navPage(
+                        //     context: context,
+                        //     page: const TraySelectionFinal(),
+                        //   ).navPageToPage();
+                        // });
                       },
                       style: FilledButton.styleFrom(
+                          enableFeedback: false,
                           fixedSize: const Size(90, 90),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0)),
@@ -100,6 +136,24 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(children: [
               Positioned(
+                  top: 220,
+                  child: SizedBox(
+                    width: 1080,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '테이블 정리 중',
+                          style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 70,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        )
+                      ],
+                    ),
+                  )),
+              Positioned(
                 top: 450,
                 left: 0,
                 child: GestureDetector(
@@ -110,10 +164,9 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                               keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
                       navPage(
-                              context: context,
-                              page: const TraySelectionFinal(),
-                              enablePop: false)
-                          .navPageToPage();
+                        context: context,
+                        page: const TraySelectionFinal(),
+                      ).navPageToPage();
                     },
                     child: Container(
                         height: 1200,

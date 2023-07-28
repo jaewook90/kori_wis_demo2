@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -23,6 +24,7 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late NetworkModel _networkProvider;
+  late ServingModel _servingProvider;
 
   final TextEditingController configController = TextEditingController();
   late SharedPreferences _prefs;
@@ -43,6 +45,9 @@ class _IntroScreenState extends State<IntroScreen>
 
   final String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
 
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
+
   bool updateComplete = false;
 
   late final AnimationController _textAniCon = AnimationController(
@@ -57,7 +62,7 @@ class _IntroScreenState extends State<IntroScreen>
 
   DateTime? currentBackPressTime;
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
-  final String _audioFile = 'assets/voices/welcome.mp3';
+  final String _audioFile = 'assets/voices/koriServingIntro.mp3';
 
   FToast? fToast;
 
@@ -71,7 +76,6 @@ class _IntroScreenState extends State<IntroScreen>
         // setLooping -> true 무한반복 false 1회 재생
         setState(() {});
       });
-    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
 
     robotInit = true;
     navTrigger = true;
@@ -79,7 +83,19 @@ class _IntroScreenState extends State<IntroScreen>
     fToast = FToast();
     fToast?.init(context);
 
+    _initAudio();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+
     _playVideo();
+  }
+
+  void _initAudio() {
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _audioPlayer.setVolume(1);
+    _effectPlayer.setVolume(1);
   }
 
   // SharedPreferences 초기화 함수
@@ -98,7 +114,6 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   void _playAudio() {
-    _audioPlayer.setVolume(1);
     _audioPlayer.play();
   }
 
@@ -113,7 +128,8 @@ class _IntroScreenState extends State<IntroScreen>
     Duration mediaDuration = _controller.value.duration;
     Duration introDuration = mediaDuration + const Duration(milliseconds: 2000);
     await Future.delayed(introDuration);
-    _playAudio();
+    WidgetsBinding.instance.addPostFrameCallback((_) {_playAudio();});
+
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       updateComplete = true;
@@ -137,6 +153,7 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   void dispose() {
+    _effectPlayer.dispose();
     _audioPlayer.dispose();
     _controller.dispose();
     _textAniCon.dispose();
@@ -148,6 +165,7 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
@@ -164,14 +182,17 @@ class _IntroScreenState extends State<IntroScreen>
       if (navTrigger == false) {
         getting(_networkProvider.startUrl!, _networkProvider.positionURL);
         if (apiData != null && apiData != []) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {_audioPlayer.stop(); });
+
           setState(() {
             navTrigger = true;
+            _servingProvider.mainInit = true;
           });
+          print(apiData);
           navPage(
-                  context: context,
-                  page: const TraySelectionFinal(),
-                  enablePop: true)
-              .navPageToPage();
+            context: context,
+            page: const TraySelectionFinal(),
+          ).navPageToPage();
         } else {
           setState(() {
             navTrigger = true;
@@ -207,7 +228,8 @@ class _IntroScreenState extends State<IntroScreen>
                             ),
                             Text(
                               _text,
-                              style: const TextStyle(fontFamily: 'kor', fontSize: 35),
+                              style: const TextStyle(
+                                  fontFamily: 'kor', fontSize: 35),
                             )
                           ],
                         ),
@@ -232,202 +254,221 @@ class _IntroScreenState extends State<IntroScreen>
           body: GestureDetector(
             // 스크린 터치시 화면 이동을 위한 위젯
             onTap: () async {
-              if (_prefs.getString('robotIp') == null) {
-                setState(() {
-                  robotInit = false;
-                });
-              } else {
-                getting(
-                    _networkProvider.startUrl!, _networkProvider.positionURL);
-                if (apiData != null && apiData != []) {
-                  setState(() {
-                    navTrigger = true;
-                  });
-                  navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                          enablePop: true)
-                      .navPageToPage();
-                } else {
+              if (updateComplete == true) {
+                if (_prefs.getString('robotIp') == null) {
                   setState(() {
                     robotInit = false;
-                    navTrigger = true;
                   });
+                } else {
+                  getting(
+                      _networkProvider.startUrl!, _networkProvider.positionURL);
+                  if (apiData != null && apiData != []) {
+                    setState(() {
+                      navTrigger = true;
+                      _servingProvider.mainInit=true;
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {_audioPlayer.stop(); });
+                    navPage(
+                      context: context,
+                      page: const TraySelectionFinal(),
+                    ).navPageToPage();
+                  } else {
+                    setState(() {
+                      robotInit = false;
+                      navTrigger = true;
+                    });
+                  }
                 }
               }
             },
             child: Center(
-              child: Scaffold(
-                body: SingleChildScrollView(
-                  child: Stack(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 108),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: screenWidth,
-                                height: screenHeight * 0.8,
-                                child: FittedBox(
-                                  fit: BoxFit.cover,
-                                  child: SizedBox(
-                                    width: videoWidth,
-                                    height: videoHeight,
-                                    child: _controller.value.isInitialized
-                                        ? AspectRatio(
-                                            aspectRatio:
-                                                _controller.value.aspectRatio,
-                                            child: VideoPlayer(
-                                              _controller,
-                                            ),
-                                          )
-                                        : Container(),
-                                  ),
+              child: SingleChildScrollView(
+                child: Stack(children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 108),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: screenWidth,
+                              height: screenHeight * 0.8,
+                              child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: SizedBox(
+                                  width: videoWidth,
+                                  height: videoHeight,
+                                  child: _controller.value.isInitialized
+                                      ? AspectRatio(
+                                          aspectRatio:
+                                              _controller.value.aspectRatio,
+                                          child: VideoPlayer(
+                                            _controller,
+                                          ),
+                                        )
+                                      : Container(),
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 1050),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (updateComplete == true)
-                                Stack(children: [
-                                  Offstage(
-                                    offstage: !robotInit,
-                                    child: FadeTransition(
-                                      opacity: _animation,
-                                      child: Text("화면을 터치해 주세요",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge),
-                                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 1050),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (updateComplete == true)
+                              Stack(children: [
+                                Offstage(
+                                  offstage: !robotInit,
+                                  child: FadeTransition(
+                                    opacity: _animation,
+                                    child: Text("화면을 터치해 주세요",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge),
                                   ),
-                                  Offstage(
-                                      offstage: robotInit,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'IP 입력',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleLarge,
-                                                ),
-                                                const SizedBox(
-                                                  width: 150,
-                                                ),
-                                                FilledButton(
-                                                  onPressed: () {
+                                ),
+                                Offstage(
+                                    offstage: robotInit,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'IP 입력',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge,
+                                              ),
+                                              const SizedBox(
+                                                width: 150,
+                                              ),
+                                              FilledButton(
+                                                onPressed: () {
+                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                    _effectPlayer.play();
                                                     _prefs.setString('robotIp',
                                                         configController.text);
                                                     setState(() {
                                                       _networkProvider
-                                                              .startUrl =
+                                                          .startUrl =
                                                           _prefs.getString(
                                                               'robotIp');
                                                       _networkProvider.hostIP();
                                                       navTrigger = false;
                                                     });
-                                                  },
-                                                  style: FilledButton.styleFrom(
-                                                      fixedSize: const Size(100, 70),
-                                                      backgroundColor:
-                                                          const Color.fromRGBO(
-                                                              80, 80, 255, 0.7),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                      )),
-                                                  child: const Icon(
-                                                    Icons.arrow_forward,
-                                                    color: Colors.white,
-                                                    size: 50,
-                                                  ),
+                                                  });
+                                                  // Future.delayed(
+                                                  //     Duration(
+                                                  //         milliseconds: 500),
+                                                  //     () {
+                                                  //   _prefs.setString('robotIp',
+                                                  //       configController.text);
+                                                  //   setState(() {
+                                                  //     _networkProvider
+                                                  //             .startUrl =
+                                                  //         _prefs.getString(
+                                                  //             'robotIp');
+                                                  //     _networkProvider.hostIP();
+                                                  //     navTrigger = false;
+                                                  //   });
+                                                  // });
+                                                },
+                                                style: FilledButton.styleFrom(
+                                                    enableFeedback: false,
+                                                    fixedSize:
+                                                        const Size(100, 70),
+                                                    backgroundColor:
+                                                        const Color.fromRGBO(
+                                                            80, 80, 255, 0.7),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                    )),
+                                                child: const Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                  size: 50,
                                                 ),
-                                              ]),
-                                          const SizedBox(
-                                            height: 50,
-                                          ),
-                                          Container(
-                                            width: 400,
-                                            child: TextField(
-                                              controller: configController,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleLarge,
-                                              keyboardType: const TextInputType
-                                                  .numberWithOptions(),
-                                              decoration: InputDecoration(
-                                                fillColor: const Color.fromRGBO(
-                                                    30, 30, 30, 0.5),
-                                                filled: true,
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white,
-                                                      width: 2),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.white,
-                                                      width: 2),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                contentPadding: const EdgeInsets.only(
-                                                    left: 20,
-                                                    top: 10,
-                                                    bottom: 10),
                                               ),
-                                              showCursor: true,
-                                              cursorColor: Colors.white,
-                                              onSubmitted: (value) {
-                                                _prefs.setString(
-                                                    'robotIp', value);
-                                                setState(() {
-                                                  _networkProvider.startUrl =
-                                                      _prefs
-                                                          .getString('robotIp');
-                                                  _networkProvider.hostIP();
-                                                  navTrigger = false;
-                                                });
-                                              },
+                                            ]),
+                                        const SizedBox(
+                                          height: 50,
+                                        ),
+                                        Container(
+                                          width: 400,
+                                          child: TextField(
+                                            controller: configController,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(),
+                                            decoration: InputDecoration(
+                                              fillColor: const Color.fromRGBO(
+                                                  30, 30, 30, 0.5),
+                                              filled: true,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white,
+                                                    width: 2),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Colors.white,
+                                                    width: 2),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 20,
+                                                      top: 10,
+                                                      bottom: 10),
                                             ),
+                                            showCursor: true,
+                                            cursorColor: Colors.white,
+                                            onSubmitted: (value) {
+                                              _prefs.setString(
+                                                  'robotIp', value);
+                                              setState(() {
+                                                _networkProvider.startUrl =
+                                                    _prefs.getString('robotIp');
+                                                _networkProvider.hostIP();
+                                                navTrigger = false;
+                                              });
+                                            },
                                           ),
-                                        ],
-                                      ))
-                                ])
-                              else
-                                const SizedBox(),
-                              SizedBox(
-                                height: screenHeight * 0.4,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ]),
-                ),
+                                        ),
+                                      ],
+                                    ))
+                              ])
+                            else
+                              const SizedBox(),
+                            SizedBox(
+                              height: screenHeight * 0.4,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ]),
               ),
             ),
           ),

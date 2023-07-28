@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
@@ -32,6 +33,8 @@ class _NavigatorProgressModuleFinalState
 
   late bool arrivedServingTable;
 
+  late bool _debugMode;
+
   String? startUrl;
   String? navUrl;
   String? moveBaseStatusUrl;
@@ -48,6 +51,8 @@ class _NavigatorProgressModuleFinalState
     navStatus = 0;
     arrivedServingTable = false;
     targetTableNum = "";
+
+    _debugMode = Provider.of<MainStatusModel>((context), listen: false).debugMode!;
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -167,23 +172,26 @@ class _NavigatorProgressModuleFinalState
         });
         if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
           navPage(
-                  context: context,
-                  page: const ServingProgressFinal(),
-                  enablePop: false)
-              .navPageToPage();
+            context: context,
+            page: const ServingProgressFinal(),
+          ).navPageToPage();
         } else if (servTableNum == 'wait') {
+          setState(() {
+            _servingProvider.mainInit = true;
+          });
           _servingProvider.clearAllTray();
           navPage(
-                  context: context,
-                  page: const TraySelectionFinal(),
-                  enablePop: false)
-              .navPageToPage();
+            context: context,
+            page: const TraySelectionFinal(),
+          ).navPageToPage();
         } else if (servTableNum == 'charging_pile') {
+          setState(() {
+            _servingProvider.mainInit = true;
+          });
           navPage(
-                  context: context,
-                  page: const TraySelectionFinal(),
-                  enablePop: false)
-              .navPageToPage();
+            context: context,
+            page: const TraySelectionFinal(),
+          ).navPageToPage();
         }
       }
     });
@@ -237,43 +245,49 @@ class _NavigatorProgressModuleFinalState
                 Positioned(
                   top: 500,
                   left: 0,
-                  child: GestureDetector(
-                      onTap: () {
-                        if (arrivedServingTable == false) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
-                              arrivedServingTable = true;
+                  child: Offstage(
+                    offstage: _debugMode,
+                    child: GestureDetector(
+                        onTap: () {
+                          if (arrivedServingTable == false) {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              setState(() {
+                                arrivedServingTable = true;
+                              });
+                              if (servTableNum != 'wait' &&
+                                  servTableNum != 'charging_pile') {
+                                navPage(
+                                  context: context,
+                                  page: const ServingProgressFinal(),
+                                ).navPageToPage();
+                              } else if (servTableNum == 'wait') {
+                                setState(() {
+                                  _servingProvider.mainInit = true;
+                                });
+                                _servingProvider.clearAllTray();
+                                navPage(
+                                  context: context,
+                                  page: const TraySelectionFinal(),
+                                ).navPageToPage();
+                              } else if (servTableNum == 'charging_pile') {
+                                setState(() {
+                                  _servingProvider.mainInit = true;
+                                });
+                                navPage(
+                                  context: context,
+                                  page: const TraySelectionFinal(),
+                                ).navPageToPage();
+                              }
                             });
-                            if (servTableNum != 'wait' &&
-                                servTableNum != 'charging_pile') {
-                              navPage(
-                                      context: context,
-                                      page: const ServingProgressFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                            } else if (servTableNum == 'wait') {
-                              _servingProvider.clearAllTray();
-                              navPage(
-                                      context: context,
-                                      page: const TraySelectionFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                            } else if (servTableNum == 'charging_pile') {
-                              navPage(
-                                      context: context,
-                                      page: const TraySelectionFinal(),
-                                      enablePop: false)
-                                  .navPageToPage();
-                            }
-                          });
-                        }
-                      },
-                      child: Container(
-                          height: 800,
-                          width: 1080,
-                          decoration: const BoxDecoration(
-                              border: Border.fromBorderSide(BorderSide(
-                                  color: Colors.transparent, width: 1))))),
+                          }
+                        },
+                        child: Container(
+                            height: 800,
+                            width: 1080,
+                            decoration: const BoxDecoration(
+                                border: Border.fromBorderSide(BorderSide(
+                                    color: Colors.transparent, width: 1))))),
+                  ),
                 ),
                 Positioned(
                     top: 372,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -22,6 +24,13 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  final String _audioFile = 'assets/voices/koriServingNavDone2nd.mp3';
+
+  late AudioPlayer _audioPlayer;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
+
   void showCountDownPopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -33,27 +42,48 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
         });
   }
 
-  final CountdownController _controller =
-      CountdownController(autoStart: true);
+  final CountdownController _controller = CountdownController(autoStart: true);
 
-  String backgroundImage = "assets/screens/Serving/koriZFinalServingDone.png";
+  String backgroundImage = "assets/screens/Serving/koriServingDone.png";
   String? startUrl;
   String? navUrl;
 
   late String targetTableNum;
+
+  late bool _debugMode;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _controller.pause();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    //   Future.delayed(Duration(milliseconds: 500), () {
+    //     _audioPlayer.play();
+    //   });
+    // });
+    _initAudio();
+    Future.delayed(Duration(milliseconds: 500), () {
+      _audioPlayer.play();
+    });
+    _debugMode = Provider.of<MainStatusModel>((context), listen: false).debugMode!;
+  }
+
+  void _initAudio() {
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _audioPlayer.setVolume(1);
+    _effectPlayer.setVolume(1);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _effectPlayer.dispose();
     _controller.pause();
+    _audioPlayer.dispose();
   }
 
   @override
@@ -82,13 +112,16 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     top: 10,
                     child: FilledButton(
                       onPressed: () {
-                        navPage(
-                                context: context,
-                                page: const TraySelectionFinal(),
-                                enablePop: false)
-                            .navPageToPage();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.play();
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        });
                       },
                       style: FilledButton.styleFrom(
+                          enableFeedback: false,
                           fixedSize: const Size(90, 90),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0)),
@@ -144,47 +177,90 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 },
               ),
               Positioned(
+                  top: 310,
+                  child: SizedBox(
+                    width: 1080,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              '트레이에서 상품을 수령하신 후',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 32,
+                                  // fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '[완료] ',
+                                  style: TextStyle(
+                                      fontFamily: 'kor',
+                                      fontSize: 37,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Text(
+                                  '버튼을 눌러주세요.',
+                                  style: TextStyle(
+                                      fontFamily: 'kor',
+                                      fontSize: 32,
+                                      // fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )),
+              Positioned(
                 top: 450,
                 left: 0,
-                child: GestureDetector(
-                    onTap: () {
-                      _controller.pause();
-                      if (_servingProvider.targetTableNum != 'none') {
-                        setState(() {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                        });
-                        PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        navPage(
-                                context: context,
-                                page: const NavigatorProgressModuleFinal(),
-                                enablePop: true)
-                            .navPageToPage();
-                      } else {
-                        _servingProvider.clearAllTray();
-                        PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: _servingProvider.waitingPoint)
-                            .Posting(context);
-                        navPage(
-                                context: context,
-                                page: const TraySelectionFinal(),
-                                enablePop: false)
-                            .navPageToPage();
-                      }
-                    },
-                    child: Container(
-                        height: 1200,
-                        width: 1080,
-                        decoration: const BoxDecoration(
-                            border: Border.fromBorderSide(BorderSide(
-                                color: Colors.transparent, width: 1))))),
+                child: Offstage(
+                  offstage: _debugMode,
+                  child: GestureDetector(
+                      onTap: () {
+                        _controller.pause();
+                        if (_servingProvider.targetTableNum != 'none') {
+                          setState(() {
+                            _servingProvider.trayChange = true;
+                            _networkProvider.servTable =
+                                _servingProvider.targetTableNum;
+                          });
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: _servingProvider.targetTableNum)
+                              .Posting(context);
+                          navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                          ).navPageToPage();
+                        } else {
+                          _servingProvider.clearAllTray();
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: _servingProvider.waitingPoint)
+                              .Posting(context);
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        }
+                      },
+                      child: Container(
+                          height: 1200,
+                          width: 1080,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  color: Colors.transparent, width: 1))))),
+                ),
               ),
               Container(
                 child: Positioned(
@@ -192,42 +268,79 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                   top: 1372.5,
                   child: FilledButton(
                     style: FilledButton.styleFrom(
-                        backgroundColor: Colors.transparent,
+                        enableFeedback: false,
+                        backgroundColor: Color(0xff3a46f0),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40)),
                         fixedSize: const Size(866, 160)),
-                    child: Container(),
+                    child: Text(
+                      '완 료',
+                      style: TextStyle(
+                          fontFamily: 'kor',
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold),
+                    ),
                     onPressed: () {
-                      _controller.pause();
-                      if (_servingProvider.targetTableNum != 'none') {
-                        _servingProvider.trayChange = true;
-                        _networkProvider.servTable =
-                            _servingProvider.targetTableNum;
-                        PostApi(
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.play();
+                          _controller.pause();
+                          if (_servingProvider.targetTableNum != 'none') {
+                            _servingProvider.trayChange = true;
+                            _networkProvider.servTable =
+                                _servingProvider.targetTableNum;
+                            PostApi(
                                 url: startUrl,
                                 endadr: navUrl,
                                 keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          navPage(
-                                  context: context,
-                                  page: const NavigatorProgressModuleFinal(),
-                                  enablePop: true)
-                              .navPageToPage();
-                        });
-                      } else {
-                        _servingProvider.clearAllTray();
-                        PostApi(
+                                .Posting(context);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(),
+                              ).navPageToPage();
+                            });
+                          } else {
+                            _servingProvider.clearAllTray();
+                            PostApi(
                                 url: startUrl,
                                 endadr: navUrl,
                                 keyBody: _servingProvider.waitingPoint)
-                            .Posting(context);
-                        navPage(
-                                context: context,
-                                page: const TraySelectionFinal(),
-                                enablePop: false)
-                            .navPageToPage();
-                      }
+                                .Posting(context);
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          }
+                        });
+                      // Future.delayed(Duration(milliseconds: 100), () {
+                      //   if (_servingProvider.targetTableNum != 'none') {
+                      //     _servingProvider.trayChange = true;
+                      //     _networkProvider.servTable =
+                      //         _servingProvider.targetTableNum;
+                      //     PostApi(
+                      //             url: startUrl,
+                      //             endadr: navUrl,
+                      //             keyBody: _servingProvider.targetTableNum)
+                      //         .Posting(context);
+                      //     WidgetsBinding.instance.addPostFrameCallback((_) {
+                      //       navPage(
+                      //         context: context,
+                      //         page: const NavigatorProgressModuleFinal(),
+                      //       ).navPageToPage();
+                      //     });
+                      //   } else {
+                      //     _servingProvider.clearAllTray();
+                      //     PostApi(
+                      //             url: startUrl,
+                      //             endadr: navUrl,
+                      //             keyBody: _servingProvider.waitingPoint)
+                      //         .Posting(context);
+                      //     navPage(
+                      //       context: context,
+                      //       page: const TraySelectionFinal(),
+                      //     ).navPageToPage();
+                      //   }
+                      // });
                     },
                   ),
                 ),

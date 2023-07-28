@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -12,11 +17,20 @@ class WebviewPage3 extends StatefulWidget {
 
 class _WebviewPage3State extends State<WebviewPage3> {
   late final WebViewController _controller;
+  late ServingModel _servingProvider;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+    _initAudio();
 
     late final PlatformWebViewControllerCreationParams params;
 
@@ -30,7 +44,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
     }
 
     final WebViewController controller =
-        WebViewController.fromPlatformCreationParams(params);
+    WebViewController.fromPlatformCreationParams(params);
 
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -90,14 +104,28 @@ class _WebviewPage3State extends State<WebviewPage3> {
     _controller = controller;
   }
 
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _effectPlayer.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _servingProvider = Provider.of<ServingModel>(context, listen: false);
+
     return Scaffold(
       body: Container(
         // padding: const EdgeInsets.only(top: 90),
         child: Stack(children: [
           Container(
-              // margin: EdgeInsets.only(top: 50),
+            // margin: EdgeInsets.only(top: 50),
               width: 1080,
               height: 1920,
               child: WebViewWidget(controller: _controller)),
@@ -106,7 +134,16 @@ class _WebviewPage3State extends State<WebviewPage3> {
               top: 20,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.play();
+                    setState(() {
+                      _servingProvider.mainInit = true;
+                    });
+                    navPage(
+                      context: context,
+                      page: const TraySelectionFinal(),
+                    ).navPageToPage();
+                  });
                 },
                 icon: const Icon(
                   Icons.close,

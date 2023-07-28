@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
@@ -19,6 +20,9 @@ class ReturnProgressModuleFinal extends StatefulWidget {
 
 class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
 
   late String backgroundImageServ;
 
@@ -45,6 +49,17 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     currentTargetTable =
         Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
+
+    _initAudio();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+  }
+
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -95,6 +110,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _effectPlayer.dispose();
   }
 
   @override
@@ -120,10 +136,9 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
             arrivedReturnTable = true;
           });
           navPage(
-                  context: context,
-                  page: const ReturnDoneScreen(),
-                  enablePop: false)
-              .navPageToPage();
+            context: context,
+            page: const ReturnDoneScreen(),
+          ).navPageToPage();
         });
       }
     });
@@ -173,6 +188,24 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
             child: Stack(
               children: [
                 Positioned(
+                    top: 220,
+                    child: SizedBox(
+                      width: 1080,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '테이블 정리 시작 (이동중)',
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 70,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )
+                        ],
+                      ),
+                    )),
+                Positioned(
                     top: 400,
                     left: 350,
                     child: Container(
@@ -202,10 +235,9 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                   child: GestureDetector(
                       onTap: () {
                         navPage(
-                                context: context,
-                                page: const ReturnDoneScreen(),
-                                enablePop: false)
-                            .navPageToPage();
+                          context: context,
+                          page: const ReturnDoneScreen(),
+                        ).navPageToPage();
                       },
                       child: Container(
                           height: 800,

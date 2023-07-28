@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -13,12 +16,47 @@ class SelectTableModalFinal extends StatefulWidget {
 class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   late ServingModel _servingProvider;
 
-  String tableSelectBG = 'assets/screens/Serving/koriZFinalTableSelect.png';
+  String tableSelectBG = 'assets/screens/Serving/KoriServingTableSelect.png';
+
+  final String _audioFile = 'assets/voices/koriServingTableSelect2nd.mp3';
+
+  late AudioPlayer _audioPlayer;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _initAudio();
+    Future.delayed(Duration(milliseconds: 500), () {
+      _audioPlayer.play();
+    });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    //   Future.delayed(Duration(milliseconds: 500), () {
+    //     _audioPlayer.play();
+    //   });
+    // });
+  }
+
+  void _initAudio() {
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _effectPlayer.dispose();
+    _audioPlayer.dispose();
+    print('table dispose!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   }
 
   @override
@@ -41,6 +79,25 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
               ),
             ),
             Positioned(
+              top: 15,
+                child: SizedBox(
+                  width: 1080,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 80),
+                        child: Text('테이블을 선택해 주세요.',
+                        style: TextStyle(
+                          fontFamily: 'kor',
+                          fontSize: 35,
+                          color: Colors.white
+                        )),
+                      ),
+                    ],
+                  ),
+                )),
+            Positioned(
                 left: 836,
                 top: 18,
                 child: Container(
@@ -49,20 +106,55 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                   color: Colors.transparent,
                   child: FilledButton(
                     style: FilledButton.styleFrom(
+                      enableFeedback: false,
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         )),
                     onPressed: () {
-                      if (_servingProvider.trayCheckAll == true) {
-                        Navigator.pop(context);
-                      } else {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      }
-                      _servingProvider.item1 = "";
-                      _servingProvider.item2 = "";
-                      _servingProvider.item3 = "";
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.play();
+                        if (_servingProvider.trayCheckAll == true) {
+                          setState(() {
+                            _servingProvider.mainInit = true;
+                          });
+                          print('aaaaa');
+                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                        } else {
+                          if ((_servingProvider.table1 == "" &&
+                              _servingProvider.table2 == "") &&
+                              _servingProvider.table3 == "") {
+                            setState(() {
+                              _servingProvider.mainInit = true;
+                            });
+                          }
+                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                        }
+                        _servingProvider.item1 = "";
+                        _servingProvider.item2 = "";
+                        _servingProvider.item3 = "";(context);
+                      });
+                      // Future.delayed(Duration(milliseconds: 500), () {
+                      //   if (_servingProvider.trayCheckAll == true) {
+                      //     setState(() {
+                      //       _servingProvider.mainInit = true;
+                      //     });
+                      //     print('aaaaa');
+                      //     navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                      //   } else {
+                      //     if ((_servingProvider.table1 == "" &&
+                      //         _servingProvider.table2 == "") &&
+                      //         _servingProvider.table3 == "") {
+                      //       setState(() {
+                      //         _servingProvider.mainInit = true;
+                      //       });
+                      //     }
+                      //     navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                      //   }
+                      //   _servingProvider.item1 = "";
+                      //   _servingProvider.item2 = "";
+                      //   _servingProvider.item3 = "";
+                      // });
                     },
                     child: null,
                   ),

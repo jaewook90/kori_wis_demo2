@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
@@ -25,6 +26,9 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
 
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
+
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
@@ -35,8 +39,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
   int buttonWidth = 0;
   int buttonHeight = 1;
-
-  List<String> menuItems = ['햄버거', '라면', '치킨', '핫도그'];
 
   int itemNumber = 0;
   String? itemName;
@@ -62,6 +64,11 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     // TODO: implement initState
     super.initState();
 
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+    _initAudio();
+
     hamburger = "assets/images/serving_item_imgs/hamburger.png";
     hotDog = "assets/images/serving_item_imgs/hotDog.png";
     chicken = "assets/images/serving_item_imgs/chicken.png";
@@ -73,21 +80,17 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     itemImagesList = [itemImages, itemImages, itemImages];
   }
 
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
+  }
+
   void showCountDownPopup(context) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
           return const NavCountDownModalFinal();
-        });
-  }
-
-  void showTableSelectPopup(context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return const SelectTableModalFinal();
         });
   }
 
@@ -111,6 +114,13 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _effectPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
@@ -127,23 +137,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     // 트레이 상품 정의
     itemName = _servingProvider.menuItem;
 
-    if (widget.screens == 0) {
-      // 서빙화면(서빙시작)
-      buttonPositionWidth = [315];
-      buttonPositionHeight = [152];
-
-      buttonSize = [450, 168];
-
-      buttonRadius = 25;
-    } else if (widget.screens == 1) {
-      // 서빙 상품 선택 화면
-      buttonPositionWidth = [70.3, 517.3, 70.3, 517.3];
-      buttonPositionHeight = [315.8, 315.8, 759, 759];
-
-      buttonSize = [412, 412];
-
-      buttonRadius = 34;
-    } else if (widget.screens == 2) {
+    if (widget.screens == 2) {
       // 서빙 테이블 선택 화면
       buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
       buttonPositionHeight = [
@@ -193,70 +187,100 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
           top: buttonPositionHeight[i],
           child: FilledButton(
             style: FilledButton.styleFrom(
+                enableFeedback: false,
                 backgroundColor: Colors.transparent,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(buttonRadius)),
                 fixedSize:
                     Size(buttonSize[buttonWidth], buttonSize[buttonHeight])),
-            onPressed: widget.screens == 0
+            onPressed: widget.screens == 2
                 ? () {
-                    // 서빙만 하는 경우
-                    if ((_servingProvider.table1 != "" ||
-                            _servingProvider.table2 != "") ||
-                        _servingProvider.table3 != "") {
-                      showCountDownPopup(context);
-                    } else {
-                      _servingProvider.trayCheckAll = true;
-                      showTableSelectPopup(context);
-                      _servingProvider.menuItem = "상품";
-                    }
-                  }
-                : widget.screens == 1
-                    ? () {
-                        setState(() {
-                          _servingProvider.menuItem = menuItems[i];
-                        });
-                        showTableSelectPopup(context);
-                      }
-                    : widget.screens == 2
-                        ? () {
-                            setState(() {
-                              if (_servingProvider.trayCheckAll == false) {
-                                if (_servingProvider.tray1Select == true) {
-                                  _servingProvider.table1 = "${i + 1}";
-                                } else if (_servingProvider.tray2Select ==
-                                    true) {
-                                  _servingProvider.table2 = "${i + 1}";
-                                } else {
-                                  _servingProvider.table3 = "${i + 1}";
-                                }
-                                uploadTableNumberNItemImg();
-
-                                navPage(
-                                        context: context,
-                                        page: const TraySelectionFinal(),
-                                        enablePop: false)
-                                    .navPageToPage();
-                              } else {
-                                _servingProvider.allTable = '${i + 1}';
-                                showCountDownPopup(context);
-                              }
-                            });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _effectPlayer.play();
+                      setState(() {
+                        if (_servingProvider.trayCheckAll == false) {
+                          if (_servingProvider.tray1Select == true) {
+                            _servingProvider.table1 = "${i + 1}";
+                          } else if (_servingProvider.tray2Select == true) {
+                            _servingProvider.table2 = "${i + 1}";
+                          } else {
+                            _servingProvider.table3 = "${i + 1}";
                           }
-                        : widget.screens == 3
-                            ? () {
-                                PostApi(
-                                        url: startUrl,
-                                        endadr: navUrl,
-                                        keyBody: _servingProvider.waitingPoint)
-                                    .Posting(context);
-                                navPage(
-                                        context: context,
-                                        page: const TraySelectionFinal(),
-                                        enablePop: false)
-                                    .navPageToPage();
-                              }
-                            : null,
+                          uploadTableNumberNItemImg();
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                          // navPage(
+                          //         context: context,
+                          //         page: const TraySelectionFinal(),
+                          //         enablePop: false)
+                          //     .navPageToPage();
+                        } else {
+                          _servingProvider.allTable = '${i + 1}';
+                          showCountDownPopup(context);
+                        }
+                      });
+                    });
+                    // Future.delayed(Duration(milliseconds: 500), () {
+                    //   setState(() {
+                    //     if (_servingProvider.trayCheckAll == false) {
+                    //       if (_servingProvider.tray1Select == true) {
+                    //         _servingProvider.table1 = "${i + 1}";
+                    //       } else if (_servingProvider.tray2Select == true) {
+                    //         _servingProvider.table2 = "${i + 1}";
+                    //       } else {
+                    //         _servingProvider.table3 = "${i + 1}";
+                    //       }
+                    //       uploadTableNumberNItemImg();
+                    //       navPage(
+                    //         context: context,
+                    //         page: const TraySelectionFinal(),
+                    //       ).navPageToPage();
+                    //       // navPage(
+                    //       //         context: context,
+                    //       //         page: const TraySelectionFinal(),
+                    //       //         enablePop: false)
+                    //       //     .navPageToPage();
+                    //     } else {
+                    //       _servingProvider.allTable = '${i + 1}';
+                    //       showCountDownPopup(context);
+                    //     }
+                    //   });
+                    // });
+                  }
+                : widget.screens == 3
+                    ? () {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.play();
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: _servingProvider.waitingPoint)
+                              .Posting(context);
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        });
+                        // Future.delayed(Duration(milliseconds: 500), () {
+                        //                 PostApi(
+                        //                         url: startUrl,
+                        //                         endadr: navUrl,
+                        //                         keyBody: _servingProvider.waitingPoint)
+                        //                     .Posting(context);
+                        //                 navPage(
+                        //                   context: context,
+                        //                   page: const TraySelectionFinal(),
+                        //                 ).navPageToPage();
+                        //                 // navPage(
+                        //                 //         context: context,
+                        //                 //         page: const TraySelectionFinal(),
+                        //                 //         enablePop: false)
+                        //                 //     .navPageToPage();
+                        //               });
+                      }
+                    : null,
             child: null,
           ),
         ),

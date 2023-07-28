@@ -25,12 +25,14 @@ void main() async {
         ChangeNotifierProvider(
             create: (context) => MainStatusModel(
                   playAd: false,
+              debugMode: true
                 )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(startUrl: '', getPoseData: [])),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
                   servingState: 0,
+                  mainInit: true,
                   waitingPoint: 'wait',
                   trayDebug: false,
                   receiptModeOn: false,

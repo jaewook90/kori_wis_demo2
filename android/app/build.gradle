@@ -70,8 +70,13 @@ flutter {
 }
 
 dependencies {
+    def exoplayer_version = "...specify-version-here...."
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayer_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.android.support:multidex:1.0.3"
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.5'
+//    implementation 'com.google.android.exoplayer:exoplayer:2.18.5'
     implementation platform('com.google.firebase:firebase-bom:32.1.0')
 }

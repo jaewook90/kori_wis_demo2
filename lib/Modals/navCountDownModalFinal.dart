@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +23,10 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
-  final CountdownController _controller =
-      CountdownController(autoStart: true);
+  final CountdownController _controller = CountdownController(autoStart: true);
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
 
   String? currentGoal;
 
@@ -51,6 +55,24 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     tableQT = 8;
     apiCallFlag = false;
     countDownNav = true;
+
+    _initAudio();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+  }
+
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _effectPlayer.dispose();
+    super.dispose();
   }
 
   @override
@@ -62,7 +84,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
-    countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
+    countDownPopup = 'assets/screens/Serving/koriServingCountDown.png';
     if (_servingProvider.trayCheckAll == true) {
       targetTableNum = _servingProvider.allTable!;
     } else {
@@ -92,12 +114,13 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   image: DecorationImage(
                       image: AssetImage(countDownPopup), fit: BoxFit.fill)),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(130, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(85, 20, 555, 240),
                 child: Countdown(
                   controller: _controller,
                   seconds: 5,
                   build: (_, double time) => Text(
                     time.toInt().toString(),
+                    textAlign: TextAlign.end,
                     style: const TextStyle(
                         fontFamily: 'kor',
                         fontSize: 80,
@@ -114,45 +137,80 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             keyBody: targetTableNum)
                         .Posting(context);
                     navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                            enablePop: true)
-                        .navPageToPage();
+                      context: context,
+                      page: const NavigatorProgressModuleFinal(),
+                    ).navPageToPage();
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.pop(context);
                       Navigator.pop(context);
                       navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
+                        context: context,
+                        page: const NavigatorProgressModuleFinal(),
+                      ).navPageToPage();
                     });
                   },
                 ),
               ),
             ),
             Positioned(
+                left: 200,
+                top: 60,
+                child: Text('초 후 서빙을 시작합니다.',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white))),
+            Positioned(
+                left: 20,
+                top: 130,
+                child: Text(
+                  '즉시 시작하려면 "즉시 시작"버튼을 눌러주세요.',
+                  style: TextStyle(
+                      fontFamily: 'kor',
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                )),
+            Positioned(
               left: 0,
               top: 242,
               child: FilledButton(
                 style: FilledButton.styleFrom(
+                    enableFeedback: false,
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  _controller.pause();
-                  _networkProvider.servingPosition = [];
-                  if (_servingProvider.table1 != "" ||
-                      (_servingProvider.table2 != "" ||
-                          _servingProvider.table3 != "")) {
-                    Navigator.pop(context);
-                  } else {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  }
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.play();
+                    _controller.pause();
+                    _networkProvider.servingPosition = [];
+                    if (_servingProvider.table1 != "" ||
+                        (_servingProvider.table2 != "" ||
+                            _servingProvider.table3 != "")) {
+                      navPage(context: context, page: TraySelectionFinal())
+                          .navPageToPage();
+                    } else {
+                      setState(() {
+                        _servingProvider.mainInit = true;
+                      });
+                      navPage(context: context, page: TraySelectionFinal())
+                          .navPageToPage();
+                    }
+                  });
+
                 },
-                child: null,
+                child: Center(
+                  child: Text(
+                    '취소',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
             ),
             Positioned(
@@ -160,30 +218,61 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
               top: 242,
               child: FilledButton(
                 style: FilledButton.styleFrom(
+                    enableFeedback: false,
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  _controller.pause();
-                  _servingProvider.trayChange = true;
-                  _networkProvider.servTable = _servingProvider.targetTableNum;
-                  PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: targetTableNum)
-                      .Posting(context);
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                            enablePop: true)
-                        .navPageToPage();
+                    _effectPlayer.play();
+                    _controller.pause();
+                    _servingProvider.trayChange = true;
+                    _networkProvider.servTable =
+                        _servingProvider.targetTableNum;
+                    PostApi(
+                        url: startUrl,
+                        endadr: navUrl,
+                        keyBody: targetTableNum)
+                        .Posting(context);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      navPage(
+                        context: context,
+                        page: const NavigatorProgressModuleFinal(),
+                      ).navPageToPage();
+                    });
                   });
+
+                  // Future.delayed(Duration(milliseconds: 100), () {
+                  //   _servingProvider.trayChange = true;
+                  //   _networkProvider.servTable =
+                  //       _servingProvider.targetTableNum;
+                  //   PostApi(
+                  //           url: startUrl,
+                  //           endadr: navUrl,
+                  //           keyBody: targetTableNum)
+                  //       .Posting(context);
+                  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //     Navigator.pop(context);
+                  //     Navigator.pop(context);
+                  //     navPage(
+                  //       context: context,
+                  //       page: const NavigatorProgressModuleFinal(),
+                  //     ).navPageToPage();
+                  //   });
+                  // });
                 },
-                child: null,
+                child: Center(
+                  child: Text(
+                    '즉시 시작',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
             ),
           ]),

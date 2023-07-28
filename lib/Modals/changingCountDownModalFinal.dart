@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -25,22 +26,42 @@ class _ChangingCountDownModalFinalState
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
-  final CountdownController _controller =
-      CountdownController(autoStart: true);
+  final CountdownController _controller = CountdownController(autoStart: true);
 
   late bool countDownNav;
 
   late String countDownPopup;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     countDownNav = true;
+
+    _initAudio();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    // });
+  }
+
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
   }
 
   String? startUrl;
   String? navUrl;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _effectPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,10 +111,9 @@ class _ChangingCountDownModalFinalState
                               keyBody: _servingProvider.targetTableNum)
                           .Posting(context);
                       navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
+                        context: context,
+                        page: const NavigatorProgressModuleFinal(),
+                      ).navPageToPage();
                     } else {
                       _servingProvider.clearAllTray();
                       PostApi(
@@ -102,10 +122,9 @@ class _ChangingCountDownModalFinalState
                               keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
                       navPage(
-                              context: context,
-                              page: const TraySelectionFinal(),
-                              enablePop: false)
-                          .navPageToPage();
+                        context: context,
+                        page: const TraySelectionFinal(),
+                      ).navPageToPage();
                     }
                   },
                 ),
@@ -116,15 +135,29 @@ class _ChangingCountDownModalFinalState
               top: 242,
               child: FilledButton(
                 style: FilledButton.styleFrom(
+                    enableFeedback: false,
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  _controller.pause();
-                  _networkProvider.servingPosition = [];
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.play();
+                    _controller.pause();
+                    _networkProvider.servingPosition = [];
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  });
+                  // _controller.pause();
+                  // _networkProvider.servingPosition = [];
+                  // Navigator.pop(context);
+                  // Navigator.pop(context);
+                  // Future.delayed(Duration(milliseconds: 500), () {
+                  //   _controller.pause();
+                  //   _networkProvider.servingPosition = [];
+                  //   Navigator.pop(context);
+                  //   Navigator.pop(context);
+                  // });
                 },
                 child: null,
               ),
@@ -134,54 +167,141 @@ class _ChangingCountDownModalFinalState
               top: 242,
               child: FilledButton(
                 style: FilledButton.styleFrom(
+                    enableFeedback: false,
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
-                  _controller.pause();
-                  if (widget.modeState == 'return') {
-                    PostApi(
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.play();
+                    _controller.pause();
+                    // _controller.pause();
+                    if (widget.modeState == 'return') {
+                      PostApi(
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: _servingProvider.waitingPoint)
+                          .Posting(context);
+                      navPage(
+                        context: context,
+                        page: const TraySelectionFinal(),
+                      ).navPageToPage();
+                    } else if (widget.modeState == 'serving') {
+                      if (_servingProvider.targetTableNum != 'none') {
+                        setState(() {
+                          _servingProvider.trayChange = true;
+                          _networkProvider.servTable =
+                              _servingProvider.targetTableNum;
+                        });
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        navPage(
+                          context: context,
+                          page: const NavigatorProgressModuleFinal(),
+                        ).navPageToPage();
+                      } else {
+                        _servingProvider.clearAllTray();
+                        PostApi(
                             url: startUrl,
                             endadr: navUrl,
                             keyBody: _servingProvider.waitingPoint)
-                        .Posting(context);
-                    navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                            enablePop: false)
-                        .navPageToPage();
-                  } else if (widget.modeState == 'serving') {
-                    if (_servingProvider.targetTableNum != 'none') {
-                      setState(() {
-                        _servingProvider.trayChange = true;
-                        _networkProvider.servTable =
-                            _servingProvider.targetTableNum;
-                      });
-                      PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.targetTableNum)
-                          .Posting(context);
-                      navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
-                    } else {
-                      _servingProvider.clearAllTray();
-                      PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.waitingPoint)
-                          .Posting(context);
-                      navPage(
-                              context: context,
-                              page: const TraySelectionFinal(),
-                              enablePop: false)
-                          .navPageToPage();
+                            .Posting(context);
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      }
                     }
-                  }
+                  });
+                  // if (widget.modeState == 'return') {
+                  //   PostApi(
+                  //       url: startUrl,
+                  //       endadr: navUrl,
+                  //       keyBody: _servingProvider.waitingPoint)
+                  //       .Posting(context);
+                  //   navPage(
+                  //       context: context,
+                  //       page: const TraySelectionFinal(),
+                  //       enablePop: false)
+                  //       .navPageToPage();
+                  // } else if (widget.modeState == 'serving') {
+                  //   if (_servingProvider.targetTableNum != 'none') {
+                  //     setState(() {
+                  //       _servingProvider.trayChange = true;
+                  //       _networkProvider.servTable =
+                  //           _servingProvider.targetTableNum;
+                  //     });
+                  //     PostApi(
+                  //         url: startUrl,
+                  //         endadr: navUrl,
+                  //         keyBody: _servingProvider.targetTableNum)
+                  //         .Posting(context);
+                  //     navPage(
+                  //         context: context,
+                  //         page: const NavigatorProgressModuleFinal(),
+                  //         enablePop: true)
+                  //         .navPageToPage();
+                  //   } else {
+                  //     _servingProvider.clearAllTray();
+                  //     PostApi(
+                  //         url: startUrl,
+                  //         endadr: navUrl,
+                  //         keyBody: _servingProvider.waitingPoint)
+                  //         .Posting(context);
+                  //     navPage(
+                  //         context: context,
+                  //         page: const TraySelectionFinal(),
+                  //         enablePop: false)
+                  //         .navPageToPage();
+                  //   }
+                  // }
+                  // _controller.pause();
+                  // Future.delayed(Duration(milliseconds: 100), () {
+                  //   // _controller.pause();
+                  //   if (widget.modeState == 'return') {
+                  //     PostApi(
+                  //             url: startUrl,
+                  //             endadr: navUrl,
+                  //             keyBody: _servingProvider.waitingPoint)
+                  //         .Posting(context);
+                  //     navPage(
+                  //       context: context,
+                  //       page: const TraySelectionFinal(),
+                  //     ).navPageToPage();
+                  //   } else if (widget.modeState == 'serving') {
+                  //     if (_servingProvider.targetTableNum != 'none') {
+                  //       setState(() {
+                  //         _servingProvider.trayChange = true;
+                  //         _networkProvider.servTable =
+                  //             _servingProvider.targetTableNum;
+                  //       });
+                  //       PostApi(
+                  //               url: startUrl,
+                  //               endadr: navUrl,
+                  //               keyBody: _servingProvider.targetTableNum)
+                  //           .Posting(context);
+                  //       navPage(
+                  //         context: context,
+                  //         page: const NavigatorProgressModuleFinal(),
+                  //       ).navPageToPage();
+                  //     } else {
+                  //       _servingProvider.clearAllTray();
+                  //       PostApi(
+                  //               url: startUrl,
+                  //               endadr: navUrl,
+                  //               keyBody: _servingProvider.waitingPoint)
+                  //           .Posting(context);
+                  //       navPage(
+                  //         context: context,
+                  //         page: const TraySelectionFinal(),
+                  //       ).navPageToPage();
+                  //     }
+                  //   }
+                  // });
                 },
                 child: null,
               ),

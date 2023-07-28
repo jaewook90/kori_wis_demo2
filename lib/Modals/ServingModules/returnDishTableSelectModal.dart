@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,13 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
 
   String tableSelectBG = 'assets/screens/Serving/koriZFinalTableSelect.png';
 
+  final String _audioFile = 'assets/voices/koriServingTableSelect2nd.mp3';
+
+  late AudioPlayer _audioPlayer;
+
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.mp3';
+
   String positionURL = "";
   String hostAdr = "";
 
@@ -41,6 +50,31 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
     super.initState();
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
+    _initAudio();
+    Future.delayed(Duration(milliseconds: 500), () {
+      _audioPlayer.play();
+    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _initAudio();
+    //   Future.delayed(Duration(milliseconds: 500), () {
+    //     _audioPlayer.play();
+    //   });
+    // });
+  }
+
+  void _initAudio() {
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(1);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _effectPlayer.dispose();
+    _audioPlayer.dispose();
   }
 
   @override
@@ -83,12 +117,24 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                   color: Colors.transparent,
                   child: FilledButton(
                     style: FilledButton.styleFrom(
+                        enableFeedback: false,
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         )),
                     onPressed: () {
-                      Navigator.pop(context);
+                      setState(() {
+                        _servingProvider.mainInit = true;
+                      });
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.play();
+                        navPage(context: context, page: TraySelectionFinal())
+                            .navPageToPage();
+                      });
+                      // Future.delayed(Duration(milliseconds: 500), () {
+                      //   navPage(context: context, page: TraySelectionFinal())
+                      //       .navPageToPage();
+                      // });
                     },
                     child: null,
                   ),
@@ -99,26 +145,45 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                   top: buttonPositionHeight[i],
                   child: FilledButton(
                     style: FilledButton.styleFrom(
+                        enableFeedback: false,
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(buttonRadius)),
                         fixedSize: Size(buttonSize[0], buttonSize[1])),
                     onPressed: () {
-                      setState(() {
-                        returnTable = _networkProvider.getPoseData![i];
-                        _servingProvider.returnTargetTable = returnTable;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.play();
+                        setState(() {
+                          returnTable = _networkProvider.getPoseData![i];
+                          _servingProvider.returnTargetTable = returnTable;
+                        });
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: returnTable)
+                            .Posting(context);
+                        Navigator.pop(context);
+                        navPage(
+                          context: context,
+                          page: const ReturnProgressModuleFinal(),
+                        ).navPageToPage();
                       });
-                      PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: returnTable)
-                          .Posting(context);
-                      Navigator.pop(context);
-                      navPage(
-                              context: context,
-                              page: const ReturnProgressModuleFinal(),
-                              enablePop: true)
-                          .navPageToPage();
+                      // Future.delayed(Duration(milliseconds: 500), () {
+                      //   setState(() {
+                      //     returnTable = _networkProvider.getPoseData![i];
+                      //     _servingProvider.returnTargetTable = returnTable;
+                      //   });
+                      //   PostApi(
+                      //           url: startUrl,
+                      //           endadr: navUrl,
+                      //           keyBody: returnTable)
+                      //       .Posting(context);
+                      //   Navigator.pop(context);
+                      //   navPage(
+                      //     context: context,
+                      //     page: const ReturnProgressModuleFinal(),
+                      //   ).navPageToPage();
+                      // });
                     },
                     child: null,
                   ))

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ServingModel with ChangeNotifier {
   int? servBotState;
+  bool? mainInit;
 
   bool? tray1;
   bool? tray2;
@@ -57,8 +58,12 @@ class ServingModel with ChangeNotifier {
 
   bool? trayDebug;
 
+  String? patrol1;
+  String? patrol2;
+
   ServingModel(
       {this.servingState,
+        this.mainInit,
       this.tray1,
       this.tray2,
       this.tray3,
