@@ -1,12 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
+import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class NavigatorPauseModuleFinal extends StatefulWidget {
@@ -23,23 +24,29 @@ class NavigatorPauseModuleFinal extends StatefulWidget {
 }
 
 class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
-  late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
 
   late String backgroundImage;
+
+  late Timer _pwrTimer;
+
 
   final String _audioFile = 'assets/voices/koriServingNavPause2nd.mp3';
 
   late AudioPlayer _audioPlayer;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   late int buttonNumbers;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
   late List<double> buttonSize;
+
+  late int batData;
+  late int CHGFlag;
+  late int EMGStatus;
 
   late double buttonRadius;
 
@@ -64,34 +71,51 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     super.initState();
 
     _initAudio();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _audioPlayer.play();
-    });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     _audioPlayer.play();
-    //   });
+    _audioPlayer.play();
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   _audioPlayer.play();
     // });
+
+
+    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+
+    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      StatusManagements(context,
+          Provider.of<NetworkModel>(context, listen: false).startUrl!)
+          .gettingPWRdata();
+      if (EMGStatus !=
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
+        setState(() {});
+      }
+      if (batData !=
+          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
+        setState(() {});
+      }
+      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+    });
   }
 
   void _initAudio() {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
+    _pwrTimer.cancel();
     _effectPlayer.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
@@ -133,11 +157,16 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
               child: Stack(
                 children: [
                   Positioned(
+                    right: 46,
+                    top: 60,
+                    child: Text(('${batData.toString()} %')),
+                  ),
+                  Positioned(
                     right: 50,
-                    top: 25,
+                    top: 20,
                     child: Container(
-                      height: 60,
-                      width: 60,
+                      height: 45,
+                      width: 50,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
@@ -146,6 +175,17 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  EMGStatus == 0
+                      ? const Positioned(
+                    right: 35,
+                    top: 15,
+                    child: Icon(Icons.block,
+                        color: Colors.red,
+                        size: 80,
+                        grade: 200,
+                        weight: 200),
+                  )
+                      : Container(),
                 ],
               ),
             )
@@ -161,23 +201,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(
               children: [
-                // Positioned(
-                //   top: 500,
-                //   left: 0,
-                //   child: GestureDetector(
-                //       onTap: () {
-                //         navPage(
-                //           context: context,
-                //           page: const ServingProgressFinal(),
-                //         ).navPageToPage();
-                //       },
-                //       child: Container(
-                //           height: 800,
-                //           width: 1080,
-                //           decoration: const BoxDecoration(
-                //               border: Border.fromBorderSide(BorderSide(
-                //                   color: Colors.transparent, width: 1))))),
-                // ),
                 Positioned(
                     top: 372,
                     left: 460,
@@ -215,6 +238,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                   buttonSize2[buttonHeight])),
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           if (i == 0) {
                             // 재시작 추가 필요
@@ -228,7 +252,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               context: context,
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                            _statusProvider.playAd = false;
                           } else if (i == 1) {
                             // 충전하러가기 기능
                             PostApi(
@@ -241,10 +264,8 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               context: context,
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                            _statusProvider.playAd = false;
                           } else if (i == 2) {
                             // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                            _statusProvider.playAd = false;
                           } else {
                             // 추후에는 거점으로 복귀
                             PostApi(
@@ -257,54 +278,8 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               context: context,
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                            _statusProvider.playAd = false;
                           }
                         });
-                        // Future.delayed(Duration(milliseconds: 500), () {
-                        //   if (i == 0) {
-                        //     // 재시작 추가 필요
-                        //     _audioPlayer.dispose();
-                        //     PostApi(
-                        //             url: startUrl,
-                        //             endadr: rsmUrl,
-                        //             keyBody: 'stop')
-                        //         .Posting(context);
-                        //     navPage(
-                        //       context: context,
-                        //       page: const NavigatorProgressModuleFinal(),
-                        //     ).navPageToPage();
-                        //     _statusProvider.playAd = false;
-                        //   } else if (i == 1) {
-                        //     // 충전하러가기 기능
-                        //     PostApi(
-                        //             url: startUrl,
-                        //             endadr: chgUrl,
-                        //             keyBody: 'charging_pile')
-                        //         .Posting(context);
-                        //     _networkProvider.currentGoal = '충전스테이션';
-                        //     navPage(
-                        //       context: context,
-                        //       page: const NavigatorProgressModuleFinal(),
-                        //     ).navPageToPage();
-                        //     _statusProvider.playAd = false;
-                        //   } else if (i == 2) {
-                        //     // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                        //     _statusProvider.playAd = false;
-                        //   } else {
-                        //     // 추후에는 거점으로 복귀
-                        //     PostApi(
-                        //             url: startUrl,
-                        //             endadr: navUrl,
-                        //             keyBody: 'wait')
-                        //         .Posting(context);
-                        //     _networkProvider.currentGoal = '충전스테이션';
-                        //     navPage(
-                        //       context: context,
-                        //       page: const NavigatorProgressModuleFinal(),
-                        //     ).navPageToPage();
-                        //     _statusProvider.playAd = false;
-                        //   }
-                        // });
                       },
                       child: null,
                     ),

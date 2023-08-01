@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
@@ -34,6 +36,7 @@ class _IntroScreenState extends State<IntroScreen>
   String positionURL = "";
   String hostAdr = "";
 
+
   // 블루투스 연결
   final String robotId = 'serv1';
 
@@ -46,7 +49,7 @@ class _IntroScreenState extends State<IntroScreen>
   final String introVideo = 'assets/videos/KoriIntro_v1.1.0.mp4';
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   bool updateComplete = false;
 
@@ -95,7 +98,7 @@ class _IntroScreenState extends State<IntroScreen>
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   // SharedPreferences 초기화 함수

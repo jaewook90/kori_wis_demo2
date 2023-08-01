@@ -4,7 +4,6 @@ import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class SelectItemModalFinal extends StatefulWidget {
@@ -24,7 +23,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
   late AudioPlayer _audioPlayer;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -39,15 +38,10 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
     super.initState();
 
     _initAudio();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _audioPlayer.play();
-    });
+    _audioPlayer.play();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     _audioPlayer.play();
-    //   });
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   _audioPlayer.play();
     // });
   }
 
@@ -64,7 +58,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -120,6 +114,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           _servingProvider.mainInit = true;
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           setState(() {
                             _servingProvider.item1 = "";
@@ -129,15 +124,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           navPage(context: context, page: TraySelectionFinal())
                               .navPageToPage();
                         });
-                        // Future.delayed(Duration(milliseconds: 500), () {
-                        //   setState(() {
-                        //     _servingProvider.item1 = "";
-                        //     _servingProvider.item2 = "";
-                        //     _servingProvider.item3 = "";
-                        //   });
-                        //   navPage(context: context, page: TraySelectionFinal())
-                        //       .navPageToPage();
-                        // });
                       },
                       child: null,
                     ),
@@ -157,24 +143,17 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                       onPressed: () {
                         _audioPlayer.dispose();
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           setState(() {
                             _servingProvider.menuItem = menuItems[i];
                           });
                           showTableSelectPopup(context);
                         });
-                        // Future.delayed(Duration(milliseconds: 500), () {
-                        //   setState(() {
-                        //     _servingProvider.menuItem = menuItems[i];
-                        //   });
-                        //   showTableSelectPopup(context);
-                        // });
+
                       },
                       child: null,
                     )),
-              // const ServingModuleButtonsFinal(
-              //   screens: 1,
-              // ),
             ],
           )),
     );

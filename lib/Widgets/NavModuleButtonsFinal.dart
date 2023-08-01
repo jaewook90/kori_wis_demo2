@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorPauseModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDishPause.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -24,11 +22,10 @@ class NavModuleButtonsFinal extends StatefulWidget {
 }
 
 class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
-  late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   String? startUrl;
   String? stpUrl;
@@ -68,7 +65,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -80,7 +77,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
 
   @override
   Widget build(BuildContext context) {
-    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
@@ -149,6 +145,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
             onPressed: widget.screens == 0
                 ? () {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _effectPlayer.seek(Duration(seconds: 0));
                       _effectPlayer.play();
                       PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
                           .Posting(context);
@@ -158,38 +155,17 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                             servGoalPose: currentGoal),
                       ).navPageToPage();
                     });
-                    // Future.delayed(Duration(milliseconds: 500), () {
-                    //   PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
-                    //       .Posting(context);
-                    //   navPage(
-                    //     context: context,
-                    //     page: NavigatorPauseModuleFinal(
-                    //         servGoalPose: currentGoal),
-                    //   ).navPageToPage();
-                    //   // navPage(
-                    //   //         context: context,
-                    //   //         page: NavigatorPauseModuleFinal(
-                    //   //             servGoalPose: currentGoal),
-                    //   //         enablePop: false)
-                    //   //     .navPageToPage();
-                    //   // 일시정지 명령 추가 필요
-                    // });
                   }
                 : widget.screens == 2
                     ? () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           navPage(
                             context: context,
                             page: const ReturnDishPauseScreen(),
                           ).navPageToPage();
                         });
-                        // Future.delayed(Duration(milliseconds: 500), () {
-                        //   navPage(
-                        //     context: context,
-                        //     page: const ReturnDishPauseScreen(),
-                        //   ).navPageToPage();
-                        // });
                       }
                     : null,
             child: null,

@@ -17,6 +17,7 @@ import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModul
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
+import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -44,11 +45,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   final String _audioFile = 'assets/voices/koriServingMain2nd.mp3';
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   late Timer _timer;
-
-  dynamic powerInfo;
+  late Timer _pwrTimer;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -56,15 +56,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late List<String> positioningList;
   late List<String> positionList;
 
-  late String targetTableNum;
-
   String? startUrl;
   String? navUrl;
   String? chgUrl;
 
+  late int batData;
+  late int CHGFlag;
+  late int EMGStatus;
+
   // 배경 화면
   late String backgroundImage;
-  late String resetIcon;
 
   // 트레이 하이드 앤 쇼
   bool? offStageTray1;
@@ -85,8 +86,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late bool _debugTray;
   late int _debugEncounter;
 
-  late int serviceState;
-
   DateTime? currentBackPressTime;
 
   FToast? fToast;
@@ -100,9 +99,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     _initSharedPreferences();
 
-    // _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-    // _audioPlayer.setVolume(1);
-
     _debugEncounter = 0;
     _debugTray = true;
 
@@ -112,13 +108,15 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     positioningList = [];
     positionList = [];
 
-    serviceState = 0;
-
     backgroundImage = "assets/screens/Serving/KoriServingMain.png";
 
     table1 = "";
     table2 = "";
     table3 = "";
+
+    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
@@ -130,24 +128,35 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
       poseDataUpdate();
     }
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 1500), () {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       _audioPlayer.play();
-    //     });
-    //   });
-    // });
     _initAudio();
-    Future.delayed(Duration(milliseconds: 1500), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       _audioPlayer.play();
-      // WidgetsBinding.instance.addPostFrameCallback((_) {
-      //   _audioPlayer.play();
-      // });
     });
-    // _timer = Timer.periodic(Duration(milliseconds: 14000), (timer) {
-    //   _audioPlayer.seek(Duration(seconds: 0));
-    // });
+
+    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+      _audioPlayer.seek(const Duration(seconds: 0));
+    });
+
+    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      StatusManagements(context,
+              Provider.of<NetworkModel>(context, listen: false).startUrl!)
+          .gettingPWRdata();
+      if ((EMGStatus !=
+                  Provider.of<MainStatusModel>(context, listen: false)
+                      .emgButton! ||
+              CHGFlag !=
+                  Provider.of<MainStatusModel>(context, listen: false)
+                      .chargeFlag!) ||
+          batData !=
+              Provider.of<MainStatusModel>(context, listen: false).batBal!) {
+        setState(() {});
+      }
+      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      CHGFlag =
+          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus =
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+    });
   }
 
   Future<void> _initSharedPreferences() async {
@@ -158,7 +167,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
@@ -245,7 +254,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   @override
   void dispose() {
     // TODO: implement dispose
+    // _pwrTimer.cancel();
     _timer.cancel();
+    _pwrTimer.cancel();
     _audioPlayer.dispose();
     _effectPlayer.dispose();
     super.dispose();
@@ -258,27 +269,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     mainInit = _servingProvider.mainInit!;
-
-    if (mainInit == true) {
-      // if (_servingProvider.table1 != "" ||
-      //     (_servingProvider.table2 != "" ||
-      //         _servingProvider.table3 != "")) {
-      //   print('tts!!!!!!!!!!!!!!!!!!!!!!!!! stop!!!!!!!!!!!!!!!!!!');
-      //   _audioPlayer.stop();
-      // }else{
-      // _audioPlayer.play();
-      _timer = Timer.periodic(Duration(seconds: 30), (timer) {
-        _audioPlayer.seek(Duration(seconds: 0));
-      });
-      // }
-    } else {
-      _audioPlayer.dispose();
-      // _timer.cancel();
-    }
-
-    //0: 일반 1: 퇴식 2: 광고 재생 3: 서빙 복귀
-    serviceState =
-        Provider.of<ServingModel>(context, listen: false).servingState!;
 
     if (positionList.isEmpty) {
       positionList = _networkProvider.getPoseData!;
@@ -356,17 +346,22 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
                 children: [
                   Positioned(
+                    right: 46,
+                    top: 60,
+                    child: Text(('${batData.toString()} %')),
+                  ),
+                  Positioned(
                     right: 50,
-                    top: 25,
+                    top: 20,
                     child: Container(
-                      height: 60,
-                      width: 60,
+                      height: 45,
+                      width: 50,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
@@ -375,6 +370,26 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  EMGStatus == 0
+                      ? const Positioned(
+                          right: 35,
+                          top: 15,
+                          child: Icon(Icons.block,
+                              color: Colors.red,
+                              size: 80,
+                              grade: 200,
+                              weight: 200),
+                        )
+                      : Container(),
+                  CHGFlag == 3
+                      ? const Positioned(
+                    right: 50,
+                    top: 18,
+                    child: Icon(Icons.bolt,
+                        color: Colors.yellow,
+                        size: 50),
+                  )
+                      : Container(),
                   Positioned(
                     right: 150,
                     top: 25,
@@ -384,12 +399,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           _servingProvider.mainInit = false;
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _audioPlayer.dispose();
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
+                          _timer.cancel();
+                          _pwrTimer.cancel();
                           showReturnSelectPopup(context);
                         });
-                        // Future.delayed(const Duration(milliseconds: 500), () {
-                        //   showReturnSelectPopup(context);
-                        // });
                       },
                       style: FilledButton.styleFrom(
                           fixedSize: const Size(60, 60),
@@ -406,7 +422,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     top: 25,
                     child: Offstage(
                       offstage: _debugTray,
-                      child: SizedBox(
+                      child: const SizedBox(
                         height: 60,
                         width: 60,
                         child: Icon(Icons.bug_report, size: 50),
@@ -422,20 +438,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             _servingProvider.mainInit = false;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.seek(Duration(seconds: 0));
                             _effectPlayer.play();
                             navPage(
                               context: context,
                               page: const WebviewPage1(),
                             ).navPageToPage();
                           });
-
-                          // Future.delayed(const Duration(milliseconds: 500), () {
-                          //   // _audioPlayer.stop();
-                          //   navPage(
-                          //     context: context,
-                          //     page: const WebviewPage1(),
-                          //   ).navPageToPage();
-                          // });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(60, 60),
@@ -463,19 +472,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             _servingProvider.mainInit = false;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.seek(Duration(seconds: 0));
                             _effectPlayer.play();
                             navPage(
                               context: context,
                               page: const WebviewPage2(),
                             ).navPageToPage();
                           });
-
-                          // Future.delayed(const Duration(milliseconds: 500), () {
-                          //   navPage(
-                          //     context: context,
-                          //     page: const WebviewPage2(),
-                          //   ).navPageToPage();
-                          // });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(60, 60),
@@ -503,19 +506,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             _servingProvider.mainInit = false;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.seek(Duration(seconds: 0));
                             _effectPlayer.play();
                             navPage(
                               context: context,
                               page: const WebviewPage3(),
                             ).navPageToPage();
                           });
-
-                          // Future.delayed(const Duration(milliseconds: 500), () {
-                          //   navPage(
-                          //     context: context,
-                          //     page: const WebviewPage3(),
-                          //   ).navPageToPage();
-                          // });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(60, 60),
@@ -555,7 +552,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
               children: [
                 Column(
                   children: [
-                    Container(
+                    SizedBox(
                       width: 370,
                       height: 1820,
                       child: Stack(children: [
@@ -584,12 +581,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 ),
                                 initiallyExpanded: false,
                                 backgroundColor: Colors.transparent,
+                                onExpansionChanged: (value) {
+                                  _effectPlayer.seek(Duration(seconds: 0));
+                                  _effectPlayer.play();
+                                },
                                 children: <Widget>[
                                   const Divider(
                                       height: 20,
                                       color: Colors.grey,
                                       indent: 15),
-                                  Container(
+                                  SizedBox(
                                     width: 370,
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -648,7 +649,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                   WidgetsBinding.instance
                                                       .addPostFrameCallback(
                                                           (_) {
-                                                    _effectPlayer.play();
+                                                            _effectPlayer.seek(Duration(seconds: 0));
+                                                            _effectPlayer.play();
                                                     _prefs.setString('robotIp',
                                                         configController.text);
                                                     setState(() {
@@ -727,6 +729,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   onPressed: () {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
+                                      _effectPlayer.seek(Duration(seconds: 0));
                                       _effectPlayer.play();
                                       getting(_networkProvider.startUrl!,
                                           _networkProvider.positionURL);
@@ -771,6 +774,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
+                                      _effectPlayer.seek(Duration(seconds: 0));
                                       _effectPlayer.play();
                                       _networkProvider.servTable =
                                           'charging_pile';
@@ -786,23 +790,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                             const NavigatorProgressModuleFinal(),
                                       ).navPageToPage();
                                     });
-
-                                    // Future.delayed(
-                                    //     const Duration(milliseconds: 500), () {
-                                    //   _networkProvider.servTable =
-                                    //       'charging_pile';
-                                    //   PostApi(
-                                    //           url: startUrl,
-                                    //           endadr: chgUrl,
-                                    //           keyBody: 'charging_pile')
-                                    //       .Posting(context);
-                                    //   _networkProvider.currentGoal = '충전스테이션';
-                                    //   navPage(
-                                    //     context: context,
-                                    //     page:
-                                    //         const NavigatorProgressModuleFinal(),
-                                    //   ).navPageToPage();
-                                    // });
                                   },
                                   style: FilledButton.styleFrom(
                                       enableFeedback: false,
@@ -841,8 +828,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             Offstage(
                               offstage: _debugTray,
                               child: ExpansionTile(
-                                  title: const Row(
-                                    children: [
+                                  title: Row(
+                                    children: const [
                                       Icon(Icons.add_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
@@ -862,15 +849,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   ),
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
-                                  children: <Widget>[
-                                    const Divider(
+                                  onExpansionChanged: (value) {
+                                    _effectPlayer.seek(Duration(seconds: 0));
+                                    _effectPlayer.play();
+                                  },
+                                  children: const <Widget>[
+                                    Divider(
                                         height: 1,
                                         color: Colors.grey,
                                         indent: 15),
-                                    Container(
+                                    SizedBox(
                                       height: 100,
                                       width: 370,
-                                      child: const Padding(
+                                      child: Padding(
                                         padding: EdgeInsets.only(left: 30),
                                         child: Column(
                                           mainAxisAlignment:
@@ -898,8 +889,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             Offstage(
                               offstage: _debugTray,
                               child: ExpansionTile(
-                                  title: const Row(
-                                    children: [
+                                  title: Row(
+                                    children: const [
                                       Icon(Icons.remove_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
@@ -919,15 +910,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   ),
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
-                                  children: <Widget>[
-                                    const Divider(
+                                  onExpansionChanged: (value) {
+                                    _effectPlayer.seek(Duration(seconds: 0));
+                                    _effectPlayer.play();
+                                  },
+                                  children: const <Widget>[
+                                    Divider(
                                         height: 1,
                                         color: Colors.grey,
                                         indent: 15),
-                                    Container(
+                                    SizedBox(
                                       height: 100,
                                       width: 370,
-                                      child: const Padding(
+                                      child: Padding(
                                         padding: EdgeInsets.only(left: 30),
                                         child: Column(
                                           mainAxisAlignment:
@@ -963,6 +958,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       });
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
+                                        _effectPlayer.seek(Duration(seconds: 0));
                                         _effectPlayer.play();
                                         _prefs.clear();
                                         navPage(
@@ -1021,20 +1017,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
                                         _effectPlayer.play();
+                                        _effectPlayer.seek(Duration(seconds: 0));
                                         navPage(
                                           context: context,
                                           page: const TestPagesScreen(),
                                         ).navPageToPage();
                                       });
-
-                                      // Future.delayed(
-                                      //     const Duration(milliseconds: 500),
-                                      //     () {
-                                      //   navPage(
-                                      //     context: context,
-                                      //     page: const TestPagesScreen(),
-                                      //   ).navPageToPage();
-                                      // });
                                     },
                                     style: FilledButton.styleFrom(
                                         enableFeedback: false,
@@ -1081,21 +1069,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       });
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
+                                        _effectPlayer.seek(Duration(seconds: 0));
                                         _effectPlayer.play();
                                         navPage(
                                           context: context,
                                           page: const NavigationPatrol(),
                                         ).navPageToPage();
                                       });
-
-                                      // Future.delayed(
-                                      //     const Duration(milliseconds: 500),
-                                      //     () {
-                                      //   navPage(
-                                      //     context: context,
-                                      //     page: const NavigationPatrol(),
-                                      //   ).navPageToPage();
-                                      // });
                                     },
                                     style: FilledButton.styleFrom(
                                         enableFeedback: false,
@@ -1132,6 +1112,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             top: 1620,
                             child: FilledButton(
                               onPressed: () {
+                                _effectPlayer.seek(Duration(seconds: 0));
+                                _effectPlayer.play();
                                 DateTime now = DateTime.now();
                                 if (currentBackPressTime == null ||
                                     now.difference(currentBackPressTime!) >
@@ -1236,33 +1218,27 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               borderRadius: BorderRadius.circular(25)),
                           fixedSize: const Size(450, 168)),
                       onPressed: () {
+                        _audioPlayer.dispose();
                         setState(() {
                           _servingProvider.mainInit = false;
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           if ((_servingProvider.table1 != "" ||
                                   _servingProvider.table2 != "") ||
                               _servingProvider.table3 != "") {
+                            _timer.cancel();
+                            _pwrTimer.cancel();
                             showCountDownPopup(context);
                           } else {
                             _servingProvider.trayCheckAll = true;
+                            _timer.cancel();
+                            _pwrTimer.cancel();
                             showTableSelectPopup(context);
                             _servingProvider.menuItem = "상품";
                           }
                         });
-
-                        // Future.delayed(const Duration(milliseconds: 500), () {
-                        //   if ((_servingProvider.table1 != "" ||
-                        //           _servingProvider.table2 != "") ||
-                        //       _servingProvider.table3 != "") {
-                        //     showCountDownPopup(context);
-                        //   } else {
-                        //     _servingProvider.trayCheckAll = true;
-                        //     showTableSelectPopup(context);
-                        //     _servingProvider.menuItem = "상품";
-                        //   }
-                        // });
                       },
                       child: const Text(
                         '서빙시작',
@@ -1305,6 +1281,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
+                                  _effectPlayer.seek(Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray1 == true) {
                                     setState(() {
@@ -1316,19 +1293,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                   }
                                 });
-
-                                // Future.delayed(
-                                //     const Duration(milliseconds: 500), () {
-                                //   if (_servingProvider.attachedTray1 == true) {
-                                //     setState(() {
-                                //       _servingProvider.stickTray1();
-                                //     });
-                                //   } else {
-                                //     setState(() {
-                                //       _servingProvider.dittachedTray1();
-                                //     });
-                                //   }
-                                // });
                               },
                               style: TextButton.styleFrom(
                                   enableFeedback: false,
@@ -1345,6 +1309,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
+                                  _effectPlayer.seek(Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray2 == true) {
                                     setState(() {
@@ -1356,19 +1321,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                   }
                                 });
-
-                                // Future.delayed(
-                                //     const Duration(milliseconds: 500), () {
-                                //   if (_servingProvider.attachedTray2 == true) {
-                                //     setState(() {
-                                //       _servingProvider.stickTray2();
-                                //     });
-                                //   } else {
-                                //     setState(() {
-                                //       _servingProvider.dittachedTray2();
-                                //     });
-                                //   }
-                                // });
                               },
                               style: TextButton.styleFrom(
                                   enableFeedback: false,
@@ -1385,6 +1337,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
+                                  _effectPlayer.seek(Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray3 == true) {
                                     setState(() {
@@ -1396,19 +1349,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                   }
                                 });
-
-                                // Future.delayed(
-                                //     const Duration(milliseconds: 500), () {
-                                //   if (_servingProvider.attachedTray3 == true) {
-                                //     setState(() {
-                                //       _servingProvider.stickTray3();
-                                //     });
-                                //   } else {
-                                //     setState(() {
-                                //       _servingProvider.dittachedTray3();
-                                //     });
-                                //   }
-                                // });
                               },
                               style: TextButton.styleFrom(
                                   enableFeedback: false,
@@ -1434,17 +1374,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   child: FilledButton(
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           _servingProvider.clearTray1();
                         });
                       });
-
-                      // Future.delayed(const Duration(milliseconds: 500), () {
-                      //   setState(() {
-                      //     _servingProvider.clearTray1();
-                      //   });
-                      // });
                     },
                     child: null,
                     style: FilledButton.styleFrom(
@@ -1461,17 +1396,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   child: FilledButton(
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           _servingProvider.clearTray2();
                         });
                       });
-
-                      // Future.delayed(const Duration(milliseconds: 500), () {
-                      //   setState(() {
-                      //     _servingProvider.clearTray2();
-                      //   });
-                      // });
                     },
                     child: null,
                     style: FilledButton.styleFrom(
@@ -1488,17 +1418,12 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   child: FilledButton(
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           _servingProvider.clearTray3();
                         });
                       });
-
-                      // Future.delayed(const Duration(milliseconds: 500), () {
-                      //   setState(() {
-                      //     _servingProvider.clearTray3();
-                      //   });
-                      // });
                     },
                     child: null,
                     style: FilledButton.styleFrom(
@@ -1553,7 +1478,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               )),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 388.5,
                         height: 171.8,
                         child: TextButton(
@@ -1563,22 +1488,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 // _audioPlayer.stop();
                               });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.seek(Duration(seconds: 0));
                                 _effectPlayer.play();
                                 _servingProvider.tray1Select = true;
                                 _servingProvider.tray2Select = false;
                                 _servingProvider.tray3Select = false;
                                 _servingProvider.trayCheckAll = false;
+                                _audioPlayer.dispose();
+                                _timer.cancel();
+                                _pwrTimer.cancel();
                                 showTraySetPopup(context);
                               });
-
-                              // Future.delayed(const Duration(milliseconds: 500),
-                              //     () {
-                              //   _servingProvider.tray1Select = true;
-                              //   _servingProvider.tray2Select = false;
-                              //   _servingProvider.tray3Select = false;
-                              //   _servingProvider.trayCheckAll = false;
-                              //   showTraySetPopup(context);
-                              // });
                             },
                             style: TextButton.styleFrom(
                                 enableFeedback: false,
@@ -1639,7 +1559,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               )),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 388.5,
                         height: 171.8,
                         child: TextButton(
@@ -1648,22 +1568,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _servingProvider.mainInit = false;
                               });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.seek(Duration(seconds: 0));
                                 _effectPlayer.play();
                                 _servingProvider.tray1Select = false;
                                 _servingProvider.tray2Select = true;
                                 _servingProvider.tray3Select = false;
                                 _servingProvider.trayCheckAll = false;
+                                _audioPlayer.dispose();
+                                _timer.cancel();
+                                _pwrTimer.cancel();
                                 showTraySetPopup(context);
                               });
-
-                              // Future.delayed(const Duration(milliseconds: 500),
-                              //     () {
-                              //   _servingProvider.tray1Select = false;
-                              //   _servingProvider.tray2Select = true;
-                              //   _servingProvider.tray3Select = false;
-                              //   _servingProvider.trayCheckAll = false;
-                              //   showTraySetPopup(context);
-                              // });
                             },
                             style: TextButton.styleFrom(
                                 enableFeedback: false,
@@ -1724,7 +1639,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               )),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 518 * 0.75,
                         height: 293 * 0.75,
                         child: TextButton(
@@ -1733,22 +1648,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _servingProvider.mainInit = false;
                               });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.seek(Duration(seconds: 0));
                                 _effectPlayer.play();
                                 _servingProvider.tray1Select = false;
                                 _servingProvider.tray2Select = false;
                                 _servingProvider.tray3Select = true;
                                 _servingProvider.trayCheckAll = false;
+                                _audioPlayer.dispose();
+                                _timer.cancel();
+                                _pwrTimer.cancel();
                                 showTraySetPopup(context);
                               });
-
-                              // Future.delayed(const Duration(milliseconds: 500),
-                              //     () {
-                              //       _servingProvider.tray1Select = false;
-                              //       _servingProvider.tray2Select = false;
-                              //       _servingProvider.tray3Select = true;
-                              //       _servingProvider.trayCheckAll = false;
-                              //       showTraySetPopup(context);
-                              // });
                             },
                             style: TextButton.styleFrom(
                                 enableFeedback: false,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
@@ -6,6 +8,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -24,12 +27,14 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  late Timer _pwrTimer;
+
   final String _audioFile = 'assets/voices/koriServingNavDone2nd.mp3';
 
   late AudioPlayer _audioPlayer;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   void showCountDownPopup(context) {
     showDialog(
@@ -52,35 +57,59 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
 
   late bool _debugMode;
 
+  late int batData;
+  late int CHGFlag;
+  late int EMGStatus;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _controller.pause();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     _audioPlayer.play();
-    //   });
-    // });
     _initAudio();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _audioPlayer.play();
+    _audioPlayer.play();
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   _audioPlayer.play();
+    // });
+    _debugMode =
+        Provider.of<MainStatusModel>((context), listen: false).debugMode!;
+
+    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+
+    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      StatusManagements(context,
+              Provider.of<NetworkModel>(context, listen: false).startUrl!)
+          .gettingPWRdata();
+      if (EMGStatus !=
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
+        setState(() {});
+      }
+      if (batData !=
+          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
+        setState(() {});
+      }
+      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      CHGFlag =
+          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus =
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     });
-    _debugMode = Provider.of<MainStatusModel>((context), listen: false).debugMode!;
   }
 
   void _initAudio() {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _pwrTimer.cancel();
     _effectPlayer.dispose();
     _controller.pause();
     _audioPlayer.dispose();
@@ -113,6 +142,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     child: FilledButton(
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           navPage(
                             context: context,
@@ -139,11 +169,16 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     ),
                   ),
                   Positioned(
+                    right: 46,
+                    top: 60,
+                    child: Text(('${batData.toString()} %')),
+                  ),
+                  Positioned(
                     right: 50,
-                    top: 25,
+                    top: 20,
                     child: Container(
-                      height: 60,
-                      width: 60,
+                      height: 45,
+                      width: 50,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
@@ -152,6 +187,17 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  EMGStatus == 0
+                      ? const Positioned(
+                          right: 35,
+                          top: 15,
+                          child: Icon(Icons.block,
+                              color: Colors.red,
+                              size: 80,
+                              grade: 200,
+                              weight: 200),
+                        )
+                      : Container(),
                 ],
               ),
             )
@@ -282,65 +328,37 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     ),
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.play();
-                          _controller.pause();
-                          if (_servingProvider.targetTableNum != 'none') {
-                            _servingProvider.trayChange = true;
-                            _networkProvider.servTable =
-                                _servingProvider.targetTableNum;
-                            PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: _servingProvider.targetTableNum)
-                                .Posting(context);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              navPage(
-                                context: context,
-                                page: const NavigatorProgressModuleFinal(),
-                              ).navPageToPage();
-                            });
-                          } else {
-                            _servingProvider.clearAllTray();
-                            PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: _servingProvider.waitingPoint)
-                                .Posting(context);
+                        _effectPlayer.seek(Duration(seconds: 0));
+                        _effectPlayer.play();
+                        _controller.pause();
+                        if (_servingProvider.targetTableNum != 'none') {
+                          _servingProvider.trayChange = true;
+                          _networkProvider.servTable =
+                              _servingProvider.targetTableNum;
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: _servingProvider.targetTableNum)
+                              .Posting(context);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
                             navPage(
                               context: context,
-                              page: const TraySelectionFinal(),
+                              page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                          }
-                        });
-                      // Future.delayed(Duration(milliseconds: 100), () {
-                      //   if (_servingProvider.targetTableNum != 'none') {
-                      //     _servingProvider.trayChange = true;
-                      //     _networkProvider.servTable =
-                      //         _servingProvider.targetTableNum;
-                      //     PostApi(
-                      //             url: startUrl,
-                      //             endadr: navUrl,
-                      //             keyBody: _servingProvider.targetTableNum)
-                      //         .Posting(context);
-                      //     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      //       navPage(
-                      //         context: context,
-                      //         page: const NavigatorProgressModuleFinal(),
-                      //       ).navPageToPage();
-                      //     });
-                      //   } else {
-                      //     _servingProvider.clearAllTray();
-                      //     PostApi(
-                      //             url: startUrl,
-                      //             endadr: navUrl,
-                      //             keyBody: _servingProvider.waitingPoint)
-                      //         .Posting(context);
-                      //     navPage(
-                      //       context: context,
-                      //       page: const TraySelectionFinal(),
-                      //     ).navPageToPage();
-                      //   }
-                      // });
+                          });
+                        } else {
+                          _servingProvider.clearAllTray();
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: _servingProvider.waitingPoint)
+                              .Posting(context);
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        }
+                      });
                     },
                   ),
                 ),

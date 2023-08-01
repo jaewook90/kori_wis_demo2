@@ -29,7 +29,7 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
   late AudioPlayer _audioPlayer;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   String positionURL = "";
   String hostAdr = "";
@@ -51,14 +51,10 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
     _initAudio();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _audioPlayer.play();
-    });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     _audioPlayer.play();
-    //   });
+    _audioPlayer.play();
+
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   _audioPlayer.play();
     // });
   }
 
@@ -66,7 +62,7 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -127,15 +123,12 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                         _servingProvider.mainInit = true;
                       });
                       WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         navPage(context: context, page: TraySelectionFinal())
                             .navPageToPage();
                       });
-                      // Future.delayed(Duration(milliseconds: 500), () {
-                      //   navPage(context: context, page: TraySelectionFinal())
-                      //       .navPageToPage();
-                      // });
-                    },
+                      },
                     child: null,
                   ),
                 )),
@@ -152,6 +145,7 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                         fixedSize: Size(buttonSize[0], buttonSize[1])),
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           returnTable = _networkProvider.getPoseData![i];
@@ -168,22 +162,6 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                           page: const ReturnProgressModuleFinal(),
                         ).navPageToPage();
                       });
-                      // Future.delayed(Duration(milliseconds: 500), () {
-                      //   setState(() {
-                      //     returnTable = _networkProvider.getPoseData![i];
-                      //     _servingProvider.returnTargetTable = returnTable;
-                      //   });
-                      //   PostApi(
-                      //           url: startUrl,
-                      //           endadr: navUrl,
-                      //           keyBody: returnTable)
-                      //       .Posting(context);
-                      //   Navigator.pop(context);
-                      //   navPage(
-                      //     context: context,
-                      //     page: const ReturnProgressModuleFinal(),
-                      //   ).navPageToPage();
-                      // });
                     },
                     child: null,
                   ))

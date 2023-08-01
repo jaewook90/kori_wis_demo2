@@ -24,18 +24,17 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
             create: (context) => MainStatusModel(
-                  playAd: false,
-              debugMode: true
-                )),
+                debugMode: true, batBal: 0, chargeFlag: 0, emgButton: 0)),
         ChangeNotifierProvider(
-            create: (context) => NetworkModel(startUrl: '', getPoseData: [])),
+            create: (context) => NetworkModel(
+                  startUrl: '',
+                  getPoseData: [],
+                )),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
                   servingState: 0,
                   mainInit: true,
                   waitingPoint: 'wait',
-                  trayDebug: false,
-                  receiptModeOn: false,
                   attachedTray1: false,
                   attachedTray2: false,
                   attachedTray3: false,

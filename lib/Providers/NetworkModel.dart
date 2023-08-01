@@ -9,12 +9,7 @@ class NetworkModel with ChangeNotifier {
   String positionURL = "reeman/android_target";
   String moveBaseStatusUrl = 'reeman/movebase_status';
   List<String>? getPoseData;
-  List<String> goalPosition = [];
-  List<String> servingPosition = [];
   String? currentGoal;
-  int? serviceState;
-  bool? servingDone;
-  bool? shippingDone;
 
   dynamic getApiData;
 
@@ -24,11 +19,8 @@ class NetworkModel with ChangeNotifier {
   dynamic APIPostData;
 
   NetworkModel(
-      {this.serviceState,
-      this.getPoseData,
+      {this.getPoseData,
       this.currentGoal,
-      this.servingDone,
-      this.shippingDone,
       this.startUrl});
 
   void hostIP() {

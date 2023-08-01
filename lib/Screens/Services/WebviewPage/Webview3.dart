@@ -20,7 +20,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
   late ServingModel _servingProvider;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   @override
   void initState() {
@@ -106,7 +106,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -135,6 +135,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
               child: IconButton(
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.seek(Duration(seconds: 0));
                     _effectPlayer.play();
                     setState(() {
                       _servingProvider.mainInit = true;

@@ -23,7 +23,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   late AudioPlayer _audioPlayer;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   @override
   void initState() {
@@ -31,15 +31,9 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     super.initState();
 
     _initAudio();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _audioPlayer.play();
-    });
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     _audioPlayer.play();
-    //   });
+    _audioPlayer.play();
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   _audioPlayer.play();
     // });
   }
 
@@ -47,7 +41,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -113,6 +107,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                         )),
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         if (_servingProvider.trayCheckAll == true) {
                           setState(() {
@@ -134,27 +129,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                         _servingProvider.item2 = "";
                         _servingProvider.item3 = "";(context);
                       });
-                      // Future.delayed(Duration(milliseconds: 500), () {
-                      //   if (_servingProvider.trayCheckAll == true) {
-                      //     setState(() {
-                      //       _servingProvider.mainInit = true;
-                      //     });
-                      //     print('aaaaa');
-                      //     navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                      //   } else {
-                      //     if ((_servingProvider.table1 == "" &&
-                      //         _servingProvider.table2 == "") &&
-                      //         _servingProvider.table3 == "") {
-                      //       setState(() {
-                      //         _servingProvider.mainInit = true;
-                      //       });
-                      //     }
-                      //     navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                      //   }
-                      //   _servingProvider.item1 = "";
-                      //   _servingProvider.item2 = "";
-                      //   _servingProvider.item3 = "";
-                      // });
                     },
                     child: null,
                   ),

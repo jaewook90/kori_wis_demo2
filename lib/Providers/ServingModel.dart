@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ServingModel with ChangeNotifier {
-  int? servBotState;
   bool? mainInit;
 
   bool? tray1;
   bool? tray2;
   bool? tray3;
   bool? trayChange;
-  List<String>? trayList;
 
   //트레이 장착 여부
   bool? attachedTray1;
@@ -25,13 +23,7 @@ class ServingModel with ChangeNotifier {
   bool? tray2Select;
   bool? tray3Select;
 
-  //서빙 모드
-  bool? receiptModeOn;
-  bool? playAd;
-
   int? servingState;
-
-  bool? servingBeginningIsNot;
 
   List<String>? itemImageList;
 
@@ -40,8 +32,6 @@ class ServingModel with ChangeNotifier {
   String? item1;
   String? item2;
   String? item3;
-  String? namelessItem;
-  List<String>? itemList;
 
   String? targetTableNum;
   String? waitingPoint;
@@ -51,12 +41,7 @@ class ServingModel with ChangeNotifier {
   String? table3;
   String? allTable;
   String? returnTargetTable;
-  List<String>? tableList;
   bool? trayCheckAll;
-
-  bool? setTrayTF;
-
-  bool? trayDebug;
 
   String? patrol1;
   String? patrol2;
@@ -75,8 +60,6 @@ class ServingModel with ChangeNotifier {
       this.tray1Select,
       this.tray2Select,
       this.tray3Select,
-      this.playAd,
-      this.servingBeginningIsNot,
       this.waitingPoint,
       this.servedItem1,
       this.servedItem2,
@@ -84,18 +67,12 @@ class ServingModel with ChangeNotifier {
       this.item1,
       this.item2,
       this.item3,
-      this.namelessItem,
       this.tableNumber,
       this.table1,
       this.table2,
       this.table3,
       this.allTable,
-      this.tableList,
-      this.itemList,
-      this.trayList,
-      this.trayCheckAll,
-      this.receiptModeOn,
-      this.trayDebug});
+      this.trayCheckAll});
 
   void initServing() {
     tray1 = false;
@@ -109,8 +86,6 @@ class ServingModel with ChangeNotifier {
     table1 = null;
     table2 = null;
     table3 = null;
-    tableList!.isEmpty;
-    itemList!.isEmpty;
     trayCheckAll = false;
 
     notifyListeners();
@@ -209,15 +184,6 @@ class ServingModel with ChangeNotifier {
     tray1Select = false;
     tray2Select = false;
     tray3Select = false;
-    notifyListeners();
-  }
-
-  void playAD() {
-    if (playAd == true) {
-      playAd = false;
-    } else {
-      playAd = true;
-    }
     notifyListeners();
   }
 

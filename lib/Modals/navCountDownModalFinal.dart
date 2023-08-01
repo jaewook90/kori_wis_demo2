@@ -26,7 +26,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   final CountdownController _controller = CountdownController(autoStart: true);
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   String? currentGoal;
 
@@ -65,7 +65,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -184,9 +184,9 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.seek(Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    _networkProvider.servingPosition = [];
                     if (_servingProvider.table1 != "" ||
                         (_servingProvider.table2 != "" ||
                             _servingProvider.table3 != "")) {
@@ -225,6 +225,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.seek(Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
                     _servingProvider.trayChange = true;
@@ -244,25 +245,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                       ).navPageToPage();
                     });
                   });
-
-                  // Future.delayed(Duration(milliseconds: 100), () {
-                  //   _servingProvider.trayChange = true;
-                  //   _networkProvider.servTable =
-                  //       _servingProvider.targetTableNum;
-                  //   PostApi(
-                  //           url: startUrl,
-                  //           endadr: navUrl,
-                  //           keyBody: targetTableNum)
-                  //       .Posting(context);
-                  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-                  //     Navigator.pop(context);
-                  //     Navigator.pop(context);
-                  //     navPage(
-                  //       context: context,
-                  //       page: const NavigatorProgressModuleFinal(),
-                  //     ).navPageToPage();
-                  //   });
-                  // });
                 },
                 child: Center(
                   child: Text(

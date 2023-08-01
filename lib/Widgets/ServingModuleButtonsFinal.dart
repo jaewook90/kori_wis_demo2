@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -27,7 +26,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
   late NetworkModel _networkProvider;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -82,7 +81,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   void showCountDownPopup(context) {
@@ -196,6 +195,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
             onPressed: widget.screens == 2
                 ? () {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _effectPlayer.seek(Duration(seconds: 0));
                       _effectPlayer.play();
                       setState(() {
                         if (_servingProvider.trayCheckAll == false) {
@@ -211,47 +211,17 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             context: context,
                             page: const TraySelectionFinal(),
                           ).navPageToPage();
-                          // navPage(
-                          //         context: context,
-                          //         page: const TraySelectionFinal(),
-                          //         enablePop: false)
-                          //     .navPageToPage();
                         } else {
                           _servingProvider.allTable = '${i + 1}';
                           showCountDownPopup(context);
                         }
                       });
                     });
-                    // Future.delayed(Duration(milliseconds: 500), () {
-                    //   setState(() {
-                    //     if (_servingProvider.trayCheckAll == false) {
-                    //       if (_servingProvider.tray1Select == true) {
-                    //         _servingProvider.table1 = "${i + 1}";
-                    //       } else if (_servingProvider.tray2Select == true) {
-                    //         _servingProvider.table2 = "${i + 1}";
-                    //       } else {
-                    //         _servingProvider.table3 = "${i + 1}";
-                    //       }
-                    //       uploadTableNumberNItemImg();
-                    //       navPage(
-                    //         context: context,
-                    //         page: const TraySelectionFinal(),
-                    //       ).navPageToPage();
-                    //       // navPage(
-                    //       //         context: context,
-                    //       //         page: const TraySelectionFinal(),
-                    //       //         enablePop: false)
-                    //       //     .navPageToPage();
-                    //     } else {
-                    //       _servingProvider.allTable = '${i + 1}';
-                    //       showCountDownPopup(context);
-                    //     }
-                    //   });
-                    // });
                   }
                 : widget.screens == 3
                     ? () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           PostApi(
                                   url: startUrl,
@@ -263,22 +233,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             page: const TraySelectionFinal(),
                           ).navPageToPage();
                         });
-                        // Future.delayed(Duration(milliseconds: 500), () {
-                        //                 PostApi(
-                        //                         url: startUrl,
-                        //                         endadr: navUrl,
-                        //                         keyBody: _servingProvider.waitingPoint)
-                        //                     .Posting(context);
-                        //                 navPage(
-                        //                   context: context,
-                        //                   page: const TraySelectionFinal(),
-                        //                 ).navPageToPage();
-                        //                 // navPage(
-                        //                 //         context: context,
-                        //                 //         page: const TraySelectionFinal(),
-                        //                 //         enablePop: false)
-                        //                 //     .navPageToPage();
-                        //               });
                       }
                     : null,
             child: null,

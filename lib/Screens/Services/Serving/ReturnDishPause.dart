@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
@@ -5,9 +7,9 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
+import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
 class ReturnDishPauseScreen extends StatefulWidget {
@@ -23,8 +25,9 @@ class ReturnDishPauseScreen extends StatefulWidget {
 }
 
 class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
-  late MainStatusModel _statusProvider;
   late NetworkModel _networkProvider;
+
+  late Timer _pwrTimer;
 
   late String backgroundImage;
 
@@ -35,7 +38,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   late AudioPlayer _audioPlayer;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   late int buttonNumbers;
 
@@ -60,6 +63,10 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   String? navUrl;
   String? chgUrl;
 
+  late int batData;
+  late int CHGFlag;
+  late int EMGStatus;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -68,22 +75,41 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
         Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
 
     _initAudio();
-    Future.delayed(Duration(milliseconds: 500), () {
-      _audioPlayer.play();
-    });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    //   Future.delayed(Duration(milliseconds: 500), () {
-    //     _audioPlayer.play();
-    //   });
+
+    _audioPlayer.play();
+    // Future.delayed(Duration(milliseconds: 500), () {
+    //   _audioPlayer.play();
     // });
+
+    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+
+    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      StatusManagements(context,
+              Provider.of<NetworkModel>(context, listen: false).startUrl!)
+          .gettingPWRdata();
+      if (EMGStatus !=
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
+        setState(() {});
+      }
+      if (batData !=
+          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
+        setState(() {});
+      }
+      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      CHGFlag =
+          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus =
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+    });
   }
 
   void _initAudio() {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -91,12 +117,12 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
     // TODO: implement dispose
     _audioPlayer.dispose();
     _effectPlayer.dispose();
+    _pwrTimer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _statusProvider = Provider.of<MainStatusModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
@@ -138,11 +164,16 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
               child: Stack(
                 children: [
                   Positioned(
+                    right: 46,
+                    top: 60,
+                    child: Text(('${batData.toString()} %')),
+                  ),
+                  Positioned(
                     right: 50,
-                    top: 25,
+                    top: 20,
                     child: Container(
-                      height: 60,
-                      width: 60,
+                      height: 45,
+                      width: 50,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage(
@@ -151,6 +182,17 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                               fit: BoxFit.fill)),
                     ),
                   ),
+                  EMGStatus == 0
+                      ? const Positioned(
+                          right: 35,
+                          top: 15,
+                          child: Icon(Icons.block,
+                              color: Colors.red,
+                              size: 80,
+                              grade: 200,
+                              weight: 200),
+                        )
+                      : Container(),
                 ],
               ),
             )
@@ -211,101 +253,53 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                                   i == 0 ? buttonRadius1 : buttonRadius2)),
                           fixedSize: i == 0
                               ? Size(buttonSize1[buttonWidth],
-                              buttonSize1[buttonHeight])
+                                  buttonSize1[buttonHeight])
                               : Size(buttonSize2[buttonWidth],
-                              buttonSize2[buttonHeight])),
+                                  buttonSize2[buttonHeight])),
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
                           if (i == 0) {
                             // 재시작 추가 필요
                             _audioPlayer.dispose();
                             PostApi(
-                                url: startUrl,
-                                endadr: rsmUrl,
-                                keyBody: 'stop')
+                                    url: startUrl,
+                                    endadr: rsmUrl,
+                                    keyBody: 'stop')
                                 .Posting(context);
                             navPage(
                               context: context,
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                            _statusProvider.playAd = false;
                           } else if (i == 1) {
                             // 충전하러가기 기능
                             PostApi(
-                                url: startUrl,
-                                endadr: chgUrl,
-                                keyBody: 'charging_pile')
+                                    url: startUrl,
+                                    endadr: chgUrl,
+                                    keyBody: 'charging_pile')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
                             navPage(
                               context: context,
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                            _statusProvider.playAd = false;
                           } else if (i == 2) {
                             // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                            _statusProvider.playAd = false;
                           } else {
                             // 추후에는 거점으로 복귀
                             PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: 'wait')
+                                    url: startUrl,
+                                    endadr: navUrl,
+                                    keyBody: 'wait')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
                             navPage(
                               context: context,
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
-                            _statusProvider.playAd = false;
                           }
                         });
-                        // Future.delayed(Duration(milliseconds: 500), () {
-                        //   if (i == 0) {
-                        //     // 재시작 추가 필요
-                        //     _audioPlayer.dispose();
-                        //     PostApi(
-                        //         url: startUrl,
-                        //         endadr: rsmUrl,
-                        //         keyBody: 'stop')
-                        //         .Posting(context);
-                        //     navPage(
-                        //       context: context,
-                        //       page: const NavigatorProgressModuleFinal(),
-                        //     ).navPageToPage();
-                        //     _statusProvider.playAd = false;
-                        //   } else if (i == 1) {
-                        //     // 충전하러가기 기능
-                        //     PostApi(
-                        //         url: startUrl,
-                        //         endadr: chgUrl,
-                        //         keyBody: 'charging_pile')
-                        //         .Posting(context);
-                        //     _networkProvider.currentGoal = '충전스테이션';
-                        //     navPage(
-                        //       context: context,
-                        //       page: const NavigatorProgressModuleFinal(),
-                        //     ).navPageToPage();
-                        //     _statusProvider.playAd = false;
-                        //   } else if (i == 2) {
-                        //     // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
-                        //     _statusProvider.playAd = false;
-                        //   } else {
-                        //     // 추후에는 거점으로 복귀
-                        //     PostApi(
-                        //         url: startUrl,
-                        //         endadr: navUrl,
-                        //         keyBody: 'wait')
-                        //         .Posting(context);
-                        //     _networkProvider.currentGoal = '충전스테이션';
-                        //     navPage(
-                        //       context: context,
-                        //       page: const NavigatorProgressModuleFinal(),
-                        //     ).navPageToPage();
-                        //     _statusProvider.playAd = false;
-                        //   }
-                        // });
                       },
                       child: null,
                     ),

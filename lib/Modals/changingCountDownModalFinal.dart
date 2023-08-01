@@ -33,7 +33,7 @@ class _ChangingCountDownModalFinalState
   late String countDownPopup;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.mp3';
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _ChangingCountDownModalFinalState
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(1);
+    _effectPlayer.setVolume(0.8);
   }
 
   String? startUrl;
@@ -142,22 +142,12 @@ class _ChangingCountDownModalFinalState
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.seek(Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    _networkProvider.servingPosition = [];
                     Navigator.pop(context);
                     Navigator.pop(context);
                   });
-                  // _controller.pause();
-                  // _networkProvider.servingPosition = [];
-                  // Navigator.pop(context);
-                  // Navigator.pop(context);
-                  // Future.delayed(Duration(milliseconds: 500), () {
-                  //   _controller.pause();
-                  //   _networkProvider.servingPosition = [];
-                  //   Navigator.pop(context);
-                  //   Navigator.pop(context);
-                  // });
                 },
                 child: null,
               ),
@@ -174,6 +164,7 @@ class _ChangingCountDownModalFinalState
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.seek(Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
                     // _controller.pause();
@@ -217,91 +208,6 @@ class _ChangingCountDownModalFinalState
                       }
                     }
                   });
-                  // if (widget.modeState == 'return') {
-                  //   PostApi(
-                  //       url: startUrl,
-                  //       endadr: navUrl,
-                  //       keyBody: _servingProvider.waitingPoint)
-                  //       .Posting(context);
-                  //   navPage(
-                  //       context: context,
-                  //       page: const TraySelectionFinal(),
-                  //       enablePop: false)
-                  //       .navPageToPage();
-                  // } else if (widget.modeState == 'serving') {
-                  //   if (_servingProvider.targetTableNum != 'none') {
-                  //     setState(() {
-                  //       _servingProvider.trayChange = true;
-                  //       _networkProvider.servTable =
-                  //           _servingProvider.targetTableNum;
-                  //     });
-                  //     PostApi(
-                  //         url: startUrl,
-                  //         endadr: navUrl,
-                  //         keyBody: _servingProvider.targetTableNum)
-                  //         .Posting(context);
-                  //     navPage(
-                  //         context: context,
-                  //         page: const NavigatorProgressModuleFinal(),
-                  //         enablePop: true)
-                  //         .navPageToPage();
-                  //   } else {
-                  //     _servingProvider.clearAllTray();
-                  //     PostApi(
-                  //         url: startUrl,
-                  //         endadr: navUrl,
-                  //         keyBody: _servingProvider.waitingPoint)
-                  //         .Posting(context);
-                  //     navPage(
-                  //         context: context,
-                  //         page: const TraySelectionFinal(),
-                  //         enablePop: false)
-                  //         .navPageToPage();
-                  //   }
-                  // }
-                  // _controller.pause();
-                  // Future.delayed(Duration(milliseconds: 100), () {
-                  //   // _controller.pause();
-                  //   if (widget.modeState == 'return') {
-                  //     PostApi(
-                  //             url: startUrl,
-                  //             endadr: navUrl,
-                  //             keyBody: _servingProvider.waitingPoint)
-                  //         .Posting(context);
-                  //     navPage(
-                  //       context: context,
-                  //       page: const TraySelectionFinal(),
-                  //     ).navPageToPage();
-                  //   } else if (widget.modeState == 'serving') {
-                  //     if (_servingProvider.targetTableNum != 'none') {
-                  //       setState(() {
-                  //         _servingProvider.trayChange = true;
-                  //         _networkProvider.servTable =
-                  //             _servingProvider.targetTableNum;
-                  //       });
-                  //       PostApi(
-                  //               url: startUrl,
-                  //               endadr: navUrl,
-                  //               keyBody: _servingProvider.targetTableNum)
-                  //           .Posting(context);
-                  //       navPage(
-                  //         context: context,
-                  //         page: const NavigatorProgressModuleFinal(),
-                  //       ).navPageToPage();
-                  //     } else {
-                  //       _servingProvider.clearAllTray();
-                  //       PostApi(
-                  //               url: startUrl,
-                  //               endadr: navUrl,
-                  //               keyBody: _servingProvider.waitingPoint)
-                  //           .Posting(context);
-                  //       navPage(
-                  //         context: context,
-                  //         page: const TraySelectionFinal(),
-                  //       ).navPageToPage();
-                  //     }
-                  //   }
-                  // });
                 },
                 child: null,
               ),

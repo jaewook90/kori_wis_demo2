@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
+import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
@@ -25,7 +29,11 @@ class _NavigatorProgressModuleFinalState
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  late Timer _pwrTimer;
   late String backgroundImageServ;
+
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/sounds/sound_moving_bg.mp3';
 
   late String targetTableNum;
 
@@ -38,6 +46,10 @@ class _NavigatorProgressModuleFinalState
   String? startUrl;
   String? navUrl;
   String? moveBaseStatusUrl;
+
+  late int batData;
+  late int CHGFlag;
+  late int EMGStatus;
 
   late int navStatus;
 
@@ -53,6 +65,39 @@ class _NavigatorProgressModuleFinalState
     targetTableNum = "";
 
     _debugMode = Provider.of<MainStatusModel>((context), listen: false).debugMode!;
+
+
+    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+
+    _initAudio();
+
+    _audioPlayer.seek(Duration(seconds: 0));
+    _audioPlayer.play();
+
+    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      StatusManagements(context,
+          Provider.of<NetworkModel>(context, listen: false).startUrl!)
+          .gettingPWRdata();
+      if (EMGStatus !=
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
+        setState(() {});
+      }
+      if (batData !=
+          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
+        setState(() {});
+      }
+      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+    });
+  }
+
+  void _initAudio() {
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
+    _audioPlayer.setLoopMode(LoopMode.all);
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -102,6 +147,8 @@ class _NavigatorProgressModuleFinalState
   @override
   void dispose() {
     // TODO: implement dispose
+    _pwrTimer.cancel();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -215,18 +262,35 @@ class _NavigatorProgressModuleFinalState
               child: Stack(
                 children: [
                   Positioned(
-                      right: 50,
-                      top: 25,
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/icons/appBar/appBar_Battery.png',
-                                ),
-                                fit: BoxFit.fill)),
-                      ))
+                    right: 46,
+                    top: 60,
+                    child: Text(('${batData.toString()} %')),
+                  ),
+                  Positioned(
+                    right: 50,
+                    top: 20,
+                    child: Container(
+                      height: 45,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/icons/appBar/appBar_Battery.png',
+                              ),
+                              fit: BoxFit.fill)),
+                    ),
+                  ),
+                  EMGStatus == 0
+                      ? const Positioned(
+                    right: 35,
+                    top: 15,
+                    child: Icon(Icons.block,
+                        color: Colors.red,
+                        size: 80,
+                        grade: 200,
+                        weight: 200),
+                  )
+                      : Container(),
                 ],
               ),
             )
