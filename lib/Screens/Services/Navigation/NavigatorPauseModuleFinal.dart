@@ -30,8 +30,13 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
   late Timer _pwrTimer;
 
+  late String serviceState;
+  late String navSentence;
+  late String destinationSentence;
 
-  final String _audioFile = 'assets/voices/koriServingNavPause2nd.mp3';
+  late String servTableNum;
+
+  final String _audioFile = 'assets/voices/koriServingNavPause.mp3';
 
   late AudioPlayer _audioPlayer;
 
@@ -69,6 +74,10 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    serviceState = '';
+    navSentence = '';
+    destinationSentence = '';
 
     _initAudio();
     _audioPlayer.play();
@@ -140,6 +149,28 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
     buttonNumbers = buttonPositionHeight.length;
 
+    servTableNum = _networkProvider.servTable!;
+
+    if(servTableNum == 'charging_pile'){
+      setState(() {
+        serviceState = '[이동]';
+        navSentence = '$serviceState이 일시중지 되었습니다';
+        destinationSentence = '충전스테이션';
+      });
+    }else if(servTableNum == 'wait'){
+      setState(() {
+        serviceState = '[이동]';
+        navSentence = '$serviceState이 일시중지 되었습니다';
+        destinationSentence = '대기장소';
+      });
+    }else{
+      setState(() {
+        serviceState = '[서빙]';
+        navSentence = '$serviceState이 일시중지 되었습니다';
+        destinationSentence = '$servTableNum번 테이블';
+      });
+    }
+
     return WillPopScope(
       onWillPop: () {
         return Future.value(false);
@@ -202,22 +233,43 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
             child: Stack(
               children: [
                 Positioned(
-                    top: 372,
-                    left: 460,
+                    top: 250,
                     child: Container(
-                      width: 300,
+                      width: 1080,
+                      height: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            navSentence,
+                            style: const TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 70,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xfffffefe)),
+                          ),
+                        ],
+                      ),
+                    )),
+                Positioned(
+                    top: 372,
+                    child: Container(
+                      width: 1080,
                       height: 90,
-                      child: Text(
-                        widget.servGoalPose == 'charging_pile'
-                            ? '충전스테이션'
-                            : widget.servGoalPose == 'wait'
-                                ? '대기장소'
-                                : '${widget.servGoalPose!}번 테이블',
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 55,
-                            color: Color(0xfffffefe)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
+                          SizedBox(width: 15,),
+                          Text(
+                            destinationSentence,
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 55,
+                                color: Color(0xfffffefe)),
+                          ),
+                        ],
                       ),
                     )),
                 for (int i = 0; i < buttonNumbers; i++)

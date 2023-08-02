@@ -35,6 +35,9 @@ class _NavigatorProgressModuleFinalState
   late AudioPlayer _audioPlayer;
   final String _audioFile = 'assets/sounds/sound_moving_bg.mp3';
 
+  late String navSentence;
+  late String destinationSentence;
+
   late String targetTableNum;
 
   late String servTableNum;
@@ -59,6 +62,8 @@ class _NavigatorProgressModuleFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
+    navSentence = '';
+    destinationSentence = '';
     initNavStatus = true;
     navStatus = 0;
     arrivedServingTable = false;
@@ -162,6 +167,23 @@ class _NavigatorProgressModuleFinalState
     moveBaseStatusUrl = _networkProvider.moveBaseStatusUrl;
 
     servTableNum = _networkProvider.servTable!;
+
+    if(servTableNum == 'charging_pile'){
+      setState(() {
+        navSentence = '[이동] 중 입니다';
+        destinationSentence = '충전스테이션';
+      });
+    }else if(servTableNum == 'wait'){
+      setState(() {
+        navSentence = '[이동] 중 입니다';
+        destinationSentence = '대기장소';
+      });
+    }else{
+      setState(() {
+        navSentence = '[서빙] 중 입니다';
+        destinationSentence = '$servTableNum번 테이블';
+      });
+    }
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
@@ -354,22 +376,43 @@ class _NavigatorProgressModuleFinalState
                   ),
                 ),
                 Positioned(
-                    top: 372,
-                    left: 460,
+                    top: 250,
                     child: Container(
-                      width: 300,
+                      width: 1080,
+                      height: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            navSentence,
+                            style: const TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 70,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xfffffefe)),
+                          ),
+                        ],
+                      ),
+                    )),
+                Positioned(
+                    top: 372,
+                    child: Container(
+                      width: 1080,
                       height: 90,
-                      child: Text(
-                        servTableNum == 'charging_pile'
-                            ? '충전스테이션'
-                            : servTableNum == 'wait'
-                                ? '대기장소'
-                                : '$servTableNum번 테이블',
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 55,
-                            color: Color(0xfffffefe)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
+                          SizedBox(width: 15,),
+                          Text(
+                            destinationSentence,
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 55,
+                                color: Color(0xfffffefe)),
+                          ),
+                        ],
                       ),
                     )),
                 NavModuleButtonsFinal(

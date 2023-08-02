@@ -38,11 +38,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
   late bool mainInit;
 
+  late bool volumeOnOff;
+
   final TextEditingController configController = TextEditingController();
   late SharedPreferences _prefs;
 
   late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/voices/koriServingMain2nd.mp3';
+  final String _audioFile = 'assets/voices/koriServingMain.mp3';
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
@@ -101,6 +103,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     _debugEncounter = 0;
     _debugTray = true;
+
+    volumeOnOff = true;
 
     fToast = FToast();
     fToast?.init(context);
@@ -419,6 +423,36 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   ),
                   Positioned(
                     right: 250,
+                    top: 25,
+                    child: FilledButton(
+                      onPressed: () {
+                        if(volumeOnOff == true){
+                          _audioPlayer.stop();
+                          setState(() {
+                            volumeOnOff = false;
+                          });
+                        }else{
+                          _audioPlayer.seek(Duration(seconds: 0));
+                          _audioPlayer.play();
+                          setState(() {
+                            volumeOnOff = true;
+                          });
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                          fixedSize: const Size(60, 60),
+                          enableFeedback: false,
+                          padding: const EdgeInsets.only(right: 0),
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0))),
+                      child: Icon(
+                        volumeOnOff == true?
+                          Icons.volume_up : Icons.volume_off, size: 50),
+                    ),
+                  ),
+                  Positioned(
+                    right: 350,
                     top: 25,
                     child: Offstage(
                       offstage: _debugTray,
@@ -1256,7 +1290,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '트레이를 선택 후 상품을 담아주세요.',
+                          '트레이를 선택하세요',
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 30,

@@ -32,6 +32,8 @@ class _ChangingCountDownModalFinalState
 
   late String countDownPopup;
 
+  late String countDownMSG;
+
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
@@ -40,7 +42,7 @@ class _ChangingCountDownModalFinalState
     // TODO: implement initState
     super.initState();
     countDownNav = true;
-
+    countDownMSG = '초 후 서빙을 시작합니다.';
     _initAudio();
 
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -65,13 +67,21 @@ class _ChangingCountDownModalFinalState
 
   @override
   Widget build(BuildContext context) {
-    countDownPopup = 'assets/screens/Serving/koriZFinalServCountDown.png';
+    countDownPopup = 'assets/screens/Serving/koriServingCountDown.png';
 
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
+
+    if((_servingProvider.tray1 == false&&_servingProvider.tray2==false)&&_servingProvider.tray3==false ){
+      setState(() {
+        countDownMSG = '초 후 대기장소로 돌아갑니다.';
+      });
+    }else{
+      countDownMSG = '초 후 서빙을 시작합니다.';
+    }
 
     return Container(
         padding: const EdgeInsets.only(top: 607),
@@ -85,7 +95,7 @@ class _ChangingCountDownModalFinalState
                   image: DecorationImage(
                       image: AssetImage(countDownPopup), fit: BoxFit.fill)),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(85, 20, 555, 240),
+                padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
                 child: Countdown(
                   controller: _controller,
                   seconds: 30,
@@ -99,6 +109,17 @@ class _ChangingCountDownModalFinalState
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
+                    if(_servingProvider.tray1 == true){
+                      _servingProvider.tray1 = false;
+                    }else{
+                      if(_servingProvider.tray2 == true){
+                        _servingProvider.tray2 = false;
+                      }else{
+                        if(_servingProvider.tray3 == true){
+                          _servingProvider.tray3 = false;
+                        }
+                      }
+                    }
                     if (_servingProvider.targetTableNum != 'none') {
                       setState(() {
                         _servingProvider.trayChange = true;
@@ -131,6 +152,15 @@ class _ChangingCountDownModalFinalState
               ),
             ),
             Positioned(
+                left: 240,
+                top: 100,
+                child: Text(countDownMSG,
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white))),
+            Positioned(
               left: 0,
               top: 242,
               child: FilledButton(
@@ -149,7 +179,15 @@ class _ChangingCountDownModalFinalState
                     Navigator.pop(context);
                   });
                 },
-                child: null,
+                child: Center(
+                  child: Text(
+                    '취소',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
             ),
             Positioned(
@@ -168,6 +206,17 @@ class _ChangingCountDownModalFinalState
                     _effectPlayer.play();
                     _controller.pause();
                     // _controller.pause();
+                    if(_servingProvider.tray1 == true){
+                      _servingProvider.tray1 = false;
+                    }else{
+                      if(_servingProvider.tray2 == true){
+                        _servingProvider.tray2 = false;
+                      }else{
+                        if(_servingProvider.tray3 == true){
+                          _servingProvider.tray3 = false;
+                        }
+                      }
+                    }
                     if (widget.modeState == 'return') {
                       PostApi(
                           url: startUrl,
@@ -209,7 +258,15 @@ class _ChangingCountDownModalFinalState
                     }
                   });
                 },
-                child: null,
+                child: Center(
+                  child: Text(
+                    '시작',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
             ),
           ]),

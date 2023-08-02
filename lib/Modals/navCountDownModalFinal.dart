@@ -27,6 +27,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/voices/koriServingNavBegin.mp3';
 
   String? currentGoal;
 
@@ -66,6 +68,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.8);
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
   }
 
   @override
@@ -114,7 +118,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   image: DecorationImage(
                       image: AssetImage(countDownPopup), fit: BoxFit.fill)),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(85, 20, 555, 240),
+                padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
                 child: Countdown(
                   controller: _controller,
                   seconds: 5,
@@ -128,6 +132,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   ),
                   interval: const Duration(seconds: 1),
                   onFinished: () {
+                    _audioPlayer.play();
                     _servingProvider.trayChange = true;
                     _networkProvider.servTable =
                         _servingProvider.targetTableNum;
@@ -153,25 +158,14 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
               ),
             ),
             Positioned(
-                left: 200,
-                top: 60,
+                left: 240,
+                top: 100,
                 child: Text('초 후 서빙을 시작합니다.',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
                         color: Colors.white))),
-            Positioned(
-                left: 20,
-                top: 130,
-                child: Text(
-                  '즉시 시작하려면 "즉시 시작"버튼을 눌러주세요.',
-                  style: TextStyle(
-                      fontFamily: 'kor',
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                )),
             Positioned(
               left: 0,
               top: 242,
@@ -224,6 +218,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                         borderRadius: BorderRadius.circular(0)),
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
+                  _audioPlayer.play();
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _effectPlayer.seek(Duration(seconds: 0));
                     _effectPlayer.play();
@@ -248,7 +243,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 },
                 child: Center(
                   child: Text(
-                    '즉시 시작',
+                    '시작',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontSize: 35,

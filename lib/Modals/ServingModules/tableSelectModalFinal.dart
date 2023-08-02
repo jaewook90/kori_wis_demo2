@@ -18,7 +18,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
 
   String tableSelectBG = 'assets/screens/Serving/KoriServingTableSelect.png';
 
-  final String _audioFile = 'assets/voices/koriServingTableSelect2nd.mp3';
+  final String _audioFile = 'assets/voices/koriServingTableSelect.mp3';
 
   late AudioPlayer _audioPlayer;
 
@@ -81,7 +81,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 80),
-                        child: Text('테이블을 선택해 주세요.',
+                        child: Text('테이블을 선택하세요',
                         style: TextStyle(
                           fontFamily: 'kor',
                           fontSize: 35,

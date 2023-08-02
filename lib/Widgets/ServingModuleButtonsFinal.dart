@@ -201,10 +201,13 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                         if (_servingProvider.trayCheckAll == false) {
                           if (_servingProvider.tray1Select == true) {
                             _servingProvider.table1 = "${i + 1}";
+                            _servingProvider.tray1 = true;
                           } else if (_servingProvider.tray2Select == true) {
                             _servingProvider.table2 = "${i + 1}";
+                            _servingProvider.tray2 = true;
                           } else {
                             _servingProvider.table3 = "${i + 1}";
+                            _servingProvider.tray3 = true;
                           }
                           uploadTableNumberNItemImg();
                           navPage(

@@ -27,9 +27,10 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  late String currentServedTrayNum;
   late Timer _pwrTimer;
 
-  final String _audioFile = 'assets/voices/koriServingNavDone2nd.mp3';
+  late String _audioFile;
 
   late AudioPlayer _audioPlayer;
 
@@ -66,11 +67,13 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     // TODO: implement initState
     super.initState();
     _controller.pause();
-    _initAudio();
-    _audioPlayer.play();
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(0.8);
     // Future.delayed(Duration(milliseconds: 500), () {
     //   _audioPlayer.play();
     // });
+    currentServedTrayNum = '';
+    _audioFile = '';
     _debugMode =
         Provider.of<MainStatusModel>((context), listen: false).debugMode!;
 
@@ -100,9 +103,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
 
   void _initAudio() {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
-    _effectPlayer.setVolume(0.8);
   }
 
   @override
@@ -119,6 +120,39 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+
+    if(_servingProvider.tray1 == true){
+      currentServedTrayNum = '1번 ';
+      _audioFile = 'assets/voices/koriServingNavDoneTray1.mp3';
+    }else{
+      if(_servingProvider.tray2 == true){
+        currentServedTrayNum = '2번 ';
+        _audioFile = 'assets/voices/koriServingNavDoneTray2.mp3';
+      }else{
+        if(_servingProvider.tray3 == true){
+          currentServedTrayNum = '3번 ';
+          _audioFile = 'assets/voices/koriServingNavDoneTray3.mp3';
+        }else{
+          currentServedTrayNum = '';
+          _audioFile = 'assets/voices/koriServingNavDone.mp3';
+        }
+      }
+    }
+
+    if(_servingProvider.tray1 == true){
+      _servingProvider.tray1 = false;
+    }else{
+      if(_servingProvider.tray2 == true){
+        _servingProvider.tray2 = false;
+      }else{
+        if(_servingProvider.tray3 == true){
+          _servingProvider.tray3 = false;
+        }
+      }
+    }
+
+    _initAudio();
+    _audioPlayer.play();
 
     double screenWidth = 1080;
 
@@ -231,13 +265,25 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                       children: [
                         Column(
                           children: [
-                            Text(
-                              '트레이에서 상품을 수령하신 후',
-                              style: TextStyle(
-                                  fontFamily: 'kor',
-                                  fontSize: 32,
-                                  // fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                            Row(
+                              children: [
+                                Text(
+                                  currentServedTrayNum,
+                                  style: TextStyle(
+                                      fontFamily: 'kor',
+                                      fontSize: 33,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Text(
+                                  '트레이에서 상품을 수령하신 후',
+                                  style: TextStyle(
+                                      fontFamily: 'kor',
+                                      fontSize: 32,
+                                      // fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
                             ),
                             Row(
                               children: [

@@ -18,7 +18,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
 
   String itemSelectBG = 'assets/screens/Serving/koriZFinalItemSelect.png';
 
-  final String _audioFile = 'assets/voices/koriServingItemSelect2nd.mp3';
+  final String _audioFile = 'assets/voices/koriServingItemSelect.mp3';
 
   late AudioPlayer _audioPlayer;
 
@@ -128,6 +128,17 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                       child: null,
                     ),
                   )),
+              Positioned(
+                left: 260,
+                  top: 40,
+                  child: Text(
+                '상품을 선택하세요',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'kor',
+                    fontSize: 60,
+                    fontWeight: FontWeight.bold),
+              )),
               // 상품 버튼
               for (int i = 0; i < buttonNumbers; i++)
                 Positioned(
@@ -150,7 +161,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           });
                           showTableSelectPopup(context);
                         });
-
                       },
                       child: null,
                     )),

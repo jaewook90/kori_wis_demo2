@@ -22,9 +22,9 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
   late String returnTable;
   late int serviceState;
 
-  String tableSelectBG = 'assets/screens/Serving/koriZFinalTableSelect.png';
+  String tableSelectBG = 'assets/screens/Serving/KoriServingTableSelect.png';
 
-  final String _audioFile = 'assets/voices/koriServingTableSelect2nd.mp3';
+  final String _audioFile = 'assets/voices/koriServingTableSelect.mp3';
 
   late AudioPlayer _audioPlayer;
 
@@ -104,6 +104,25 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                     image: AssetImage(tableSelectBG), fit: BoxFit.cover),
               ),
             ),
+            Positioned(
+                top: 150,
+                child: SizedBox(
+                  width: 1080,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 80),
+                        child: Text('테이블을 선택하세요',
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 35,
+                                color: Colors.white
+                            )),
+                      ),
+                    ],
+                  ),
+                )),
             Positioned(
                 left: 855,
                 top: 147,
