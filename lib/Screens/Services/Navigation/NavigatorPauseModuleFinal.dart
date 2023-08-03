@@ -81,10 +81,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
     _initAudio();
     _audioPlayer.play();
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _audioPlayer.play();
-    // });
-
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -182,7 +178,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -234,7 +230,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
               children: [
                 Positioned(
                     top: 250,
-                    child: Container(
+                    child: SizedBox(
                       width: 1080,
                       height: 100,
                       child: Row(
@@ -253,14 +249,14 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                     )),
                 Positioned(
                     top: 372,
-                    child: Container(
+                    child: SizedBox(
                       width: 1080,
                       height: 90,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
-                          SizedBox(width: 15,),
+                          const Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
+                          const SizedBox(width: 15,),
                           Text(
                             destinationSentence,
                             textAlign: TextAlign.start,
@@ -290,7 +286,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                   buttonSize2[buttonHeight])),
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           if (i == 0) {
                             // 재시작 추가 필요
@@ -336,7 +332,6 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                       child: null,
                     ),
                   ),
-                // const NavModuleButtonsFinal(screens: 1),
               ],
             ),
           ),

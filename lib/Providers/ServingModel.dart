@@ -23,8 +23,6 @@ class ServingModel with ChangeNotifier {
   bool? tray2Select;
   bool? tray3Select;
 
-  int? servingState;
-
   List<String>? itemImageList;
 
   String? menuItem;
@@ -35,7 +33,6 @@ class ServingModel with ChangeNotifier {
 
   String? targetTableNum;
   String? waitingPoint;
-  String? tableNumber;
   String? table1;
   String? table2;
   String? table3;
@@ -47,8 +44,7 @@ class ServingModel with ChangeNotifier {
   String? patrol2;
 
   ServingModel(
-      {this.servingState,
-        this.mainInit,
+      {this.mainInit,
       this.tray1,
       this.tray2,
       this.tray3,
@@ -67,69 +63,11 @@ class ServingModel with ChangeNotifier {
       this.item1,
       this.item2,
       this.item3,
-      this.tableNumber,
       this.table1,
       this.table2,
       this.table3,
       this.allTable,
       this.trayCheckAll});
-
-  void initServing() {
-    tray1 = false;
-    tray2 = false;
-    tray3 = false;
-    menuItem = null;
-    item1 = null;
-    item2 = null;
-    item3 = null;
-    tableNumber = null;
-    table1 = null;
-    table2 = null;
-    table3 = null;
-    trayCheckAll = false;
-
-    notifyListeners();
-  }
-
-  // 주문서 선택 ( 상품, 테이블 일괄 지정 )
-  void setTray1() {
-    tray1 = true;
-    item1 = menuItem;
-    table1 = tableNumber;
-
-    notifyListeners();
-  }
-
-  void setTray2() {
-    tray2 = true;
-    item2 = menuItem;
-    table2 = tableNumber;
-
-    notifyListeners();
-  }
-
-  void setTray3() {
-    tray3 = true;
-    item3 = menuItem;
-    table3 = tableNumber;
-
-    notifyListeners();
-  }
-
-  void setTrayAll() {
-    item1 = menuItem;
-    item2 = menuItem;
-    item3 = menuItem;
-    table1 = tableNumber;
-    table2 = tableNumber;
-    table3 = tableNumber;
-    allTable = tableNumber;
-
-    menuItem = "";
-    tableNumber = "";
-
-    notifyListeners();
-  }
 
   void clearTray1() {
     tray1 = false;
@@ -180,13 +118,6 @@ class ServingModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void cancelTraySelection() {
-    tray1Select = false;
-    tray2Select = false;
-    tray3Select = false;
-    notifyListeners();
-  }
-
   void stickTray1() {
     attachedTray1 = false;
     notifyListeners();
@@ -217,28 +148,4 @@ class ServingModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void servedItemTray1() {
-    if (servedItem1 == true) {
-      servedItem1 = false;
-    } else {
-      servedItem1 = true;
-    }
-    notifyListeners();
-  }
-
-  void servedItemTray2() {
-    if (servedItem2 == true) {
-      servedItem2 = false;
-    } else {
-      servedItem2 = true;
-    }
-    notifyListeners();
-  }
-
-  void servedItemTray3() {
-    if (servedItem3 == true) {
-      servedItem3 = false;
-    }
-    notifyListeners();
-  }
 }

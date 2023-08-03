@@ -63,9 +63,6 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
     // TODO: implement initState
     super.initState();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
     _initAudio();
 
     hamburger = "assets/images/serving_item_imgs/hamburger.png";

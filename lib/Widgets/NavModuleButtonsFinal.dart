@@ -57,9 +57,6 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
     // TODO: implement initState
     super.initState();
     currentGoal = "";
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
     _initAudio();
   }
 

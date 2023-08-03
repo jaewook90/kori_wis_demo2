@@ -32,7 +32,6 @@ void main() async {
                 )),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
-                  servingState: 0,
                   mainInit: true,
                   waitingPoint: 'wait',
                   attachedTray1: false,

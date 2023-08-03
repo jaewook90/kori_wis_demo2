@@ -60,9 +60,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
 
     _initAudio();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
   }
 
   void _initAudio() {
@@ -157,7 +154,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
                 left: 240,
                 top: 100,
                 child: Text('초 후 서빙을 시작합니다.',
@@ -178,25 +175,25 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(Duration(seconds: 0));
+                    _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
                     if (_servingProvider.table1 != "" ||
                         (_servingProvider.table2 != "" ||
                             _servingProvider.table3 != "")) {
-                      navPage(context: context, page: TraySelectionFinal())
+                      navPage(context: context, page: const TraySelectionFinal())
                           .navPageToPage();
                     } else {
                       setState(() {
                         _servingProvider.mainInit = true;
                       });
-                      navPage(context: context, page: TraySelectionFinal())
+                      navPage(context: context, page: const TraySelectionFinal())
                           .navPageToPage();
                     }
                   });
 
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
                     '취소',
                     style: TextStyle(
@@ -220,7 +217,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 onPressed: () {
                   _audioPlayer.play();
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(Duration(seconds: 0));
+                    _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
                     _servingProvider.trayChange = true;
@@ -241,7 +238,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     });
                   });
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
                     '시작',
                     style: TextStyle(

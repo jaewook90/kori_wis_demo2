@@ -83,7 +83,6 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
   Widget build(BuildContext context) {
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
-    // double screenWidth = MediaQuery.of(context).size.width;
     double screenWidth = 1080;
 
     buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
@@ -111,7 +110,7 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
         elevation: 0.0,
         automaticallyImplyLeading: false,
         actions: [
-          Container(
+          SizedBox(
             width: screenWidth,
             height: 108,
             child: Stack(
@@ -186,13 +185,13 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
       body: Stack(children: [
         Container(
           constraints: const BoxConstraints.expand(),
-          color: Color(0xff191919),
+          color: const Color(0xff191919),
           child: Stack(
             children: [
               Container(
                 width: 1080,
                 height: 170,
-                margin: EdgeInsets.only(top: 200),
+                margin: const EdgeInsets.only(top: 200),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -203,16 +202,16 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                           });
                         },
                         style: TextButton.styleFrom(
-                            fixedSize: Size(220, 150),
-                            side: BorderSide(color: Colors.white, width: 1)),
+                            fixedSize: const Size(220, 150),
+                            side: const BorderSide(color: Colors.white, width: 1)),
                         child: Text(
                           patrolPoints1,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 60,
                               fontFamily: 'kor'),
                         )),
-                    SizedBox(
+                    const SizedBox(
                         width: 120,
                         height: 120,
                         child: Icon(
@@ -227,11 +226,11 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                           });
                         },
                         style: TextButton.styleFrom(
-                            fixedSize: Size(220, 150),
-                            side: BorderSide(color: Colors.white, width: 1)),
+                            fixedSize: const Size(220, 150),
+                            side: const BorderSide(color: Colors.white, width: 1)),
                         child: Text(
                           patrolPoints2,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white,
                               fontSize: 60,
                               fontFamily: 'kor'),
@@ -242,10 +241,7 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
               Container(
                 height: 330,
                 width: 1080,
-                margin: EdgeInsets.only(top: 370),
-                // decoration: BoxDecoration(
-                //     border: Border.fromBorderSide(
-                //         BorderSide(color: Colors.white, width: 1))),
+                margin: const EdgeInsets.only(top: 370),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -258,32 +254,26 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                                     patrol2: patrolPoints2))
                             .navPageToPage();
                       },
-                      child: Text(
+                      style: TextButton.styleFrom(
+                          side: const BorderSide(color: Colors.white, width: 1),
+                          backgroundColor: Colors.blue,
+                          shape: const RoundedRectangleBorder(),
+                          fixedSize: const Size(220, 150)),
+                      child: const Text(
                         '출발',
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'kor',
                             fontSize: 70),
                       ),
-                      style: TextButton.styleFrom(
-                          side: BorderSide(color: Colors.white, width: 1),
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(),
-                          fixedSize: Size(220, 150)),
                     )
                   ],
                 ),
               ),
               for (int i = 0; i < buttonNumbers; i++)
                 Container(
-                  margin: EdgeInsets.only(top: 700),
-                  padding: EdgeInsets.only(bottom: 250, top: 10),
-                  // decoration: BoxDecoration(
-                  //     shape: BoxShape.rectangle,
-                  //     border: Border.fromBorderSide(
-                  //         BorderSide(color: Colors.white, width: 1))),
-                  // padding: EdgeInsets.only(
-                  //     top: 1920 * 0.2, left: 1080 * 0.1, right: 1080 * 0.1),
+                  margin: const EdgeInsets.only(top: 700),
+                  padding: const EdgeInsets.only(bottom: 250, top: 10),
                   height: 1220,
                   width: 1080,
                   child: Column(
@@ -299,19 +289,17 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                                     if (patrolPoints1 == '') {
                                       setState(() {
                                         patrolPoints1 = '${2 * j + h + 1}';
-                                        print(patrolPoints1);
                                       });
                                     } else if (patrolPoints2 == '') {
                                       setState(() {
                                         patrolPoints2 = '${2 * j + h + 1}';
-                                        print(patrolPoints2);
                                       });
                                     }
                                   },
                                   style: FilledButton.styleFrom(
                                       backgroundColor: Colors.transparent,
                                       shape: RoundedRectangleBorder(
-                                          side: BorderSide(
+                                          side: const BorderSide(
                                               color: Colors.white, width: 2),
                                           borderRadius: BorderRadius.circular(
                                               buttonRadius)),
@@ -319,7 +307,7 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                                           buttonSize[buttonHeight])),
                                   child: Text(
                                     '${2 * j + h + 1} 번',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontFamily: 'kor',
                                         fontSize: 40),

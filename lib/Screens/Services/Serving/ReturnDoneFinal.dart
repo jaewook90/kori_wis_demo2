@@ -42,9 +42,6 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
     _initAudio();
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
@@ -98,7 +95,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -109,7 +106,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                     child: FilledButton(
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           navPage(
                             context: context,
@@ -178,7 +175,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                 image: DecorationImage(
                     image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(children: [
-              Positioned(
+              const Positioned(
                   top: 220,
                   child: SizedBox(
                     width: 1080,
@@ -218,9 +215,7 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                             border: Border.fromBorderSide(BorderSide(
                                 color: Colors.transparent, width: 1))))),
               ),
-              Container(
-                child: const ServingModuleButtonsFinal(screens: 3),
-              ),
+              const ServingModuleButtonsFinal(screens: 3),
             ])));
   }
 }

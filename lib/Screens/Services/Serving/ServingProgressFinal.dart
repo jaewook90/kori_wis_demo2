@@ -69,9 +69,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     _controller.pause();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.8);
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _audioPlayer.play();
-    // });
+
     currentServedTrayNum = '';
     _audioFile = '';
     _debugMode =
@@ -165,7 +163,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -176,7 +174,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                     child: FilledButton(
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           navPage(
                             context: context,
@@ -269,23 +267,22 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                               children: [
                                 Text(
                                   currentServedTrayNum,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'kor',
                                       fontSize: 33,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
-                                Text(
+                                const Text(
                                   '트레이에서 상품을 수령하신 후',
                                   style: TextStyle(
                                       fontFamily: 'kor',
                                       fontSize: 32,
-                                      // fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
                               ],
                             ),
-                            Row(
+                            const Row(
                               children: [
                                 Text(
                                   '[완료] ',
@@ -300,7 +297,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                   style: TextStyle(
                                       fontFamily: 'kor',
                                       fontSize: 32,
-                                      // fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
                               ],
@@ -354,59 +350,57 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                   color: Colors.transparent, width: 1))))),
                 ),
               ),
-              Container(
-                child: Positioned(
-                  left: 107.3,
-                  top: 1372.5,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        enableFeedback: false,
-                        backgroundColor: Color(0xff3a46f0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40)),
-                        fixedSize: const Size(866, 160)),
-                    child: Text(
-                      '완 료',
-                      style: TextStyle(
-                          fontFamily: 'kor',
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
-                        _effectPlayer.play();
-                        _controller.pause();
-                        if (_servingProvider.targetTableNum != 'none') {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                          PostApi(
-                                  url: startUrl,
-                                  endadr: navUrl,
-                                  keyBody: _servingProvider.targetTableNum)
-                              .Posting(context);
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                            ).navPageToPage();
-                          });
-                        } else {
-                          _servingProvider.clearAllTray();
-                          PostApi(
-                                  url: startUrl,
-                                  endadr: navUrl,
-                                  keyBody: _servingProvider.waitingPoint)
-                              .Posting(context);
+              Positioned(
+                left: 107.3,
+                top: 1372.5,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                      enableFeedback: false,
+                      backgroundColor: const Color(0xff3a46f0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40)),
+                      fixedSize: const Size(866, 160)),
+                  child: const Text(
+                    '완 료',
+                    style: TextStyle(
+                        fontFamily: 'kor',
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _effectPlayer.seek(const Duration(seconds: 0));
+                      _effectPlayer.play();
+                      _controller.pause();
+                      if (_servingProvider.targetTableNum != 'none') {
+                        _servingProvider.trayChange = true;
+                        _networkProvider.servTable =
+                            _servingProvider.targetTableNum;
+                        PostApi(
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           navPage(
                             context: context,
-                            page: const TraySelectionFinal(),
+                            page: const NavigatorProgressModuleFinal(),
                           ).navPageToPage();
-                        }
-                      });
-                    },
-                  ),
+                        });
+                      } else {
+                        _servingProvider.clearAllTray();
+                        PostApi(
+                                url: startUrl,
+                                endadr: navUrl,
+                                keyBody: _servingProvider.waitingPoint)
+                            .Posting(context);
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      }
+                    });
+                  },
                 ),
               ),
             ])));

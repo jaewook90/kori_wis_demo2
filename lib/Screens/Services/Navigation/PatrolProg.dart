@@ -161,7 +161,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
     if (patrolling == true) {
-      // print('a');
       PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
           .Posting(context);
       setState(() {
@@ -174,7 +173,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
         Getting(startUrl!, moveBaseStatusUrl!);
       });
       if (navStatus == 3 && arrivedServingTable == false) {
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           setState(() {
             patrolling = true;
             arrivedServingTable = true;
@@ -182,14 +181,14 @@ class _PatrolProgressState extends State<PatrolProgress> {
           });
         });
         if (targetPoint == targetPoint1) {
-          Future.delayed(Duration(seconds: 5), () {
+          Future.delayed(const Duration(seconds: 5), () {
             setState(() {
               arrivedServingTable = false;
               targetPoint = targetPoint2;
             });
           });
         } else if (targetPoint == targetPoint2) {
-          Future.delayed(Duration(seconds: 5), () {
+          Future.delayed(const Duration(seconds: 5), () {
             setState(() {
               arrivedServingTable = false;
               targetPoint = targetPoint1;
@@ -212,7 +211,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -272,11 +271,11 @@ class _PatrolProgressState extends State<PatrolProgress> {
                         });
                         PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
                             .Posting(context);
-                        Future.delayed(Duration(milliseconds: 20), (){
+                        Future.delayed(const Duration(milliseconds: 20), (){
                           PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
                               .Posting(context);
                         });
-                        navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                        navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
                       },
                       child: Container(
                           height: 800,
@@ -288,11 +287,11 @@ class _PatrolProgressState extends State<PatrolProgress> {
                 Positioned(
                     top: 372,
                     left: 460,
-                    child: Container(
+                    child: SizedBox(
                       width: 300,
                       height: 90,
                       child: Text(
-                        '${targetPoint}번 테이블',
+                        '$targetPoint번 테이블',
                         textAlign: TextAlign.start,
                         style: const TextStyle(
                             fontFamily: 'kor',
@@ -310,11 +309,11 @@ class _PatrolProgressState extends State<PatrolProgress> {
                         });
                         PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
                             .Posting(context);
-                        Future.delayed(Duration(milliseconds: 20), (){
+                        Future.delayed(const Duration(milliseconds: 20), (){
                           PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
                               .Posting(context);
                         });
-                        navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                        navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
@@ -322,13 +321,9 @@ class _PatrolProgressState extends State<PatrolProgress> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40)
                         ),
-                        fixedSize: Size(866, 173)
+                        fixedSize: const Size(866, 173)
                       ),
                     ))
-                // NavModuleButtonsFinal(
-                //   screens: 0,
-                //   servGoalPose: servTableNum,
-                // )
               ],
             ),
           ),

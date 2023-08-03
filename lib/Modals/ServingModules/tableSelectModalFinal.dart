@@ -32,9 +32,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
 
     _initAudio();
     _audioPlayer.play();
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _audioPlayer.play();
-    // });
   }
 
   void _initAudio() {
@@ -50,7 +47,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
     super.dispose();
     _effectPlayer.dispose();
     _audioPlayer.dispose();
-    print('table dispose!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   }
 
   @override
@@ -72,7 +68,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                     image: AssetImage(tableSelectBG), fit: BoxFit.cover),
               ),
             ),
-            Positioned(
+            const Positioned(
               top: 15,
                 child: SizedBox(
                   width: 1080,
@@ -80,7 +76,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 80),
+                        padding: EdgeInsets.only(right: 80),
                         child: Text('테이블을 선택하세요',
                         style: TextStyle(
                           fontFamily: 'kor',
@@ -107,14 +103,13 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                         )),
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
+                        _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
                         if (_servingProvider.trayCheckAll == true) {
                           setState(() {
                             _servingProvider.mainInit = true;
                           });
-                          print('aaaaa');
-                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                          navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
                         } else {
                           if ((_servingProvider.table1 == "" &&
                               _servingProvider.table2 == "") &&
@@ -123,7 +118,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                               _servingProvider.mainInit = true;
                             });
                           }
-                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                          navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
                         }
                         _servingProvider.item1 = "";
                         _servingProvider.item2 = "";

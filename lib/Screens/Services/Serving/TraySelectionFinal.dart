@@ -8,6 +8,7 @@ import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/ChargingStation.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
@@ -258,7 +259,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   @override
   void dispose() {
     // TODO: implement dispose
-    // _pwrTimer.cancel();
     _timer.cancel();
     _pwrTimer.cancel();
     _audioPlayer.dispose();
@@ -300,6 +300,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     double textButtonHeight = screenHeight * 0.08;
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
+
+    if(CHGFlag == 1){
+      _mainStatusProvider.restartService = false;
+    }
+
+    if(CHGFlag == 2 && _mainStatusProvider.restartService == false){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navPage(context: context, page: ChargingStation()).navPageToPage();
+      });
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -404,7 +414,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _audioPlayer.dispose();
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           _timer.cancel();
                           _pwrTimer.cancel();
@@ -432,7 +442,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             volumeOnOff = false;
                           });
                         }else{
-                          _audioPlayer.seek(Duration(seconds: 0));
+                          _audioPlayer.seek(const Duration(seconds: 0));
                           _audioPlayer.play();
                           setState(() {
                             volumeOnOff = true;
@@ -472,7 +482,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             _servingProvider.mainInit = false;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _effectPlayer.seek(Duration(seconds: 0));
+                            _effectPlayer.seek(const Duration(seconds: 0));
                             _effectPlayer.play();
                             navPage(
                               context: context,
@@ -506,7 +516,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             _servingProvider.mainInit = false;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _effectPlayer.seek(Duration(seconds: 0));
+                            _effectPlayer.seek(const Duration(seconds: 0));
                             _effectPlayer.play();
                             navPage(
                               context: context,
@@ -540,7 +550,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             _servingProvider.mainInit = false;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _effectPlayer.seek(Duration(seconds: 0));
+                            _effectPlayer.seek(const Duration(seconds: 0));
                             _effectPlayer.play();
                             navPage(
                               context: context,
@@ -616,7 +626,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 initiallyExpanded: false,
                                 backgroundColor: Colors.transparent,
                                 onExpansionChanged: (value) {
-                                  _effectPlayer.seek(Duration(seconds: 0));
+                                  _effectPlayer.seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                 },
                                 children: <Widget>[
@@ -683,7 +693,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                   WidgetsBinding.instance
                                                       .addPostFrameCallback(
                                                           (_) {
-                                                            _effectPlayer.seek(Duration(seconds: 0));
+                                                            _effectPlayer.seek(const Duration(seconds: 0));
                                                             _effectPlayer.play();
                                                     _prefs.setString('robotIp',
                                                         configController.text);
@@ -763,7 +773,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   onPressed: () {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(Duration(seconds: 0));
+                                      _effectPlayer.seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       getting(_networkProvider.startUrl!,
                                           _networkProvider.positionURL);
@@ -808,7 +818,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(Duration(seconds: 0));
+                                      _effectPlayer.seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       _networkProvider.servTable =
                                           'charging_pile';
@@ -862,8 +872,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             Offstage(
                               offstage: _debugTray,
                               child: ExpansionTile(
-                                  title: Row(
-                                    children: const [
+                                  title: const Row(
+                                    children: [
                                       Icon(Icons.add_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
@@ -884,7 +894,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
                                   onExpansionChanged: (value) {
-                                    _effectPlayer.seek(Duration(seconds: 0));
+                                    _effectPlayer.seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                   },
                                   children: const <Widget>[
@@ -923,8 +933,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             Offstage(
                               offstage: _debugTray,
                               child: ExpansionTile(
-                                  title: Row(
-                                    children: const [
+                                  title: const Row(
+                                    children: [
                                       Icon(Icons.remove_circle_outline_outlined,
                                           color: Colors.white, size: 50),
                                       Padding(
@@ -945,7 +955,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
                                   onExpansionChanged: (value) {
-                                    _effectPlayer.seek(Duration(seconds: 0));
+                                    _effectPlayer.seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                   },
                                   children: const <Widget>[
@@ -992,7 +1002,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       });
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
-                                        _effectPlayer.seek(Duration(seconds: 0));
+                                        _effectPlayer.seek(const Duration(seconds: 0));
                                         _effectPlayer.play();
                                         _prefs.clear();
                                         navPage(
@@ -1051,7 +1061,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
                                         _effectPlayer.play();
-                                        _effectPlayer.seek(Duration(seconds: 0));
+                                        _effectPlayer.seek(const Duration(seconds: 0));
                                         navPage(
                                           context: context,
                                           page: const TestPagesScreen(),
@@ -1103,7 +1113,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       });
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
-                                        _effectPlayer.seek(Duration(seconds: 0));
+                                        _effectPlayer.seek(const Duration(seconds: 0));
                                         _effectPlayer.play();
                                         navPage(
                                           context: context,
@@ -1146,7 +1156,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             top: 1620,
                             child: FilledButton(
                               onPressed: () {
-                                _effectPlayer.seek(Duration(seconds: 0));
+                                _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 DateTime now = DateTime.now();
                                 if (currentBackPressTime == null ||
@@ -1162,12 +1172,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                     if (_debugEncounter == 5 &&
                                         _debugTray == true) {
-                                      // _debugTray = false;
                                       _mainStatusProvider.debugMode = false;
                                       _debugEncounter = 0;
                                     } else if (_debugEncounter == 3 &&
                                         _debugTray == false) {
-                                      // _debugTray = true;
                                       _mainStatusProvider.debugMode = true;
                                       _debugEncounter = 0;
                                     }
@@ -1248,7 +1256,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           enableFeedback: false,
                           backgroundColor: const Color(0xff3a46f0),
                           shape: RoundedRectangleBorder(
-                              // side: const BorderSide(color: Colors.white, width: 2),
                               borderRadius: BorderRadius.circular(25)),
                           fixedSize: const Size(450, 168)),
                       onPressed: () {
@@ -1257,7 +1264,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           _servingProvider.mainInit = false;
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           if ((_servingProvider.table1 != "" ||
                                   _servingProvider.table2 != "") ||
@@ -1315,7 +1322,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  _effectPlayer.seek(Duration(seconds: 0));
+                                  _effectPlayer.seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray1 == true) {
                                     setState(() {
@@ -1343,7 +1350,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  _effectPlayer.seek(Duration(seconds: 0));
+                                  _effectPlayer.seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray2 == true) {
                                     setState(() {
@@ -1371,7 +1378,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  _effectPlayer.seek(Duration(seconds: 0));
+                                  _effectPlayer.seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray3 == true) {
                                     setState(() {
@@ -1408,7 +1415,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   child: FilledButton(
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
+                        _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           _servingProvider.clearTray1();
@@ -1430,7 +1437,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   child: FilledButton(
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
+                        _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           _servingProvider.clearTray2();
@@ -1452,7 +1459,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                   child: FilledButton(
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
+                        _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
                         setState(() {
                           _servingProvider.clearTray3();
@@ -1519,10 +1526,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             onPressed: () {
                               setState(() {
                                 _servingProvider.mainInit = false;
-                                // _audioPlayer.stop();
                               });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _effectPlayer.seek(Duration(seconds: 0));
+                                _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 _servingProvider.tray1Select = true;
                                 _servingProvider.tray2Select = false;
@@ -1602,7 +1608,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _servingProvider.mainInit = false;
                               });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _effectPlayer.seek(Duration(seconds: 0));
+                                _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 _servingProvider.tray1Select = false;
                                 _servingProvider.tray2Select = true;
@@ -1682,7 +1688,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _servingProvider.mainInit = false;
                               });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _effectPlayer.seek(Duration(seconds: 0));
+                                _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 _servingProvider.tray1Select = false;
                                 _servingProvider.tray2Select = false;

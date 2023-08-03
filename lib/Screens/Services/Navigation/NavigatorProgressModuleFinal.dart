@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/ChargingStation.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -78,7 +79,7 @@ class _NavigatorProgressModuleFinalState
 
     _initAudio();
 
-    _audioPlayer.seek(Duration(seconds: 0));
+    _audioPlayer.seek(const Duration(seconds: 0));
     _audioPlayer.play();
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
@@ -259,7 +260,7 @@ class _NavigatorProgressModuleFinalState
           });
           navPage(
             context: context,
-            page: const TraySelectionFinal(),
+            page: const ChargingStation(),
           ).navPageToPage();
         }
       }
@@ -278,7 +279,7 @@ class _NavigatorProgressModuleFinalState
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -377,7 +378,7 @@ class _NavigatorProgressModuleFinalState
                 ),
                 Positioned(
                     top: 250,
-                    child: Container(
+                    child: SizedBox(
                       width: 1080,
                       height: 100,
                       child: Row(
@@ -396,14 +397,14 @@ class _NavigatorProgressModuleFinalState
                     )),
                 Positioned(
                     top: 372,
-                    child: Container(
+                    child: SizedBox(
                       width: 1080,
                       height: 90,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
-                          SizedBox(width: 15,),
+                          const Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
+                          const SizedBox(width: 15,),
                           Text(
                             destinationSentence,
                             textAlign: TextAlign.start,

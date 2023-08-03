@@ -26,9 +26,6 @@ class StatusManagements{
     //0: push, 1: pop
     int emgButtonState = getApiData['emergencyButton'];
 
-    // print(batBalance);
-    // print(emgButtonState);
-
     Provider.of<MainStatusModel>(context, listen: false).batBal = batBalance;
     Provider.of<MainStatusModel>(context, listen: false).chargeFlag =
         chargeFlage;

@@ -39,10 +39,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
 
     _initAudio();
     _audioPlayer.play();
-
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _audioPlayer.play();
-    // });
   }
 
   void showTableSelectPopup(context) {
@@ -67,7 +63,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
     super.dispose();
     _effectPlayer.dispose();
     _audioPlayer.dispose();
-    print('dispose item!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   }
 
   @override
@@ -114,21 +109,21 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           _servingProvider.mainInit = true;
                         });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           setState(() {
                             _servingProvider.item1 = "";
                             _servingProvider.item2 = "";
                             _servingProvider.item3 = "";
                           });
-                          navPage(context: context, page: TraySelectionFinal())
+                          navPage(context: context, page: const TraySelectionFinal())
                               .navPageToPage();
                         });
                       },
                       child: null,
                     ),
                   )),
-              Positioned(
+              const Positioned(
                 left: 260,
                   top: 40,
                   child: Text(
@@ -150,11 +145,11 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(34)),
-                          fixedSize: Size(412, 412)),
+                          fixedSize: const Size(412, 412)),
                       onPressed: () {
                         _audioPlayer.dispose();
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           setState(() {
                             _servingProvider.menuItem = menuItems[i];

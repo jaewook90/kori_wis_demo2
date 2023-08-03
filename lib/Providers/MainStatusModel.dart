@@ -5,6 +5,8 @@ class MainStatusModel with ChangeNotifier {
   int? chargeFlag;
   int? emgButton;
 
+  bool? restartService;
+
   bool? debugMode;
 
   MainStatusModel({

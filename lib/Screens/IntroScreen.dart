@@ -87,10 +87,6 @@ class _IntroScreenState extends State<IntroScreen>
     fToast?.init(context);
 
     _initAudio();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
-
     _playVideo();
   }
 
@@ -372,21 +368,6 @@ class _IntroScreenState extends State<IntroScreen>
                                                       navTrigger = false;
                                                     });
                                                   });
-                                                  // Future.delayed(
-                                                  //     Duration(
-                                                  //         milliseconds: 500),
-                                                  //     () {
-                                                  //   _prefs.setString('robotIp',
-                                                  //       configController.text);
-                                                  //   setState(() {
-                                                  //     _networkProvider
-                                                  //             .startUrl =
-                                                  //         _prefs.getString(
-                                                  //             'robotIp');
-                                                  //     _networkProvider.hostIP();
-                                                  //     navTrigger = false;
-                                                  //   });
-                                                  // });
                                                 },
                                                 style: FilledButton.styleFrom(
                                                     enableFeedback: false,

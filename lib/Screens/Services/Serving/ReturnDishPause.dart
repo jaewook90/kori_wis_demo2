@@ -77,9 +77,6 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
     _initAudio();
 
     _audioPlayer.play();
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _audioPlayer.play();
-    // });
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -158,7 +155,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -228,7 +225,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                 Positioned(
                     top: 372,
                     left: 460,
-                    child: Container(
+                    child: SizedBox(
                       width: 300,
                       height: 90,
                       child: Text(
@@ -258,7 +255,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                                   buttonSize2[buttonHeight])),
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(Duration(seconds: 0));
+                          _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           if (i == 0) {
                             // 재시작 추가 필요
@@ -304,7 +301,6 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                       child: null,
                     ),
                   ),
-                // const NavModuleButtonsFinal(screens: 1),
               ],
             ),
           ),

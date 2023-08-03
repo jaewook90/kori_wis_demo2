@@ -27,9 +27,6 @@ class _WebviewPage1State extends State<WebviewPage1> {
     // TODO: implement initState
     super.initState();
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
     _initAudio();
     late final PlatformWebViewControllerCreationParams params;
 
@@ -91,7 +88,6 @@ class _WebviewPage1State extends State<WebviewPage1> {
       )
       ..loadRequest(Uri.parse(
           'http://192.168.0.111/connector/client/material/?sid=1&cid=1'));
-    // ..loadRequest(Uri.parse('http://172.30.1.35/'));
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
@@ -121,10 +117,8 @@ class _WebviewPage1State extends State<WebviewPage1> {
 
     return Scaffold(
       body: Container(
-        // padding: const EdgeInsets.only(top: 90),
         child: Stack(children: [
           Container(
-            // margin: EdgeInsets.only(top: 50),
               width: 1080,
               height: 1920,
               child: WebViewWidget(controller: _controller)),

@@ -52,10 +52,6 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
     _initAudio();
     _audioPlayer.play();
-
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _audioPlayer.play();
-    // });
   }
 
   void _initAudio() {
@@ -90,101 +86,99 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
 
     buttonRadius = 0;
 
-    return Container(
-      child: Dialog(
-          backgroundColor: Colors.transparent,
-          shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(0),
-              borderSide: const BorderSide()),
-          child: Stack(children: [
-            Container(
-              height: 1920,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(tableSelectBG), fit: BoxFit.cover),
-              ),
+    return Dialog(
+        backgroundColor: Colors.transparent,
+        shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(0),
+            borderSide: const BorderSide()),
+        child: Stack(children: [
+          Container(
+            height: 1920,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(tableSelectBG), fit: BoxFit.cover),
             ),
-            Positioned(
-                top: 150,
-                child: SizedBox(
-                  width: 1080,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 80),
-                        child: Text('테이블을 선택하세요',
-                            style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 35,
-                                color: Colors.white
-                            )),
-                      ),
-                    ],
-                  ),
-                )),
-            Positioned(
-                left: 855,
-                top: 147,
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  color: Colors.transparent,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        enableFeedback: false,
-                        backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        )),
-                    onPressed: () {
-                      setState(() {
-                        _servingProvider.mainInit = true;
-                      });
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
-                        _effectPlayer.play();
-                        navPage(context: context, page: TraySelectionFinal())
-                            .navPageToPage();
-                      });
-                      },
-                    child: null,
-                  ),
-                )),
-            for (int i = 0; i < buttonNumbers; i++)
-              Positioned(
-                  left: buttonPositionWidth[i],
-                  top: buttonPositionHeight[i],
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        enableFeedback: false,
-                        backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(buttonRadius)),
-                        fixedSize: Size(buttonSize[0], buttonSize[1])),
-                    onPressed: () {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        _effectPlayer.seek(Duration(seconds: 0));
-                        _effectPlayer.play();
-                        setState(() {
-                          returnTable = _networkProvider.getPoseData![i];
-                          _servingProvider.returnTargetTable = returnTable;
-                        });
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: returnTable)
-                            .Posting(context);
-                        Navigator.pop(context);
-                        navPage(
-                          context: context,
-                          page: const ReturnProgressModuleFinal(),
-                        ).navPageToPage();
-                      });
+          ),
+          const Positioned(
+              top: 150,
+              child: SizedBox(
+                width: 1080,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 80),
+                      child: Text('테이블을 선택하세요',
+                          style: TextStyle(
+                              fontFamily: 'kor',
+                              fontSize: 35,
+                              color: Colors.white
+                          )),
+                    ),
+                  ],
+                ),
+              )),
+          Positioned(
+              left: 855,
+              top: 147,
+              child: Container(
+                width: 48,
+                height: 48,
+                color: Colors.transparent,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                      enableFeedback: false,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      )),
+                  onPressed: () {
+                    setState(() {
+                      _servingProvider.mainInit = true;
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _effectPlayer.seek(const Duration(seconds: 0));
+                      _effectPlayer.play();
+                      navPage(context: context, page: const TraySelectionFinal())
+                          .navPageToPage();
+                    });
                     },
-                    child: null,
-                  ))
-          ])),
-    );
+                  child: null,
+                ),
+              )),
+          for (int i = 0; i < buttonNumbers; i++)
+            Positioned(
+                left: buttonPositionWidth[i],
+                top: buttonPositionHeight[i],
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                      enableFeedback: false,
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(buttonRadius)),
+                      fixedSize: Size(buttonSize[0], buttonSize[1])),
+                  onPressed: () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _effectPlayer.seek(const Duration(seconds: 0));
+                      _effectPlayer.play();
+                      setState(() {
+                        returnTable = _networkProvider.getPoseData![i];
+                        _servingProvider.returnTargetTable = returnTable;
+                      });
+                      PostApi(
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: returnTable)
+                          .Posting(context);
+                      Navigator.pop(context);
+                      navPage(
+                        context: context,
+                        page: const ReturnProgressModuleFinal(),
+                      ).navPageToPage();
+                    });
+                  },
+                  child: null,
+                ))
+        ]));
   }
 }

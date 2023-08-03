@@ -182,7 +182,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
+            SizedBox(
               width: screenWidth,
               height: 108,
               child: Stack(
@@ -232,7 +232,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                     image: AssetImage(backgroundImageServ), fit: BoxFit.cover)),
             child: Stack(
               children: [
-                Positioned(
+                const Positioned(
                     top: 220,
                     child: SizedBox(
                       width: 1080,
@@ -253,7 +253,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                 Positioned(
                     top: 400,
                     left: 350,
-                    child: Container(
+                    child: SizedBox(
                       width: 380,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -291,7 +291,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                               border: Border.fromBorderSide(BorderSide(
                                   color: Colors.transparent, width: 1))))),
                 ),
-                NavModuleButtonsFinal(
+                const NavModuleButtonsFinal(
                   screens: 2,
                 )
               ],

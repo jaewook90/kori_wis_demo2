@@ -44,10 +44,6 @@ class _ChangingCountDownModalFinalState
     countDownNav = true;
     countDownMSG = '초 후 서빙을 시작합니다.';
     _initAudio();
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _initAudio();
-    // });
   }
 
   void _initAudio() {
@@ -155,7 +151,7 @@ class _ChangingCountDownModalFinalState
                 left: 240,
                 top: 100,
                 child: Text(countDownMSG,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'kor',
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
@@ -172,14 +168,14 @@ class _ChangingCountDownModalFinalState
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(Duration(seconds: 0));
+                    _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
                     Navigator.pop(context);
                     Navigator.pop(context);
                   });
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
                     '취소',
                     style: TextStyle(
@@ -202,10 +198,9 @@ class _ChangingCountDownModalFinalState
                     fixedSize: const Size(370, 120)),
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(Duration(seconds: 0));
+                    _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    // _controller.pause();
                     if(_servingProvider.tray1 == true){
                       _servingProvider.tray1 = false;
                     }else{
@@ -258,7 +253,7 @@ class _ChangingCountDownModalFinalState
                     }
                   });
                 },
-                child: Center(
+                child: const Center(
                   child: Text(
                     '시작',
                     style: TextStyle(
