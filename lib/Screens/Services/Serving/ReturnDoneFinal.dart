@@ -67,8 +67,9 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override
@@ -108,10 +109,13 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
                         });
                       },
                       style: FilledButton.styleFrom(
@@ -203,10 +207,13 @@ class _ReturnDoneScreenState extends State<ReturnDoneScreen> {
                               endadr: navUrl,
                               keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
-                      navPage(
-                        context: context,
-                        page: const TraySelectionFinal(),
-                      ).navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      });
                     },
                     child: Container(
                         height: 1200,

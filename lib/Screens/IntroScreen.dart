@@ -36,7 +36,6 @@ class _IntroScreenState extends State<IntroScreen>
   String positionURL = "";
   String hostAdr = "";
 
-
   // 블루투스 연결
   final String robotId = 'serv1';
 
@@ -91,10 +90,11 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   // SharedPreferences 초기화 함수
@@ -127,7 +127,9 @@ class _IntroScreenState extends State<IntroScreen>
     Duration mediaDuration = _controller.value.duration;
     Duration introDuration = mediaDuration + const Duration(milliseconds: 2000);
     await Future.delayed(introDuration);
-    WidgetsBinding.instance.addPostFrameCallback((_) {_playAudio();});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _playAudio();
+    });
 
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
@@ -152,8 +154,6 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   void dispose() {
-    _effectPlayer.dispose();
-    _audioPlayer.dispose();
     _controller.dispose();
     _textAniCon.dispose();
     super.dispose();
@@ -181,17 +181,25 @@ class _IntroScreenState extends State<IntroScreen>
       if (navTrigger == false) {
         getting(_networkProvider.startUrl!, _networkProvider.positionURL);
         if (apiData != null && apiData != []) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {_audioPlayer.stop(); });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _audioPlayer.stop();
+          });
 
           setState(() {
             navTrigger = true;
             _servingProvider.mainInit = true;
           });
-          print(apiData);
-          navPage(
-            context: context,
-            page: const TraySelectionFinal(),
-          ).navPageToPage();
+          _effectPlayer.dispose();
+          _audioPlayer.dispose();
+          Future.delayed(
+            Duration(milliseconds: 50),
+            () {
+              navPage(
+                context: context,
+                page: const TraySelectionFinal(),
+              ).navPageToPage();
+            }
+          );
         } else {
           setState(() {
             navTrigger = true;
@@ -264,13 +272,22 @@ class _IntroScreenState extends State<IntroScreen>
                   if (apiData != null && apiData != []) {
                     setState(() {
                       navTrigger = true;
-                      _servingProvider.mainInit=true;
+                      _servingProvider.mainInit = true;
                     });
-                    WidgetsBinding.instance.addPostFrameCallback((_) {_audioPlayer.stop(); });
-                    navPage(
-                      context: context,
-                      page: const TraySelectionFinal(),
-                    ).navPageToPage();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _audioPlayer.stop();
+                    });
+                    _effectPlayer.dispose();
+                    _audioPlayer.dispose();
+                    Future.delayed(
+                        Duration(milliseconds: 50),
+                            () {
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        }
+                    );
                   } else {
                     setState(() {
                       robotInit = false;
@@ -355,13 +372,15 @@ class _IntroScreenState extends State<IntroScreen>
                                               ),
                                               FilledButton(
                                                 onPressed: () {
-                                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
                                                     _effectPlayer.play();
                                                     _prefs.setString('robotIp',
                                                         configController.text);
                                                     setState(() {
                                                       _networkProvider
-                                                          .startUrl =
+                                                              .startUrl =
                                                           _prefs.getString(
                                                               'robotIp');
                                                       _networkProvider.hostIP();

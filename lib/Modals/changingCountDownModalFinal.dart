@@ -47,8 +47,9 @@ class _ChangingCountDownModalFinalState
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   String? startUrl;
@@ -127,10 +128,13 @@ class _ChangingCountDownModalFinalState
                               endadr: navUrl,
                               keyBody: _servingProvider.targetTableNum)
                           .Posting(context);
-                      navPage(
-                        context: context,
-                        page: const NavigatorProgressModuleFinal(),
-                      ).navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: const NavigatorProgressModuleFinal(),
+                        ).navPageToPage();
+                      });
                     } else {
                       _servingProvider.clearAllTray();
                       PostApi(
@@ -138,10 +142,14 @@ class _ChangingCountDownModalFinalState
                               endadr: navUrl,
                               keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
-                      navPage(
-                        context: context,
-                        page: const TraySelectionFinal(),
-                      ).navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      });
+
                     }
                   },
                 ),
@@ -218,10 +226,14 @@ class _ChangingCountDownModalFinalState
                           endadr: navUrl,
                           keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
-                      navPage(
-                        context: context,
-                        page: const TraySelectionFinal(),
-                      ).navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      });
+
                     } else if (widget.modeState == 'serving') {
                       if (_servingProvider.targetTableNum != 'none') {
                         setState(() {
@@ -234,10 +246,14 @@ class _ChangingCountDownModalFinalState
                             endadr: navUrl,
                             keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
-                        navPage(
-                          context: context,
-                          page: const NavigatorProgressModuleFinal(),
-                        ).navPageToPage();
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                          ).navPageToPage();
+                        });
+
                       } else {
                         _servingProvider.clearAllTray();
                         PostApi(
@@ -245,10 +261,14 @@ class _ChangingCountDownModalFinalState
                             endadr: navUrl,
                             keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
-                        navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                        ).navPageToPage();
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        });
+
                       }
                     }
                   });

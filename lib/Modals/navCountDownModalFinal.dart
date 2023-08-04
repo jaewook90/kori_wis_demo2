@@ -59,12 +59,12 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     countDownNav = true;
 
     _initAudio();
-
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
   }
@@ -138,13 +138,9 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             endadr: navUrl,
                             keyBody: targetTableNum)
                         .Posting(context);
-                    navPage(
-                      context: context,
-                      page: const NavigatorProgressModuleFinal(),
-                    ).navPageToPage();
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                    Future.delayed(Duration(milliseconds: 230), () {
+                      _audioPlayer.dispose();
+                      _effectPlayer.dispose();
                       navPage(
                         context: context,
                         page: const NavigatorProgressModuleFinal(),
@@ -181,17 +177,28 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     if (_servingProvider.table1 != "" ||
                         (_servingProvider.table2 != "" ||
                             _servingProvider.table3 != "")) {
-                      navPage(context: context, page: const TraySelectionFinal())
-                          .navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _audioPlayer.dispose();
+                        _effectPlayer.dispose();
+                        navPage(
+                                context: context,
+                                page: const TraySelectionFinal())
+                            .navPageToPage();
+                      });
                     } else {
                       setState(() {
                         _servingProvider.mainInit = true;
                       });
-                      navPage(context: context, page: const TraySelectionFinal())
-                          .navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _audioPlayer.dispose();
+                        _effectPlayer.dispose();
+                        navPage(
+                            context: context,
+                            page: const TraySelectionFinal())
+                            .navPageToPage();
+                      });
                     }
                   });
-
                 },
                 child: const Center(
                   child: Text(
@@ -224,13 +231,13 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     _networkProvider.servTable =
                         _servingProvider.targetTableNum;
                     PostApi(
-                        url: startUrl,
-                        endadr: navUrl,
-                        keyBody: targetTableNum)
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: targetTableNum)
                         .Posting(context);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
+                    Future.delayed(Duration(milliseconds: 230), () {
+                      _audioPlayer.dispose();
+                      _effectPlayer.dispose();
                       navPage(
                         context: context,
                         page: const NavigatorProgressModuleFinal(),

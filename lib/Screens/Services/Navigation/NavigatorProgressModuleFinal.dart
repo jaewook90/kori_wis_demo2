@@ -101,6 +101,7 @@ class _NavigatorProgressModuleFinalState
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _audioPlayer.setLoopMode(LoopMode.all);
@@ -241,27 +242,38 @@ class _NavigatorProgressModuleFinalState
           navStatus = 0;
         });
         if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
-          navPage(
-            context: context,
-            page: const ServingProgressFinal(),
-          ).navPageToPage();
+          Future.delayed(Duration(milliseconds: 230), () {
+            _audioPlayer.dispose();
+            navPage(
+              context: context,
+              page: const ServingProgressFinal(),
+            ).navPageToPage();
+          });
         } else if (servTableNum == 'wait') {
           setState(() {
             _servingProvider.mainInit = true;
           });
           _servingProvider.clearAllTray();
-          navPage(
-            context: context,
-            page: const TraySelectionFinal(),
-          ).navPageToPage();
+          Future.delayed(Duration(milliseconds: 230), () {
+            _audioPlayer.dispose();
+            navPage(
+              context: context,
+              page: const TraySelectionFinal(),
+            ).navPageToPage();
+          });
+
         } else if (servTableNum == 'charging_pile') {
           setState(() {
             _servingProvider.mainInit = true;
           });
-          navPage(
-            context: context,
-            page: const ChargingStation(),
-          ).navPageToPage();
+          Future.delayed(Duration(milliseconds: 230), () {
+            _audioPlayer.dispose();
+            navPage(
+              context: context,
+              page: const ChargingStation(),
+            ).navPageToPage();
+          });
+
         }
       }
     });
@@ -343,27 +355,37 @@ class _NavigatorProgressModuleFinalState
                               });
                               if (servTableNum != 'wait' &&
                                   servTableNum != 'charging_pile') {
-                                navPage(
-                                  context: context,
-                                  page: const ServingProgressFinal(),
-                                ).navPageToPage();
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _audioPlayer.dispose();
+                                  navPage(
+                                    context: context,
+                                    page: const ServingProgressFinal(),
+                                  ).navPageToPage();
+                                });
                               } else if (servTableNum == 'wait') {
                                 setState(() {
                                   _servingProvider.mainInit = true;
                                 });
                                 _servingProvider.clearAllTray();
-                                navPage(
-                                  context: context,
-                                  page: const TraySelectionFinal(),
-                                ).navPageToPage();
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _audioPlayer.dispose();
+                                  navPage(
+                                    context: context,
+                                    page: const TraySelectionFinal(),
+                                  ).navPageToPage();
+                                });
+
                               } else if (servTableNum == 'charging_pile') {
                                 setState(() {
                                   _servingProvider.mainInit = true;
                                 });
-                                navPage(
-                                  context: context,
-                                  page: const TraySelectionFinal(),
-                                ).navPageToPage();
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _audioPlayer.dispose();
+                                  navPage(
+                                    context: context,
+                                    page: const TraySelectionFinal(),
+                                  ).navPageToPage();
+                                });
                               }
                             });
                           }

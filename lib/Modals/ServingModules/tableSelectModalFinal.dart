@@ -35,10 +35,11 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override
@@ -109,7 +110,14 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                           setState(() {
                             _servingProvider.mainInit = true;
                           });
-                          navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
                         } else {
                           if ((_servingProvider.table1 == "" &&
                               _servingProvider.table2 == "") &&
@@ -118,7 +126,15 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                               _servingProvider.mainInit = true;
                             });
                           }
-                          navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
                         }
                         _servingProvider.item1 = "";
                         _servingProvider.item2 = "";

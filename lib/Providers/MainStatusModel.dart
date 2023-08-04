@@ -5,6 +5,8 @@ class MainStatusModel with ChangeNotifier {
   int? chargeFlag;
   int? emgButton;
 
+  bool? mainSoundMute;
+
   bool? restartService;
 
   bool? debugMode;
@@ -14,6 +16,7 @@ class MainStatusModel with ChangeNotifier {
     this.batBal,
     this.chargeFlag,
     this.emgButton,
+    this.mainSoundMute
   });
 // 서빙 이송 중 광고 재생
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class StatusManagements{
   final BuildContext context;
@@ -26,13 +27,11 @@ class StatusManagements{
     //0: push, 1: pop
     int emgButtonState = getApiData['emergencyButton'];
 
+    if(!context.mounted) return;
     Provider.of<MainStatusModel>(context, listen: false).batBal = batBalance;
     Provider.of<MainStatusModel>(context, listen: false).chargeFlag =
         chargeFlage;
     Provider.of<MainStatusModel>(context, listen: false).emgButton =
         emgButtonState;
-
-    // setState(() {
-    // });
   }
 }

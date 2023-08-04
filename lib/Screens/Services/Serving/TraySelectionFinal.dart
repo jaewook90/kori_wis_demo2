@@ -105,7 +105,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _debugEncounter = 0;
     _debugTray = true;
 
-    volumeOnOff = true;
+    // volumeOnOff = true;
+    volumeOnOff =
+        Provider.of<MainStatusModel>(context, listen: false).mainSoundMute!;
 
     fToast = FToast();
     fToast?.init(context);
@@ -134,9 +136,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     }
 
     _initAudio();
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      _audioPlayer.play();
-    });
+
+    // Future.delayed(const Duration(milliseconds: 2000), () {
+    //   _audioPlayer.play();
+    // });
 
     _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       _audioPlayer.seek(const Duration(seconds: 0));
@@ -169,10 +172,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
@@ -272,6 +276,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
+    print(volumeOnOff);
+
     mainInit = _servingProvider.mainInit!;
 
     if (positionList.isEmpty) {
@@ -279,6 +285,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     } else {
       _networkProvider.getPoseData = positionList;
     }
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (_mainStatusProvider.mainSoundMute == true) {
+        _audioPlayer.seek(const Duration(seconds: 0));
+        // _audioPlayer.play();
+        _audioPlayer.play();
+      } else {
+        _audioPlayer.stop();
+      }
+    });
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -301,13 +317,18 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
 
     TextStyle? buttonFont = Theme.of(context).textTheme.headlineMedium;
 
-    if(CHGFlag == 1){
+    if (CHGFlag == 1) {
       _mainStatusProvider.restartService = false;
     }
 
-    if(CHGFlag == 2 && _mainStatusProvider.restartService == false){
+    if (CHGFlag == 2 && _mainStatusProvider.restartService == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        navPage(context: context, page: ChargingStation()).navPageToPage();
+        _effectPlayer.dispose();
+        _audioPlayer.dispose();
+        navPage(
+          context: context,
+          page: const ChargingStation(),
+        ).navPageToPage();
       });
     }
 
@@ -397,12 +418,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                       : Container(),
                   CHGFlag == 3
                       ? const Positioned(
-                    right: 50,
-                    top: 18,
-                    child: Icon(Icons.bolt,
-                        color: Colors.yellow,
-                        size: 50),
-                  )
+                          right: 50,
+                          top: 18,
+                          child:
+                              Icon(Icons.bolt, color: Colors.yellow, size: 50),
+                        )
                       : Container(),
                   Positioned(
                     right: 150,
@@ -418,7 +438,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           _effectPlayer.play();
                           _timer.cancel();
                           _pwrTimer.cancel();
-                          showReturnSelectPopup(context);
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            showReturnSelectPopup(context);
+                          });
                         });
                       },
                       style: FilledButton.styleFrom(
@@ -436,16 +460,15 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                     top: 25,
                     child: FilledButton(
                       onPressed: () {
-                        if(volumeOnOff == true){
-                          _audioPlayer.stop();
+                        if (volumeOnOff == true) {
                           setState(() {
                             volumeOnOff = false;
+                            _mainStatusProvider.mainSoundMute = volumeOnOff;
                           });
-                        }else{
-                          _audioPlayer.seek(const Duration(seconds: 0));
-                          _audioPlayer.play();
+                        } else {
                           setState(() {
                             volumeOnOff = true;
+                            _mainStatusProvider.mainSoundMute = volumeOnOff;
                           });
                         }
                       },
@@ -457,8 +480,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0))),
                       child: Icon(
-                        volumeOnOff == true?
-                          Icons.volume_up : Icons.volume_off, size: 50),
+                          volumeOnOff == true
+                              ? Icons.volume_up
+                              : Icons.volume_off,
+                          size: 50),
                     ),
                   ),
                   Positioned(
@@ -484,10 +509,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             _effectPlayer.seek(const Duration(seconds: 0));
                             _effectPlayer.play();
-                            navPage(
-                              context: context,
-                              page: const WebviewPage1(),
-                            ).navPageToPage();
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+                              _audioPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const WebviewPage1(),
+                              ).navPageToPage();
+                            });
                           });
                         },
                         style: TextButton.styleFrom(
@@ -518,10 +547,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             _effectPlayer.seek(const Duration(seconds: 0));
                             _effectPlayer.play();
-                            navPage(
-                              context: context,
-                              page: const WebviewPage2(),
-                            ).navPageToPage();
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+                              _audioPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const WebviewPage2(),
+                              ).navPageToPage();
+                            });
                           });
                         },
                         style: TextButton.styleFrom(
@@ -552,10 +585,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             _effectPlayer.seek(const Duration(seconds: 0));
                             _effectPlayer.play();
-                            navPage(
-                              context: context,
-                              page: const WebviewPage3(),
-                            ).navPageToPage();
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+                              _audioPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const WebviewPage3(),
+                              ).navPageToPage();
+                            });
                           });
                         },
                         style: TextButton.styleFrom(
@@ -626,7 +663,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 initiallyExpanded: false,
                                 backgroundColor: Colors.transparent,
                                 onExpansionChanged: (value) {
-                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer
+                                      .seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                 },
                                 children: <Widget>[
@@ -693,8 +731,10 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                                   WidgetsBinding.instance
                                                       .addPostFrameCallback(
                                                           (_) {
-                                                            _effectPlayer.seek(const Duration(seconds: 0));
-                                                            _effectPlayer.play();
+                                                    _effectPlayer.seek(
+                                                        const Duration(
+                                                            seconds: 0));
+                                                    _effectPlayer.play();
                                                     _prefs.setString('robotIp',
                                                         configController.text);
                                                     setState(() {
@@ -773,7 +813,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   onPressed: () {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(const Duration(seconds: 0));
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       getting(_networkProvider.startUrl!,
                                           _networkProvider.positionURL);
@@ -818,7 +859,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     });
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(const Duration(seconds: 0));
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       _networkProvider.servTable =
                                           'charging_pile';
@@ -828,11 +870,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                               keyBody: 'charging_pile')
                                           .Posting(context);
                                       _networkProvider.currentGoal = '충전스테이션';
-                                      navPage(
-                                        context: context,
-                                        page:
-                                            const NavigatorProgressModuleFinal(),
-                                      ).navPageToPage();
+                                      Future.delayed(
+                                          Duration(milliseconds: 230), () {
+                                        _effectPlayer.dispose();
+                                        _audioPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page:
+                                              const NavigatorProgressModuleFinal(),
+                                        ).navPageToPage();
+                                      });
                                     });
                                   },
                                   style: FilledButton.styleFrom(
@@ -894,7 +941,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
                                   onExpansionChanged: (value) {
-                                    _effectPlayer.seek(const Duration(seconds: 0));
+                                    _effectPlayer
+                                        .seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                   },
                                   children: const <Widget>[
@@ -955,7 +1003,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                   initiallyExpanded: false,
                                   backgroundColor: Colors.transparent,
                                   onExpansionChanged: (value) {
-                                    _effectPlayer.seek(const Duration(seconds: 0));
+                                    _effectPlayer
+                                        .seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                   },
                                   children: const <Widget>[
@@ -1002,13 +1051,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       });
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
-                                        _effectPlayer.seek(const Duration(seconds: 0));
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
                                         _effectPlayer.play();
                                         _prefs.clear();
-                                        navPage(
-                                          context: context,
-                                          page: const IntroScreen(),
-                                        ).navPageToPage();
+                                        Future.delayed(
+                                            Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          _audioPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const IntroScreen(),
+                                          ).navPageToPage();
+                                        });
                                         setState(() {
                                           _networkProvider.getApiData = [];
                                           _networkProvider.startUrl = "";
@@ -1061,11 +1116,17 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
                                         _effectPlayer.play();
-                                        _effectPlayer.seek(const Duration(seconds: 0));
-                                        navPage(
-                                          context: context,
-                                          page: const TestPagesScreen(),
-                                        ).navPageToPage();
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
+                                        Future.delayed(
+                                            Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          _audioPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const TestPagesScreen(),
+                                          ).navPageToPage();
+                                        });
                                       });
                                     },
                                     style: FilledButton.styleFrom(
@@ -1113,12 +1174,18 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                       });
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((_) {
-                                        _effectPlayer.seek(const Duration(seconds: 0));
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
                                         _effectPlayer.play();
-                                        navPage(
-                                          context: context,
-                                          page: const NavigationPatrol(),
-                                        ).navPageToPage();
+                                        Future.delayed(
+                                            Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          _audioPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const NavigationPatrol(),
+                                          ).navPageToPage();
+                                        });
                                       });
                                     },
                                     style: FilledButton.styleFrom(
@@ -1271,12 +1338,21 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               _servingProvider.table3 != "") {
                             _timer.cancel();
                             _pwrTimer.cancel();
-                            showCountDownPopup(context);
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+                              _audioPlayer.dispose();
+                              showCountDownPopup(context);
+                            });
                           } else {
                             _servingProvider.trayCheckAll = true;
                             _timer.cancel();
                             _pwrTimer.cancel();
-                            showTableSelectPopup(context);
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+                              _audioPlayer.dispose();
+                              showTableSelectPopup(context);
+                            });
+
                             _servingProvider.menuItem = "상품";
                           }
                         });
@@ -1322,7 +1398,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer
+                                      .seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray1 == true) {
                                     setState(() {
@@ -1350,7 +1427,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer
+                                      .seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray2 == true) {
                                     setState(() {
@@ -1378,7 +1456,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               onPressed: () {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer
+                                      .seek(const Duration(seconds: 0));
                                   _effectPlayer.play();
                                   if (_servingProvider.attachedTray3 == true) {
                                     setState(() {
@@ -1537,7 +1616,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _audioPlayer.dispose();
                                 _timer.cancel();
                                 _pwrTimer.cancel();
-                                showTraySetPopup(context);
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _effectPlayer.dispose();
+                                  _audioPlayer.dispose();
+                                  showTraySetPopup(context);
+                                });
                               });
                             },
                             style: TextButton.styleFrom(
@@ -1617,7 +1700,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _audioPlayer.dispose();
                                 _timer.cancel();
                                 _pwrTimer.cancel();
-                                showTraySetPopup(context);
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _effectPlayer.dispose();
+                                  _audioPlayer.dispose();
+                                  showTraySetPopup(context);
+                                });
                               });
                             },
                             style: TextButton.styleFrom(
@@ -1697,7 +1784,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                 _audioPlayer.dispose();
                                 _timer.cancel();
                                 _pwrTimer.cancel();
-                                showTraySetPopup(context);
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _effectPlayer.dispose();
+                                  _audioPlayer.dispose();
+                                  showTraySetPopup(context);
+                                });
                               });
                             },
                             style: TextButton.styleFrom(

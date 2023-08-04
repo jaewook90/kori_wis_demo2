@@ -68,7 +68,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     super.initState();
     _controller.pause();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
 
     currentServedTrayNum = '';
     _audioFile = '';
@@ -100,6 +100,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
   }
@@ -119,38 +120,41 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
-    if(_servingProvider.tray1 == true){
+    if (_servingProvider.tray1 == true) {
       currentServedTrayNum = '1번 ';
       _audioFile = 'assets/voices/koriServingNavDoneTray1.mp3';
-    }else{
-      if(_servingProvider.tray2 == true){
+    } else {
+      if (_servingProvider.tray2 == true) {
         currentServedTrayNum = '2번 ';
         _audioFile = 'assets/voices/koriServingNavDoneTray2.mp3';
-      }else{
-        if(_servingProvider.tray3 == true){
+      } else {
+        if (_servingProvider.tray3 == true) {
           currentServedTrayNum = '3번 ';
           _audioFile = 'assets/voices/koriServingNavDoneTray3.mp3';
-        }else{
+        } else {
           currentServedTrayNum = '';
           _audioFile = 'assets/voices/koriServingNavDone.mp3';
         }
       }
     }
 
-    if(_servingProvider.tray1 == true){
+    if (_servingProvider.tray1 == true) {
       _servingProvider.tray1 = false;
-    }else{
-      if(_servingProvider.tray2 == true){
+    } else {
+      if (_servingProvider.tray2 == true) {
         _servingProvider.tray2 = false;
-      }else{
-        if(_servingProvider.tray3 == true){
+      } else {
+        if (_servingProvider.tray3 == true) {
           _servingProvider.tray3 = false;
         }
       }
     }
 
     _initAudio();
-    _audioPlayer.play();
+
+    Future.delayed(Duration(seconds: 1), () {
+      _audioPlayer.play();
+    });
 
     double screenWidth = 1080;
 
@@ -176,10 +180,14 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
                         });
                       },
                       style: FilledButton.styleFrom(
@@ -251,7 +259,11 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                 },
                 interval: const Duration(seconds: 1),
                 onFinished: () {
-                  showCountDownPopup(context);
+                  Future.delayed(Duration(milliseconds: 230), () {
+                    _effectPlayer.dispose();
+                    _audioPlayer.dispose();
+                    showCountDownPopup(context);
+                  });
                 },
               ),
               Positioned(
@@ -325,10 +337,15 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                   endadr: navUrl,
                                   keyBody: _servingProvider.targetTableNum)
                               .Posting(context);
-                          navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(),
+                            ).navPageToPage();
+                          });
+
                         } else {
                           _servingProvider.clearAllTray();
                           PostApi(
@@ -336,10 +353,15 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                   endadr: navUrl,
                                   keyBody: _servingProvider.waitingPoint)
                               .Posting(context);
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
+
                         }
                       },
                       child: Container(
@@ -382,10 +404,14 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(),
+                            ).navPageToPage();
+                          });
                         });
                       } else {
                         _servingProvider.clearAllTray();
@@ -394,10 +420,14 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                                 endadr: navUrl,
                                 keyBody: _servingProvider.waitingPoint)
                             .Posting(context);
-                        navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                        ).navPageToPage();
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          _audioPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        });
                       }
                     });
                   },

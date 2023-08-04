@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -29,6 +30,9 @@ class PatrolProgress extends StatefulWidget {
 class _PatrolProgressState extends State<PatrolProgress> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/sounds/sound_moving_bg.mp3';
 
   late Timer _pwrTimer;
   late String backgroundImageServ;
@@ -75,6 +79,11 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
     stopDuration=0;
 
+    _initAudio();
+
+    _audioPlayer.seek(const Duration(seconds: 0));
+    _audioPlayer.play();
+
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
@@ -95,6 +104,13 @@ class _PatrolProgressState extends State<PatrolProgress> {
       CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
       EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     });
+  }
+
+  void _initAudio() {
+    AudioPlayer.clearAssetCache();
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
+    _audioPlayer.setLoopMode(LoopMode.all);
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {

@@ -102,7 +102,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override

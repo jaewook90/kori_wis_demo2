@@ -105,10 +105,11 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override
@@ -296,10 +297,15 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                 endadr: rsmUrl,
                                 keyBody: 'stop')
                                 .Posting(context);
-                            navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                            ).navPageToPage();
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _audioPlayer.dispose();
+                              _effectPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(),
+                              ).navPageToPage();
+                            });
+
                           } else if (i == 1) {
                             // 충전하러가기 기능
                             PostApi(
@@ -308,10 +314,15 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                 keyBody: 'charging_pile')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
-                            navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                            ).navPageToPage();
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+
+                              _audioPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(),
+                              ).navPageToPage();
+                            });
                           } else if (i == 2) {
                             // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
                           } else {
@@ -322,10 +333,14 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                 keyBody: 'wait')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
-                            navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                            ).navPageToPage();
+                            Future.delayed(Duration(milliseconds: 230), () {
+                              _effectPlayer.dispose();
+                              _audioPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(),
+                              ).navPageToPage();
+                            });
                           }
                         });
                       },

@@ -51,10 +51,11 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override
@@ -116,24 +117,30 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                             _servingProvider.item2 = "";
                             _servingProvider.item3 = "";
                           });
-                          navPage(context: context, page: const TraySelectionFinal())
-                              .navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            navPage(
+                                    context: context,
+                                    page: const TraySelectionFinal())
+                                .navPageToPage();
+                          });
                         });
                       },
                       child: null,
                     ),
                   )),
               const Positioned(
-                left: 260,
+                  left: 260,
                   top: 40,
                   child: Text(
-                '상품을 선택하세요',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'kor',
-                    fontSize: 60,
-                    fontWeight: FontWeight.bold),
-              )),
+                    '상품을 선택하세요',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'kor',
+                        fontSize: 60,
+                        fontWeight: FontWeight.bold),
+                  )),
               // 상품 버튼
               for (int i = 0; i < buttonNumbers; i++)
                 Positioned(
@@ -154,7 +161,11 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           setState(() {
                             _servingProvider.menuItem = menuItems[i];
                           });
-                          showTableSelectPopup(context);
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            showTableSelectPopup(context);
+                          });
                         });
                       },
                       child: null,

@@ -55,10 +55,11 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override
@@ -112,8 +113,7 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 35,
-                              color: Colors.white
-                          )),
+                              color: Colors.white)),
                     ),
                   ],
                 ),
@@ -139,10 +139,16 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _effectPlayer.seek(const Duration(seconds: 0));
                       _effectPlayer.play();
-                      navPage(context: context, page: const TraySelectionFinal())
-                          .navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        _audioPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      });
                     });
-                    },
+                  },
                   child: null,
                 ),
               )),
@@ -166,15 +172,19 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                         _servingProvider.returnTargetTable = returnTable;
                       });
                       PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: returnTable)
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: returnTable)
                           .Posting(context);
                       Navigator.pop(context);
-                      navPage(
-                        context: context,
-                        page: const ReturnProgressModuleFinal(),
-                      ).navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        _audioPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: const ReturnProgressModuleFinal(),
+                        ).navPageToPage();
+                      });
                     });
                   },
                   child: null,

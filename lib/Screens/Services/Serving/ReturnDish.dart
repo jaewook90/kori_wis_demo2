@@ -61,14 +61,13 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     _initAudio();
 
-
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
-          Provider.of<NetworkModel>(context, listen: false).startUrl!)
+              Provider.of<NetworkModel>(context, listen: false).startUrl!)
           .gettingPWRdata();
       if (EMGStatus !=
           Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
@@ -79,14 +78,17 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
         setState(() {});
       }
       batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+      CHGFlag =
+          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus =
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     });
   }
 
   void _initAudio() {
+    AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -163,10 +165,13 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
             navStatus = 0;
             arrivedReturnTable = true;
           });
-          navPage(
-            context: context,
-            page: const ReturnDoneScreen(),
-          ).navPageToPage();
+          Future.delayed(Duration(milliseconds: 230), () {
+            _effectPlayer.dispose();
+            navPage(
+              context: context,
+              page: const ReturnDoneScreen(),
+            ).navPageToPage();
+          });
         });
       }
     });
@@ -208,14 +213,14 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                   ),
                   EMGStatus == 0
                       ? const Positioned(
-                    right: 35,
-                    top: 15,
-                    child: Icon(Icons.block,
-                        color: Colors.red,
-                        size: 80,
-                        grade: 200,
-                        weight: 200),
-                  )
+                          right: 35,
+                          top: 15,
+                          child: Icon(Icons.block,
+                              color: Colors.red,
+                              size: 80,
+                              grade: 200,
+                              weight: 200),
+                        )
                       : Container(),
                 ],
               ),
@@ -279,10 +284,13 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        navPage(
-                          context: context,
-                          page: const ReturnDoneScreen(),
-                        ).navPageToPage();
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const ReturnDoneScreen(),
+                          ).navPageToPage();
+                        });
                       },
                       child: Container(
                           height: 800,

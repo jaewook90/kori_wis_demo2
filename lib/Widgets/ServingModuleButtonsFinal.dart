@@ -78,7 +78,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   void showCountDownPopup(context) {
@@ -206,14 +206,20 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             _servingProvider.table3 = "${i + 1}";
                             _servingProvider.tray3 = true;
                           }
-                          uploadTableNumberNItemImg();
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            uploadTableNumberNItemImg();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
                         } else {
                           _servingProvider.allTable = '${i + 1}';
-                          showCountDownPopup(context);
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            showCountDownPopup(context);
+                          });
                         }
                       });
                     });
@@ -228,10 +234,13 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                                   endadr: navUrl,
                                   keyBody: _servingProvider.waitingPoint)
                               .Posting(context);
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
                         });
                       }
                     : null,

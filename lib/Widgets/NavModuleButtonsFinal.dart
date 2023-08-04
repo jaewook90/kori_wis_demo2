@@ -62,7 +62,7 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
 
   void _initAudio() {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.8);
+    _effectPlayer.setVolume(0.4);
   }
 
   @override
@@ -146,11 +146,14 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                       _effectPlayer.play();
                       PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
                           .Posting(context);
-                      navPage(
-                        context: context,
-                        page: NavigatorPauseModuleFinal(
-                            servGoalPose: currentGoal),
-                      ).navPageToPage();
+                      Future.delayed(Duration(milliseconds: 230), () {
+                        _effectPlayer.dispose();
+                        navPage(
+                          context: context,
+                          page: NavigatorPauseModuleFinal(
+                              servGoalPose: currentGoal),
+                        ).navPageToPage();
+                      });
                     });
                   }
                 : widget.screens == 2
@@ -158,10 +161,13 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
-                          navPage(
-                            context: context,
-                            page: const ReturnDishPauseScreen(),
-                          ).navPageToPage();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const ReturnDishPauseScreen(),
+                            ).navPageToPage();
+                          });
                         });
                       }
                     : null,
