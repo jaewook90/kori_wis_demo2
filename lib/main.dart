@@ -24,7 +24,16 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
             create: (context) => MainStatusModel(
-                debugMode: true, batBal: 0, chargeFlag: 0, emgButton: 0, mainSoundMute: true)),
+                debugMode: true,
+                batBal: 0,
+                chargeFlag: 0,
+                emgButton: 0,
+                // movebaseStatus: 99,
+                mainSoundMute: true,
+                restartService: false,
+                autoCharge: 20
+                // initNavStatus: true
+            )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(
                   startUrl: '',

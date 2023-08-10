@@ -26,6 +26,7 @@ class ServingProgressFinal extends StatefulWidget {
 class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  // late MainStatusModel _mainStatusProvider;
 
   late String currentServedTrayNum;
   late Timer _pwrTimer;
@@ -119,21 +120,22 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    // _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     if (_servingProvider.tray1 == true) {
       currentServedTrayNum = '1번 ';
-      _audioFile = 'assets/voices/koriServingNavDoneTray1.mp3';
+      _audioFile = 'assets/voices/koriServingNavDoneTray1.wav';
     } else {
       if (_servingProvider.tray2 == true) {
         currentServedTrayNum = '2번 ';
-        _audioFile = 'assets/voices/koriServingNavDoneTray2.mp3';
+        _audioFile = 'assets/voices/koriServingNavDoneTray2.wav';
       } else {
         if (_servingProvider.tray3 == true) {
           currentServedTrayNum = '3번 ';
-          _audioFile = 'assets/voices/koriServingNavDoneTray3.mp3';
+          _audioFile = 'assets/voices/koriServingNavDoneTray3.wav';
         } else {
           currentServedTrayNum = '';
-          _audioFile = 'assets/voices/koriServingNavDone.mp3';
+          _audioFile = 'assets/voices/koriServingNavDone.wav';
         }
       }
     }
@@ -326,6 +328,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                   child: GestureDetector(
                       onTap: () {
                         _controller.pause();
+                        // _mainStatusProvider.initNavStatus = true;
                         if (_servingProvider.targetTableNum != 'none') {
                           setState(() {
                             _servingProvider.trayChange = true;

@@ -24,7 +24,7 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
 
   String tableSelectBG = 'assets/screens/Serving/KoriServingTableSelect.png';
 
-  final String _audioFile = 'assets/voices/koriServingTableSelect.mp3';
+  final String _audioFile = 'assets/voices/koriServingTableSelect.wav';
 
   late AudioPlayer _audioPlayer;
 

@@ -42,6 +42,11 @@ class _IntroScreenState extends State<IntroScreen>
   late bool robotInit;
   late bool navTrigger;
 
+  late bool skipIntro;
+  late bool playingVideo;
+
+  late Duration mediaDuration;
+
   late VideoPlayerController _controller;
   late AudioPlayer _audioPlayer;
 
@@ -64,13 +69,15 @@ class _IntroScreenState extends State<IntroScreen>
 
   DateTime? currentBackPressTime;
   final String _text = "뒤로가기 버튼을 한 번 더 누르시면 앱이 종료됩니다.";
-  final String _audioFile = 'assets/voices/koriServingIntro.mp3';
+  final String _audioFile = 'assets/voices/koriServingIntro.wav';
 
   FToast? fToast;
 
   @override
   void initState() {
     super.initState();
+    skipIntro = false;
+    playingVideo = true;
     _initSharedPreferences();
     _controller = VideoPlayerController.asset(introVideo)
       ..initialize().then((_) {
@@ -79,7 +86,6 @@ class _IntroScreenState extends State<IntroScreen>
         setState(() {});
       });
 
-    robotInit = true;
     navTrigger = true;
 
     fToast = FToast();
@@ -122,18 +128,25 @@ class _IntroScreenState extends State<IntroScreen>
     if (_prefs.getString('robotIp') != null) {
       _networkProvider.startUrl = _prefs.getString('robotIp');
     }
+    if(_prefs.getBool('robotInit')==null){
+      robotInit = false;
+    }else{
+      robotInit = _prefs.getBool('robotInit')!;
+    }
+    print('-----------------robotInit---------------------');
+    print(robotInit);
     _networkProvider.hostIP();
     getting(_networkProvider.startUrl!, _networkProvider.positionURL);
-    Duration mediaDuration = _controller.value.duration;
+    mediaDuration = _controller.value.duration;
     Duration introDuration = mediaDuration + const Duration(milliseconds: 2000);
     await Future.delayed(introDuration);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _playAudio();
     });
-
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       updateComplete = true;
+      playingVideo = false;
     });
   }
 
@@ -184,22 +197,18 @@ class _IntroScreenState extends State<IntroScreen>
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _audioPlayer.stop();
           });
-
           setState(() {
             navTrigger = true;
             _servingProvider.mainInit = true;
           });
           _effectPlayer.dispose();
           _audioPlayer.dispose();
-          Future.delayed(
-            Duration(milliseconds: 50),
-            () {
-              navPage(
-                context: context,
-                page: const TraySelectionFinal(),
-              ).navPageToPage();
-            }
-          );
+          Future.delayed(const Duration(milliseconds: 50), () {
+            navPage(
+              context: context,
+              page: const TraySelectionFinal(),
+            ).navPageToPage();
+          });
         } else {
           setState(() {
             navTrigger = true;
@@ -261,40 +270,49 @@ class _IntroScreenState extends State<IntroScreen>
           body: GestureDetector(
             // 스크린 터치시 화면 이동을 위한 위젯
             onTap: () async {
-              if (updateComplete == true) {
-                if (_prefs.getString('robotIp') == null) {
-                  setState(() {
-                    robotInit = false;
-                  });
-                } else {
-                  getting(
-                      _networkProvider.startUrl!, _networkProvider.positionURL);
-                  if (apiData != null && apiData != []) {
-                    setState(() {
-                      navTrigger = true;
-                      _servingProvider.mainInit = true;
-                    });
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      _audioPlayer.stop();
-                    });
-                    _effectPlayer.dispose();
-                    _audioPlayer.dispose();
-                    Future.delayed(
-                        Duration(milliseconds: 50),
-                            () {
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
-                        }
-                    );
-                  } else {
+              if(playingVideo == false){
+                if (updateComplete == true) {
+                  if (_prefs.getString('robotIp') == null) {
                     setState(() {
                       robotInit = false;
-                      navTrigger = true;
                     });
+                  } else {
+                    getting(
+                        _networkProvider.startUrl!, _networkProvider.positionURL);
+                    if (apiData != null && apiData != []) {
+                      setState(() {
+                        navTrigger = true;
+                        _servingProvider.mainInit = true;
+                      });
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _audioPlayer.stop();
+                      });
+                      _effectPlayer.dispose();
+                      _audioPlayer.dispose();
+                      Future.delayed(const Duration(milliseconds: 50), () {
+                        navPage(
+                          context: context,
+                          page: const TraySelectionFinal(),
+                        ).navPageToPage();
+                      });
+                    } else {
+                      setState(() {
+                        robotInit = false;
+                        navTrigger = true;
+                      });
+                    }
                   }
                 }
+              }else if(playingVideo == true && robotInit == true){
+                _controller.seekTo(mediaDuration);
+                Future.delayed(const Duration(milliseconds: 500), () {
+                  _audioPlayer.play();
+                });
+                await Future.delayed(const Duration(milliseconds: 500));
+                setState(() {
+                  updateComplete = true;
+                  playingVideo = false;
+                });
               }
             },
             child: Center(
@@ -378,6 +396,7 @@ class _IntroScreenState extends State<IntroScreen>
                                                     _effectPlayer.play();
                                                     _prefs.setString('robotIp',
                                                         configController.text);
+                                                    _prefs.setBool('robotInit', !robotInit);
                                                     setState(() {
                                                       _networkProvider
                                                               .startUrl =
@@ -449,6 +468,7 @@ class _IntroScreenState extends State<IntroScreen>
                                             onSubmitted: (value) {
                                               _prefs.setString(
                                                   'robotIp', value);
+                                              _prefs.setBool('robotInit', !robotInit);
                                               setState(() {
                                                 _networkProvider.startUrl =
                                                     _prefs.getString('robotIp');

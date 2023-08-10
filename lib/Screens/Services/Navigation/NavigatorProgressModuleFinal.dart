@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/ChargingStation.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
 
@@ -30,11 +32,13 @@ class _NavigatorProgressModuleFinalState
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  late int hiddenCounter;
+
   late Timer _pwrTimer;
   late String backgroundImageServ;
 
   late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/sounds/sound_moving_bg.mp3';
+  final String _audioFile = 'assets/sounds/sound_moving_bg.wav';
 
   late String navSentence;
   late String destinationSentence;
@@ -63,10 +67,11 @@ class _NavigatorProgressModuleFinalState
   void initState() {
     // TODO: implement initState
     super.initState();
+    hiddenCounter = 0;
     navSentence = '';
     destinationSentence = '';
     initNavStatus = true;
-    navStatus = 0;
+    navStatus = 99;
     arrivedServingTable = false;
     targetTableNum = "";
 
@@ -83,9 +88,14 @@ class _NavigatorProgressModuleFinalState
     _audioPlayer.play();
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      // initNavStatus = Provider.of<MainStatusModel>(context, listen: false).initNavStatus!;
       StatusManagements(context,
           Provider.of<NetworkModel>(context, listen: false).startUrl!)
           .gettingPWRdata();
+      // StatusManagements(context,
+      //     Provider.of<NetworkModel>(context, listen: false).startUrl!)
+      //     .gettingMoveData(initNavStatus);
+
       if (EMGStatus !=
           Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
         setState(() {});
@@ -94,9 +104,15 @@ class _NavigatorProgressModuleFinalState
           Provider.of<MainStatusModel>(context, listen: false).batBal!) {
         setState(() {});
       }
+      // if (navStatus !=
+      //     Provider.of<MainStatusModel>(context, listen: false).movebaseStatus!) {
+      //   setState(() {});
+      // }
+
       batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
       CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
       EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+      // navStatus = Provider.of<MainStatusModel>(context, listen: false).movebaseStatus!;
     });
   }
 
@@ -115,6 +131,7 @@ class _NavigatorProgressModuleFinalState
     dynamic getApiData = await network.getAPI();
 
     if (initNavStatus == true) {
+      // 이동 화면 첫 진입 여부 확인
       if (getApiData == 3) {
         while (getApiData != 3) {
           if (mounted) {
@@ -149,6 +166,15 @@ class _NavigatorProgressModuleFinalState
         });
       }
     }
+  }
+
+  void showCountDownPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const UnmovableCountDownModalFinal();
+        });
   }
 
   @override
@@ -261,7 +287,6 @@ class _NavigatorProgressModuleFinalState
               page: const TraySelectionFinal(),
             ).navPageToPage();
           });
-
         } else if (servTableNum == 'charging_pile') {
           setState(() {
             _servingProvider.mainInit = true;
@@ -270,11 +295,19 @@ class _NavigatorProgressModuleFinalState
             _audioPlayer.dispose();
             navPage(
               context: context,
-              page: const ChargingStation(),
+              page: const KoriDocking(),
             ).navPageToPage();
           });
 
         }
+      }
+      if(navStatus == 4 && arrivedServingTable == false){
+        setState(() {
+          arrivedServingTable = true;
+          navStatus = 0;
+        });
+        _audioPlayer.dispose();
+        showCountDownPopup(context);
       }
     });
 
@@ -326,6 +359,48 @@ class _NavigatorProgressModuleFinalState
                         weight: 200),
                   )
                       : Container(),
+                  Positioned(
+                    right: 30,
+                    top: 25,
+                    child: FilledButton(
+                      onPressed: () {
+                        setState(() {
+                          hiddenCounter++;
+                          print(hiddenCounter);
+                        });
+                        Future.delayed(Duration(milliseconds: 2000),(){
+                          setState(() {
+                            hiddenCounter = 0;
+                          });
+                        });
+                        if(hiddenCounter == 5){
+                          _audioPlayer.dispose();
+                          _servingProvider.clearAllTray();
+                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                          PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: 'wait')
+                              .Posting(context);
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                          // side: BorderSide(color: Colors.white, width: 5),
+                          surfaceTintColor: Colors.transparent,
+                          disabledBackgroundColor: Colors.transparent,
+
+                          foregroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          disabledForegroundColor: Colors.transparent,
+
+                          fixedSize: const Size(120, 60),
+                          enableFeedback: false,
+                          backgroundColor: Colors.transparent
+                      ),
+                      child: null,
+                    ),
+                  ),
                 ],
               ),
             )

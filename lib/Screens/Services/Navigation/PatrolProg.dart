@@ -32,7 +32,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
   late ServingModel _servingProvider;
 
   late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/sounds/sound_moving_bg.mp3';
+  final String _audioFile = 'assets/sounds/sound_moving_bg.wav';
 
   late Timer _pwrTimer;
   late String backgroundImageServ;

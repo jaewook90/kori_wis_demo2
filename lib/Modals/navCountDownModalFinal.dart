@@ -28,7 +28,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
   late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/voices/koriServingNavBegin.mp3';
+  final String _audioFile = 'assets/voices/koriServingNavBegin.wav';
 
   String? currentGoal;
 

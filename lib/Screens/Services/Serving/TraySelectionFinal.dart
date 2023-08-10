@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
+import 'package:kori_wis_demo/Modals/CableConnectedModalFinal.dart';
+import 'package:kori_wis_demo/Modals/EMGPopModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
@@ -42,10 +44,11 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late bool volumeOnOff;
 
   final TextEditingController configController = TextEditingController();
+  final TextEditingController autoChargeController = TextEditingController();
   late SharedPreferences _prefs;
 
   late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/voices/koriServingMain.mp3';
+  final String _audioFile = 'assets/voices/koriServingMain.wav';
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
@@ -66,6 +69,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   late int batData;
   late int CHGFlag;
   late int EMGStatus;
+
+  late int autoChargeConfig;
 
   // 배경 화면
   late String backgroundImage;
@@ -124,6 +129,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+
+    autoChargeConfig = Provider.of<MainStatusModel>(context, listen: false).autoCharge!;
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
@@ -233,6 +240,24 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
         });
   }
 
+  void showEMGAlert(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const EMGPopModalFinal();
+        });
+  }
+
+  void showAdaptorCableAlert(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const CableConnectedModalFinal();
+        });
+  }
+
   void showTableSelectPopup(context) {
     showDialog(
         barrierDismissible: false,
@@ -330,6 +355,38 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
           page: const ChargingStation(),
         ).navPageToPage();
       });
+    }
+
+    if(batData != 0){
+      if(batData < autoChargeConfig){
+        setState(() {
+          _servingProvider.mainInit = false;
+        });
+        WidgetsBinding.instance
+            .addPostFrameCallback((_) {
+          _effectPlayer
+              .seek(const Duration(seconds: 0));
+          _effectPlayer.play();
+          _networkProvider.servTable =
+          'charging_pile';
+          PostApi(
+              url: startUrl,
+              endadr: chgUrl,
+              keyBody: 'charging_pile')
+              .Posting(context);
+          _networkProvider.currentGoal = '충전스테이션';
+          Future.delayed(
+              Duration(milliseconds: 230), () {
+            _effectPlayer.dispose();
+            _audioPlayer.dispose();
+            navPage(
+              context: context,
+              page:
+              const NavigatorProgressModuleFinal(),
+            ).navPageToPage();
+          });
+        });
+      }
     }
 
     return WillPopScope(
@@ -806,47 +863,161 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                             const SizedBox(
                               height: 20,
                             ),
-                            //골포지션 새로고침
-                            Padding(
-                                padding: const EdgeInsets.only(left: 0),
-                                child: FilledButton(
-                                  onPressed: () {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      _effectPlayer
-                                          .seek(const Duration(seconds: 0));
-                                      _effectPlayer.play();
-                                      getting(_networkProvider.startUrl!,
-                                          _networkProvider.positionURL);
-                                    });
-                                  },
-                                  style: FilledButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      enableFeedback: false,
-                                      fixedSize: const Size(370, 58),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(0))),
-                                  child: const Row(
-                                    children: [
-                                      Icon(Icons.sync,
-                                          color: Colors.white, size: 50),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 15),
-                                        child: Text(
-                                          '목적지설정 초기화',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontFamily: 'kor',
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              height: 1,
-                                              color: Colors.white),
-                                        ),
+                            ExpansionTile(
+                                title: const Row(
+                                  children: [
+                                    Icon(Icons.battery_saver,
+                                        color: Colors.white, size: 50),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        '자동 충전',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontFamily: 'kor',
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1,
+                                            color: Colors.white),
                                       ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                                initiallyExpanded: false,
+                                backgroundColor: Colors.transparent,
+                                onExpansionChanged: (value) {
+                                  _effectPlayer
+                                      .seek(const Duration(seconds: 0));
+                                  _effectPlayer.play();
+                                },
+                                children: <Widget>[
+                                  const Divider(
+                                      height: 20,
+                                      color: Colors.grey,
+                                      indent: 15),
+                                  SizedBox(
+                                    width: 370,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 50, bottom: 30),
+                                      child: Column(
+                                        children: [
+                                          const Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '현재 설정',
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 12,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '$autoChargeConfig',
+                                                style: const TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            height: 30,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                '변경 할 설정',
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                              const SizedBox(
+                                                width: 150,
+                                              ),
+                                              FilledButton(
+                                                onPressed: () async {
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                        _effectPlayer.seek(
+                                                            const Duration(
+                                                                seconds: 0));
+                                                        _effectPlayer.play();
+                                                        _prefs.setInt('autoCharge',
+                                                            int.parse(autoChargeController.text));
+
+                                                        setState(() {
+                                                          _mainStatusProvider.autoCharge = int.parse(autoChargeController.text);
+                                                          autoChargeConfig = _mainStatusProvider.autoCharge!;
+                                                          autoChargeController.text =
+                                                          '';
+                                                        });
+                                                      });
+                                                },
+                                                style: FilledButton.styleFrom(
+                                                    enableFeedback: false,
+                                                    backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        80, 80, 255, 0.7),
+                                                    shape:
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          15),
+                                                    )),
+                                                child: const Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          TextField(
+                                            onTap: () {
+                                              setState(() {
+                                                autoChargeController.text = '';
+                                              });
+                                            },
+                                            controller: autoChargeController,
+                                            style: const TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(),
+                                            decoration: const InputDecoration(
+                                                border: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                enabledBorder:
+                                                UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1),
+                                                )),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                )),
+                                ]),
                             const SizedBox(
                               height: 20,
                             ),
@@ -897,6 +1068,50 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                         padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '충전 스테이션으로 이동',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            //골포지션 새로고침
+                            Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: FilledButton(
+                                  onPressed: () {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
+                                      _effectPlayer.play();
+                                      getting(_networkProvider.startUrl!,
+                                          _networkProvider.positionURL);
+                                    });
+                                  },
+                                  style: FilledButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      enableFeedback: false,
+                                      fixedSize: const Size(370, 58),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(0))),
+                                  child: const Row(
+                                    children: [
+                                      Icon(Icons.sync,
+                                          color: Colors.white, size: 50),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          '목적지설정 초기화',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
@@ -1216,6 +1431,62 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     ),
                                   )),
                             ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: const SizedBox(
+                                height: 20,
+                              ),
+                            ),
+                            Offstage(
+                              offstage: _debugTray,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: FilledButton(
+                                    onPressed: () {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
+                                        _effectPlayer.play();
+                                        Future.delayed(
+                                            Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          _audioPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const IntroScreen(),
+                                          ).navPageToPage();
+                                        });
+                                      });
+                                    },
+                                    style: FilledButton.styleFrom(
+                                        enableFeedback: false,
+                                        backgroundColor: Colors.transparent,
+                                        fixedSize: const Size(370, 58),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(0))),
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.repeat,
+                                            color: Colors.white, size: 50),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 15),
+                                          child: Text(
+                                            '인트로 화면 이동',
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                            ),
                           ],
                         ),
                         //투명 디버그 모드 온/오프 스위치
@@ -1327,35 +1598,42 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                           fixedSize: const Size(450, 168)),
                       onPressed: () {
                         _audioPlayer.dispose();
-                        setState(() {
-                          _servingProvider.mainInit = false;
-                        });
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(const Duration(seconds: 0));
-                          _effectPlayer.play();
-                          if ((_servingProvider.table1 != "" ||
+                        if(EMGStatus==0){
+                          showEMGAlert(context);
+                        }else{
+                          if(CHGFlag == 3){
+                            showAdaptorCableAlert(context);
+                          }else{
+                            setState(() {
+                              _servingProvider.mainInit = false;
+                            });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              if ((_servingProvider.table1 != "" ||
                                   _servingProvider.table2 != "") ||
-                              _servingProvider.table3 != "") {
-                            _timer.cancel();
-                            _pwrTimer.cancel();
-                            Future.delayed(Duration(milliseconds: 230), () {
-                              _effectPlayer.dispose();
-                              _audioPlayer.dispose();
-                              showCountDownPopup(context);
+                                  _servingProvider.table3 != "") {
+                                _timer.cancel();
+                                _pwrTimer.cancel();
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _effectPlayer.dispose();
+                                  _audioPlayer.dispose();
+                                  showCountDownPopup(context);
+                                });
+                              } else {
+                                _servingProvider.trayCheckAll = true;
+                                _timer.cancel();
+                                _pwrTimer.cancel();
+                                Future.delayed(Duration(milliseconds: 230), () {
+                                  _effectPlayer.dispose();
+                                  _audioPlayer.dispose();
+                                  showTableSelectPopup(context);
+                                });
+                                _servingProvider.menuItem = "상품";
+                              }
                             });
-                          } else {
-                            _servingProvider.trayCheckAll = true;
-                            _timer.cancel();
-                            _pwrTimer.cancel();
-                            Future.delayed(Duration(milliseconds: 230), () {
-                              _effectPlayer.dispose();
-                              _audioPlayer.dispose();
-                              showTableSelectPopup(context);
-                            });
-
-                            _servingProvider.menuItem = "상품";
                           }
-                        });
+                        }
                       },
                       child: const Text(
                         '서빙시작',

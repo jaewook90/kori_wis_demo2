@@ -33,7 +33,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
 
   late String targetTable;
 
-  final String _audioFile = 'assets/voices/koriServingNavPause.mp3';
+  final String _audioFile = 'assets/voices/koriServingNavPause.wav';
 
   late AudioPlayer _audioPlayer;
 

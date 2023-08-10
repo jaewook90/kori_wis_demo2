@@ -36,7 +36,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
   late String servTableNum;
 
-  final String _audioFile = 'assets/voices/koriServingNavPause.mp3';
+  final String _audioFile = 'assets/voices/koriServingNavPause.wav';
 
   late AudioPlayer _audioPlayer;
 

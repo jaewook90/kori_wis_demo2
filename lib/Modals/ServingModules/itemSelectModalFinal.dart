@@ -18,7 +18,7 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
 
   String itemSelectBG = 'assets/screens/Serving/koriZFinalItemSelect.png';
 
-  final String _audioFile = 'assets/voices/koriServingItemSelect.mp3';
+  final String _audioFile = 'assets/voices/koriServingItemSelect.wav';
 
   late AudioPlayer _audioPlayer;
 
