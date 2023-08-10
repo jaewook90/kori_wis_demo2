@@ -161,6 +161,8 @@ class _NavModuleButtonsFinalState extends State<NavModuleButtonsFinal> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(Duration(seconds: 0));
                           _effectPlayer.play();
+                          PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
+                              .Posting(context);
                           Future.delayed(Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
                             navPage(

@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -28,6 +29,11 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   late NetworkModel _networkProvider;
 
   late Timer _pwrTimer;
+
+
+  late String serviceState;
+  late String navSentence;
+  late String destinationSentence;
 
   late String backgroundImage;
 
@@ -74,6 +80,10 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
     targetTable =
         Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
 
+    serviceState = '[이동]';
+    navSentence = '$serviceState이 일시중지 되었습니다';
+    destinationSentence = '${targetTable}번 테이블';
+
     _initAudio();
 
     _audioPlayer.play();
@@ -108,6 +118,15 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
+  }
+
+  void showReturnSelectPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ReturnDishTableModal();
+        });
   }
 
   @override
@@ -207,39 +226,43 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
             child: Stack(
               children: [
                 Positioned(
-                  top: 500,
-                  left: 0,
-                  child: GestureDetector(
-                      onTap: () {
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          _audioPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const ReturnDoneScreen(),
-                          ).navPageToPage();
-                        });
-                      },
-                      child: Container(
-                          height: 800,
-                          width: 1080,
-                          decoration: const BoxDecoration(
-                              border: Border.fromBorderSide(BorderSide(
-                                  color: Colors.transparent, width: 1))))),
-                ),
+                    top: 250,
+                    child: SizedBox(
+                      width: 1080,
+                      height: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            navSentence,
+                            style: const TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 70,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xfffffefe)),
+                          ),
+                        ],
+                      ),
+                    )),
                 Positioned(
                     top: 372,
-                    left: 460,
                     child: SizedBox(
-                      width: 300,
+                      width: 1080,
                       height: 90,
-                      child: Text(
-                        '$targetTable번 테이블',
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 55,
-                            color: Color(0xfffffefe)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
+                          const SizedBox(width: 15,),
+                          Text(
+                            destinationSentence,
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 55,
+                                color: Color(0xfffffefe)),
+                          ),
+                        ],
                       ),
                     )),
                 for (int i = 0; i < buttonNumbers; i++)
@@ -275,7 +298,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const NavigatorProgressModuleFinal(),
+                                page: const ReturnProgressModuleFinal(),
                               ).navPageToPage();
                             });
                           } else if (i == 1) {
@@ -291,11 +314,12 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const NavigatorProgressModuleFinal(),
+                                page: const ReturnProgressModuleFinal(),
                               ).navPageToPage();
                             });
                           } else if (i == 2) {
                             // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                            showReturnSelectPopup(context);
                           } else {
                             // 추후에는 거점으로 복귀
                             PostApi(
@@ -309,7 +333,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const NavigatorProgressModuleFinal(),
+                                page: const TraySelectionFinal(),
                               ).navPageToPage();
                             });
                           }

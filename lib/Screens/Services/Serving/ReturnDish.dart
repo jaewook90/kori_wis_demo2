@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -26,6 +27,8 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
 
   late Timer _pwrTimer;
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/sounds/sound_moving_bg.wav';
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
@@ -61,6 +64,9 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     _initAudio();
 
+    _audioPlayer.seek(const Duration(seconds: 0));
+    _audioPlayer.play();
+
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
@@ -87,8 +93,20 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
   void _initAudio() {
     AudioPlayer.clearAssetCache();
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
+    _audioPlayer.setLoopMode(LoopMode.all);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
+  }
+
+  void showCountDownPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const UnmovableCountDownModalFinal();
+        });
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -139,6 +157,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _audioPlayer.dispose();
     _effectPlayer.dispose();
     _pwrTimer.cancel();
   }
@@ -160,19 +179,28 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
         Getting(startUrl!, moveBaseStatusUrl!);
       });
       if (navStatus == 3 && arrivedReturnTable == false) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
           setState(() {
             navStatus = 0;
             arrivedReturnTable = true;
           });
-          Future.delayed(Duration(milliseconds: 230), () {
-            _effectPlayer.dispose();
-            navPage(
-              context: context,
-              page: const ReturnDoneScreen(),
-            ).navPageToPage();
-          });
+          if(currentTargetTable != 'wait' && currentTargetTable != 'charging_pile'){
+            Future.delayed(Duration(milliseconds: 230), () {
+              _audioPlayer.dispose();
+              _effectPlayer.dispose();
+              navPage(
+                context: context,
+                page: const ReturnDoneScreen(),
+              ).navPageToPage();
+            });
+          }
+      }
+      if(navStatus == 4 && arrivedReturnTable == false){
+        setState(() {
+          arrivedReturnTable = true;
+          navStatus = 0;
         });
+        _audioPlayer.dispose();
+        showCountDownPopup(context);
       }
     });
 
@@ -285,6 +313,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                   child: GestureDetector(
                       onTap: () {
                         Future.delayed(Duration(milliseconds: 230), () {
+                          _audioPlayer.dispose();
                           _effectPlayer.dispose();
                           navPage(
                             context: context,

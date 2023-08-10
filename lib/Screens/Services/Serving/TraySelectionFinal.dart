@@ -1034,6 +1034,68 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                           .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       _networkProvider.servTable =
+                                      'wait';
+                                      PostApi(
+                                          url: startUrl,
+                                          endadr: navUrl,
+                                          keyBody: 'wait')
+                                          .Posting(context);
+                                      _networkProvider.currentGoal = '대기장소';
+                                      Future.delayed(
+                                          Duration(milliseconds: 230), () {
+                                        _effectPlayer.dispose();
+                                        _audioPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page:
+                                          const NavigatorProgressModuleFinal(),
+                                        ).navPageToPage();
+                                      });
+                                    });
+                                  },
+                                  style: FilledButton.styleFrom(
+                                      enableFeedback: false,
+                                      backgroundColor: Colors.transparent,
+                                      fixedSize: const Size(370, 58),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(0))),
+                                  child: const Row(
+                                    children: [
+                                      Icon(Icons.add_to_home_screen,
+                                          color: Colors.white, size: 50),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: Text(
+                                          '대기장소로 이동',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: FilledButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _servingProvider.mainInit = false;
+                                    });
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
+                                      _effectPlayer.play();
+                                      _networkProvider.servTable =
                                           'charging_pile';
                                       PostApi(
                                               url: startUrl,

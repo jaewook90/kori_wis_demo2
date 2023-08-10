@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -110,6 +111,16 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
+  }
+
+  // 추후 디테일 하게 변경 ( 전체 서빙 / 트레이별 서빙 )
+  void showTableSelectPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const SelectTableModalFinal();
+        });
   }
 
   @override
@@ -325,6 +336,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                             });
                           } else if (i == 2) {
                             // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                            // showTableSelectPopup(context);
                           } else {
                             // 추후에는 거점으로 복귀
                             PostApi(

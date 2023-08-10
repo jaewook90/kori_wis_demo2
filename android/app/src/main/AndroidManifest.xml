@@ -10,7 +10,7 @@
         android:allowBackup="true"
         android:largeHeap="true"
         android:usesCleartextTraffic="true"
-        android:label="kori_wis_demo"
+        android:label="KORI-ServingBot"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

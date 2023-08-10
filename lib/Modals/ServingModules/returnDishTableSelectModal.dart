@@ -176,10 +176,10 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                               endadr: navUrl,
                               keyBody: returnTable)
                           .Posting(context);
-                      Navigator.pop(context);
                       Future.delayed(Duration(milliseconds: 230), () {
                         _effectPlayer.dispose();
                         _audioPlayer.dispose();
+                        Navigator.pop(context);
                         navPage(
                           context: context,
                           page: const ReturnProgressModuleFinal(),
