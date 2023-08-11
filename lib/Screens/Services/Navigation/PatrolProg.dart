@@ -42,6 +42,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
   late String targetPoint;
 
+  late String pastTargetPoint;
+
   late bool patrolling;
 
   late bool arrivedServingTable;
@@ -74,10 +76,11 @@ class _PatrolProgressState extends State<PatrolProgress> {
     targetPoint2 = widget.patrol2;
 
     targetPoint = targetPoint1;
+    pastTargetPoint = '';
 
     patrolling = true;
 
-    stopDuration=0;
+    stopDuration = 0;
 
     _initAudio();
 
@@ -90,7 +93,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
-          Provider.of<NetworkModel>(context, listen: false).startUrl!)
+              Provider.of<NetworkModel>(context, listen: false).startUrl!)
           .gettingPWRdata();
       if (EMGStatus !=
           Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
@@ -101,8 +104,10 @@ class _PatrolProgressState extends State<PatrolProgress> {
         setState(() {});
       }
       batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+      CHGFlag =
+          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus =
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     });
   }
 
@@ -121,8 +126,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
     dynamic getApiData = await network.getAPI();
 
     if (initNavStatus == true) {
-      if (getApiData == 3) {
-        while (getApiData != 3) {
+      if (navStatus == 3) {
+        while (navStatus != 3) {
           if (mounted) {
             Provider.of<NetworkModel>((context), listen: false).APIGetData =
                 getApiData;
@@ -176,43 +181,67 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
-    if (patrolling == true) {
-      PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
-          .Posting(context);
-      setState(() {
-        patrolling = false;
-      });
-    }
+    // if (patrolling == true) {
+    //   // PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
+    //   //     .Posting(context);
+    //   setState(() {
+    //     patrolling = false;
+    //   });
+    // }
 
+    //TODO: 완료 후 토픽 한번만 날리게 수정 필요( 현재는 스테이터스 2개중 0번에서 작동 안하도록 수정함 )
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 1000), () {
         Getting(startUrl!, moveBaseStatusUrl!);
-      });
-      if (navStatus == 3 && arrivedServingTable == false) {
-        Future.delayed(const Duration(seconds: 5), () {
+        print('*****************************************************');
+        print(Provider.of<NetworkModel>((context), listen: false).APIGetData);
+        print(Provider.of<NetworkModel>((context), listen: false)
+            .APIGetData['status']);
+        print('*****************************************************');
+        print('-------------------------------------');
+        print(pastTargetPoint);
+        print(targetPoint);
+        print('-------------------------------------');
+        if (navStatus == 3 && pastTargetPoint != targetPoint) {
+          PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
+              .Posting(context);
+          // Future.delayed(const Duration(seconds: 5), () {
           setState(() {
-            patrolling = true;
+            // patrolling = true;
             arrivedServingTable = true;
-            navStatus = 0;
+            // navStatus = 0;
           });
-        });
-        if (targetPoint == targetPoint1) {
+          // });
           Future.delayed(const Duration(seconds: 5), () {
-            setState(() {
-              arrivedServingTable = false;
-              targetPoint = targetPoint2;
-            });
-          });
-        } else if (targetPoint == targetPoint2) {
-          Future.delayed(const Duration(seconds: 5), () {
-            setState(() {
-              arrivedServingTable = false;
-              targetPoint = targetPoint1;
-            });
+            if (targetPoint == targetPoint1) {
+              setState(() {
+                arrivedServingTable = false;
+                if (navStatus != 0) {
+                  pastTargetPoint = targetPoint;
+                  targetPoint = targetPoint2;
+                }
+              });
+            } else if (targetPoint == targetPoint2) {
+              setState(() {
+                arrivedServingTable = false;
+                if (navStatus != 0) {
+                  pastTargetPoint = targetPoint2;
+                  targetPoint = targetPoint1;
+                }
+              });
+            }
           });
         }
-      }
+      });
     });
+
+    if(navStatus == 4){
+      PostApi(url: startUrl, endadr: navUrl, keyBody: pastTargetPoint)
+          .Posting(context);
+      setState(() {
+        targetPoint = pastTargetPoint;
+      });
+    }
 
     double screenWidth = 1080;
 
@@ -253,14 +282,14 @@ class _PatrolProgressState extends State<PatrolProgress> {
                   ),
                   EMGStatus == 0
                       ? const Positioned(
-                    right: 35,
-                    top: 15,
-                    child: Icon(Icons.block,
-                        color: Colors.red,
-                        size: 80,
-                        grade: 200,
-                        weight: 200),
-                  )
+                          right: 35,
+                          top: 15,
+                          child: Icon(Icons.block,
+                              color: Colors.red,
+                              size: 80,
+                              grade: 200,
+                              weight: 200),
+                        )
                       : Container(),
                 ],
               ),
@@ -277,29 +306,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
                     image: AssetImage(backgroundImageServ), fit: BoxFit.cover)),
             child: Stack(
               children: [
-                Positioned(
-                  top: 500,
-                  left: 0,
-                  child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _servingProvider.mainInit = true;
-                        });
-                        PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
-                            .Posting(context);
-                        Future.delayed(const Duration(milliseconds: 20), (){
-                          PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
-                              .Posting(context);
-                        });
-                        navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
-                      },
-                      child: Container(
-                          height: 800,
-                          width: 1080,
-                          decoration: const BoxDecoration(
-                              border: Border.fromBorderSide(BorderSide(
-                                  color: Colors.transparent, width: 1))))),
-                ),
                 Positioned(
                     top: 372,
                     left: 460,
@@ -325,20 +331,25 @@ class _PatrolProgressState extends State<PatrolProgress> {
                         });
                         PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
                             .Posting(context);
-                        Future.delayed(const Duration(milliseconds: 20), (){
-                          PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
+                        Future.delayed(const Duration(milliseconds: 20), () {
+                          PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: 'wait')
                               .Posting(context);
                         });
-                        navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
+                        _audioPlayer.dispose();
+                        navPage(
+                                context: context,
+                                page: const TraySelectionFinal())
+                            .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40)
-                        ),
-                        fixedSize: const Size(866, 173)
-                      ),
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40)),
+                          fixedSize: const Size(866, 173)),
                     ))
               ],
             ),
