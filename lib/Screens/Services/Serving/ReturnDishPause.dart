@@ -6,6 +6,7 @@ import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.d
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
@@ -309,12 +310,13 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                                     keyBody: 'charging_pile')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
+                            _networkProvider.servTable = 'charging_pile';
                             Future.delayed(Duration(milliseconds: 230), () {
                               _effectPlayer.dispose();
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const ReturnProgressModuleFinal(),
+                                page: const NavigatorProgressModuleFinal(),
                               ).navPageToPage();
                             });
                           } else if (i == 2) {

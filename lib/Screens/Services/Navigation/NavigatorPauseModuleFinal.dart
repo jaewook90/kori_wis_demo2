@@ -325,9 +325,9 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                 keyBody: 'charging_pile')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
+                            _networkProvider.servTable = 'charging_pile';
                             Future.delayed(Duration(milliseconds: 230), () {
                               _effectPlayer.dispose();
-
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
@@ -345,6 +345,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                                 keyBody: 'wait')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
+                            _networkProvider.servTable = 'wait';
                             Future.delayed(Duration(milliseconds: 230), () {
                               _effectPlayer.dispose();
                               _audioPlayer.dispose();

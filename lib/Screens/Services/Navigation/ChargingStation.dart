@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -92,6 +93,15 @@ class _ChargingStationState extends State<ChargingStation> {
 
   Future<void> _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
+  }
+
+  void showPowerOffPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const PowerOffModalFinal();
+        });
   }
 
   @override
@@ -213,182 +223,201 @@ class _ChargingStationState extends State<ChargingStation> {
         backgroundColor: const Color(0xff292929),
         shadowColor: const Color(0xff191919),
         width: 400,
-        child: Container(
-          padding: const EdgeInsets.only(top: 100, left: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    width: 370,
-                    height: 1820,
-                    child: Stack(children: [
-                      Column(
-                        children: [
-                          ExpansionTile(
-                              title: const Row(
-                                children: [
-                                  Icon(Icons.battery_saver,
-                                      color: Colors.white, size: 50),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: Text(
-                                      '자동 충전',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              initiallyExpanded: false,
-                              backgroundColor: Colors.transparent,
-                              onExpansionChanged: (value) {
-                                _effectPlayer
-                                    .seek(const Duration(seconds: 0));
-                                _effectPlayer.play();
-                              },
-                              children: <Widget>[
-                                const Divider(
-                                    height: 20,
-                                    color: Colors.grey,
-                                    indent: 15),
-                                SizedBox(
-                                  width: 370,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 50, bottom: 30),
-                                    child: Column(
-                                      children: [
-                                        const Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '현재 설정',
-                                              style: TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 12,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '$autoChargeConfig',
-                                              style: const TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                        const Divider(
-                                          color: Colors.grey,
-                                          height: 30,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              '변경 할 설정',
-                                              style: TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 18,
-                                                  color: Colors.white),
-                                            ),
-                                            const SizedBox(
-                                              width: 150,
-                                            ),
-                                            FilledButton(
-                                              onPressed: () async {
-                                                WidgetsBinding.instance
-                                                    .addPostFrameCallback(
-                                                        (_) {
-                                                      _effectPlayer.seek(
-                                                          const Duration(
-                                                              seconds: 0));
-                                                      _effectPlayer.play();
-                                                      _prefs.setInt('autoCharge',
-                                                          int.parse(autoChargeController.text));
-
-                                                      setState(() {
-                                                        _mainStatusProvider.autoCharge = int.parse(autoChargeController.text);
-                                                        autoChargeConfig = _mainStatusProvider.autoCharge!;
-                                                        autoChargeController.text =
-                                                        '';
-                                                      });
-                                                    });
-                                              },
-                                              style: FilledButton.styleFrom(
-                                                  enableFeedback: false,
-                                                  backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      80, 80, 255, 0.7),
-                                                  shape:
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        15),
-                                                  )),
-                                              child: const Icon(
-                                                Icons.arrow_forward,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        TextField(
-                                          onTap: () {
-                                            setState(() {
-                                              autoChargeController.text = '';
-                                            });
-                                          },
-                                          controller: autoChargeController,
-                                          style: const TextStyle(
-                                              fontFamily: 'kor',
-                                              fontSize: 18,
-                                              color: Colors.white),
-                                          keyboardType: const TextInputType
-                                              .numberWithOptions(),
-                                          decoration: const InputDecoration(
-                                              border: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey,
-                                                    width: 1),
-                                              ),
-                                              enabledBorder:
-                                              UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1),
-                                              )),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                        ],
-                      ),
-                    ]),
+        child: Stack(
+          children: [
+            SizedBox(
+              width: 400,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15, left: 300),
+                child: IconButton(
+                  onPressed: () {
+                    showPowerOffPopup(context);
+                  },
+                  icon: Icon(
+                    Icons.power_settings_new,
+                    color: Colors.white,
                   ),
-                ],
+                  iconSize: 50,
+                ),
               ),
-            ],
-          ),
+            ),
+            Container(
+            padding: const EdgeInsets.only(top: 100, left: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      width: 370,
+                      height: 1820,
+                      child: Stack(children: [
+                        Column(
+                          children: [
+                            ExpansionTile(
+                                title: const Row(
+                                  children: [
+                                    Icon(Icons.battery_saver,
+                                        color: Colors.white, size: 50),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        '자동 충전',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontFamily: 'kor',
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                initiallyExpanded: false,
+                                backgroundColor: Colors.transparent,
+                                onExpansionChanged: (value) {
+                                  _effectPlayer
+                                      .seek(const Duration(seconds: 0));
+                                  _effectPlayer.play();
+                                },
+                                children: <Widget>[
+                                  const Divider(
+                                      height: 20,
+                                      color: Colors.grey,
+                                      indent: 15),
+                                  SizedBox(
+                                    width: 370,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 50, bottom: 30),
+                                      child: Column(
+                                        children: [
+                                          const Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '현재 설정',
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 12,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '$autoChargeConfig',
+                                                style: const TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                          const Divider(
+                                            color: Colors.grey,
+                                            height: 30,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                '변경 할 설정',
+                                                style: TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 18,
+                                                    color: Colors.white),
+                                              ),
+                                              const SizedBox(
+                                                width: 150,
+                                              ),
+                                              FilledButton(
+                                                onPressed: () async {
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                        _effectPlayer.seek(
+                                                            const Duration(
+                                                                seconds: 0));
+                                                        _effectPlayer.play();
+                                                        _prefs.setInt('autoCharge',
+                                                            int.parse(autoChargeController.text));
+
+                                                        setState(() {
+                                                          _mainStatusProvider.autoCharge = int.parse(autoChargeController.text);
+                                                          autoChargeConfig = _mainStatusProvider.autoCharge!;
+                                                          autoChargeController.text =
+                                                          '';
+                                                        });
+                                                      });
+                                                },
+                                                style: FilledButton.styleFrom(
+                                                    enableFeedback: false,
+                                                    backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        80, 80, 255, 0.7),
+                                                    shape:
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          15),
+                                                    )),
+                                                child: const Icon(
+                                                  Icons.arrow_forward,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          TextField(
+                                            onTap: () {
+                                              setState(() {
+                                                autoChargeController.text = '';
+                                              });
+                                            },
+                                            controller: autoChargeController,
+                                            style: const TextStyle(
+                                                fontFamily: 'kor',
+                                                fontSize: 18,
+                                                color: Colors.white),
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(),
+                                            decoration: const InputDecoration(
+                                                border: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                enabledBorder:
+                                                UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white,
+                                                      width: 1),
+                                                )),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                          ],
+                        ),
+                      ]),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),]
         ),
       ),
       body: Stack(
