@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
-import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
 class AdScreen extends StatefulWidget {
@@ -110,10 +108,7 @@ class _AdScreenState extends State<AdScreen> {
                               _effectPlayer.play();
                               Future.delayed(Duration(milliseconds: 230), () {
                                 _effectPlayer.dispose();
-                                navPage(
-                                  context: context,
-                                  page: const TraySelectionSec(),
-                                ).navPageToPage();
+                                Navigator.pop(context);
                               });
                             });
                           },

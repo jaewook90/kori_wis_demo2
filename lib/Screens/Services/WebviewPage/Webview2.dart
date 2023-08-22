@@ -88,7 +88,7 @@ class _WebviewPage2State extends State<WebviewPage2> {
         },
       )
       ..loadRequest(Uri.parse(
-          'https://43.200.215.116/connector/client/material/?sid=1&cid=2'));
+          'http://43.200.215.116/connector/client/material/?sid=1&cid=2'));
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -43,6 +45,15 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  void showReturnSelectPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ReturnDishTableModal();
+        });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -55,137 +66,276 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
     backGroundIMG = 'assets/screens/koriServiceSelect.png';
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
-
-    return Container(
-        padding: const EdgeInsets.only(top: 607),
-        child: AlertDialog(
-          alignment: Alignment.topCenter,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          // alignment: Alignment.topCenter,
           content: Stack(children: [
             Container(
-              width: 740,
-              height: 362,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(backGroundIMG), fit: BoxFit.fill)),
+              width: 1080 * 0.8,
+              height: 1920 * 0.7,
+              color: Color.fromRGBO(24, 24, 24, 0.9),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 50),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('사용할 서비스를 선택하세요',
+                  Text('서비스 선택',
                       style: TextStyle(
                           fontFamily: 'kor',
-                          fontSize: 35,
+                          fontSize: 80,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                 ],
               ),
             ),
             Positioned(
+              top: 30,
+                right: 30,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.close, color: Colors.white),
+                  iconSize: 50,
+                )),
+            Positioned(
               // left: 50,
-              top: 180,
+              top: 200,
               child: SizedBox(
-                width: 740,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                width: 1080 * 0.8,
+                height: 1920 * 0.7 - 200,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                          enableFeedback: false,
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              enableFeedback: false,
+                              backgroundColor: Color(0xff1b263b),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              fixedSize: const Size(
+                                  1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              _prefs.setInt('robotMode', 0);
+                              setState(() {
+                                _mainStatusProvider.robotServiceMode =
+                                    _prefs.getInt('robotMode');
+                              });
+                              Navigator.pop(context);
+                              navPage(
+                                      context: context,
+                                      page: TraySelectionFinal())
+                                  .navPageToPage();
+                            });
+                          },
+                          child: const Center(
+                            child: Text(
+                              '서빙',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          fixedSize: const Size(240, 100)),
-                      onPressed: () {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(const Duration(seconds: 0));
-                          _effectPlayer.play();
-                          _prefs.setInt('robotMode', 0);
-                          setState(() {
-                            _mainStatusProvider.robotServiceMode =
-                                _prefs.getInt('robotMode');
-                          });
-                          Navigator.pop(context);
-                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                        });
-                      },
-                      child: const Center(
-                        child: Text(
-                          '서빙',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold),
                         ),
-                      ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              enableFeedback: false,
+                              backgroundColor: Color(0xff1b263b),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0)),
+                              fixedSize: const Size(
+                                  1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              _prefs.setInt('robotMode', 1);
+                              setState(() {
+                                _mainStatusProvider.robotServiceMode =
+                                    _prefs.getInt('robotMode');
+                              });
+                              Navigator.pop(context);
+                              navPage(
+                                      context: context,
+                                      page: ShippingMainScreen())
+                                  .navPageToPage();
+                            });
+                          },
+                          child: const Center(
+                            child: Text(
+                              '택배',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                          enableFeedback: false,
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          fixedSize: const Size(240, 100)),
-                      onPressed: () {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(const Duration(seconds: 0));
-                          _effectPlayer.play();
-                          _prefs.setInt('robotMode', 1);
-                          setState(() {
-                            _mainStatusProvider.robotServiceMode =
-                                _prefs.getInt('robotMode');
-                          });
-                          Navigator.pop(context);
-                          navPage(context: context, page: ShippingMainScreen()).navPageToPage();
-                        });
-                      },
-                      child: const Center(
-                        child: Text(
-                          '택배',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              enableFeedback: false,
+                              backgroundColor: Color(0xff415a77),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              fixedSize: const Size(
+                                  1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              Future.delayed(const Duration(milliseconds: 230),
+                                  () {
+                                _effectPlayer.dispose();
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const AdScreen(
+                                              patrolMode: false,
+                                            )));
+                              });
+                            });
+                          },
+                          child: const Center(
+                            child: Text(
+                              '사이니지',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              enableFeedback: false,
+                              backgroundColor: Color(0xff415a77),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0)),
+                              fixedSize: const Size(
+                                  1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              Future.delayed(Duration(milliseconds: 230), () {
+                                _effectPlayer.dispose();
+                                navPage(
+                                  context: context,
+                                  page: const NavigationPatrol(),
+                                ).navPageToPage();
+                              });
+                            });
+                          },
+                          child: const Center(
+                            child: Text(
+                              '패트롤',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              enableFeedback: false,
+                              backgroundColor: Color(0xff778da9),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                              fixedSize: const Size(
+                                  1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              Future.delayed(const Duration(milliseconds: 230),
+                                  () {
+                                _effectPlayer.dispose();
+                                showReturnSelectPopup(context);
+                              });
+                            });
+                          },
+                          child: const Center(
+                            child: Text(
+                              '퇴식',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                              enableFeedback: false,
+                              backgroundColor: Color(0xff778da9),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0)),
+                              fixedSize: const Size(
+                                  1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
+                          onPressed: () {
+
+                          },
+                          child: const Center(
+                            child: Text(
+                              '시설안내',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
-            // Positioned(
-            //   left: 340,
-            //   top: 180,
-            //   child: FilledButton(
-            //     style: FilledButton.styleFrom(
-            //         enableFeedback: false,
-            //         backgroundColor: Colors.transparent,
-            //         shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(0)),
-            //         fixedSize: const Size(240, 100)),
-            //     onPressed: () {
-            //       WidgetsBinding.instance.addPostFrameCallback((_) {
-            //         _effectPlayer.seek(const Duration(seconds: 0));
-            //         _effectPlayer.play();
-            //         Navigator.pop(context);
-            //       });
-            //     },
-            //     child: const Center(
-            //       child: Text(
-            //         '택배',
-            //         style: TextStyle(
-            //             fontFamily: 'kor',
-            //             fontSize: 35,
-            //             fontWeight: FontWeight.bold),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ]),
           backgroundColor: Colors.transparent,
           contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-        ));
+        ),
+      ],
+    );
   }
 }
