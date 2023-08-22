@@ -7,6 +7,7 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -220,7 +221,7 @@ class _IntroScreenState extends State<IntroScreen>
             if (_mainStatusProvider.robotServiceMode == 0) {
               navPage(
                 context: context,
-                page: const TraySelectionSec(),
+                page: const TraySelectionFinal(),
               ).navPageToPage();
             } else {
               navPage(
@@ -313,7 +314,7 @@ class _IntroScreenState extends State<IntroScreen>
                         if (_mainStatusProvider.robotServiceMode == 0) {
                           navPage(
                             context: context,
-                            page: const TraySelectionSec(),
+                            page: const TraySelectionFinal(),
                           ).navPageToPage();
                         } else {
                           navPage(

@@ -7,6 +7,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
@@ -376,7 +377,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
                             });
                             navPage(
                                     context: context,
-                                    page: const TraySelectionSec())
+                                    page: const TraySelectionFinal())
                                 .navPageToPage();
                           });
                         });

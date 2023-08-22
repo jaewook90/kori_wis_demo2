@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/saveDataTest.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +47,7 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
                       });
                       navPage(
                               context: context,
-                              page: const TraySelectionSec(),)
+                              page: const TraySelectionFinal(),)
                           .navPageToPage();
                     },
                     style: FilledButton.styleFrom(

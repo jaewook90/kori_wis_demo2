@@ -9,6 +9,7 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
@@ -284,7 +285,7 @@ class _NavigatorProgressModuleFinalState
             _audioPlayer.dispose();
             navPage(
               context: context,
-              page: const TraySelectionSec(),
+              page: const TraySelectionFinal(),
             ).navPageToPage();
           });
         } else if (servTableNum == 'charging_pile') {
@@ -375,7 +376,7 @@ class _NavigatorProgressModuleFinalState
                         if(hiddenCounter == 5){
                           _audioPlayer.dispose();
                           _servingProvider.clearAllTray();
-                          navPage(context: context, page: TraySelectionSec()).navPageToPage();
+                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
                           PostApi(
                               url: startUrl,
                               endadr: navUrl,
@@ -445,7 +446,7 @@ class _NavigatorProgressModuleFinalState
                                   _audioPlayer.dispose();
                                   navPage(
                                     context: context,
-                                    page: const TraySelectionSec(),
+                                    page: const TraySelectionFinal(),
                                   ).navPageToPage();
                                 });
 
@@ -457,7 +458,7 @@ class _NavigatorProgressModuleFinalState
                                   _audioPlayer.dispose();
                                   navPage(
                                     context: context,
-                                    page: const TraySelectionSec(),
+                                    page: const TraySelectionFinal(),
                                   ).navPageToPage();
                                 });
                               }

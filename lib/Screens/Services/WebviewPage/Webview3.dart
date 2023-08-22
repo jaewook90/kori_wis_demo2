@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -88,7 +89,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
         },
       )
       ..loadRequest(Uri.parse(
-          'http://192.168.0.111/connector/client/material/?sid=1&cid=3'));
+          'https://43.200.215.116/connector/client/material/?sid=1&cid=3'));
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
@@ -136,7 +137,7 @@ class _WebviewPage3State extends State<WebviewPage3> {
                     });
                     navPage(
                       context: context,
-                      page: const TraySelectionSec(),
+                      page: const TraySelectionFinal(),
                     ).navPageToPage();
                   });
                 },

@@ -9,6 +9,7 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -335,7 +336,7 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const TraySelectionSec(),
+                                page: const TraySelectionFinal(),
                               ).navPageToPage();
                             });
                           }

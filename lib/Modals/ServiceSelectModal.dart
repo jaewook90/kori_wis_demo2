@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -107,7 +108,7 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
                                 _prefs.getInt('robotMode');
                           });
                           Navigator.pop(context);
-                          navPage(context: context, page: TraySelectionSec()).navPageToPage();
+                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
                         });
                       },
                       child: const Center(

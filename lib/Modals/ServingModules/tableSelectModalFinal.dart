@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/ServingModuleButtonsFinal.dart';
 import 'package:provider/provider.dart';
@@ -115,7 +116,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                             _audioPlayer.dispose();
                             navPage(
                               context: context,
-                              page: const TraySelectionSec(),
+                              page: const TraySelectionFinal(),
                             ).navPageToPage();
                           });
                         } else {
@@ -132,7 +133,7 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
 
                             navPage(
                               context: context,
-                              page: const TraySelectionSec(),
+                              page: const TraySelectionFinal(),
                             ).navPageToPage();
                           });
                         }
