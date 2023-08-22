@@ -12,17 +12,15 @@ import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/ChargingStation.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
-import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
-import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -30,18 +28,20 @@ import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TraySelectionFinal extends StatefulWidget {
-  const TraySelectionFinal({Key? key}) : super(key: key);
+class TraySelectionSec extends StatefulWidget {
+  const TraySelectionSec({Key? key}) : super(key: key);
 
   @override
-  State<TraySelectionFinal> createState() => _TraySelectionFinalState();
+  State<TraySelectionSec> createState() => _TraySelectionSecState();
 }
 
-class _TraySelectionFinalState extends State<TraySelectionFinal>
+class _TraySelectionSecState extends State<TraySelectionSec>
     with TickerProviderStateMixin {
   late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
   late MainStatusModel _mainStatusProvider;
+
+  late int hiddenCounter;
 
   late bool mainInit;
 
@@ -69,8 +69,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   String? startUrl;
   String? navUrl;
   String? chgUrl;
-
-  late int hiddenCounter;
 
   late int batData;
   late int CHGFlag;
@@ -495,7 +493,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                         if(hiddenCounter == 5){
                           _audioPlayer.dispose();
                           _effectPlayer.dispose();
-                          navPage(context: context, page: TraySelectionSec()).navPageToPage();
+                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
                         }
                       },
                       style: FilledButton.styleFrom(
@@ -624,13 +622,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const WebviewPage1(),
+                                page: const AdScreen(patrolMode: false,),
                               ).navPageToPage();
                             });
                           });
                         },
                         style: TextButton.styleFrom(
-                            fixedSize: const Size(60, 60),
+                            fixedSize: const Size(120, 60),
                             enableFeedback: false,
                             padding: const EdgeInsets.only(right: 0, bottom: 2),
                             backgroundColor: Colors.transparent,
@@ -639,7 +637,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     color: Colors.white, width: 3),
                                 borderRadius: BorderRadius.circular(0))),
                         child: const Text(
-                          '1',
+                          '광고',
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 40,
@@ -647,28 +645,31 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                         ),
                       )),
                   Positioned(
-                      left: 100,
+                      left: 160,
                       top: 25,
                       child: TextButton(
                         onPressed: () {
                           setState(() {
                             _servingProvider.mainInit = false;
                           });
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _effectPlayer.seek(const Duration(seconds: 0));
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) {
+                            _effectPlayer
+                                .seek(const Duration(seconds: 0));
                             _effectPlayer.play();
-                            Future.delayed(Duration(milliseconds: 230), () {
+                            Future.delayed(
+                                Duration(milliseconds: 230), () {
                               _effectPlayer.dispose();
                               _audioPlayer.dispose();
                               navPage(
                                 context: context,
-                                page: const WebviewPage2(),
+                                page: const NavigationPatrol(),
                               ).navPageToPage();
                             });
                           });
                         },
                         style: TextButton.styleFrom(
-                            fixedSize: const Size(60, 60),
+                            fixedSize: const Size(120, 60),
                             enableFeedback: false,
                             padding: const EdgeInsets.only(right: 0, bottom: 2),
                             backgroundColor: Colors.transparent,
@@ -677,51 +678,127 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                     color: Colors.white, width: 3),
                                 borderRadius: BorderRadius.circular(0))),
                         child: const Text(
-                          '2',
+                          '왕복',
                           style: TextStyle(
                               fontFamily: 'kor',
                               fontSize: 40,
                               color: Colors.white),
                         ),
                       )),
-                  Positioned(
-                      left: 180,
-                      top: 25,
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _servingProvider.mainInit = false;
-                          });
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _effectPlayer.seek(const Duration(seconds: 0));
-                            _effectPlayer.play();
-                            Future.delayed(Duration(milliseconds: 230), () {
-                              _effectPlayer.dispose();
-                              _audioPlayer.dispose();
-                              navPage(
-                                context: context,
-                                page: const WebviewPage3(),
-                              ).navPageToPage();
-                            });
-                          });
-                        },
-                        style: TextButton.styleFrom(
-                            fixedSize: const Size(60, 60),
-                            enableFeedback: false,
-                            padding: const EdgeInsets.only(right: 0, bottom: 2),
-                            backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                    color: Colors.white, width: 3),
-                                borderRadius: BorderRadius.circular(0))),
-                        child: const Text(
-                          '3',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 40,
-                              color: Colors.white),
-                        ),
-                      )),
+                  // Positioned(
+                  //     left: 20,
+                  //     top: 25,
+                  //     child: TextButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           _servingProvider.mainInit = false;
+                  //         });
+                  //         WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //           _effectPlayer.seek(const Duration(seconds: 0));
+                  //           _effectPlayer.play();
+                  //           Future.delayed(Duration(milliseconds: 230), () {
+                  //             _effectPlayer.dispose();
+                  //             _audioPlayer.dispose();
+                  //             navPage(
+                  //               context: context,
+                  //               page: const WebviewPage1(),
+                  //             ).navPageToPage();
+                  //           });
+                  //         });
+                  //       },
+                  //       style: TextButton.styleFrom(
+                  //           fixedSize: const Size(60, 60),
+                  //           enableFeedback: false,
+                  //           padding: const EdgeInsets.only(right: 0, bottom: 2),
+                  //           backgroundColor: Colors.transparent,
+                  //           shape: RoundedRectangleBorder(
+                  //               side: const BorderSide(
+                  //                   color: Colors.white, width: 3),
+                  //               borderRadius: BorderRadius.circular(0))),
+                  //       child: const Text(
+                  //         '1',
+                  //         style: TextStyle(
+                  //             fontFamily: 'kor',
+                  //             fontSize: 40,
+                  //             color: Colors.white),
+                  //       ),
+                  //     )),
+                  // Positioned(
+                  //     left: 100,
+                  //     top: 25,
+                  //     child: TextButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           _servingProvider.mainInit = false;
+                  //         });
+                  //         WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //           _effectPlayer.seek(const Duration(seconds: 0));
+                  //           _effectPlayer.play();
+                  //           Future.delayed(Duration(milliseconds: 230), () {
+                  //             _effectPlayer.dispose();
+                  //             _audioPlayer.dispose();
+                  //             navPage(
+                  //               context: context,
+                  //               page: const WebviewPage2(),
+                  //             ).navPageToPage();
+                  //           });
+                  //         });
+                  //       },
+                  //       style: TextButton.styleFrom(
+                  //           fixedSize: const Size(60, 60),
+                  //           enableFeedback: false,
+                  //           padding: const EdgeInsets.only(right: 0, bottom: 2),
+                  //           backgroundColor: Colors.transparent,
+                  //           shape: RoundedRectangleBorder(
+                  //               side: const BorderSide(
+                  //                   color: Colors.white, width: 3),
+                  //               borderRadius: BorderRadius.circular(0))),
+                  //       child: const Text(
+                  //         '2',
+                  //         style: TextStyle(
+                  //             fontFamily: 'kor',
+                  //             fontSize: 40,
+                  //             color: Colors.white),
+                  //       ),
+                  //     )),
+                  // Positioned(
+                  //     left: 180,
+                  //     top: 25,
+                  //     child: TextButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           _servingProvider.mainInit = false;
+                  //         });
+                  //         WidgetsBinding.instance.addPostFrameCallback((_) {
+                  //           _effectPlayer.seek(const Duration(seconds: 0));
+                  //           _effectPlayer.play();
+                  //           Future.delayed(Duration(milliseconds: 230), () {
+                  //             _effectPlayer.dispose();
+                  //             _audioPlayer.dispose();
+                  //             navPage(
+                  //               context: context,
+                  //               page: const WebviewPage3(),
+                  //             ).navPageToPage();
+                  //           });
+                  //         });
+                  //       },
+                  //       style: TextButton.styleFrom(
+                  //           fixedSize: const Size(60, 60),
+                  //           enableFeedback: false,
+                  //           padding: const EdgeInsets.only(right: 0, bottom: 2),
+                  //           backgroundColor: Colors.transparent,
+                  //           shape: RoundedRectangleBorder(
+                  //               side: const BorderSide(
+                  //                   color: Colors.white, width: 3),
+                  //               borderRadius: BorderRadius.circular(0))),
+                  //       child: const Text(
+                  //         '3',
+                  //         style: TextStyle(
+                  //             fontFamily: 'kor',
+                  //             fontSize: 40,
+                  //             color: Colors.white),
+                  //       ),
+                  //     )),
                 ],
               ),
             )
@@ -1270,7 +1347,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                               const SizedBox(
                                 height: 20,
                               ),
-                              //골포지션 새로고침
                               Padding(
                                   padding: const EdgeInsets.only(left: 0),
                                   child: FilledButton(
@@ -1548,65 +1624,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
                                             padding: EdgeInsets.only(left: 15),
                                             child: Text(
                                               '테스트 페이지 이동',
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  fontFamily: 'kor',
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
-                                                  height: 1,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                              Offstage(
-                                offstage: _debugTray,
-                                child: const SizedBox(
-                                  height: 20,
-                                ),
-                              ),
-                              Offstage(
-                                offstage: _debugTray,
-                                child: Padding(
-                                    padding: const EdgeInsets.only(left: 0),
-                                    child: FilledButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _servingProvider.mainInit = false;
-                                        });
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          _effectPlayer
-                                              .seek(const Duration(seconds: 0));
-                                          _effectPlayer.play();
-                                          Future.delayed(
-                                              Duration(milliseconds: 230), () {
-                                            _effectPlayer.dispose();
-                                            _audioPlayer.dispose();
-                                            navPage(
-                                              context: context,
-                                              page: const NavigationPatrol(),
-                                            ).navPageToPage();
-                                          });
-                                        });
-                                      },
-                                      style: FilledButton.styleFrom(
-                                          enableFeedback: false,
-                                          backgroundColor: Colors.transparent,
-                                          fixedSize: const Size(370, 58),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(0))),
-                                      child: const Row(
-                                        children: [
-                                          Icon(Icons.repeat,
-                                              color: Colors.white, size: 50),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 15),
-                                            child: Text(
-                                              '순찰 기동',
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   fontFamily: 'kor',

@@ -5,7 +5,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
@@ -31,8 +32,12 @@ class _PatrolProgressState extends State<PatrolProgress> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
 
+  late bool adPlay;
+
   late AudioPlayer _audioPlayer;
   final String _audioFile = 'assets/sounds/sound_moving_bg.wav';
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.wav';
 
   late Timer _pwrTimer;
   late String backgroundImageServ;
@@ -68,6 +73,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    adPlay = true;
+
     initNavStatus = true;
     navStatus = 0;
     arrivedServingTable = false;
@@ -116,6 +123,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _audioPlayer.setLoopMode(LoopMode.all);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(0.4);
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -166,6 +175,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
   void dispose() {
     // TODO: implement dispose
     _pwrTimer.cancel();
+    _effectPlayer.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -181,37 +192,16 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
-    // if (patrolling == true) {
-    //   // PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
-    //   //     .Posting(context);
-    //   setState(() {
-    //     patrolling = false;
-    //   });
-    // }
-
     //TODO: 완료 후 토픽 한번만 날리게 수정 필요( 현재는 스테이터스 2개중 0번에서 작동 안하도록 수정함 )
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 1000), () {
         Getting(startUrl!, moveBaseStatusUrl!);
-        print('*****************************************************');
-        print(Provider.of<NetworkModel>((context), listen: false).APIGetData);
-        print(Provider.of<NetworkModel>((context), listen: false)
-            .APIGetData['status']);
-        print('*****************************************************');
-        print('-------------------------------------');
-        print(pastTargetPoint);
-        print(targetPoint);
-        print('-------------------------------------');
         if (navStatus == 3 && pastTargetPoint != targetPoint) {
           PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
               .Posting(context);
-          // Future.delayed(const Duration(seconds: 5), () {
           setState(() {
-            // patrolling = true;
             arrivedServingTable = true;
-            // navStatus = 0;
           });
-          // });
           Future.delayed(const Duration(seconds: 5), () {
             if (targetPoint == targetPoint1) {
               setState(() {
@@ -235,7 +225,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
       });
     });
 
-    if(navStatus == 4){
+    if (navStatus == 4) {
       PostApi(url: startUrl, endadr: navUrl, keyBody: pastTargetPoint)
           .Posting(context);
       setState(() {
@@ -291,6 +281,42 @@ class _PatrolProgressState extends State<PatrolProgress> {
                               weight: 200),
                         )
                       : Container(),
+                  Positioned(
+                    right: 150,
+                    top: 25,
+                    child: FilledButton(
+                      onPressed: () {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            if (adPlay == false) {
+                              setState(() {
+                                adPlay = true;
+                              });
+                            } else {
+                              setState(() {
+                                adPlay = false;
+                              });
+                            }
+                          });
+                        });
+                      },
+                      style: FilledButton.styleFrom(
+                          fixedSize: const Size(60, 60),
+                          enableFeedback: false,
+                          padding: const EdgeInsets.only(right: 0),
+                          backgroundColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0))),
+                      child: Icon(
+                          adPlay == false
+                              ? Icons.play_circle_outline_sharp
+                              : Icons.pause_circle_outline_sharp,
+                          color: Colors.white,
+                          size: 60),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -326,23 +352,34 @@ class _PatrolProgressState extends State<PatrolProgress> {
                     left: 107,
                     child: FilledButton(
                       onPressed: () {
-                        setState(() {
-                          _servingProvider.mainInit = true;
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            setState(() {
+                              _servingProvider.mainInit = true;
+                            });
+                            PostApi(
+                                    url: startUrl,
+                                    endadr: stpUrl,
+                                    keyBody: 'stop')
+                                .Posting(context);
+                            Future.delayed(const Duration(milliseconds: 20),
+                                () {
+                              PostApi(
+                                      url: startUrl,
+                                      endadr: navUrl,
+                                      keyBody: 'wait')
+                                  .Posting(context);
+                            });
+                            navPage(
+                                    context: context,
+                                    page: const TraySelectionSec())
+                                .navPageToPage();
+                          });
                         });
-                        PostApi(url: startUrl, endadr: stpUrl, keyBody: 'stop')
-                            .Posting(context);
-                        Future.delayed(const Duration(milliseconds: 20), () {
-                          PostApi(
-                                  url: startUrl,
-                                  endadr: navUrl,
-                                  keyBody: 'wait')
-                              .Posting(context);
-                        });
-                        _audioPlayer.dispose();
-                        navPage(
-                                context: context,
-                                page: const TraySelectionFinal())
-                            .navPageToPage();
                       },
                       child: null,
                       style: FilledButton.styleFrom(
@@ -353,6 +390,10 @@ class _PatrolProgressState extends State<PatrolProgress> {
                     ))
               ],
             ),
+          ),
+          Offstage(
+            offstage: !adPlay,
+            child: const AdScreen(patrolMode: true),
           ),
         ]),
       ),

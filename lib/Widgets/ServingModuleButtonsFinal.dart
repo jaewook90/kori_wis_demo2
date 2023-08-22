@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -211,7 +211,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             uploadTableNumberNItemImg();
                             navPage(
                               context: context,
-                              page: const TraySelectionFinal(),
+                              page: const TraySelectionSec(),
                             ).navPageToPage();
                           });
                         } else {
@@ -238,7 +238,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
                             _effectPlayer.dispose();
                             navPage(
                               context: context,
-                              page: const TraySelectionFinal(),
+                              page: const TraySelectionSec(),
                             ).navPageToPage();
                           });
                         });

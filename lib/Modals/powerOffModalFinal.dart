@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -121,7 +121,7 @@ class _PowerOffModalFinalState extends State<PowerOffModalFinal> {
                       _effectPlayer.dispose();
                       navPage(
                               context: context,
-                              page: const TraySelectionFinal())
+                              page: const TraySelectionSec())
                           .navPageToPage();
                     });
                   });

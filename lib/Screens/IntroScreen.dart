@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
+import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,7 @@ class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late MainStatusModel _mainStatusProvider;
 
   final TextEditingController configController = TextEditingController();
   late SharedPreferences _prefs;
@@ -44,6 +47,11 @@ class _IntroScreenState extends State<IntroScreen>
 
   late bool skipIntro;
   late bool playingVideo;
+
+  late bool introStage1; // 모드 선택
+  late bool introStage2; // IP 설정
+
+  late int robotServiceMode;
 
   late Duration mediaDuration;
 
@@ -125,16 +133,20 @@ class _IntroScreenState extends State<IntroScreen>
   // 추후 로딩 시 데이터 업데이트 및 로딩시 사용할 함수 현재는 임의로 2초의 시간 딜레이로 지정
 
   void _updateData() async {
+    // _prefs.clear();
     if (_prefs.getString('robotIp') != null) {
+      _mainStatusProvider.robotServiceMode = _prefs.getInt('robotMode');
       _networkProvider.startUrl = _prefs.getString('robotIp');
     }
-    if(_prefs.getBool('robotInit')==null){
+    if (_prefs.getBool('robotInit') == null) {
+      introStage1 = false;
+      introStage2 = true;
       robotInit = false;
-    }else{
+    } else {
+      introStage1 = _prefs.getBool('introStage1')!;
+      introStage2 = _prefs.getBool('introStage2')!;
       robotInit = _prefs.getBool('robotInit')!;
     }
-    print('-----------------robotInit---------------------');
-    print(robotInit);
     _networkProvider.hostIP();
     getting(_networkProvider.startUrl!, _networkProvider.positionURL);
     mediaDuration = _controller.value.duration;
@@ -178,6 +190,7 @@ class _IntroScreenState extends State<IntroScreen>
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     hostAdr = _networkProvider.startUrl!;
     positionURL = _networkProvider.positionURL;
@@ -204,10 +217,17 @@ class _IntroScreenState extends State<IntroScreen>
           _effectPlayer.dispose();
           _audioPlayer.dispose();
           Future.delayed(const Duration(milliseconds: 50), () {
-            navPage(
-              context: context,
-              page: const TraySelectionFinal(),
-            ).navPageToPage();
+            if (_mainStatusProvider.robotServiceMode == 0) {
+              navPage(
+                context: context,
+                page: const TraySelectionSec(),
+              ).navPageToPage();
+            } else {
+              navPage(
+                context: context,
+                page: const ShippingMainScreen(),
+              ).navPageToPage();
+            }
           });
         } else {
           setState(() {
@@ -270,15 +290,15 @@ class _IntroScreenState extends State<IntroScreen>
           body: GestureDetector(
             // 스크린 터치시 화면 이동을 위한 위젯
             onTap: () async {
-              if(playingVideo == false){
+              if (playingVideo == false) {
                 if (updateComplete == true) {
                   if (_prefs.getString('robotIp') == null) {
                     setState(() {
                       robotInit = false;
                     });
                   } else {
-                    getting(
-                        _networkProvider.startUrl!, _networkProvider.positionURL);
+                    getting(_networkProvider.startUrl!,
+                        _networkProvider.positionURL);
                     if (apiData != null && apiData != []) {
                       setState(() {
                         navTrigger = true;
@@ -290,10 +310,17 @@ class _IntroScreenState extends State<IntroScreen>
                       _effectPlayer.dispose();
                       _audioPlayer.dispose();
                       Future.delayed(const Duration(milliseconds: 50), () {
-                        navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                        ).navPageToPage();
+                        if (_mainStatusProvider.robotServiceMode == 0) {
+                          navPage(
+                            context: context,
+                            page: const TraySelectionSec(),
+                          ).navPageToPage();
+                        } else {
+                          navPage(
+                            context: context,
+                            page: const ShippingMainScreen(),
+                          ).navPageToPage();
+                        }
                       });
                     } else {
                       setState(() {
@@ -303,7 +330,7 @@ class _IntroScreenState extends State<IntroScreen>
                     }
                   }
                 }
-              }else if(playingVideo == true && robotInit == true){
+              } else if (playingVideo == true && robotInit == true) {
                 _controller.seekTo(mediaDuration);
                 Future.delayed(const Duration(milliseconds: 500), () {
                   _audioPlayer.play();
@@ -319,7 +346,7 @@ class _IntroScreenState extends State<IntroScreen>
               child: SingleChildScrollView(
                 child: Stack(children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 108),
+                    padding: const EdgeInsets.only(top: 0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -351,144 +378,286 @@ class _IntroScreenState extends State<IntroScreen>
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 1050),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (updateComplete == true)
-                              Stack(children: [
-                                Offstage(
-                                  offstage: !robotInit,
-                                  child: FadeTransition(
-                                    opacity: _animation,
-                                    child: Text("화면을 터치해 주세요",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge),
+                  Positioned(
+                    top: 1150,
+                    child: SizedBox(
+                      height: 300,
+                      width: 1080,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (updateComplete == true)
+                                Stack(children: [
+                                  Offstage(
+                                    offstage: !robotInit,
+                                    child: FadeTransition(
+                                      opacity: _animation,
+                                      child: Text("화면을 터치해 주세요",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge),
+                                    ),
                                   ),
-                                ),
-                                Offstage(
-                                    offstage: robotInit,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'IP 입력',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge,
-                                              ),
-                                              const SizedBox(
-                                                width: 150,
-                                              ),
-                                              FilledButton(
-                                                onPressed: () {
-                                                  WidgetsBinding.instance
-                                                      .addPostFrameCallback(
-                                                          (_) {
-                                                    _effectPlayer.play();
-                                                    _prefs.setString('robotIp',
-                                                        configController.text);
-                                                    _prefs.setBool('robotInit', !robotInit);
-                                                    setState(() {
-                                                      _networkProvider
-                                                              .startUrl =
-                                                          _prefs.getString(
-                                                              'robotIp');
-                                                      _networkProvider.hostIP();
-                                                      navTrigger = false;
-                                                    });
-                                                  });
-                                                },
-                                                style: FilledButton.styleFrom(
-                                                    enableFeedback: false,
-                                                    fixedSize:
-                                                        const Size(100, 70),
-                                                    backgroundColor:
-                                                        const Color.fromRGBO(
-                                                            80, 80, 255, 0.7),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    )),
-                                                child: const Icon(
-                                                  Icons.arrow_forward,
-                                                  color: Colors.white,
-                                                  size: 50,
-                                                ),
-                                              ),
-                                            ]),
-                                        const SizedBox(
-                                          height: 50,
-                                        ),
-                                        Container(
-                                          width: 400,
-                                          child: TextField(
-                                            controller: configController,
+                                  Offstage(
+                                      offstage: introStage1,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '이용하실 서비스를 선택하세요',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .titleLarge,
-                                            keyboardType: const TextInputType
-                                                .numberWithOptions(),
-                                            decoration: InputDecoration(
-                                              fillColor: const Color.fromRGBO(
-                                                  30, 30, 30, 0.5),
-                                              filled: true,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Colors.white,
-                                                    width: 2),
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Colors.white,
-                                                    width: 2),
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              contentPadding:
-                                                  const EdgeInsets.only(
-                                                      left: 20,
-                                                      top: 10,
-                                                      bottom: 10),
-                                            ),
-                                            showCursor: true,
-                                            cursorColor: Colors.white,
-                                            onSubmitted: (value) {
-                                              _prefs.setString(
-                                                  'robotIp', value);
-                                              _prefs.setBool('robotInit', !robotInit);
-                                              setState(() {
-                                                _networkProvider.startUrl =
-                                                    _prefs.getString('robotIp');
-                                                _networkProvider.hostIP();
-                                                navTrigger = false;
-                                              });
-                                            },
                                           ),
-                                        ),
-                                      ],
-                                    ))
-                              ])
-                            else
-                              const SizedBox(),
-                            SizedBox(
-                              height: screenHeight * 0.4,
-                            )
-                          ],
-                        ),
-                      ],
+                                          SizedBox(
+                                            height: 40,
+                                          ),
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
+                                                        _effectPlayer.play();
+                                                        _prefs.setInt(
+                                                            'robotMode', 0);
+                                                        _prefs.setBool(
+                                                            'introStage1',
+                                                            true);
+                                                        _prefs.setBool(
+                                                            'introStage2',
+                                                            false);
+                                                        setState(() {
+                                                          introStage1 = _prefs.getBool('introStage1')!;
+                                                          introStage2 = _prefs.getBool('introStage2')!;
+                                                          _mainStatusProvider
+                                                                  .robotServiceMode =
+                                                              _prefs.getInt(
+                                                                  'robotMode');
+                                                        });
+                                                      });
+                                                    },
+                                                    style:
+                                                        FilledButton.styleFrom(
+                                                            enableFeedback:
+                                                                false,
+                                                            fixedSize:
+                                                                const Size(
+                                                                    200, 110),
+                                                            backgroundColor:
+                                                                const Color
+                                                                        .fromRGBO(
+                                                                    80,
+                                                                    80,
+                                                                    255,
+                                                                    0.7),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15),
+                                                            )),
+                                                    child: Text(
+                                                      '서빙',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: 'kor',
+                                                          fontSize: 40),
+                                                    )),
+                                                SizedBox(
+                                                  width: 60,
+                                                ),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
+                                                        _effectPlayer.play();
+                                                        _prefs.setInt(
+                                                            'robotMode', 1);
+                                                        _prefs.setBool(
+                                                            'introStage1',
+                                                            true);
+                                                        _prefs.setBool(
+                                                            'introStage2',
+                                                            false);
+                                                        setState(() {
+                                                          introStage1 = _prefs.getBool('introStage1')!;
+                                                          introStage2 = _prefs.getBool('introStage2')!;
+                                                          _mainStatusProvider
+                                                                  .robotServiceMode =
+                                                              _prefs.getInt(
+                                                                  'robotMode');
+                                                        });
+                                                      });
+                                                    },
+                                                    style:
+                                                        FilledButton.styleFrom(
+                                                            enableFeedback:
+                                                                false,
+                                                            fixedSize:
+                                                                const Size(
+                                                                    200, 110),
+                                                            backgroundColor:
+                                                                const Color
+                                                                        .fromRGBO(
+                                                                    80,
+                                                                    80,
+                                                                    255,
+                                                                    0.7),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15),
+                                                            )),
+                                                    child: Text('택배',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily: 'kor',
+                                                            fontSize: 40))),
+                                              ]),
+                                          const SizedBox(
+                                            height: 50,
+                                          ),
+                                        ],
+                                      )),
+                                  Offstage(
+                                      offstage: introStage2,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'IP 입력',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleLarge,
+                                                ),
+                                                const SizedBox(
+                                                  width: 150,
+                                                ),
+                                                FilledButton(
+                                                  onPressed: () {
+                                                    WidgetsBinding.instance
+                                                        .addPostFrameCallback(
+                                                            (_) {
+                                                      _effectPlayer.play();
+                                                      _prefs.setString(
+                                                          'robotIp',
+                                                          configController
+                                                              .text);
+                                                      _prefs.setBool(
+                                                          'introStage1', true);
+                                                      _prefs.setBool(
+                                                          'introStage2', true);
+                                                      _prefs.setBool(
+                                                          'robotInit',
+                                                          !robotInit);
+                                                      setState(() {
+                                                        _networkProvider
+                                                                .startUrl =
+                                                            _prefs.getString(
+                                                                'robotIp');
+                                                        _networkProvider
+                                                            .hostIP();
+                                                        navTrigger = false;
+                                                      });
+                                                    });
+                                                  },
+                                                  style: FilledButton.styleFrom(
+                                                      enableFeedback: false,
+                                                      fixedSize:
+                                                          const Size(100, 70),
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                              80, 80, 255, 0.7),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      )),
+                                                  child: const Icon(
+                                                    Icons.arrow_forward,
+                                                    color: Colors.white,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                              ]),
+                                          const SizedBox(
+                                            height: 50,
+                                          ),
+                                          Container(
+                                            width: 400,
+                                            child: TextField(
+                                              controller: configController,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge,
+                                              keyboardType: const TextInputType
+                                                  .numberWithOptions(),
+                                              decoration: InputDecoration(
+                                                fillColor: const Color.fromRGBO(
+                                                    30, 30, 30, 0.5),
+                                                filled: true,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.white,
+                                                      width: 2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.white,
+                                                      width: 2),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 20,
+                                                        top: 10,
+                                                        bottom: 10),
+                                              ),
+                                              showCursor: true,
+                                              cursorColor: Colors.white,
+                                              onSubmitted: (value) {
+                                                _prefs.setString(
+                                                    'robotIp', value);
+                                                _prefs.setBool(
+                                                    'robotInit', !robotInit);
+                                                setState(() {
+                                                  _networkProvider.startUrl =
+                                                      _prefs
+                                                          .getString('robotIp');
+                                                  _networkProvider.hostIP();
+                                                  navTrigger = false;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ))
+                                ])
+                              else
+                                const SizedBox(),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 ]),

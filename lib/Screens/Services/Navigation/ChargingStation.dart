@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -123,7 +123,7 @@ class _ChargingStationState extends State<ChargingStation> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (CHGFlag == 1) {
-        navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+        navPage(context: context, page: TraySelectionSec()).navPageToPage();
       }
     });
 
@@ -189,7 +189,7 @@ class _ChargingStationState extends State<ChargingStation> {
                       Future.delayed(Duration(milliseconds: 500), () {
                         navPage(
                           context: context,
-                          page: const TraySelectionFinal(),
+                          page: const TraySelectionSec(),
                         ).navPageToPage();
                       });
                     },
@@ -464,7 +464,7 @@ class _ChargingStationState extends State<ChargingStation> {
                     Future.delayed(Duration(milliseconds: 500), () {
                       navPage(
                         context: context,
-                        page: const TraySelectionFinal(),
+                        page: const TraySelectionSec(),
                       ).navPageToPage();
                     });
                   },

@@ -8,7 +8,7 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
@@ -284,7 +284,7 @@ class _NavigatorProgressModuleFinalState
             _audioPlayer.dispose();
             navPage(
               context: context,
-              page: const TraySelectionFinal(),
+              page: const TraySelectionSec(),
             ).navPageToPage();
           });
         } else if (servTableNum == 'charging_pile') {
@@ -366,7 +366,6 @@ class _NavigatorProgressModuleFinalState
                       onPressed: () {
                         setState(() {
                           hiddenCounter++;
-                          print(hiddenCounter);
                         });
                         Future.delayed(Duration(milliseconds: 2000),(){
                           setState(() {
@@ -376,7 +375,7 @@ class _NavigatorProgressModuleFinalState
                         if(hiddenCounter == 5){
                           _audioPlayer.dispose();
                           _servingProvider.clearAllTray();
-                          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                          navPage(context: context, page: TraySelectionSec()).navPageToPage();
                           PostApi(
                               url: startUrl,
                               endadr: navUrl,
@@ -446,7 +445,7 @@ class _NavigatorProgressModuleFinalState
                                   _audioPlayer.dispose();
                                   navPage(
                                     context: context,
-                                    page: const TraySelectionFinal(),
+                                    page: const TraySelectionSec(),
                                   ).navPageToPage();
                                 });
 
@@ -458,7 +457,7 @@ class _NavigatorProgressModuleFinalState
                                   _audioPlayer.dispose();
                                   navPage(
                                     context: context,
-                                    page: const TraySelectionFinal(),
+                                    page: const TraySelectionSec(),
                                   ).navPageToPage();
                                 });
                               }

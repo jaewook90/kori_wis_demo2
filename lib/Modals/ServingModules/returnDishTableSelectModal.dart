@@ -3,7 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Serving/TraySelection2.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -144,7 +144,7 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                         _audioPlayer.dispose();
                         navPage(
                           context: context,
-                          page: const TraySelectionFinal(),
+                          page: const TraySelectionSec(),
                         ).navPageToPage();
                       });
                     });

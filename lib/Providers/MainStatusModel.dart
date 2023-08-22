@@ -17,6 +17,8 @@ class MainStatusModel with ChangeNotifier {
 
   bool? debugMode;
 
+  int? robotServiceMode; // 0: 서빙, 1: 택배, 딜리버리
+
   MainStatusModel({
     this.debugMode,
     this.batBal,
