@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -28,7 +27,6 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late NetworkModel _networkProvider;
-  late ServingModel _servingProvider;
   late MainStatusModel _mainStatusProvider;
 
   final TextEditingController configController = TextEditingController();
@@ -156,10 +154,13 @@ class _IntroScreenState extends State<IntroScreen>
       _playAudio();
     });
     await Future.delayed(const Duration(milliseconds: 500));
-    setState(() {
-      updateComplete = true;
-      playingVideo = false;
-    });
+    if(mounted){
+      print('okay?');
+      setState(() {
+        updateComplete = true;
+        playingVideo = false;
+      });
+    }
   }
 
   dynamic getting(String hostUrl, String endUrl) async {
@@ -189,7 +190,6 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     hostAdr = _networkProvider.startUrl!;
@@ -212,7 +212,6 @@ class _IntroScreenState extends State<IntroScreen>
           });
           setState(() {
             navTrigger = true;
-            _servingProvider.mainInit = true;
           });
           _effectPlayer.dispose();
           _audioPlayer.dispose();
@@ -302,7 +301,6 @@ class _IntroScreenState extends State<IntroScreen>
                     if (apiData != null && apiData != []) {
                       setState(() {
                         navTrigger = true;
-                        _servingProvider.mainInit = true;
                       });
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _audioPlayer.stop();

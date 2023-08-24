@@ -88,6 +88,7 @@ flutter:
     - assets/fonts/
     - assets/videos/
     - assets/voices/
+    - assets/voices/Ad/
     - assets/sounds/
     - assets/icons/
     - assets/icons/appBar/

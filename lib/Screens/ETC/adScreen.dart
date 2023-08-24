@@ -6,6 +6,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
+import 'package:kori_wis_demo/Widgets/appBarAction.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
 class AdScreen extends StatefulWidget {
@@ -24,7 +26,13 @@ class _AdScreenState extends State<AdScreen> {
   late int CHGFlag;
   late int EMGStatus;
 
+  late Timer _timer;
   late Timer _pwrTimer;
+
+  late bool adVoiceOnOff;
+
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/voices/Ad/daechan.wav';
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
@@ -33,6 +41,11 @@ class _AdScreenState extends State<AdScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.patrolMode == false){
+      adVoiceOnOff = false;
+    }else{
+      adVoiceOnOff = true;
+    }
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
@@ -46,6 +59,10 @@ class _AdScreenState extends State<AdScreen> {
       "assets/images/adPics/daechan/ad7.png",
     ];
     _initAudio();
+
+    _timer = Timer.periodic(const Duration(seconds:30), (timer) {
+      _audioPlayer.seek(const Duration(seconds: 0));
+    });
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
@@ -71,7 +88,9 @@ class _AdScreenState extends State<AdScreen> {
 
   void _initAudio() {
     AudioPlayer.clearAssetCache();
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _audioPlayer.setVolume(1);
     _effectPlayer.setVolume(0.4);
   }
 
@@ -79,12 +98,24 @@ class _AdScreenState extends State<AdScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _timer.cancel();
     _pwrTimer.cancel();
+    _audioPlayer.dispose();
     _effectPlayer.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (adVoiceOnOff == true) {
+        _audioPlayer.seek(const Duration(seconds: 0));
+        _audioPlayer.play();
+      } else {
+        _audioPlayer.stop();
+      }
+    });
+
     return Scaffold(
       appBar: widget.patrolMode == false
           ? AppBar(
@@ -92,74 +123,14 @@ class _AdScreenState extends State<AdScreen> {
               backgroundColor: Colors.transparent,
               elevation: 0.0,
               automaticallyImplyLeading: false,
-              actions: [
+              actions: const [
                 SizedBox(
                   width: 1080,
                   height: 108,
                   child: Stack(
                     children: [
-                      Positioned(
-                        left: 46,
-                        top: 10,
-                        child: FilledButton(
-                          onPressed: () {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              _effectPlayer.seek(const Duration(seconds: 0));
-                              _effectPlayer.play();
-                              Future.delayed(Duration(milliseconds: 230), () {
-                                _effectPlayer.dispose();
-                                Navigator.pop(context);
-                              });
-                            });
-                          },
-                          style: FilledButton.styleFrom(
-                              enableFeedback: false,
-                              fixedSize: const Size(90, 90),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0)),
-                              backgroundColor: Colors.transparent),
-                          child: Container(
-                            height: 60,
-                            width: 60,
-                            decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                      'assets/icons/appBar/appBar_Home.png',
-                                    ),
-                                    fit: BoxFit.fill)),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 46,
-                        top: 60,
-                        child: Text(('${batData.toString()} %')),
-                      ),
-                      Positioned(
-                        right: 50,
-                        top: 20,
-                        child: Container(
-                          height: 45,
-                          width: 50,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/icons/appBar/appBar_Battery.png',
-                                  ),
-                                  fit: BoxFit.fill)),
-                        ),
-                      ),
-                      EMGStatus == 0
-                          ? const Positioned(
-                              right: 35,
-                              top: 15,
-                              child: Icon(Icons.block,
-                                  color: Colors.red,
-                                  size: 80,
-                                  grade: 200,
-                                  weight: 200),
-                            )
-                          : Container(),
+                      AppBarAction(homeButton: true),
+                      AppBarStatus(),
                     ],
                   ),
                 )
@@ -168,32 +139,47 @@ class _AdScreenState extends State<AdScreen> {
             )
           : null,
       extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                return ClipRRect(
-                    child: Image.asset(
-                  advImages[index],
-                  fit: BoxFit.cover,
-                ));
-              },
-              itemCount: advImages.length,
-              autoplay: true,
-              autoplayDelay: 8000,
-              pagination: const SwiperPagination(
-                  alignment: Alignment.bottomRight,
-                  builder: FractionPaginationBuilder(
-                      color: Colors.white,
-                      fontSize: 20,
-                      activeColor: Colors.white,
-                      activeFontSize: 25)),
-            ),
-          )
-        ],
+      body: GestureDetector(
+        onTap: (){
+          if(adVoiceOnOff == false){
+            setState(() {
+              adVoiceOnOff = true;
+            });
+          }else{
+            {
+              setState(() {
+                adVoiceOnOff = false;
+              });
+            }
+          }
+        },
+        child: Stack(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return ClipRRect(
+                      child: Image.asset(
+                    advImages[index],
+                    fit: BoxFit.cover,
+                  ));
+                },
+                itemCount: advImages.length,
+                autoplay: true,
+                autoplayDelay: 8000,
+                pagination: const SwiperPagination(
+                    alignment: Alignment.bottomRight,
+                    builder: FractionPaginationBuilder(
+                        color: Colors.white,
+                        fontSize: 20,
+                        activeColor: Colors.white,
+                        activeFontSize: 25)),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

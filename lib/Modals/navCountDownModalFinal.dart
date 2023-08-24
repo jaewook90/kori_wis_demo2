@@ -186,9 +186,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             .navPageToPage();
                       });
                     } else {
-                      setState(() {
-                        _servingProvider.mainInit = true;
-                      });
                       Future.delayed(Duration(milliseconds: 230), () {
                         _audioPlayer.dispose();
                         _effectPlayer.dispose();

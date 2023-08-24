@@ -13,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
   await initializeDateFormatting();
 
@@ -28,11 +28,9 @@ void main() async {
                 batBal: 0,
                 chargeFlag: 0,
                 emgButton: 0,
-                // movebaseStatus: 99,
                 mainSoundMute: true,
                 restartService: false,
-                autoCharge: 20
-                // initNavStatus: true
+                autoCharge: 20,
             )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(
@@ -41,7 +39,6 @@ void main() async {
                 )),
         ChangeNotifierProvider(
             create: (context) => ServingModel(
-                  mainInit: true,
                   waitingPoint: 'wait',
                   attachedTray1: false,
                   attachedTray2: false,

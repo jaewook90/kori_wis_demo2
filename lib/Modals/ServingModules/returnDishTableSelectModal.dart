@@ -133,9 +133,6 @@ class _ReturnDishTableModalState extends State<ReturnDishTableModal> {
                         borderRadius: BorderRadius.circular(0),
                       )),
                   onPressed: () {
-                    setState(() {
-                      _servingProvider.mainInit = true;
-                    });
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       _effectPlayer.seek(const Duration(seconds: 0));
                       _effectPlayer.play();

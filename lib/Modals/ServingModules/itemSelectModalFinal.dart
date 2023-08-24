@@ -106,9 +106,6 @@ class _SelectItemModalFinalState extends State<SelectItemModalFinal> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0))),
                       onPressed: () {
-                        setState(() {
-                          _servingProvider.mainInit = true;
-                        });
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();

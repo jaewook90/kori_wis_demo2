@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/PatrolProg.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Widgets/appBarAction.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
 class NavigationPatrol extends StatefulWidget {
@@ -20,7 +20,6 @@ class NavigationPatrol extends StatefulWidget {
 }
 
 class _NavigationPatrolState extends State<NavigationPatrol> {
-  late ServingModel _servingProvider;
 
   late Timer _pwrTimer;
   late int batData;
@@ -81,8 +80,6 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
-
     double screenWidth = 1080;
 
     buttonPositionWidth = [205, 205, 205, 205, 585, 585, 585, 585];
@@ -113,68 +110,10 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
           SizedBox(
             width: screenWidth,
             height: 108,
-            child: Stack(
+            child: const Stack(
               children: [
-                Positioned(
-                  right: 46,
-                  top: 60,
-                  child: Text(('${batData.toString()} %')),
-                ),
-                Positioned(
-                  right: 50,
-                  top: 20,
-                  child: Container(
-                    height: 45,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Battery.png',
-                            ),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                EMGStatus == 0
-                    ? const Positioned(
-                        right: 35,
-                        top: 15,
-                        child: Icon(Icons.block,
-                            color: Colors.red,
-                            size: 80,
-                            grade: 200,
-                            weight: 200),
-                      )
-                    : Container(),
-                Positioned(
-                  left: 20,
-                  top: 10,
-                  child: FilledButton(
-                    onPressed: () {
-                      setState(() {
-                        _servingProvider.mainInit = true;
-                      });
-                      navPage(
-                        context: context,
-                        page: const TraySelectionFinal(),
-                      ).navPageToPage();
-                    },
-                    style: FilledButton.styleFrom(
-                        fixedSize: const Size(90, 90),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                        backgroundColor: Colors.transparent),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Backward.png',
-                              ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                ),
+                AppBarStatus(),
+                AppBarAction(homeButton: true,)
               ],
             ),
           )
@@ -203,7 +142,8 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(220, 150),
-                            side: const BorderSide(color: Colors.white, width: 1)),
+                            side: const BorderSide(
+                                color: Colors.white, width: 1)),
                         child: Text(
                           patrolPoints1,
                           style: const TextStyle(
@@ -227,7 +167,8 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(220, 150),
-                            side: const BorderSide(color: Colors.white, width: 1)),
+                            side: const BorderSide(
+                                color: Colors.white, width: 1)),
                         child: Text(
                           patrolPoints2,
                           style: const TextStyle(

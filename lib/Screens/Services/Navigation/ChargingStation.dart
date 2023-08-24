@@ -7,7 +7,6 @@ import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -19,6 +18,8 @@ import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
+import 'package:kori_wis_demo/Widgets/appBarAction.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,15 +31,11 @@ class ChargingStation extends StatefulWidget {
 }
 
 class _ChargingStationState extends State<ChargingStation> {
-  late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
   late MainStatusModel _mainStatusProvider;
 
   final TextEditingController autoChargeController = TextEditingController();
   late SharedPreferences _prefs;
-
-  late AudioPlayer _audioPlayer;
-  String _audioFile = 'assets/sounds/dock3.wav';
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
@@ -112,8 +109,6 @@ class _ChargingStationState extends State<ChargingStation> {
 
   void _initAudio() {
     AudioPlayer.clearAssetCache();
-    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-    _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -190,13 +185,11 @@ class _ChargingStationState extends State<ChargingStation> {
     // TODO: implement dispose
     super.dispose();
     _pwrTimer.cancel();
-    _audioPlayer.dispose();
     _effectPlayer.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
@@ -213,12 +206,10 @@ class _ChargingStationState extends State<ChargingStation> {
     });
 
     if (_mainStatusProvider.fromDocking == true) {
-      _audioPlayer.play();
       setState(() {
         _mainStatusProvider.fromDocking = false;
       });
     } else if (_mainStatusProvider.fromDocking == false || _mainStatusProvider.fromDocking == null){
-      _audioPlayer.dispose();
     }
 
     if (positionList.isEmpty) {
@@ -239,68 +230,9 @@ class _ChargingStationState extends State<ChargingStation> {
             height: 108,
             child: Stack(
               children: [
-                Positioned(
-                  right: 46,
-                  top: 60,
-                  child: Text(('${batData.toString()} %')),
-                ),
-                Positioned(
-                  right: 50,
-                  top: 20,
-                  child: Container(
-                    height: 45,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'assets/icons/appBar/appBar_Battery.png',
-                            ),
-                            fit: BoxFit.fill)),
-                  ),
-                ),
-                EMGStatus == 0
-                    ? const Positioned(
-                        right: 35,
-                        top: 15,
-                        child: Icon(Icons.block,
-                            color: Colors.red,
-                            size: 80,
-                            grade: 200,
-                            weight: 200),
-                      )
-                    : Container(),
-                Positioned(
-                  left: 20,
-                  top: 10,
-                  child: FilledButton(
-                    onPressed: () {
-                      _mainStatusProvider.restartService = true;
-                      PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
-                          .Posting(context);
-                      Future.delayed(Duration(milliseconds: 500), () {
-                        navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                        ).navPageToPage();
-                      });
-                    },
-                    style: FilledButton.styleFrom(
-                        fixedSize: const Size(90, 90),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                        backgroundColor: Colors.transparent),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Home.png',
-                              ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                ),
+                AppBarStatus(),
+                AppBarAction(homeButton: true, screenName: "Charging",),
+
               ],
             ),
           )
@@ -516,9 +448,6 @@ class _ChargingStationState extends State<ChargingStation> {
                               padding: const EdgeInsets.only(left: 0),
                               child: FilledButton(
                                 onPressed: () {
-                                  setState(() {
-                                    _servingProvider.mainInit = false;
-                                  });
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
                                     _effectPlayer
@@ -534,7 +463,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                     Future.delayed(
                                         const Duration(milliseconds: 230), () {
                                       _effectPlayer.dispose();
-                                      _audioPlayer.dispose();
                                       navPage(
                                         context: context,
                                         page:
@@ -793,9 +721,6 @@ class _ChargingStationState extends State<ChargingStation> {
                               padding: const EdgeInsets.only(left: 0),
                               child: FilledButton(
                                 onPressed: () {
-                                  setState(() {
-                                    _servingProvider.mainInit = false;
-                                  });
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
                                     _effectPlayer
@@ -812,7 +737,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                     Future.delayed(
                                         const Duration(milliseconds: 230), () {
                                       _effectPlayer.dispose();
-                                      _audioPlayer.dispose();
                                       navPage(
                                         context: context,
                                         page:
@@ -976,9 +900,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                 //     ]),
                                 FilledButton(
                                   onPressed: () async {
-                                    setState(() {
-                                      _servingProvider.mainInit = false;
-                                    });
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       _effectPlayer.seek(
@@ -989,7 +910,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                           const Duration(milliseconds: 230),
                                               () {
                                             _effectPlayer.dispose();
-                                            _audioPlayer.dispose();
                                             navPage(
                                               context: context,
                                               page: const IntroScreen(),
@@ -1039,9 +959,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                 ),
                                 FilledButton(
                                   onPressed: () {
-                                    setState(() {
-                                      _servingProvider.mainInit = false;
-                                    });
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       _effectPlayer.seek(
@@ -1051,7 +968,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                           const Duration(milliseconds: 230),
                                               () {
                                             _effectPlayer.dispose();
-                                            _audioPlayer.dispose();
                                             navPage(
                                               context: context,
                                               page:
@@ -1161,9 +1077,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                 //     ]),
                                 FilledButton(
                                   onPressed: () {
-                                    setState(() {
-                                      _servingProvider.mainInit = false;
-                                    });
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       _effectPlayer.play();
@@ -1173,7 +1086,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                           const Duration(milliseconds: 230),
                                               () {
                                             _effectPlayer.dispose();
-                                            _audioPlayer.dispose();
                                             navPage(
                                               context: context,
                                               page: const TestPagesScreen(),
@@ -1227,7 +1139,6 @@ class _ChargingStationState extends State<ChargingStation> {
                                           const Duration(milliseconds: 230),
                                               () {
                                             _effectPlayer.dispose();
-                                            _audioPlayer.dispose();
                                             navPage(
                                               context: context,
                                               page: const IntroScreen(),
@@ -1297,15 +1208,11 @@ class _ChargingStationState extends State<ChargingStation> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              setState(() {
-                                _servingProvider.mainInit = false;
-                              });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 Future.delayed(const Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
-                                  _audioPlayer.dispose();
                                   navPage(
                                     context: context,
                                     page: const WebviewPage1(),
@@ -1332,15 +1239,11 @@ class _ChargingStationState extends State<ChargingStation> {
                           ),
                           TextButton(
                             onPressed: () {
-                              setState(() {
-                                _servingProvider.mainInit = false;
-                              });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 Future.delayed(const Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
-                                  _audioPlayer.dispose();
                                   navPage(
                                     context: context,
                                     page: const WebviewPage2(),
@@ -1367,15 +1270,11 @@ class _ChargingStationState extends State<ChargingStation> {
                           ),
                           TextButton(
                             onPressed: () {
-                              setState(() {
-                                _servingProvider.mainInit = false;
-                              });
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                                 Future.delayed(const Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
-                                  _audioPlayer.dispose();
                                   navPage(
                                     context: context,
                                     page: const WebviewPage3(),

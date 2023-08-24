@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
-import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:provider/provider.dart';
+import 'package:kori_wis_demo/Widgets/appBarAction.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -17,17 +14,11 @@ class WebviewPage3 extends StatefulWidget {
 
 class _WebviewPage3State extends State<WebviewPage3> {
   late final WebViewController _controller;
-  late ServingModel _servingProvider;
-
-  late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.wav';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    _initAudio();
 
     late final PlatformWebViewControllerCreationParams params;
 
@@ -100,53 +91,43 @@ class _WebviewPage3State extends State<WebviewPage3> {
     _controller = controller;
   }
 
-  void _initAudio() {
-    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.4);
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
-    _effectPlayer.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     return Scaffold(
-      body: Container(
-        child: Stack(children: [
-          Container(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+        actions: const [
+          SizedBox(
+            width: 1080,
+            height: 108,
+            child: Stack(
+              children: [
+                AppBarStatus(),
+                AppBarAction(homeButton: true,)
+              ],
+            ),
+          )
+        ],
+        toolbarHeight: 110,
+        iconTheme: const IconThemeData(size: 70, color: Color(0xfffefeff)),
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          SizedBox(
               width: 1080,
               height: 1920,
               child: WebViewWidget(controller: _controller)),
-          Positioned(
-              right: 50,
-              top: 20,
-              child: IconButton(
-                onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(Duration(seconds: 0));
-                    _effectPlayer.play();
-                    setState(() {
-                      _servingProvider.mainInit = true;
-                    });
-                    navPage(
-                      context: context,
-                      page: const TraySelectionFinal(),
-                    ).navPageToPage();
-                  });
-                },
-                icon: const Icon(
-                  Icons.close,
-                ),
-                iconSize: 60,
-                color: const Color.fromRGBO(0, 0, 0, 0.4),
-              ))
-        ]),
+        ],
       ),
     );
   }

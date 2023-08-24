@@ -107,9 +107,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                         _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
                         if (_servingProvider.trayCheckAll == true) {
-                          setState(() {
-                            _servingProvider.mainInit = true;
-                          });
                           Future.delayed(Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
                             _audioPlayer.dispose();
@@ -122,9 +119,6 @@ class _SelectTableModalFinalState extends State<SelectTableModalFinal> {
                           if ((_servingProvider.table1 == "" &&
                               _servingProvider.table2 == "") &&
                               _servingProvider.table3 == "") {
-                            setState(() {
-                              _servingProvider.mainInit = true;
-                            });
                           }
                           Future.delayed(Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();

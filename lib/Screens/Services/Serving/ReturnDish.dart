@@ -11,6 +11,8 @@ import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
+import 'package:kori_wis_demo/Widgets/appBarAction.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
 class ReturnProgressModuleFinal extends StatefulWidget {
@@ -27,8 +29,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
 
   late Timer _pwrTimer;
-  late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/sounds/sound_moving_bg.wav';
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
@@ -64,8 +64,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
     _initAudio();
 
-    _audioPlayer.seek(const Duration(seconds: 0));
-    _audioPlayer.play();
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -93,9 +91,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
 
   void _initAudio() {
     AudioPlayer.clearAssetCache();
-    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-    _audioPlayer.setVolume(1);
-    _audioPlayer.setLoopMode(LoopMode.all);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -157,7 +152,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _audioPlayer.dispose();
     _effectPlayer.dispose();
     _pwrTimer.cancel();
   }
@@ -184,8 +178,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
             arrivedReturnTable = true;
           });
           if(currentTargetTable != 'wait' && currentTargetTable != 'charging_pile'){
-            Future.delayed(Duration(milliseconds: 230), () {
-              _audioPlayer.dispose();
+            Future.delayed(const Duration(milliseconds: 230), () {
               _effectPlayer.dispose();
               navPage(
                 context: context,
@@ -199,7 +192,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
           arrivedReturnTable = true;
           navStatus = 0;
         });
-        _audioPlayer.dispose();
         showCountDownPopup(context);
       }
     });
@@ -218,38 +210,10 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
             SizedBox(
               width: screenWidth,
               height: 108,
-              child: Stack(
+              child: const Stack(
                 children: [
-                  Positioned(
-                    right: 46,
-                    top: 60,
-                    child: Text(('${batData.toString()} %')),
-                  ),
-                  Positioned(
-                    right: 50,
-                    top: 20,
-                    child: Container(
-                      height: 45,
-                      width: 50,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Battery.png',
-                              ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                  EMGStatus == 0
-                      ? const Positioned(
-                          right: 35,
-                          top: 15,
-                          child: Icon(Icons.block,
-                              color: Colors.red,
-                              size: 80,
-                              grade: 200,
-                              weight: 200),
-                        )
-                      : Container(),
+                  AppBarAction(homeButton: false, screenName: "ReturnProgress",),
+                  AppBarStatus()
                 ],
               ),
             )
@@ -312,8 +276,7 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
                   left: 0,
                   child: GestureDetector(
                       onTap: () {
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _audioPlayer.dispose();
+                        Future.delayed(const Duration(milliseconds: 230), () {
                           _effectPlayer.dispose();
                           navPage(
                             context: context,

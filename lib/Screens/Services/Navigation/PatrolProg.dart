@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -12,6 +11,8 @@ import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
+import 'package:kori_wis_demo/Widgets/appBarAction.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
 class PatrolProgress extends StatefulWidget {
@@ -30,12 +31,9 @@ class PatrolProgress extends StatefulWidget {
 
 class _PatrolProgressState extends State<PatrolProgress> {
   late NetworkModel _networkProvider;
-  late ServingModel _servingProvider;
 
   late bool adPlay;
 
-  late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/sounds/sound_moving_bg.wav';
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
@@ -91,8 +89,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
     _initAudio();
 
-    _audioPlayer.seek(const Duration(seconds: 0));
-    _audioPlayer.play();
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -120,9 +116,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
   void _initAudio() {
     AudioPlayer.clearAssetCache();
-    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-    _audioPlayer.setVolume(1);
-    _audioPlayer.setLoopMode(LoopMode.all);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -176,14 +169,12 @@ class _PatrolProgressState extends State<PatrolProgress> {
     // TODO: implement dispose
     _pwrTimer.cancel();
     _effectPlayer.dispose();
-    _audioPlayer.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
-    _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -251,36 +242,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
               height: 108,
               child: Stack(
                 children: [
-                  Positioned(
-                    right: 46,
-                    top: 60,
-                    child: Text(('${batData.toString()} %')),
-                  ),
-                  Positioned(
-                    right: 50,
-                    top: 20,
-                    child: Container(
-                      height: 45,
-                      width: 50,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icons/appBar/appBar_Battery.png',
-                              ),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                  EMGStatus == 0
-                      ? const Positioned(
-                          right: 35,
-                          top: 15,
-                          child: Icon(Icons.block,
-                              color: Colors.red,
-                              size: 80,
-                              grade: 200,
-                              weight: 200),
-                        )
-                      : Container(),
+                  const AppBarAction(homeButton: true, screenName: "Patrolling",),
+                  const AppBarStatus(),
                   Positioned(
                     right: 150,
                     top: 25,
@@ -289,7 +252,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          Future.delayed(Duration(milliseconds: 230), () {
+                          Future.delayed(const Duration(milliseconds: 230), () {
                             if (adPlay == false) {
                               setState(() {
                                 adPlay = true;
@@ -355,12 +318,8 @@ class _PatrolProgressState extends State<PatrolProgress> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          Future.delayed(Duration(milliseconds: 230), () {
+                          Future.delayed(const Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
-                            _audioPlayer.dispose();
-                            setState(() {
-                              _servingProvider.mainInit = true;
-                            });
                             PostApi(
                                     url: startUrl,
                                     endadr: stpUrl,

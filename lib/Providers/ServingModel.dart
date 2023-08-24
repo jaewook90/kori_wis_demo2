@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ServingModel with ChangeNotifier {
-  bool? mainInit;
-
   bool? tray1;
   bool? tray2;
   bool? tray3;
@@ -44,7 +42,7 @@ class ServingModel with ChangeNotifier {
   String? patrol2;
 
   ServingModel(
-      {this.mainInit,
+      {
       this.tray1,
       this.tray2,
       this.tray3,
