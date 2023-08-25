@@ -8,7 +8,6 @@ import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -28,10 +27,8 @@ class ServingProgressFinal extends StatefulWidget {
 class _ServingProgressFinalState extends State<ServingProgressFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
-  // late MainStatusModel _mainStatusProvider;
 
   late String currentServedTrayNum;
-  late Timer _pwrTimer;
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
@@ -57,10 +54,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
 
   late bool _debugMode;
 
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -72,40 +65,16 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
     currentServedTrayNum = '';
     _debugMode =
         Provider.of<MainStatusModel>((context), listen: false).debugMode!;
-
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-              Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag =
-          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus =
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _pwrTimer.cancel();
     _effectPlayer.dispose();
     _controller.pause();
   }

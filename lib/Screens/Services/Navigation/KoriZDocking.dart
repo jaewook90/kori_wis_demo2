@@ -72,7 +72,7 @@ class _KoriDockingState extends State<KoriDocking> {
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }

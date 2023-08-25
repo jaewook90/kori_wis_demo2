@@ -9,7 +9,6 @@ import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -35,7 +34,6 @@ class _NavigatorProgressModuleFinalState
 
   late int hiddenCounter;
 
-  late Timer _pwrTimer;
   late String backgroundImageServ;
 
   late String navSentence;
@@ -52,10 +50,6 @@ class _NavigatorProgressModuleFinalState
   String? startUrl;
   String? navUrl;
   String? moveBaseStatusUrl;
-
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
 
   late int navStatus;
 
@@ -74,29 +68,6 @@ class _NavigatorProgressModuleFinalState
     targetTableNum = "";
 
     _debugMode = Provider.of<MainStatusModel>((context), listen: false).debugMode!;
-
-
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-          Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -156,7 +127,6 @@ class _NavigatorProgressModuleFinalState
   @override
   void dispose() {
     // TODO: implement dispose
-    _pwrTimer.cancel();
     super.dispose();
   }
 

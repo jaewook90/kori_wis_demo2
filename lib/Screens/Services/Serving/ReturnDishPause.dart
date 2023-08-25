@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDish.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/appBarAction.dart';
@@ -31,9 +29,6 @@ class ReturnDishPauseScreen extends StatefulWidget {
 class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   late NetworkModel _networkProvider;
 
-  late Timer _pwrTimer;
-
-
   late String serviceState;
   late String navSentence;
   late String destinationSentence;
@@ -41,8 +36,6 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   late String backgroundImage;
 
   late String targetTable;
-
-
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
@@ -70,10 +63,6 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   String? navUrl;
   String? chgUrl;
 
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -86,34 +75,10 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
     destinationSentence = '${targetTable}번 테이블';
 
     _initAudio();
-
-
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-              Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag =
-          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus =
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -131,7 +96,6 @@ class _ReturnDishPauseScreenState extends State<ReturnDishPauseScreen> {
   void dispose() {
     // TODO: implement dispose
     _effectPlayer.dispose();
-    _pwrTimer.cancel();
     super.dispose();
   }
 

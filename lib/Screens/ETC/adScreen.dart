@@ -3,12 +3,8 @@ import 'dart:async';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Widgets/appBarAction.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
-import 'package:provider/provider.dart';
 
 class AdScreen extends StatefulWidget {
   final bool? patrolMode;
@@ -22,12 +18,7 @@ class AdScreen extends StatefulWidget {
 class _AdScreenState extends State<AdScreen> {
   late final List<String> advImages;
 
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
-
   late Timer _timer;
-  late Timer _pwrTimer;
 
   late bool adVoiceOnOff;
 
@@ -46,9 +37,6 @@ class _AdScreenState extends State<AdScreen> {
     }else{
       adVoiceOnOff = true;
     }
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     advImages = [
       "assets/images/adPics/daechan/ad1.png",
       "assets/images/adPics/daechan/ad2.png",
@@ -63,31 +51,10 @@ class _AdScreenState extends State<AdScreen> {
     _timer = Timer.periodic(const Duration(seconds:30), (timer) {
       _audioPlayer.seek(const Duration(seconds: 0));
     });
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-              Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag =
-          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus =
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
-  void _initAudio() {
-    AudioPlayer.clearAssetCache();
+  void _initAudio() async {
+    // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
@@ -99,7 +66,6 @@ class _AdScreenState extends State<AdScreen> {
     // TODO: implement dispose
     super.dispose();
     _timer.cancel();
-    _pwrTimer.cancel();
     _audioPlayer.dispose();
     _effectPlayer.dispose();
   }

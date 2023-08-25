@@ -3,12 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ReturnDoneFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/NavModuleButtonsFinal.dart';
 import 'package:kori_wis_demo/Widgets/appBarAction.dart';
@@ -28,7 +26,6 @@ class ReturnProgressModuleFinal extends StatefulWidget {
 class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late NetworkModel _networkProvider;
 
-  late Timer _pwrTimer;
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
@@ -47,10 +44,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
   late int navStatus;
   late bool initNavStatus;
 
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -63,34 +56,10 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
         Provider.of<ServingModel>(context, listen: false).returnTargetTable!;
 
     _initAudio();
-
-
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-              Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag =
-          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus =
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -153,7 +122,6 @@ class _ReturnProgressModuleFinalState extends State<ReturnProgressModuleFinal> {
     // TODO: implement dispose
     super.dispose();
     _effectPlayer.dispose();
-    _pwrTimer.cancel();
   }
 
   @override

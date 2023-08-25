@@ -29,7 +29,7 @@ class _EMGPopModalFinalState
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);

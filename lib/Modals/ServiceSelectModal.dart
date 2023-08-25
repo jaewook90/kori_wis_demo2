@@ -36,7 +36,7 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }

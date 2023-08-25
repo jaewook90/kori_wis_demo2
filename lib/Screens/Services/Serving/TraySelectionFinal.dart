@@ -29,8 +29,7 @@ class TraySelectionFinal extends StatefulWidget {
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
 }
 
-class _TraySelectionFinalState extends State<TraySelectionFinal>
-    with TickerProviderStateMixin {
+class _TraySelectionFinalState extends State<TraySelectionFinal>{
   late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
   late MainStatusModel _mainStatusProvider;
@@ -155,7 +154,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);

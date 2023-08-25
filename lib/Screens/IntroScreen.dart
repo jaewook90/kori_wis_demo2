@@ -102,7 +102,7 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
@@ -197,9 +197,6 @@ class _IntroScreenState extends State<IntroScreen>
 
     double screenWidth = 1080;
     double screenHeight = 1920;
-
-    double videoWidth = _controller.value.size.width;
-    double videoHeight = _controller.value.size.height;
 
     apiData = Provider.of<NetworkModel>(context, listen: false).getApiData;
 
@@ -357,8 +354,8 @@ class _IntroScreenState extends State<IntroScreen>
                               child: FittedBox(
                                 fit: BoxFit.cover,
                                 child: SizedBox(
-                                  width: videoWidth,
-                                  height: videoHeight,
+                                  width: screenWidth,
+                                  height: screenHeight,
                                   child: _controller.value.isInitialized
                                       ? AspectRatio(
                                           aspectRatio:

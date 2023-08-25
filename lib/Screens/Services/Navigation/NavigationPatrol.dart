@@ -1,14 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/PatrolProg.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/appBarAction.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
-import 'package:provider/provider.dart';
 
 class NavigationPatrol extends StatefulWidget {
   const NavigationPatrol({
@@ -20,11 +14,6 @@ class NavigationPatrol extends StatefulWidget {
 }
 
 class _NavigationPatrolState extends State<NavigationPatrol> {
-
-  late Timer _pwrTimer;
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
 
   late List<double> buttonPositionWidth;
   late List<double> buttonPositionHeight;
@@ -46,35 +35,11 @@ class _NavigationPatrolState extends State<NavigationPatrol> {
     super.initState();
     patrolPoints1 = '';
     patrolPoints2 = '';
-
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-              Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag =
-          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus =
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _pwrTimer.cancel();
     super.dispose();
   }
 

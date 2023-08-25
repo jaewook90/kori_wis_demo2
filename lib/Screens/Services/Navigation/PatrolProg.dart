@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
-import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -37,7 +35,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
-  late Timer _pwrTimer;
   late String backgroundImageServ;
 
   late String targetPoint1;
@@ -54,10 +51,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
   String? startUrl;
   String? navUrl;
   String? stpUrl;
-
-  late int batData;
-  late int CHGFlag;
-  late int EMGStatus;
 
   String? moveBaseStatusUrl;
 
@@ -88,34 +81,10 @@ class _PatrolProgressState extends State<PatrolProgress> {
     stopDuration = 0;
 
     _initAudio();
-
-
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      StatusManagements(context,
-              Provider.of<NetworkModel>(context, listen: false).startUrl!)
-          .gettingPWRdata();
-      if (EMGStatus !=
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!) {
-        setState(() {});
-      }
-      if (batData !=
-          Provider.of<MainStatusModel>(context, listen: false).batBal!) {
-        setState(() {});
-      }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
-      CHGFlag =
-          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
-      EMGStatus =
-          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-    });
   }
 
   void _initAudio() {
-    AudioPlayer.clearAssetCache();
+    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -167,7 +136,6 @@ class _PatrolProgressState extends State<PatrolProgress> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _pwrTimer.cancel();
     _effectPlayer.dispose();
     super.dispose();
   }
