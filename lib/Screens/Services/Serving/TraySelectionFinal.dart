@@ -6,18 +6,17 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/CableConnectedModalFinal.dart';
 import 'package:kori_wis_demo/Modals/EMGPopModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/itemSelectModalFinal.dart';
+import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/ChargingStation.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/appBarQuick.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:kori_wis_demo/Widgets/configDrawer.dart';
 import 'package:provider/provider.dart';
@@ -29,18 +28,18 @@ class TraySelectionFinal extends StatefulWidget {
   State<TraySelectionFinal> createState() => _TraySelectionFinalState();
 }
 
-class _TraySelectionFinalState extends State<TraySelectionFinal>{
+class _TraySelectionFinalState extends State<TraySelectionFinal> {
   late ServingModel _servingProvider;
   late NetworkModel _networkProvider;
   late MainStatusModel _mainStatusProvider;
 
   late bool volumeOnOff;
 
-  late AudioPlayer _audioPlayer;
-  final String _audioFile = 'assets/voices/koriServingMain.wav';
-
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
+
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/voices/koriServingMain.wav';
 
   late Timer _timer;
   late Timer _pwrTimer;
@@ -54,7 +53,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
   String? startUrl;
   String? chgUrl;
 
-  late int batData;
+  // late int batData;
   late int CHGFlag;
   late int EMGStatus;
 
@@ -109,7 +108,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
     table2 = "";
     table3 = "";
 
-    batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+    // batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
 
@@ -127,25 +126,25 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
 
     _initAudio();
 
-    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
-      _audioPlayer.seek(const Duration(seconds: 0));
-    });
+    if (mounted) {
+      _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+        _audioPlayer.seek(const Duration(seconds: 0));
+      });
+    }
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
               Provider.of<NetworkModel>(context, listen: false).startUrl!)
           .gettingPWRdata();
-      if ((EMGStatus !=
+      if (EMGStatus !=
                   Provider.of<MainStatusModel>(context, listen: false)
                       .emgButton! ||
               CHGFlag !=
                   Provider.of<MainStatusModel>(context, listen: false)
-                      .chargeFlag!) ||
-          batData !=
-              Provider.of<MainStatusModel>(context, listen: false).batBal!) {
+                      .chargeFlag!) {
         setState(() {});
       }
-      batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      // batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
       CHGFlag =
           Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
       EMGStatus =
@@ -156,8 +155,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
   void _initAudio() {
     // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
 
@@ -251,13 +250,22 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
         });
   }
 
+  void showReturnSelectPopup(context) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const ReturnDishTableModal();
+        });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     _timer.cancel();
     _pwrTimer.cancel();
-    _audioPlayer.dispose();
     _effectPlayer.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -267,20 +275,13 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
+    print(_mainStatusProvider.mainSoundMute);
+
     if (positionList.isEmpty) {
       positionList = _networkProvider.getPoseData!;
     } else {
       _networkProvider.getPoseData = positionList;
     }
-
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (_mainStatusProvider.mainSoundMute == true) {
-        _audioPlayer.seek(const Duration(seconds: 0));
-        _audioPlayer.play();
-      } else {
-        _audioPlayer.stop();
-      }
-    });
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -318,26 +319,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
       });
     }
 
-    if (batData != 0) {
-      if (batData < autoChargeConfig && (CHGFlag != 2 || CHGFlag != 3)) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _effectPlayer.seek(const Duration(seconds: 0));
-          _effectPlayer.play();
-          _networkProvider.servTable = 'charging_pile';
-          PostApi(url: startUrl, endadr: chgUrl, keyBody: 'charging_pile')
-              .Posting(context);
-          _networkProvider.currentGoal = '충전스테이션';
-          Future.delayed(const Duration(milliseconds: 230), () {
-            _effectPlayer.dispose();
-            _audioPlayer.dispose();
-            navPage(
-              context: context,
-              page: const NavigatorProgressModuleFinal(),
-            ).navPageToPage();
-          });
-        });
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_mainStatusProvider.mainSoundMute == true) {
+        if(_audioPlayer.playing != true){
+          _audioPlayer.seek(const Duration(seconds: 0));
+          _audioPlayer.play();
+        }
+      } else {
+        _audioPlayer.stop();
       }
-    }
+    });
 
     return WillPopScope(
       onWillPop: () async {
@@ -379,7 +370,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
               gravity: ToastGravity.BOTTOM);
           return Future.value(false);
         }
-
         return Future.value(false);
       },
       child: Scaffold(
@@ -388,48 +378,117 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            SizedBox(
-              width: screenWidth,
-              height: 108,
-              child: Stack(
-                children: [
-                  const AppBarStatus(),
-                  const AppBarQuick(),
-                  Positioned(
-                    right: 150,
-                    top: 25,
-                    child: FilledButton(
-                      onPressed: () {
-                        if (volumeOnOff == true) {
-                          setState(() {
-                            volumeOnOff = false;
-                            _mainStatusProvider.mainSoundMute = volumeOnOff;
-                          });
-                        } else {
-                          setState(() {
-                            volumeOnOff = true;
-                            _mainStatusProvider.mainSoundMute = volumeOnOff;
-                          });
-                        }
-                        print('volumeOnOFF : $volumeOnOff');
-                      },
-                      style: FilledButton.styleFrom(
-                          fixedSize: const Size(60, 60),
-                          enableFeedback: false,
-                          padding: const EdgeInsets.only(right: 0),
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0))),
-                      child: Icon(
-                          volumeOnOff == true
-                              ? Icons.volume_up
-                              : Icons.volume_off,
-                          size: 50),
+            mounted == true
+                ? SizedBox(
+                    width: screenWidth,
+                    height: 108,
+                    child: Stack(
+                      children: [
+                        const AppBarStatus(),
+                        Positioned(
+                            left: 20,
+                            top: 25,
+                            child: TextButton(
+                              onPressed: () {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer.play();
+                                  Future.delayed(const Duration(milliseconds: 230), () {
+                                    _effectPlayer.dispose();
+                                    navPage(context: context, page: const AdScreen(patrolMode: false)).navPageToPage();
+                                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>const AdScreen(
+                                    //   patrolMode: false,
+                                    // )));
+                                  });
+                                });
+                              },
+                              style: TextButton.styleFrom(
+                                  fixedSize: const Size(180, 60),
+                                  enableFeedback: false,
+                                  padding: const EdgeInsets.only(right: 0, bottom: 2),
+                                  backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: Colors.white, width: 3),
+                                      borderRadius: BorderRadius.circular(0))),
+                              child: const Text(
+                                '사이니지',
+                                style: TextStyle(
+                                    fontFamily: 'kor',
+                                    fontSize: 40,
+                                    color: Colors.white),
+                              ),
+                            )),
+                        Positioned(
+                            left: 220,
+                            top: 25,
+                            child: TextButton(
+                              onPressed: () {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer.play();
+                                  Future.delayed(const Duration(milliseconds: 230), () {
+                                    _effectPlayer.dispose();
+                                    _audioPlayer.dispose();
+                                    showReturnSelectPopup(context);
+                                  });
+                                });
+                              },
+                              style: TextButton.styleFrom(
+                                  fixedSize: const Size(120, 60),
+                                  enableFeedback: false,
+                                  padding: const EdgeInsets.only(right: 0, bottom: 2),
+                                  backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: Colors.white, width: 3),
+                                      borderRadius: BorderRadius.circular(0))),
+                              child: const Text(
+                                '퇴식',
+                                style: TextStyle(
+                                    fontFamily: 'kor',
+                                    fontSize: 40,
+                                    color: Colors.white),
+                              ),
+                            )),
+                        Positioned(
+                          right: 150,
+                          top: 25,
+                          child: FilledButton(
+                            onPressed: () {
+                              if (volumeOnOff == true) {
+                                setState(() {
+                                  volumeOnOff = false;
+                                  _mainStatusProvider.mainSoundMute =
+                                      volumeOnOff;
+                                });
+                              } else {
+                                setState(() {
+                                  volumeOnOff = true;
+                                  _mainStatusProvider.mainSoundMute =
+                                      volumeOnOff;
+                                });
+                              }
+                              print('volumeOnOFF : $volumeOnOff');
+                            },
+                            style: FilledButton.styleFrom(
+                                fixedSize: const Size(60, 60),
+                                enableFeedback: false,
+                                padding: const EdgeInsets.only(right: 0),
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0))),
+                            child: Icon(
+                                volumeOnOff == true
+                                    ? Icons.volume_up
+                                    : Icons.volume_off,
+                                size: 50),
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            )
+                  )
+                : Container()
           ],
           toolbarHeight: 110,
           iconTheme: const IconThemeData(size: 70, color: Color(0xfffefeff)),
@@ -498,7 +557,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                               borderRadius: BorderRadius.circular(25)),
                           fixedSize: const Size(450, 168)),
                       onPressed: () {
-                        _audioPlayer.dispose();
                         if (EMGStatus == 0) {
                           showEMGAlert(context);
                         } else {
@@ -506,7 +564,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                             showAdaptorCableAlert(context);
                           } else {
                             setState(() {
-                              _mainStatusProvider.mainSoundMute = false;
+                              // _mainStatusProvider.mainSoundMute = false;
                               // _mainStatusProvider.muteByNav = true;
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -515,7 +573,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                               if ((_servingProvider.table1 != "" ||
                                       _servingProvider.table2 != "") ||
                                   _servingProvider.table3 != "") {
-                                _timer.cancel();
                                 _pwrTimer.cancel();
                                 Future.delayed(
                                     const Duration(milliseconds: 230), () {
@@ -525,7 +582,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                                 });
                               } else {
                                 _servingProvider.trayCheckAll = true;
-                                _timer.cancel();
                                 _pwrTimer.cancel();
                                 Future.delayed(
                                     const Duration(milliseconds: 230), () {
@@ -792,8 +848,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                                 _servingProvider.tray2Select = false;
                                 _servingProvider.tray3Select = false;
                                 _servingProvider.trayCheckAll = false;
-                                _audioPlayer.dispose();
-                                _timer.cancel();
                                 _pwrTimer.cancel();
                                 Future.delayed(
                                     const Duration(milliseconds: 230), () {
@@ -874,8 +928,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                                 _servingProvider.tray2Select = true;
                                 _servingProvider.tray3Select = false;
                                 _servingProvider.trayCheckAll = false;
-                                _audioPlayer.dispose();
-                                _timer.cancel();
                                 _pwrTimer.cancel();
                                 Future.delayed(
                                     const Duration(milliseconds: 230), () {
@@ -956,8 +1008,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal>{
                                 _servingProvider.tray2Select = false;
                                 _servingProvider.tray3Select = true;
                                 _servingProvider.trayCheckAll = false;
-                                _audioPlayer.dispose();
-                                _timer.cancel();
                                 _pwrTimer.cancel();
                                 Future.delayed(
                                     const Duration(milliseconds: 230), () {

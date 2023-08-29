@@ -19,7 +19,6 @@ class ServiceSelectModalFinal extends StatefulWidget {
 }
 
 class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
-  late String backGroundIMG;
   late MainStatusModel _mainStatusProvider;
 
   late SharedPreferences _prefs;
@@ -63,7 +62,6 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
 
   @override
   Widget build(BuildContext context) {
-    backGroundIMG = 'assets/screens/koriServiceSelect.png';
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     return Column(

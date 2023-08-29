@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:provider/provider.dart';
 
 class AppBarStatus extends StatefulWidget {
-
   const AppBarStatus({Key? key}) : super(key: key);
 
   @override
@@ -16,16 +14,11 @@ class AppBarStatus extends StatefulWidget {
 }
 
 class _AppBarStatusState extends State<AppBarStatus> {
-
   late Timer _pwrTimer;
 
   late int batData;
   late int CHGFlag;
   late int EMGStatus;
-
-  late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.wav';
-
 
   @override
   void initState() {
@@ -35,8 +28,6 @@ class _AppBarStatusState extends State<AppBarStatus> {
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
-
-    _initAudio();
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
@@ -60,23 +51,15 @@ class _AppBarStatusState extends State<AppBarStatus> {
     });
   }
 
-  void _initAudio() {
-    // AudioPlayer.clearAssetCache();
-    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
-    _effectPlayer.setVolume(0.4);
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     _pwrTimer.cancel();
-    _effectPlayer.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Stack(children: [
       Positioned(
         right: 46,

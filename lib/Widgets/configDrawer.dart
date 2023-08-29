@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
+import 'package:kori_wis_demo/Modals/adminPWModal.dart';
 import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
@@ -58,7 +59,7 @@ class _ConfigDrawerMenuState extends State<ConfigDrawerMenu> {
 
     _initSharedPreferences();
 
-    _debugTray = true;
+    _debugTray = Provider.of<MainStatusModel>(context, listen: false).debugMode!;
 
     positioningList = [];
     positionList = [];
@@ -152,6 +153,15 @@ class _ConfigDrawerMenuState extends State<ConfigDrawerMenu> {
         context: context,
         builder: (context) {
           return const ReturnDishTableModal();
+        });
+  }
+
+  void enterAdmin(context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return const AdminPWModal();
         });
   }
 
@@ -1115,9 +1125,7 @@ class _ConfigDrawerMenuState extends State<ConfigDrawerMenu> {
                 child: FilledButton(
                   onPressed: () {
                     if(_debugTray == true){
-                      setState(() {
-                        _mainStatusProvider.debugMode = false;
-                      });
+                      enterAdmin(context);
                     }else{
                       setState(() {
                         _mainStatusProvider.debugMode = true;

@@ -30,6 +30,8 @@ class _AppBarActionState extends State<AppBarAction> {
   late AudioPlayer _audioPlayer;
   late String _audioFile;
 
+  late bool mainTTSPlay;
+
   String? startUrl;
   String? navUrl;
   String? chgUrl;
@@ -38,6 +40,8 @@ class _AppBarActionState extends State<AppBarAction> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    mainTTSPlay = Provider.of<MainStatusModel>(context, listen: false).mainSoundMute!;
 
     if (widget.screenName == 'ServingProgress') {
       if (Provider.of<ServingModel>(context, listen: false).tray1 == true) {
