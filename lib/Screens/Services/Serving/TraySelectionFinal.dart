@@ -395,6 +395,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                   _effectPlayer.play();
                                   Future.delayed(const Duration(milliseconds: 230), () {
                                     _effectPlayer.dispose();
+                                    _audioPlayer.dispose();
                                     navPage(context: context, page: const AdScreen(patrolMode: false)).navPageToPage();
                                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>const AdScreen(
                                     //   patrolMode: false,
