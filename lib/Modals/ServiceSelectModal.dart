@@ -94,7 +94,7 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
                 right: 30,
                 child: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      navPage(context: context, page: TraySelectionFinal()).navPageToPage();
                     },
                     icon: Icon(Icons.close, color: Colors.white),
                   iconSize: 50,

@@ -75,8 +75,10 @@ class _AdScreenState extends State<AdScreen> {
 
     Future.delayed(const Duration(milliseconds: 100), () {
       if (adVoiceOnOff == true) {
-        _audioPlayer.seek(const Duration(seconds: 0));
-        _audioPlayer.play();
+        if(_audioPlayer.playing != true){
+          _audioPlayer.seek(const Duration(seconds: 0));
+          _audioPlayer.play();
+        }
       } else {
         _audioPlayer.stop();
       }

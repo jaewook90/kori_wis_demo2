@@ -151,38 +151,39 @@ class _PatrolProgressState extends State<PatrolProgress> {
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
-    //TODO: 완료 후 토픽 한번만 날리게 수정 필요( 현재는 스테이터스 2개중 0번에서 작동 안하도록 수정함 )
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        Getting(startUrl!, moveBaseStatusUrl!);
-        if (navStatus == 3 && pastTargetPoint != targetPoint) {
-          PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
-              .Posting(context);
-          setState(() {
-            arrivedServingTable = true;
-          });
-          Future.delayed(const Duration(seconds: 5), () {
-            if (targetPoint == targetPoint1) {
-              setState(() {
-                arrivedServingTable = false;
-                if (navStatus != 0) {
-                  pastTargetPoint = targetPoint;
-                  targetPoint = targetPoint2;
-                }
-              });
-            } else if (targetPoint == targetPoint2) {
-              setState(() {
-                arrivedServingTable = false;
-                if (navStatus != 0) {
-                  pastTargetPoint = targetPoint2;
-                  targetPoint = targetPoint1;
-                }
-              });
-            }
-          });
-        }
+    if(mounted){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          Getting(startUrl!, moveBaseStatusUrl!);
+          if (navStatus == 3 && pastTargetPoint != targetPoint) {
+            PostApi(url: startUrl, endadr: navUrl, keyBody: targetPoint)
+                .Posting(context);
+            setState(() {
+              arrivedServingTable = true;
+            });
+            Future.delayed(const Duration(seconds: 5), () {
+              if (targetPoint == targetPoint1) {
+                setState(() {
+                  arrivedServingTable = false;
+                  if (navStatus != 0) {
+                    pastTargetPoint = targetPoint;
+                    targetPoint = targetPoint2;
+                  }
+                });
+              } else if (targetPoint == targetPoint2) {
+                setState(() {
+                  arrivedServingTable = false;
+                  if (navStatus != 0) {
+                    pastTargetPoint = targetPoint2;
+                    targetPoint = targetPoint1;
+                  }
+                });
+              }
+            });
+          }
+        });
       });
-    });
+    }
 
     if (navStatus == 4) {
       PostApi(url: startUrl, endadr: navUrl, keyBody: pastTargetPoint)
