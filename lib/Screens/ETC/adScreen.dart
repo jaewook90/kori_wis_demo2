@@ -85,19 +85,22 @@ class _AdScreenState extends State<AdScreen> {
     return Scaffold(
       appBar: widget.patrolMode == false
           ? AppBar(
-              title: const Text(''),
+              title:  Text(''),
               backgroundColor: Colors.transparent,
               elevation: 0.0,
               automaticallyImplyLeading: false,
-              actions: const [
-                SizedBox(
-                  width: 1080,
-                  height: 108,
-                  child: Stack(
-                    children: [
-                      AppBarAction(homeButton: true),
-                      AppBarStatus(),
-                    ],
+              actions:  [
+                Offstage(
+                  offstage: adVoiceOnOff,
+                  child: SizedBox(
+                    width: 1080,
+                    height: 108,
+                    child: Stack(
+                      children: [
+                        AppBarAction(homeButton: true),
+                        AppBarStatus(),
+                      ],
+                    ),
                   ),
                 )
               ],
