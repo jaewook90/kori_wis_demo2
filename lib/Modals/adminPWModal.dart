@@ -87,6 +87,8 @@ class _AdminPWModalState extends State<AdminPWModal> {
                           pwrController.text = '';
                         });
                       },
+                      obscureText: true,
+                      autofocus: true,
                       controller: pwrController,
                       style: const TextStyle(
                           fontFamily: 'kor', fontSize: 25, color: Colors.white),

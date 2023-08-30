@@ -18,6 +18,8 @@ class AdScreen extends StatefulWidget {
 class _AdScreenState extends State<AdScreen> {
   late final List<String> advImages;
 
+  late int adOffCommand;
+
   late Timer _timer;
 
   late bool adVoiceOnOff;
@@ -32,6 +34,7 @@ class _AdScreenState extends State<AdScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    adOffCommand = 0;
     if(widget.patrolMode == false){
       adVoiceOnOff = false;
     }else{
@@ -118,9 +121,19 @@ class _AdScreenState extends State<AdScreen> {
             });
           }else{
             {
-              setState(() {
-                adVoiceOnOff = false;
+              Future.delayed(const Duration(milliseconds: 1000), () {
+                setState(() {
+                  adOffCommand = 0;
+                });
               });
+              setState(() {
+                adOffCommand++;
+              });
+              if(adOffCommand == 3){
+                setState(() {
+                  adVoiceOnOff = false;
+                });
+              }
             }
           }
         },
