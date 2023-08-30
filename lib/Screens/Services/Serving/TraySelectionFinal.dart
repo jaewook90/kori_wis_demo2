@@ -1512,13 +1512,21 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     width: 800,
                     child: FilledButton(
                       onPressed: () {
-                        if(_debugTray == true){
-                          enterAdmin(context);
-                        }else{
-                          setState(() {
-                            _mainStatusProvider.debugMode = true;
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            _audioPlayer.dispose();
+                            if(_debugTray == true){
+                              enterAdmin(context);
+                            }else{
+                              setState(() {
+                                _mainStatusProvider.debugMode = true;
+                              });
+                            }
                           });
-                        }
+                        });
                       },
                       style: FilledButton.styleFrom(
                           foregroundColor: Colors.transparent,
