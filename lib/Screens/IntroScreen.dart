@@ -6,7 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
@@ -221,7 +221,7 @@ class _IntroScreenState extends State<IntroScreen>
             } else {
               navPage(
                 context: context,
-                page: const ShippingMainScreen(),
+                page: const ShippingMenuFinal(),
               ).navPageToPage();
             }
           });
@@ -313,7 +313,7 @@ class _IntroScreenState extends State<IntroScreen>
                         } else {
                           navPage(
                             context: context,
-                            page: const ShippingMainScreen(),
+                            page: const ShippingMenuFinal(),
                           ).navPageToPage();
                         }
                       });

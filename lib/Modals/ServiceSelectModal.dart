@@ -5,7 +5,7 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
-import 'package:kori_wis_demo/Screens/Services/ShippingAndDelivery/ShippingMain.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,7 +169,7 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
                               Navigator.pop(context);
                               navPage(
                                       context: context,
-                                      page: ShippingMainScreen())
+                                      page: ShippingMenuFinal())
                                   .navPageToPage();
                             });
                           },
