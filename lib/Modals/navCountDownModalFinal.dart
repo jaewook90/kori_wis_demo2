@@ -12,8 +12,9 @@ import 'package:timer_count_down/timer_count_down.dart';
 
 class NavCountDownModalFinal extends StatefulWidget {
   final String? goalPosition;
+  final String? serviceMode;
 
-  const NavCountDownModalFinal({Key? key, this.goalPosition}) : super(key: key);
+  const NavCountDownModalFinal({Key? key, this.goalPosition, this.serviceMode}) : super(key: key);
 
   @override
   State<NavCountDownModalFinal> createState() => _NavCountDownModalFinalState();
@@ -86,22 +87,26 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     chgUrl = _networkProvider.chgUrl;
 
     countDownPopup = 'assets/screens/Serving/koriServingCountDown.png';
-    if (_servingProvider.trayCheckAll == true) {
-      targetTableNum = _servingProvider.allTable!;
-    } else {
-      if (_servingProvider.table1 != "") {
-        targetTableNum = _servingProvider.table1!;
+    if(widget.serviceMode == 'Serving'){
+      if (_servingProvider.trayCheckAll == true) {
+        targetTableNum = _servingProvider.allTable!;
       } else {
-        if (_servingProvider.table2 != "") {
-          targetTableNum = _servingProvider.table2!;
+        if (_servingProvider.table1 != "") {
+          targetTableNum = _servingProvider.table1!;
         } else {
-          if (_servingProvider.table3 != "") {
-            targetTableNum = _servingProvider.table3!;
+          if (_servingProvider.table2 != "") {
+            targetTableNum = _servingProvider.table2!;
+          } else {
+            if (_servingProvider.table3 != "") {
+              targetTableNum = _servingProvider.table3!;
+            }
           }
         }
       }
+      _servingProvider.targetTableNum = targetTableNum;
+    }else{
+      targetTableNum = widget.goalPosition!;
     }
-    _servingProvider.targetTableNum = targetTableNum;
 
     return Container(
         padding: const EdgeInsets.only(top: 607),
@@ -130,9 +135,14 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   interval: const Duration(seconds: 1),
                   onFinished: () {
                     _audioPlayer.play();
-                    _servingProvider.trayChange = true;
-                    _networkProvider.servTable =
-                        _servingProvider.targetTableNum;
+                    if(widget.serviceMode == 'Shipping'){
+                      _networkProvider.servTable =
+                          widget.goalPosition;
+                    }else{
+                      _servingProvider.trayChange = true;
+                      _networkProvider.servTable =
+                          _servingProvider.targetTableNum;
+                    }
                     PostApi(
                             url: startUrl,
                             endadr: navUrl,
@@ -224,9 +234,14 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    _servingProvider.trayChange = true;
-                    _networkProvider.servTable =
-                        _servingProvider.targetTableNum;
+                    if(widget.serviceMode == 'Shipping'){
+                      _networkProvider.servTable =
+                          widget.goalPosition;
+                    }else{
+                      _servingProvider.trayChange = true;
+                      _networkProvider.servTable =
+                          _servingProvider.targetTableNum;
+                    }
                     PostApi(
                             url: startUrl,
                             endadr: navUrl,

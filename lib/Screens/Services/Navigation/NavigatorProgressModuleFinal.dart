@@ -8,6 +8,8 @@ import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingDoneFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -31,6 +33,8 @@ class _NavigatorProgressModuleFinalState
     extends State<NavigatorProgressModuleFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late MainStatusModel _mainStatusProvider;
+
 
   late int hiddenCounter;
 
@@ -134,6 +138,7 @@ class _NavigatorProgressModuleFinalState
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -214,18 +219,23 @@ class _NavigatorProgressModuleFinalState
         });
         if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
           Future.delayed(const Duration(milliseconds: 230), () {
-            navPage(
-              context: context,
-              page: const ServingProgressFinal(),
-            ).navPageToPage();
+            if(_mainStatusProvider.robotServiceMode == 0){
+              navPage(
+                context: context,
+                page: const ServingProgressFinal(),
+              ).navPageToPage();
+            }else{
+              navPage(context: context, page: ShippingDoneFinal()).navPageToPage();
+            }
           });
         } else if (servTableNum == 'wait') {
           _servingProvider.clearAllTray();
           Future.delayed(const Duration(milliseconds: 230), () {
-            navPage(
-              context: context,
-              page: const TraySelectionFinal(),
-            ).navPageToPage();
+            if(_mainStatusProvider.robotServiceMode == 0){
+              navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+            }else{
+              navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+            }
           });
         } else if (servTableNum == 'charging_pile') {
           Future.delayed(const Duration(milliseconds: 230), () {
@@ -281,7 +291,11 @@ class _NavigatorProgressModuleFinalState
                         });
                         if(hiddenCounter == 5){
                           _servingProvider.clearAllTray();
-                          navPage(context: context, page: const TraySelectionFinal()).navPageToPage();
+                          if(_mainStatusProvider.robotServiceMode == 0){
+                            navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                          }else{
+                            navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                          }
                           PostApi(
                               url: startUrl,
                               endadr: navUrl,
@@ -336,26 +350,33 @@ class _NavigatorProgressModuleFinalState
                               if (servTableNum != 'wait' &&
                                   servTableNum != 'charging_pile') {
                                 Future.delayed(const Duration(milliseconds: 230), () {
-                                  navPage(
-                                    context: context,
-                                    page: const ServingProgressFinal(),
-                                  ).navPageToPage();
+                                  if(_mainStatusProvider.robotServiceMode == 0){
+                                    navPage(
+                                      context: context,
+                                      page: const ServingProgressFinal(),
+                                    ).navPageToPage();
+                                  }else{
+                                    navPage(context: context, page: ShippingDoneFinal()).navPageToPage();
+                                  }
+
                                 });
                               } else if (servTableNum == 'wait') {
                                 _servingProvider.clearAllTray();
                                 Future.delayed(const Duration(milliseconds: 230), () {
-                                  navPage(
-                                    context: context,
-                                    page: const TraySelectionFinal(),
-                                  ).navPageToPage();
+                                  if(_mainStatusProvider.robotServiceMode == 0){
+                                    navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                                  }else{
+                                    navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                                  }
                                 });
 
                               } else if (servTableNum == 'charging_pile') {
                                 Future.delayed(const Duration(milliseconds: 230), () {
-                                  navPage(
-                                    context: context,
-                                    page: const TraySelectionFinal(),
-                                  ).navPageToPage();
+                                  if(_mainStatusProvider.robotServiceMode == 0){
+                                    navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                                  }else{
+                                    navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                                  }
                                 });
                               }
                             });

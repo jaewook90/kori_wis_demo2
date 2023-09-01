@@ -6,6 +6,7 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
@@ -77,9 +78,11 @@ class _AppBarActionState extends State<AppBarAction> {
 
     _initAudio();
     if (widget.screenName != null) {
-      Future.delayed(Duration(seconds: 1), () {
-        _audioPlayer.play();
-      });
+      if(widget.screenName != 'Shipping'){
+        Future.delayed(Duration(seconds: 1), () {
+          _audioPlayer.play();
+        });
+      }
     }
   }
 
@@ -88,10 +91,12 @@ class _AppBarActionState extends State<AppBarAction> {
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
     if (widget.screenName != null) {
-      _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-      _audioPlayer.setVolume(1);
-      if(_audioFile == 'assets/sounds/sound_moving_bg.wav' || _audioFile == 'assets/sounds/docking.wav'){
-        _audioPlayer.setLoopMode(LoopMode.all);
+      if(widget.screenName != "Shipping"){
+        _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+        _audioPlayer.setVolume(1);
+        if(_audioFile == 'assets/sounds/sound_moving_bg.wav' || _audioFile == 'assets/sounds/docking.wav'){
+          _audioPlayer.setLoopMode(LoopMode.all);
+        }
       }
     }
   }
@@ -102,7 +107,9 @@ class _AppBarActionState extends State<AppBarAction> {
     super.dispose();
     _effectPlayer.dispose();
     if (widget.screenName != null) {
-      _audioPlayer.dispose();
+      if (widget.screenName != "Shipping"){
+        _audioPlayer.dispose();
+      }
     }
   }
 
@@ -140,6 +147,15 @@ class _AppBarActionState extends State<AppBarAction> {
                           Future.delayed(Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
                             Navigator.pop(context);
+                          });
+                        });
+                      } else if(widget.screenName == 'Shipping'){
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
                           });
                         });
                       } else {

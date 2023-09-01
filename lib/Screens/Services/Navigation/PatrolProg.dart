@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -29,6 +31,7 @@ class PatrolProgress extends StatefulWidget {
 
 class _PatrolProgressState extends State<PatrolProgress> {
   late NetworkModel _networkProvider;
+  late MainStatusModel _mainStatusProvider;
 
   late bool adPlay;
 
@@ -143,6 +146,7 @@ class _PatrolProgressState extends State<PatrolProgress> {
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
@@ -302,10 +306,11 @@ class _PatrolProgressState extends State<PatrolProgress> {
                                       keyBody: 'wait')
                                   .Posting(context);
                             });
-                            navPage(
-                                    context: context,
-                                    page: const TraySelectionFinal())
-                                .navPageToPage();
+                            if(_mainStatusProvider.robotServiceMode == 0){
+                              navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                            }else{
+                              navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                            }
                           });
                         });
                       },

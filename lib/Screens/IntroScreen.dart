@@ -633,6 +633,10 @@ class _IntroScreenState extends State<IntroScreen>
                                                 _prefs.setString(
                                                     'robotIp', value);
                                                 _prefs.setBool(
+                                                    'introStage1', true);
+                                                _prefs.setBool(
+                                                    'introStage2', true);
+                                                _prefs.setBool(
                                                     'robotInit', !robotInit);
                                                 setState(() {
                                                   _networkProvider.startUrl =

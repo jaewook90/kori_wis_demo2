@@ -233,7 +233,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return const NavCountDownModalFinal();
+          return const NavCountDownModalFinal(serviceMode: 'Serving',);
         });
   }
 

@@ -86,7 +86,7 @@ class _ServingModuleButtonsFinalState extends State<ServingModuleButtonsFinal> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return const NavCountDownModalFinal();
+          return const NavCountDownModalFinal(serviceMode: 'Serving',);
         });
   }
 

@@ -11,6 +11,7 @@ import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
@@ -201,7 +202,11 @@ class _ChargingStationState extends State<ChargingStation> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (CHGFlag == 1) {
-        navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+        if(_mainStatusProvider.robotServiceMode == 0){
+          navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+        }else{
+          navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+        }
       }
     });
 
@@ -1387,10 +1392,11 @@ class _ChargingStationState extends State<ChargingStation> {
                     PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
                         .Posting(context);
                     Future.delayed(Duration(milliseconds: 500), () {
-                      navPage(
-                        context: context,
-                        page: const TraySelectionFinal(),
-                      ).navPageToPage();
+                      if(_mainStatusProvider.robotServiceMode == 0){
+                        navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                      }else{
+                        navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                      }
                     });
                   },
                   child: Text(
