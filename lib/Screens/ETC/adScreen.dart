@@ -47,7 +47,6 @@ class _AdScreenState extends State<AdScreen> {
       "assets/images/adPics/daechan/ad4.png",
       "assets/images/adPics/daechan/ad5.png",
       "assets/images/adPics/daechan/ad6.png",
-      "assets/images/adPics/daechan/ad7.png",
     ];
     _initAudio();
 
@@ -153,13 +152,13 @@ class _AdScreenState extends State<AdScreen> {
                 itemCount: advImages.length,
                 autoplay: true,
                 autoplayDelay: 8000,
-                pagination: const SwiperPagination(
-                    alignment: Alignment.bottomRight,
-                    builder: FractionPaginationBuilder(
-                        color: Colors.white,
-                        fontSize: 20,
-                        activeColor: Colors.white,
-                        activeFontSize: 25)),
+                // pagination: const SwiperPagination(
+                //     alignment: Alignment.bottomRight,
+                //     builder: FractionPaginationBuilder(
+                //         color: Colors.white,
+                //         fontSize: 20,
+                //         activeColor: Colors.white,
+                //         activeFontSize: 25)),
               ),
             )
           ],
