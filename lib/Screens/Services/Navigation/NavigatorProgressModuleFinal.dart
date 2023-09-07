@@ -5,6 +5,7 @@ import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -157,10 +158,22 @@ class _NavigatorProgressModuleFinalState
         destinationSentence = '대기장소';
       });
     }else{
-      setState(() {
-        navSentence = '[서빙] 중 입니다';
-        destinationSentence = '$servTableNum번 테이블';
-      });
+      if(_mainStatusProvider.robotServiceMode == 0){
+        setState(() {
+          navSentence = '[서빙] 중 입니다';
+          destinationSentence = '$servTableNum번 테이블';
+        });
+      }else if(_mainStatusProvider.robotServiceMode == 1){
+        setState(() {
+          navSentence = '[배송] 중 입니다';
+          destinationSentence = '$servTableNum번 테이블';
+        });
+      }else if(_mainStatusProvider.robotServiceMode == 2){
+        setState(() {
+          navSentence = '[안내] 중 입니다';
+          destinationSentence = '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
+        });
+      }
     }
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
@@ -224,8 +237,15 @@ class _NavigatorProgressModuleFinalState
                 context: context,
                 page: const ServingProgressFinal(),
               ).navPageToPage();
-            }else{
+            }else if (_mainStatusProvider.robotServiceMode == 1){
               navPage(context: context, page: ShippingDoneFinal()).navPageToPage();
+            }else if (_mainStatusProvider.robotServiceMode == 2){
+              PostApi(
+                  url: startUrl,
+                  endadr: navUrl,
+                  keyBody: 'wait')
+                  .Posting(context);
+              navPage(context: context, page: FacilityScreen()).navPageToPage();
             }
           });
         } else if (servTableNum == 'wait') {
@@ -233,8 +253,11 @@ class _NavigatorProgressModuleFinalState
           Future.delayed(const Duration(milliseconds: 230), () {
             if(_mainStatusProvider.robotServiceMode == 0){
               navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-            }else{
+            }else if (_mainStatusProvider.robotServiceMode == 1){
               navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+            }else if (_mainStatusProvider.robotServiceMode == 2){
+
+              navPage(context: context, page: FacilityScreen()).navPageToPage();
             }
           });
         } else if (servTableNum == 'charging_pile') {

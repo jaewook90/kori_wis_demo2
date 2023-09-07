@@ -31,6 +31,9 @@ void main() async {
                 mainSoundMute: true,
                 restartService: false,
                 autoCharge: 20,
+              facilityDetail: [],
+              facilityName: [],
+              facilityNum: []
             )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(

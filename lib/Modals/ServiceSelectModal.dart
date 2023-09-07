@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/returnDishTableSelectModal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/ETC/adScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
@@ -90,13 +91,14 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
               ),
             ),
             Positioned(
-              top: 30,
+                top: 30,
                 right: 30,
                 child: IconButton(
-                    onPressed: () {
-                      navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                    },
-                    icon: Icon(Icons.close, color: Colors.white),
+                  onPressed: () {
+                    navPage(context: context, page: TraySelectionFinal())
+                        .navPageToPage();
+                  },
+                  icon: Icon(Icons.close, color: Colors.white),
                   iconSize: 50,
                 )),
             Positioned(
@@ -311,7 +313,20 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
                               fixedSize: const Size(
                                   1080 * 0.4 - 5, ((1920 * 0.7 - 220) / 3))),
                           onPressed: () {
-
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              Future.delayed(Duration(milliseconds: 230), () {
+                                _effectPlayer.dispose();
+                                setState(() {
+                                  _mainStatusProvider.robotServiceMode = 2;
+                                });
+                                navPage(
+                                  context: context,
+                                  page: const FacilityScreen(),
+                                ).navPageToPage();
+                              });
+                            });
                           },
                           child: const Center(
                             child: Text(

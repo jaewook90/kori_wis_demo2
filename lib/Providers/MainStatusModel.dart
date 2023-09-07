@@ -17,6 +17,11 @@ class MainStatusModel with ChangeNotifier {
 
   int? robotServiceMode; // 0: 서빙, 1: 택배, 딜리버리
 
+  List<String>? facilityNum;
+  List<String>? facilityName;
+  List<String>? facilityDetail;
+  int? targetFacilityIndex;
+
   MainStatusModel({
     this.debugMode,
     this.batBal,
@@ -25,6 +30,9 @@ class MainStatusModel with ChangeNotifier {
     this.restartService,
     this.mainSoundMute,
     this.autoCharge,
+    this.facilityDetail,
+    this.facilityName,
+    this.facilityNum
   });
 // 서빙 이송 중 광고 재생
 }

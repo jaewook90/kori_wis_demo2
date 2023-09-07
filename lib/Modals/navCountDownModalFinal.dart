@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -14,7 +16,8 @@ class NavCountDownModalFinal extends StatefulWidget {
   final String? goalPosition;
   final String? serviceMode;
 
-  const NavCountDownModalFinal({Key? key, this.goalPosition, this.serviceMode}) : super(key: key);
+  const NavCountDownModalFinal({Key? key, this.goalPosition, this.serviceMode})
+      : super(key: key);
 
   @override
   State<NavCountDownModalFinal> createState() => _NavCountDownModalFinalState();
@@ -23,6 +26,7 @@ class NavCountDownModalFinal extends StatefulWidget {
 class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late MainStatusModel _mainStatusProvider;
 
   final CountdownController _controller = CountdownController(autoStart: true);
 
@@ -81,13 +85,14 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
     countDownPopup = 'assets/screens/Serving/koriServingCountDown.png';
-    if(widget.serviceMode == 'Serving'){
+    if (widget.serviceMode == 'Serving') {
       if (_servingProvider.trayCheckAll == true) {
         targetTableNum = _servingProvider.allTable!;
       } else {
@@ -104,7 +109,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
         }
       }
       _servingProvider.targetTableNum = targetTableNum;
-    }else{
+    } else {
       targetTableNum = widget.goalPosition!;
     }
 
@@ -135,10 +140,9 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   interval: const Duration(seconds: 1),
                   onFinished: () {
                     _audioPlayer.play();
-                    if(widget.serviceMode == 'Shipping'){
-                      _networkProvider.servTable =
-                          widget.goalPosition;
-                    }else{
+                    if (widget.serviceMode == 'Shipping') {
+                      _networkProvider.servTable = widget.goalPosition;
+                    } else {
                       _servingProvider.trayChange = true;
                       _networkProvider.servTable =
                           _servingProvider.targetTableNum;
@@ -148,7 +152,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             endadr: navUrl,
                             keyBody: targetTableNum)
                         .Posting(context);
-                    Future.delayed(Duration(milliseconds: 230), () {
+                    Future.delayed(const Duration(milliseconds: 230), () {
                       _audioPlayer.dispose();
                       _effectPlayer.dispose();
                       navPage(
@@ -160,15 +164,37 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                 ),
               ),
             ),
-            const Positioned(
-                left: 240,
-                top: 100,
-                child: Text('초 후 서빙을 시작합니다.',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white))),
+            _mainStatusProvider.robotServiceMode == 0
+                ? const Positioned(
+                    left: 240,
+                    top: 100,
+                    child: Text('초 후 서빙을 시작합니다.',
+                        style: TextStyle(
+                            fontFamily: 'kor',
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)))
+                : _mainStatusProvider.robotServiceMode == 1
+                    ? const Positioned(
+                        left: 240,
+                        top: 100,
+                        child: Text('초 후 배송을 시작합니다.',
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)))
+                    : _mainStatusProvider.robotServiceMode == 2
+                        ? const Positioned(
+                            left: 240,
+                            top: 100,
+                            child: Text('초 후 안내를 시작합니다.',
+                                style: TextStyle(
+                                    fontFamily: 'kor',
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)))
+                        : Container(),
             Positioned(
               left: 0,
               top: 242,
@@ -184,24 +210,35 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    if (_servingProvider.table1 != "" ||
-                        (_servingProvider.table2 != "" ||
-                            _servingProvider.table3 != "")) {
-                      Future.delayed(Duration(milliseconds: 230), () {
-                        _audioPlayer.dispose();
-                        _effectPlayer.dispose();
-                        navPage(
-                                context: context,
-                                page: const TraySelectionFinal())
-                            .navPageToPage();
-                      });
-                    } else {
-                      Future.delayed(Duration(milliseconds: 230), () {
+                    if(_mainStatusProvider.robotServiceMode==0){
+                      if (_servingProvider.table1 != "" ||
+                          (_servingProvider.table2 != "" ||
+                              _servingProvider.table3 != "")) {
+                        Future.delayed(const Duration(milliseconds: 230), () {
+                          _audioPlayer.dispose();
+                          _effectPlayer.dispose();
+                          navPage(
+                              context: context,
+                              page: const TraySelectionFinal())
+                              .navPageToPage();
+                        });
+                      } else {
+                        Future.delayed(const Duration(milliseconds: 230), () {
+                          _audioPlayer.dispose();
+                          _effectPlayer.dispose();
+                          navPage(
+                              context: context,
+                              page: const TraySelectionFinal())
+                              .navPageToPage();
+                        });
+                      }
+                    }else if(_mainStatusProvider.robotServiceMode==2){
+                      Future.delayed(const Duration(milliseconds: 230), () {
                         _audioPlayer.dispose();
                         _effectPlayer.dispose();
                         navPage(
                             context: context,
-                            page: const TraySelectionFinal())
+                            page: const FacilityScreen())
                             .navPageToPage();
                       });
                     }
@@ -234,10 +271,10 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                     _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    if(widget.serviceMode == 'Shipping'){
-                      _networkProvider.servTable =
-                          widget.goalPosition;
-                    }else{
+                    if (widget.serviceMode == 'Shipping' ||
+                        widget.serviceMode == 'facilityGuide') {
+                      _networkProvider.servTable = widget.goalPosition;
+                    } else {
                       _servingProvider.trayChange = true;
                       _networkProvider.servTable =
                           _servingProvider.targetTableNum;
@@ -247,7 +284,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             endadr: navUrl,
                             keyBody: targetTableNum)
                         .Posting(context);
-                    Future.delayed(Duration(milliseconds: 230), () {
+                    Future.delayed(const Duration(milliseconds: 230), () {
                       _audioPlayer.dispose();
                       _effectPlayer.dispose();
                       navPage(
