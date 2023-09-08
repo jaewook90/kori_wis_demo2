@@ -73,7 +73,7 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
             height: 108,
             child: Stack(
               children: [
-                AppBarAction(homeButton: true),
+                AppBarAction(homeButton: true, screenName: 'facilityList'),
                 AppBarStatus(),
               ],
             ),

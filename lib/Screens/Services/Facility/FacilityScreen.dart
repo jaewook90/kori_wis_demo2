@@ -61,9 +61,15 @@ class _FacilityScreenState extends State<FacilityScreen> {
       '여기는 716호 사물실 입니다.'
     ];
 
-    if ((Provider.of<MainStatusModel>(context, listen: false).facilityNum!.isEmpty ||
-            Provider.of<MainStatusModel>(context, listen: false).facilityName!.isEmpty) ||
-        Provider.of<MainStatusModel>(context, listen: false).facilityDetail!.isEmpty) {
+    if ((Provider.of<MainStatusModel>(context, listen: false)
+                .facilityNum!
+                .isEmpty ||
+            Provider.of<MainStatusModel>(context, listen: false)
+                .facilityName!
+                .isEmpty) ||
+        Provider.of<MainStatusModel>(context, listen: false)
+            .facilityDetail!
+            .isEmpty) {
       for (int i = 0; i < officeQTY; i++) {
         setState(() {
           Provider.of<MainStatusModel>(context, listen: false)
@@ -112,10 +118,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                     left: 170,
                     child: TextButton(
                       onPressed: () {
-                        navPage(context: context, page: FacilityListScreen()).navPageToPage();
+                        navPage(context: context, page: FacilityListScreen())
+                            .navPageToPage();
                       },
                       style: TextButton.styleFrom(
-                          side: const BorderSide(color: Colors.white, width: 2)),
+                          side:
+                              const BorderSide(color: Colors.white, width: 2)),
                       child: const Text(
                         '입주사 목록',
                         style: TextStyle(
@@ -143,103 +151,98 @@ class _FacilityScreenState extends State<FacilityScreen> {
               decoration: const BoxDecoration(
                   border: Border.fromBorderSide(
                       BorderSide(color: Colors.white, width: 2))),
-              child: const Center(
-                child: Text(
-                  '시설 안내도',
-                  style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'kor',
-                      fontWeight: FontWeight.bold),
+              child: Stack(children: [
+                const Center(
+                  child: Text(
+                    '시설 안내도',
+                    style: TextStyle(
+                        fontSize: 60,
+                        fontFamily: 'kor',
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
+                for (int i = 0; i < 16; i++)
+                  Positioned(
+                    top: i == 0
+                        ? 200
+                        : i == 1
+                            ? 250
+                            : i == 2
+                                ? 300
+                                : i == 3
+                                    ? (i % 3) * 50 + 200
+                                    : i == 4
+                                        ? (i % 3) * 50 + 200
+                                        : i == 5
+                                            ? (i % 3) * 50 + 200
+                                            : i == 6
+                                                ? (i % 3) * 50 + 200
+                                                : i == 7
+                                                    ? (i % 3) * 50 + 200
+                                                    : i == 8
+                                                        ? (i % 3) * 50 + 200
+                                                        : i == 9
+                                                            ? (i % 3) * 50 + 200
+                                                            : i == 10
+                                                                ? (i % 3) * 50 +
+                                                                    200
+                                                                : i == 11
+                                                                    ? (i % 3) *
+                                                                            50 +
+                                                                        200
+                                                                    : i == 12
+                                                                        ? (i % 3) *
+                                                                                50 +
+                                                                            200
+                                                                        : i == 13
+                                                                            ? (i % 3) * 50 + 200
+                                                                            : i == 14
+                                                                                ? (i % 3) * 50 + 200
+                                                                                : i == 15
+                                                                                    ? (i % 3) * 50 + 200
+                                                                                    : 0,
+                    left: i == 0
+                        ? 200
+                        : i == 1
+                            ? 200
+                            : i == 2
+                                ? 200
+                                : i == 3
+                                    ? 300
+                                    : i == 4
+                                        ? 300
+                                        : i == 5
+                                            ? 300
+                                            : i == 6
+                                                ? 400
+                                                : i == 7
+                                                    ? 400
+                                                    : i == 8
+                                                        ? 400
+                                                        : i == 9
+                                                            ? 500
+                                                            : i == 10
+                                                                ? 500
+                                                                : i == 11
+                                                                    ? 500
+                                                                    : i == 12
+                                                                        ? 600
+                                                                        : i == 13
+                                                                            ? 600
+                                                                            : i == 14
+                                                                                ? 600
+                                                                                : i == 15
+                                                                                    ? 700
+                                                                                    : 0,
+                    child: FilledButton(
+                        onPressed: () {
+                          facilityInform(context, i);
+                        },
+                        child: Text('${i + 701}')),
+                  ),
+              ]),
             ),
           ),
-          for (int i = 0; i < 16; i++)
-            Positioned(
-              top: i == 0
-                  ? 200
-                  : i == 1
-                      ? 250
-                      : i == 2
-                          ? 300
-                          : i == 3
-                              ? (i % 3) * 50 + 200
-                              : i == 4
-                                  ? (i % 3) * 50 + 200
-                                  : i == 5
-                                      ? (i % 3) * 50 + 200
-                                      : i == 6
-                                          ? (i % 3) * 50 + 200
-                                          : i == 7
-                                              ? (i % 3) * 50 + 200
-                                              : i == 8
-                                                  ? (i % 3) * 50 + 200
-                                                  : i == 9
-                                                      ? (i % 3) * 50 + 200
-                                                      : i == 10
-                                                          ? (i % 3) * 50 + 200
-                                                          : i == 11
-                                                              ? (i % 3) * 50 +
-                                                                  200
-                                                              : i == 12
-                                                                  ? (i % 3) *
-                                                                          50 +
-                                                                      200
-                                                                  : i == 13
-                                                                      ? (i % 3) *
-                                                                              50 +
-                                                                          200
-                                                                      : i == 14
-                                                                          ? (i % 3) * 50 +
-                                                                              200
-                                                                          : i == 15
-                                                                              ? (i % 3) * 50 + 200
-                                                                              : 0,
-              left: i == 0
-                  ? 200
-                  : i == 1
-                      ? 200
-                      : i == 2
-                          ? 200
-                          : i == 3
-                              ? 300
-                              : i == 4
-                                  ? 300
-                                  : i == 5
-                                      ? 300
-                                      : i == 6
-                                          ? 400
-                                          : i == 7
-                                              ? 400
-                                              : i == 8
-                                                  ? 400
-                                                  : i == 9
-                                                      ? 500
-                                                      : i == 10
-                                                          ? 500
-                                                          : i == 11
-                                                              ? 500
-                                                              : i == 12
-                                                                  ? 600
-                                                                  : i == 13
-                                                                      ? 600
-                                                                      : i == 14
-                                                                          ? 600
-                                                                          : i == 15
-                                                                              ? 700
-                                                                              : 0,
-              child: FilledButton(
-                  onPressed: () {
-                    // setState(() {
-                    //   // Provider.of<MainStatusModel>(context, listen: false).facilityNum!.add(habioSevenOffice[i].officeNum!);
-                    //   Provider.of<MainStatusModel>(context, listen: false).facilityNum![i] = habioSevenOffice[i].officeNum!;
-                    // });
-                    // print(Provider.of<MainStatusModel>(context, listen: false).facilityNum![i]);
-                    // print(habioSevenOffice[i].officeNum);
-                    facilityInform(context, i);
-                  },
-                  child: Text('${i + 701}')),
-            ),
         ],
       ),
     );

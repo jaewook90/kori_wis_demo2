@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -158,7 +159,17 @@ class _AppBarActionState extends State<AppBarAction> {
                             navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
                           });
                         });
-                      } else {
+                      } else if (widget.screenName == 'facilityList'){
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(context: context, page: FacilityScreen()).navPageToPage();
+                          });
+                        });
+                      }
+                      else {
                         _effectPlayer.seek(Duration(seconds: 0));
                         _effectPlayer.play();
                         if (widget.screenName != null) {
