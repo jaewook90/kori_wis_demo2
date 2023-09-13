@@ -47,6 +47,11 @@ class _AdScreenState extends State<AdScreen> {
       "assets/images/adPics/daechan/ad4.png",
       "assets/images/adPics/daechan/ad5.png",
       "assets/images/adPics/daechan/ad6.png",
+      "assets/images/adPics/daechan/ad7.png",
+      "assets/images/adPics/daechan/ad8.png",
+      "assets/images/adPics/daechan/ad9.png",
+      "assets/images/adPics/daechan/ad10.png",
+      "assets/images/adPics/daechan/ad11.png",
     ];
     _initAudio();
 
