@@ -64,9 +64,14 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
 
   dynamic newPoseData;
   dynamic poseData;
+  dynamic newCordData;
+  dynamic cordData;
 
   late List<String> positioningList;
   late List<String> positionList;
+  late List<String> positioningCordList;
+  late List<String> positioningSeparatedCordList;
+  late List<List<String>> positionCordList;
 
   @override
   void initState() {
@@ -81,8 +86,13 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
     volumeOnOff =
         Provider.of<MainStatusModel>(context, listen: false).mainSoundMute!;
 
+    Provider.of<MainStatusModel>(context, listen: false).robotServiceMode = 1;
+
     positioningList = [];
     positionList = [];
+    positioningSeparatedCordList = [];
+    positioningCordList = [];
+    positionCordList = [];
 
     autoChargeConfig =
         Provider.of<MainStatusModel>(context, listen: false).autoCharge!;
@@ -93,6 +103,9 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
     chgUrl = Provider.of<NetworkModel>(context, listen: false).chgUrl;
+
+    poseDataUpdate();
+    // poseDataUpdate();
 
     if (Provider.of<NetworkModel>(context, listen: false)
         .getPoseData!
@@ -145,6 +158,7 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
 
     setState(() {
       positionList = [];
+      positionCordList = [];
       poseDataUpdate();
     });
   }
@@ -153,11 +167,19 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
     newPoseData = Provider.of<NetworkModel>(context, listen: false).getApiData;
     if (newPoseData != null) {
       poseData = newPoseData;
+      cordData = newPoseData;
       String editPoseData = poseData.toString();
 
       editPoseData = editPoseData.replaceAll('{', "");
       editPoseData = editPoseData.replaceAll('}', "");
+
       List<String> positionWithCordList = editPoseData.split("], ");
+
+      String editCordData = cordData.toString();
+
+      editCordData = editCordData.replaceAll('{', "");
+      editCordData = editCordData.replaceAll('}', "");
+      List<String> cordWithNumList = editCordData.split("]");
 
       for (int i = 0; i < positionWithCordList.length; i++) {
         positioningList = positionWithCordList[i].split(":");
@@ -168,6 +190,14 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
               positionList.add(poseData);
             }
           }
+        }
+      }
+      for (int h = 0; h < cordWithNumList.length-1; h++) {
+        positioningCordList = cordWithNumList[h].split(": [");
+        positioningSeparatedCordList = positioningCordList[1].split(', ');
+        positioningSeparatedCordList.removeAt(2);
+        if(positionList[h]!='charging_pile'){
+          positionCordList.add(positioningSeparatedCordList);
         }
       }
       positionList.sort();
@@ -220,11 +250,14 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
 
     if (positionList.isEmpty) {
       positionList = _networkProvider.getPoseData!;
+      positionCordList = _mainStatusProvider.cordList!;
     } else {
       _networkProvider.getPoseData = positionList;
+      _mainStatusProvider.cordList = positionCordList;
     }
 
     print('pose : $positionList');
+    print('cord : $positionCordList');
 
     if (CHGFlag == 1) {
       _mainStatusProvider.restartService = false;
@@ -498,8 +531,7 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
                                               fontFamily: 'kor',
                                               fontSize: 25,
                                               color: Colors.white),
-                                          keyboardType: const TextInputType
-                                              .numberWithOptions(),
+                                          keyboardType: TextInputType.url,
                                           decoration: const InputDecoration(
                                               border: UnderlineInputBorder(
                                                 borderSide: BorderSide(
@@ -1347,23 +1379,18 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
                         Future.delayed(const Duration(milliseconds: 230), () {
                           _effectPlayer.dispose();
                           navPage(
-                              context: context,
-                              page: const ShippingDestinationNewFinal())
+                                  context: context,
+                                  page: const ShippingDestinationNewFinal())
                               .navPageToPage();
                         });
                       });
                     },
                     style: FilledButton.styleFrom(
-                      fixedSize: Size(870, 160),
-                      backgroundColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40)
-                      ),
-                      side: BorderSide(
-                        width: 5,
-                        color: Colors.lightBlue
-                      )
-                    ),
+                        fixedSize: Size(870, 160),
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40)),
+                        side: BorderSide(width: 5, color: Colors.lightBlue)),
                     child: null,
                   )),
               // 로봇 화면 터치

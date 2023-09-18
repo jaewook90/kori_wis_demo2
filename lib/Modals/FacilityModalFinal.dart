@@ -108,13 +108,14 @@ class _FacilityModalState extends State<FacilityModal> {
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     _mainStatusProvider.targetFacilityIndex = widget.number;
+
     return Container(
-        padding: const EdgeInsets.only(top: 288),
+        padding: const EdgeInsets.only(top: 588),
         child: AlertDialog(
           alignment: Alignment.topCenter,
           content: Container(
             width: 740,
-            height: 1000,
+            height: 300,
             decoration: const BoxDecoration(
               color: Colors.black,
               border: Border.fromBorderSide(
@@ -127,25 +128,25 @@ class _FacilityModalState extends State<FacilityModal> {
             child: Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.only(top: 60),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SizedBox(
-                            width: 100,
+                            width: 150,
                           ),
-                          Text('${_mainStatusProvider.facilityNum![widget.number!].toString()} 호',
+                          Text('${_mainStatusProvider.facilityNum![widget.number!]}',
                               style: const TextStyle(
                                   fontFamily: 'kor',
                                   fontSize: 35,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white)),
                           const SizedBox(
-                            width: 100,
+                            width: 150,
                           ),
-                          Text(_mainStatusProvider.facilityName![widget.number!].toString(),
+                          Text(_mainStatusProvider.facilityName![widget.number!],
                               style: const TextStyle(
                                   fontFamily: 'kor',
                                   fontSize: 35,
@@ -153,41 +154,47 @@ class _FacilityModalState extends State<FacilityModal> {
                                   color: Colors.white)),
                         ],
                       ),
-                      const Divider(
-                        height: 60,
-                        color: Colors.white,
-                        indent: 50,
-                        endIndent: 50,
-                        thickness: 3,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                          ),
-                          Text(_mainStatusProvider.facilityDetail![widget.number!].toString(),
-                              style: const TextStyle(
-                                  fontFamily: 'kor',
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        ],
-                      ),
+                      // const Divider(
+                      //   height: 60,
+                      //   color: Colors.white,
+                      //   indent: 50,
+                      //   endIndent: 50,
+                      //   thickness: 3,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     const SizedBox(
+                      //       width: 100,
+                      //     ),
+                      //     Text(_mainStatusProvider.facilityDetail![widget.number!].toString(),
+                      //         style: const TextStyle(
+                      //             fontFamily: 'kor',
+                      //             fontSize: 35,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white)),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),
                 Positioned(
                   left: 0,
-                  top: 800,
+                  top: 170,
                   child: Row(
                     children: [
                       FilledButton(
                         style: FilledButton.styleFrom(
                             enableFeedback: false,
                             backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
+                            shape: LinearBorder(
+                                side: BorderSide(
+                                    width: 1,
+                                    color: Colors.white
+                                ),
+                                top: LinearBorderEdge(size: 1),
+                              end: LinearBorderEdge(size: 1)
+                            ),
                             fixedSize: const Size(370, 120)),
                         onPressed: () {
                           if (EMGStatus == 0) {
@@ -204,7 +211,7 @@ class _FacilityModalState extends State<FacilityModal> {
                                       const Duration(milliseconds: 230), () {
                                     _effectPlayer.dispose();
                                     // 우선 8포인트까지 존재하여 나머지 함수를 이용함
-                                    showCountDownPopup(context, (((widget.number!%8)+1).toString()));
+                                    showCountDownPopup(context, _mainStatusProvider.facilityNum![widget.number!]);
                                   });
 
                               });
@@ -225,8 +232,14 @@ class _FacilityModalState extends State<FacilityModal> {
                         style: FilledButton.styleFrom(
                             enableFeedback: false,
                             backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
+                            shape: LinearBorder(
+                                side: BorderSide(
+                                    width: 1,
+                                    color: Colors.white
+                                ),
+                                top: LinearBorderEdge(size: 1),
+                              start: LinearBorderEdge(size: 1)
+                            ),
                             fixedSize: const Size(370, 120)),
                         onPressed: () {
                           WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -36,7 +36,6 @@ class _NavigatorProgressModuleFinalState
   late ServingModel _servingProvider;
   late MainStatusModel _mainStatusProvider;
 
-
   late int hiddenCounter;
 
   late String backgroundImageServ;
@@ -72,7 +71,8 @@ class _NavigatorProgressModuleFinalState
     arrivedServingTable = false;
     targetTableNum = "";
 
-    _debugMode = Provider.of<MainStatusModel>((context), listen: false).debugMode!;
+    _debugMode =
+        Provider.of<MainStatusModel>((context), listen: false).debugMode!;
   }
 
   Future<dynamic> Getting(String hostUrl, String endUrl) async {
@@ -147,39 +147,42 @@ class _NavigatorProgressModuleFinalState
 
     servTableNum = _networkProvider.servTable!;
 
-    if(servTableNum == 'charging_pile'){
+    if (servTableNum == 'charging_pile') {
       setState(() {
         navSentence = '[이동] 중 입니다';
         destinationSentence = '충전스테이션';
       });
-    }else if(servTableNum == 'wait'){
+    } else if (servTableNum == 'wait') {
       setState(() {
         navSentence = '[이동] 중 입니다';
         destinationSentence = '대기장소';
       });
-    }else{
-      if(_mainStatusProvider.robotServiceMode == 0){
+    } else {
+      if (_mainStatusProvider.robotServiceMode == 0) {
         setState(() {
           navSentence = '[서빙] 중 입니다';
           destinationSentence = '$servTableNum번 테이블';
         });
-      }else if(_mainStatusProvider.robotServiceMode == 1){
+      } else if (_mainStatusProvider.robotServiceMode == 1) {
         setState(() {
           navSentence = '[배송] 중 입니다';
-          destinationSentence = '$servTableNum번 테이블';
+          destinationSentence = '${_mainStatusProvider.targetRoomNum} 호';
         });
-      }else if(_mainStatusProvider.robotServiceMode == 2){
+      } else if (_mainStatusProvider.robotServiceMode == 2) {
         setState(() {
           navSentence = '[안내] 중 입니다';
-          destinationSentence = '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
+          destinationSentence =
+              '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
         });
       }
     }
 
     backgroundImageServ = "assets/screens/Nav/koriZFinalServProgNav.png";
 
-    if (_servingProvider.targetTableNum != null) {
-      targetTableNum = _servingProvider.targetTableNum!;
+    if (_mainStatusProvider.robotServiceMode == 0) {
+      if (_servingProvider.targetTableNum != null) {
+        targetTableNum = _servingProvider.targetTableNum!;
+      }
     }
 
     setState(() {
@@ -219,6 +222,11 @@ class _NavigatorProgressModuleFinalState
         }
       }
     }
+    if (_mainStatusProvider.robotServiceMode == 1) {
+
+        targetTableNum = 'wait';
+
+    }
     _servingProvider.targetTableNum = targetTableNum;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -232,18 +240,16 @@ class _NavigatorProgressModuleFinalState
         });
         if (servTableNum != 'wait' && servTableNum != 'charging_pile') {
           Future.delayed(const Duration(milliseconds: 230), () {
-            if(_mainStatusProvider.robotServiceMode == 0){
+            if (_mainStatusProvider.robotServiceMode == 0) {
               navPage(
                 context: context,
                 page: const ServingProgressFinal(),
               ).navPageToPage();
-            }else if (_mainStatusProvider.robotServiceMode == 1){
-              navPage(context: context, page: ShippingDoneFinal()).navPageToPage();
-            }else if (_mainStatusProvider.robotServiceMode == 2){
-              PostApi(
-                  url: startUrl,
-                  endadr: navUrl,
-                  keyBody: 'wait')
+            } else if (_mainStatusProvider.robotServiceMode == 1) {
+              navPage(context: context, page: ShippingDoneFinal())
+                  .navPageToPage();
+            } else if (_mainStatusProvider.robotServiceMode == 2) {
+              PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
                   .Posting(context);
               navPage(context: context, page: FacilityScreen()).navPageToPage();
             }
@@ -251,12 +257,13 @@ class _NavigatorProgressModuleFinalState
         } else if (servTableNum == 'wait') {
           _servingProvider.clearAllTray();
           Future.delayed(const Duration(milliseconds: 230), () {
-            if(_mainStatusProvider.robotServiceMode == 0){
-              navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-            }else if (_mainStatusProvider.robotServiceMode == 1){
-              navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
-            }else if (_mainStatusProvider.robotServiceMode == 2){
-
+            if (_mainStatusProvider.robotServiceMode == 0) {
+              navPage(context: context, page: TraySelectionFinal())
+                  .navPageToPage();
+            } else if (_mainStatusProvider.robotServiceMode == 1) {
+              navPage(context: context, page: ShippingMenuFinal())
+                  .navPageToPage();
+            } else if (_mainStatusProvider.robotServiceMode == 2) {
               navPage(context: context, page: FacilityScreen()).navPageToPage();
             }
           });
@@ -267,10 +274,9 @@ class _NavigatorProgressModuleFinalState
               page: const KoriDocking(),
             ).navPageToPage();
           });
-
         }
       }
-      if(navStatus == 4 && arrivedServingTable == false){
+      if (navStatus == 4 && arrivedServingTable == false) {
         setState(() {
           arrivedServingTable = true;
           navStatus = 0;
@@ -297,7 +303,10 @@ class _NavigatorProgressModuleFinalState
               height: 108,
               child: Stack(
                 children: [
-                  const AppBarAction(homeButton: false, screenName: "NavigationProgress",),
+                  const AppBarAction(
+                    homeButton: false,
+                    screenName: "NavigationProgress",
+                  ),
                   const AppBarStatus(),
                   Positioned(
                     right: 30,
@@ -307,39 +316,41 @@ class _NavigatorProgressModuleFinalState
                         setState(() {
                           hiddenCounter++;
                         });
-                        Future.delayed(const Duration(milliseconds: 2000),(){
+                        Future.delayed(const Duration(milliseconds: 2000), () {
                           setState(() {
                             hiddenCounter = 0;
                           });
                         });
-                        if(hiddenCounter == 5){
+                        if (hiddenCounter == 5) {
                           _servingProvider.clearAllTray();
-                          if(_mainStatusProvider.robotServiceMode == 0){
-                            navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                          }else{
-                            navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                          if (_mainStatusProvider.robotServiceMode == 0) {
+                            navPage(
+                                    context: context,
+                                    page: TraySelectionFinal())
+                                .navPageToPage();
+                          } else {
+                            navPage(context: context, page: ShippingMenuFinal())
+                                .navPageToPage();
                           }
                           PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: 'wait')
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: 'wait')
                               .Posting(context);
                         }
                       },
                       style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
                           // side: BorderSide(color: Colors.white, width: 5),
                           surfaceTintColor: Colors.transparent,
                           disabledBackgroundColor: Colors.transparent,
-
                           foregroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                           disabledForegroundColor: Colors.transparent,
-
                           fixedSize: const Size(120, 60),
                           enableFeedback: false,
-                          backgroundColor: Colors.transparent
-                      ),
+                          backgroundColor: Colors.transparent),
                       child: null,
                     ),
                   ),
@@ -372,33 +383,52 @@ class _NavigatorProgressModuleFinalState
                               });
                               if (servTableNum != 'wait' &&
                                   servTableNum != 'charging_pile') {
-                                Future.delayed(const Duration(milliseconds: 230), () {
-                                  if(_mainStatusProvider.robotServiceMode == 0){
+                                Future.delayed(
+                                    const Duration(milliseconds: 230), () {
+                                  if (_mainStatusProvider.robotServiceMode ==
+                                      0) {
                                     navPage(
                                       context: context,
                                       page: const ServingProgressFinal(),
                                     ).navPageToPage();
-                                  }else{
-                                    navPage(context: context, page: ShippingDoneFinal()).navPageToPage();
+                                  } else {
+                                    navPage(
+                                            context: context,
+                                            page: ShippingDoneFinal())
+                                        .navPageToPage();
                                   }
-
                                 });
                               } else if (servTableNum == 'wait') {
                                 _servingProvider.clearAllTray();
-                                Future.delayed(const Duration(milliseconds: 230), () {
-                                  if(_mainStatusProvider.robotServiceMode == 0){
-                                    navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                                  }else{
-                                    navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                                Future.delayed(
+                                    const Duration(milliseconds: 230), () {
+                                  if (_mainStatusProvider.robotServiceMode ==
+                                      0) {
+                                    navPage(
+                                            context: context,
+                                            page: TraySelectionFinal())
+                                        .navPageToPage();
+                                  } else {
+                                    navPage(
+                                            context: context,
+                                            page: ShippingMenuFinal())
+                                        .navPageToPage();
                                   }
                                 });
-
                               } else if (servTableNum == 'charging_pile') {
-                                Future.delayed(const Duration(milliseconds: 230), () {
-                                  if(_mainStatusProvider.robotServiceMode == 0){
-                                    navPage(context: context, page: TraySelectionFinal()).navPageToPage();
-                                  }else{
-                                    navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                                Future.delayed(
+                                    const Duration(milliseconds: 230), () {
+                                  if (_mainStatusProvider.robotServiceMode ==
+                                      0) {
+                                    navPage(
+                                            context: context,
+                                            page: TraySelectionFinal())
+                                        .navPageToPage();
+                                  } else {
+                                    navPage(
+                                            context: context,
+                                            page: ShippingMenuFinal())
+                                        .navPageToPage();
                                   }
                                 });
                               }
@@ -440,8 +470,14 @@ class _NavigatorProgressModuleFinalState
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
-                          const SizedBox(width: 15,),
+                          const Icon(
+                            Icons.location_on_outlined,
+                            size: 65,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
                           Text(
                             destinationSentence,
                             textAlign: TextAlign.start,

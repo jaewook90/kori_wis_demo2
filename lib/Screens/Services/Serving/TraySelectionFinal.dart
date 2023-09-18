@@ -61,9 +61,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
   dynamic newPoseData;
   dynamic poseData;
+  dynamic newCordData;
+  dynamic cordData;
 
   late List<String> positioningList;
   late List<String> positionList;
+  late List<String> positioningCordList;
+  late List<String> positioningSeparatedCordList;
+  late List<List<String>> positionCordList;
 
   String? startUrl;
   String? chgUrl;
@@ -119,6 +124,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     positioningList = [];
     positionList = [];
+    positioningSeparatedCordList = [];
+    positioningCordList = [];
+    positionCordList = [];
 
     backgroundImage = "assets/screens/Serving/KoriServingMain.png";
 
@@ -197,6 +205,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     setState(() {
       positionList = [];
+      positionCordList = [];
       poseDataUpdate();
     });
   }
@@ -205,11 +214,19 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
     newPoseData = Provider.of<NetworkModel>(context, listen: false).getApiData;
     if (newPoseData != null) {
       poseData = newPoseData;
+      cordData = newPoseData;
       String editPoseData = poseData.toString();
 
       editPoseData = editPoseData.replaceAll('{', "");
       editPoseData = editPoseData.replaceAll('}', "");
+
       List<String> positionWithCordList = editPoseData.split("], ");
+
+      String editCordData = cordData.toString();
+
+      editCordData = editCordData.replaceAll('{', "");
+      editCordData = editCordData.replaceAll('}', "");
+      List<String> cordWithNumList = editCordData.split("]");
 
       for (int i = 0; i < positionWithCordList.length; i++) {
         positioningList = positionWithCordList[i].split(":");
@@ -220,6 +237,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
               positionList.add(poseData);
             }
           }
+        }
+      }
+      for (int h = 0; h < cordWithNumList.length-1; h++) {
+        positioningCordList = cordWithNumList[h].split(": [");
+        positioningSeparatedCordList = positioningCordList[1].split(', ');
+        positioningSeparatedCordList.removeAt(2);
+        if(positionList[h]!='charging_pile'){
+          positionCordList.add(positioningSeparatedCordList);
         }
       }
       positionList.sort();
@@ -329,9 +354,14 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
 
     if (positionList.isEmpty) {
       positionList = _networkProvider.getPoseData!;
+      positionCordList = _mainStatusProvider.cordList!;
     } else {
       _networkProvider.getPoseData = positionList;
+      _mainStatusProvider.cordList = positionCordList;
     }
+
+    print('pose : $positionList');
+    print('cord : $positionCordList');
 
     offStageTray1 = _servingProvider.attachedTray1;
     offStageTray2 = _servingProvider.attachedTray2;
@@ -714,8 +744,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                                 fontFamily: 'kor',
                                                 fontSize: 25,
                                                 color: Colors.white),
-                                            keyboardType: const TextInputType
-                                                .numberWithOptions(),
+                                            keyboardType: TextInputType.url,
                                             decoration: const InputDecoration(
                                                 border: UnderlineInputBorder(
                                                   borderSide: BorderSide(

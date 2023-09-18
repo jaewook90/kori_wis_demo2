@@ -341,8 +341,7 @@ class _ConfigDrawerMenuState extends State<ConfigDrawerMenu> {
                                             fontFamily: 'kor',
                                             fontSize: 25,
                                             color: Colors.white),
-                                        keyboardType: const TextInputType
-                                            .numberWithOptions(),
+                                        keyboardType: TextInputType.url,
                                         decoration: const InputDecoration(
                                             border: UnderlineInputBorder(
                                               borderSide: BorderSide(

@@ -599,8 +599,7 @@ class _IntroScreenState extends State<IntroScreen>
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleLarge,
-                                              keyboardType: const TextInputType
-                                                  .numberWithOptions(),
+                                              keyboardType: TextInputType.url,
                                               decoration: InputDecoration(
                                                 fillColor: const Color.fromRGBO(
                                                     30, 30, 30, 0.5),

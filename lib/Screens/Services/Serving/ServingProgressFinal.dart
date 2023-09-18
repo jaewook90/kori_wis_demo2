@@ -255,7 +255,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                               page: const TraySelectionFinal(),
                             ).navPageToPage();
                           });
-
                         }
                       },
                       child: Container(
@@ -305,20 +304,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
                           });
-                        });
-                      } else {
-                        _servingProvider.clearAllTray();
-                        PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: _servingProvider.waitingPoint)
-                            .Posting(context);
-                        Future.delayed(const Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
                         });
                       }
                     });

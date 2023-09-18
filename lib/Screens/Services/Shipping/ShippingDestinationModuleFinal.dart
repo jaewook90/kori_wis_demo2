@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Widgets/appBarAction.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
@@ -18,6 +19,8 @@ class ShippingDestinationNewFinal extends StatefulWidget {
 class _ShippingDestinationNewFinalState
     extends State<ShippingDestinationNewFinal> {
   late NetworkModel _networkProvider;
+  late MainStatusModel _mainStatusProvider;
+
 
   String shippingKeyPadIMG =
       "assets/screens/Shipping/koriZFinalShippingDestinations.png";
@@ -139,6 +142,7 @@ class _ShippingDestinationNewFinalState
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     goalPositionList = _networkProvider.getPoseData!;
 
@@ -299,6 +303,9 @@ class _ShippingDestinationNewFinalState
                     } else if (i == 10) {
                       currentNum = '${currentNum}0';
                     } else if (i == 11) {
+                      setState(() {
+                        _mainStatusProvider.targetRoomNum = currentNum;
+                      });
                       if (currentNum == "101") {
                         setGoalPose(0);
                       } else if (currentNum == "102") {

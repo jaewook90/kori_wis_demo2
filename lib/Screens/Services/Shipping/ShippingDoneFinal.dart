@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
+import 'package:kori_wis_demo/Utills/postAPI.dart';
+import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
+import 'package:provider/provider.dart';
 
 class ShippingDoneFinal extends StatefulWidget {
   const ShippingDoneFinal({Key? key}) : super(key: key);
@@ -10,14 +16,43 @@ class ShippingDoneFinal extends StatefulWidget {
 }
 
 class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
+  late NetworkModel _networkProvider;
+  late ServingModel _servingProvider;
 
   String backgroundImage = "assets/screens/Shipping/koriZFinalShippingDone.png";
 
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.wav';
+
+  String? startUrl;
+  String? navUrl;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(0.4);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _effectPlayer.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
     // double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
+
+    startUrl = _networkProvider.startUrl;
+    navUrl = _networkProvider.navUrl;
 
     return Scaffold(
         appBar: AppBar(
@@ -25,56 +60,7 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
           elevation: 0.0,
           automaticallyImplyLeading: false,
           actions: [
-            // Container(
-            //   width: screenWidth,
-            //   height: 108,
-            //   child: Stack(
-            //     children: [
-            //       Positioned(
-            //         left: 120,
-            //         top: 10,
-            //         child: FilledButton(
-            //           onPressed: () {
-            //             navPage(
-            //                 context: context,
-            //                 page: const MainScreenBLEAutoConnect(),
-            //                 enablePop: false)
-            //                 .navPageToPage();
-            //           },
-            //           style: FilledButton.styleFrom(
-            //               fixedSize: const Size(90, 90),
-            //               shape: RoundedRectangleBorder(
-            //                   borderRadius: BorderRadius.circular(0)),
-            //               backgroundColor: Colors.transparent),
-            //           child: Container(
-            //             height: 60,
-            //             width: 60,
-            //             decoration: const BoxDecoration(
-            //                 image: DecorationImage(
-            //                     image: AssetImage(
-            //                       'assets/icons/appBar/appBar_Home.png',
-            //                     ),
-            //                     fit: BoxFit.fill)),
-            //           ),
-            //         ),
-            //       ),
-            //       Positioned(
-            //         right: 50,
-            //         top: 25,
-            //         child: Container(
-            //           height: 60,
-            //           width: 60,
-            //           decoration: const BoxDecoration(
-            //               image: DecorationImage(
-            //                   image: AssetImage(
-            //                     'assets/icons/appBar/appBar_Battery.png',
-            //                   ),
-            //                   fit: BoxFit.fill)),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // )
+            AppBarStatus(),
           ],
           toolbarHeight: 110,
         ),
@@ -90,22 +76,41 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                       image: AssetImage(backgroundImage), fit: BoxFit.cover)),
               child: Stack(children: [
                 Positioned(
-                  top: 450,
-                  left: 0,
-                  child: GestureDetector(
-                    // 화면 터치로 화면 이동
-                      onTap: () {
-                        navPage(
-                            context: context,
-                            page: const ShippingMenuFinal())
-                            .navPageToPage();
-                      },
-                      child: Container(
-                          height: 1200,
-                          width: 1080,
-                          decoration: const BoxDecoration(
-                              border: Border.fromBorderSide(BorderSide(
-                                  color: Colors.transparent, width: 1))))),
+                  left: 107.3,
+                  top: 1372.5,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        enableFeedback: false,
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40)),
+                        fixedSize: const Size(866, 160)),
+                    child: null,
+                    onPressed: () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _effectPlayer.seek(const Duration(seconds: 0));
+                        _effectPlayer.play();
+                        _networkProvider.servTable =
+                            _servingProvider.targetTableNum;
+                        print(_servingProvider.targetTableNum);
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Future.delayed(const Duration(milliseconds: 230),
+                                  () {
+                                _effectPlayer.dispose();
+                                navPage(
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(),
+                                ).navPageToPage();
+                              });
+                        });
+                      });
+                    },
+                  ),
                 ),
                 // const ShippingModuleButtonsFinal(
                 //   screens: 3,

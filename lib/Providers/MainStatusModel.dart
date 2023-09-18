@@ -17,10 +17,14 @@ class MainStatusModel with ChangeNotifier {
 
   int? robotServiceMode; // 0: 서빙, 1: 택배, 딜리버리
 
+  String? targetRoomNum;
+
   List<String>? facilityNum;
   List<String>? facilityName;
   List<String>? facilityDetail;
   int? targetFacilityIndex;
+
+  List<List<String>>? cordList;
 
   MainStatusModel({
     this.debugMode,

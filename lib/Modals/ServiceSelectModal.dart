@@ -95,8 +95,16 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
                 right: 30,
                 child: IconButton(
                   onPressed: () {
-                    navPage(context: context, page: TraySelectionFinal())
-                        .navPageToPage();
+                    if(_mainStatusProvider.robotServiceMode == 0){
+                      navPage(context: context, page: TraySelectionFinal())
+                          .navPageToPage();
+                    }else if(_mainStatusProvider.robotServiceMode == 1){
+                      navPage(context: context, page: ShippingMenuFinal())
+                          .navPageToPage();
+                    }else if(_mainStatusProvider.robotServiceMode == 2){
+                      navPage(context: context, page: FacilityScreen())
+                          .navPageToPage();
+                    }
                   },
                   icon: Icon(Icons.close, color: Colors.white),
                   iconSize: 50,
@@ -316,10 +324,11 @@ class _ServiceSelectModalFinalState extends State<ServiceSelectModalFinal> {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               _effectPlayer.seek(const Duration(seconds: 0));
                               _effectPlayer.play();
+                              _prefs.setInt('robotMode', 2);
                               Future.delayed(Duration(milliseconds: 230), () {
                                 _effectPlayer.dispose();
                                 setState(() {
-                                  _mainStatusProvider.robotServiceMode = 2;
+                                  _mainStatusProvider.robotServiceMode = _prefs.getInt('robotMode');
                                 });
                                 navPage(
                                   context: context,
