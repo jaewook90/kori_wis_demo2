@@ -37,10 +37,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
   late SharedPreferences _prefs;
 
   final String facilityMap = 'assets/images/officeFacility5.png';
+  final String facilityOfficeMap = 'assets/images/facility_test_v1.0.png';
   late int officeQTY;
   late List<String> officeNum;
   late List<String> officeName;
-  late List<String> officeDetail;
+
+  // late List<String> officeDetail;
 
   late int autoChargeConfig;
 
@@ -95,7 +97,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
     chgUrl = Provider.of<NetworkModel>(context, listen: false).chgUrl;
 
     autoChargeConfig =
-    Provider.of<MainStatusModel>(context, listen: false).autoCharge!;
+        Provider.of<MainStatusModel>(context, listen: false).autoCharge!;
 
     positioningList = [];
     positionList = [];
@@ -105,7 +107,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
     officeNum = [];
     officeName = [];
-    officeDetail = [];
+    // officeDetail = [];
 
     canvasX = 972;
     canvasY = 1344;
@@ -122,11 +124,13 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
     mapOrigin = [3.1, 63.36];
 
-    originMove.add(mapOrigin[0]/mapX);
-    originMove.add(mapOrigin[1]/mapY);
+    originMove.add(mapOrigin[0] / mapX);
+    originMove.add(mapOrigin[1] / mapY);
 
     officeQTY =
         Provider.of<MainStatusModel>(context, listen: false).cordList!.length;
+
+    print(officeQTY);
 
     for (int h = 0; h < officeQTY; h++) {
       poseX.add(double.parse(
@@ -135,35 +139,128 @@ class _FacilityScreenState extends State<FacilityScreen> {
       poseY.add(double.parse(
           Provider.of<MainStatusModel>(context, listen: false).cordList![h]
               [1]));
-      officeNum.add(Provider.of<NetworkModel>(context, listen: false).getPoseData![h]);
+      officeNum.add(
+          Provider.of<NetworkModel>(context, listen: false).getPoseData![h]);
 
-      if(Provider.of<NetworkModel>(context, listen: false).getPoseData![h] != '엘리베이터'){
-        if(Provider.of<NetworkModel>(context, listen: false).getPoseData![h] != '화장실1'){
-          if(Provider.of<NetworkModel>(context, listen: false).getPoseData![h] != '화장실2'){
-            officeName.add('${officeNum[h]}호 사무실');
-            officeDetail.add('여기는 ${officeName[h]} 입니다.');
-          }else{
+      if (Provider.of<NetworkModel>(context, listen: false).getPoseData![h] !=
+          '시설1') {
+        if (Provider.of<NetworkModel>(context, listen: false).getPoseData![h] !=
+            '시설2') {
+          if (Provider.of<NetworkModel>(context, listen: false)
+                  .getPoseData![h] !=
+              '시설3') {
+            if (Provider.of<NetworkModel>(context, listen: false)
+                    .getPoseData![h] !=
+                '701') {
+              // officeName.add("D'LIVE  (주)딜라이브");
+              if (Provider.of<NetworkModel>(context, listen: false)
+                      .getPoseData![h] !=
+                  '704') {
+                if (Provider.of<NetworkModel>(context, listen: false)
+                        .getPoseData![h] !=
+                    '705') {
+                  if (Provider.of<NetworkModel>(context, listen: false)
+                          .getPoseData![h] !=
+                      '706') {
+                    if (Provider.of<NetworkModel>(context, listen: false)
+                            .getPoseData![h] !=
+                        '708') {
+                      if (Provider.of<NetworkModel>(context, listen: false)
+                              .getPoseData![h] !=
+                          '710') {
+                        if (Provider.of<NetworkModel>(context, listen: false)
+                                .getPoseData![h] !=
+                            '711') {
+                          if (Provider.of<NetworkModel>(context, listen: false)
+                                  .getPoseData![h] !=
+                              '712') {
+                            if (Provider.of<NetworkModel>(context,
+                                        listen: false)
+                                    .getPoseData![h] !=
+                                '713') {
+                              if (Provider.of<NetworkModel>(context,
+                                          listen: false)
+                                      .getPoseData![h] !=
+                                  '715') {
+                                if (Provider.of<NetworkModel>(context,
+                                            listen: false)
+                                        .getPoseData![h] !=
+                                    '716') {
+                                  if (Provider.of<NetworkModel>(context,
+                                              listen: false)
+                                          .getPoseData![h] !=
+                                      '717') {
+                                    if (Provider.of<NetworkModel>(context,
+                                                listen: false)
+                                            .getPoseData![h] !=
+                                        '718') {
+                                      if (Provider.of<NetworkModel>(context,
+                                                  listen: false)
+                                              .getPoseData![h] !=
+                                          '719') {
+                                      } else {
+                                        officeName.add("JS융합인재교육원(주)");
+                                      }
+                                    } else {
+                                      officeName.add("(주)딜라이브 자재실");
+                                    }
+                                  } else {
+                                    officeName.add("수성엔지니어링");
+                                  }
+                                } else {
+                                  officeName.add("(주)엑사로보틱스");
+                                }
+                              } else {
+                                officeName.add("HD인베스트");
+                              }
+                            } else {
+                              officeName.add("신영비엠이(주)");
+                            }
+                          } else {
+                            officeName.add("(주)엘렉시");
+                          }
+                        } else {
+                          officeName.add("Daily Vegan");
+                        }
+                      } else {
+                        officeName.add("(주)범건축종합건축사사무소");
+                      }
+                    } else {
+                      officeName.add("(주)드림디엔에스");
+                    }
+                  } else {
+                    officeName.add("DAWON Tax Office");
+                  }
+                } else {
+                  officeName.add("브레인컴퍼니");
+                }
+              } else {
+                officeName.add("아워팜");
+              }
+            } else {
+              officeName.add("(주)딜라이브");
+            }
+            // officeName.add('awsdfasdf');
+            // officeDetail.add('여기는 ${officeName[h]} 입니다.');
+          } else {
             officeName.add('화장실2');
-            officeDetail.add('여기는 화장실2 입니다.');
+            // officeDetail.add('여기는 화장실2 입니다.');
           }
-        }else{
+        } else {
           officeName.add('화장실1');
-          officeDetail.add('여기는 화장실1 입니다.');
+          // officeDetail.add('여기는 화장실1 입니다.');
         }
-      }else{
+      } else {
         officeName.add('엘리베이터');
-        officeDetail.add('여기는 엘리베이터 입니다.');
+        // officeDetail.add('여기는 엘리베이터 입니다.');
       }
     }
 
-    if ((Provider.of<MainStatusModel>(context, listen: false)
-                .facilityNum!
-                .isEmpty ||
-            Provider.of<MainStatusModel>(context, listen: false)
-                .facilityName!
-                .isEmpty) ||
+    if (Provider.of<MainStatusModel>(context, listen: false)
+            .facilityNum!
+            .isEmpty ||
         Provider.of<MainStatusModel>(context, listen: false)
-            .facilityDetail!
+            .facilityName!
             .isEmpty) {
       for (int i = 0; i < officeQTY; i++) {
         setState(() {
@@ -173,19 +270,15 @@ class _FacilityScreenState extends State<FacilityScreen> {
           Provider.of<MainStatusModel>(context, listen: false)
               .facilityName!
               .add(officeName[i]);
-          Provider.of<MainStatusModel>(context, listen: false)
-              .facilityDetail!
-              .add(officeDetail[i]);
+          // Provider.of<MainStatusModel>(context, listen: false)
+          //     .facilityDetail!
+          //     .add(officeDetail[i]);
         });
       }
-
-      print( Provider.of<MainStatusModel>(context, listen: false)
-          .facilityNum);
-      print( Provider.of<MainStatusModel>(context, listen: false)
-          .facilityName);
-      print( Provider.of<MainStatusModel>(context, listen: false)
-          .facilityDetail);
-
+      print(Provider.of<MainStatusModel>(context, listen: false).facilityNum);
+      print(Provider.of<MainStatusModel>(context, listen: false).facilityName);
+      print(
+          Provider.of<MainStatusModel>(context, listen: false).facilityDetail);
     }
   }
 
@@ -199,16 +292,19 @@ class _FacilityScreenState extends State<FacilityScreen> {
     _effectPlayer.setVolume(0.4);
   }
 
-  cordOffice(String axis, int num){
-    if(axis=='x'){
-      double cordX = (canvasX*(((poseX[num])/mapX)+((mapOrigin[0]/mapX)))-(buttonWidth/2));
+  cordOffice(String axis, int num) {
+    if (axis == 'x') {
+      double cordX =
+          (canvasX * (((poseX[num]) / mapX) + ((mapOrigin[0] / mapX))) -
+              (buttonWidth / 2));
       return cordX;
-    }else if(axis == 'y'){
-      double cordY = (canvasY*(((poseY[num])/mapY)+((mapOrigin[1]/mapY)))-(buttonHeight/2));
+    } else if (axis == 'y') {
+      double cordY =
+          (canvasY * (((poseY[num]) / mapY) + ((mapOrigin[1] / mapY))) -
+              (buttonHeight / 2));
       return cordY;
     }
   }
-
 
   dynamic getting(String hostUrl, String endUrl) async {
     String hostIP = hostUrl;
@@ -258,11 +354,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
           }
         }
       }
-      for (int h = 0; h < cordWithNumList.length-1; h++) {
+      for (int h = 0; h < cordWithNumList.length - 1; h++) {
         positioningCordList = cordWithNumList[h].split(": [");
         positioningSeparatedCordList = positioningCordList[1].split(', ');
         positioningSeparatedCordList.removeAt(2);
-        if(positionList[h]!='charging_pile'){
+        if (positionList[h] != 'charging_pile') {
           positionCordList.add(positioningSeparatedCordList);
         }
       }
@@ -271,7 +367,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
       positionList = [];
     }
   }
-
 
   void facilityInform(context, int number) {
     showDialog(
@@ -337,7 +432,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                     left: 53,
                     child: TextButton(
                       onPressed: () {
-                        navPage(context: context, page: FacilityListScreen())
+                        navPage(context: context, page: const FacilityListScreen())
                             .navPageToPage();
                       },
                       style: TextButton.styleFrom(
@@ -362,8 +457,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
       drawerEdgeDragWidth: 70,
       endDrawerEnableOpenDragGesture: true,
       endDrawer:
-      // ConfigDrawerMenu(),
-      Drawer(
+          // ConfigDrawerMenu(),
+          Drawer(
         backgroundColor: const Color(0xff292929),
         shadowColor: const Color(0xff191919),
         width: 800,
@@ -405,15 +500,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               initiallyExpanded: false,
                               backgroundColor: Colors.transparent,
                               onExpansionChanged: (value) {
-                                _effectPlayer
-                                    .seek(const Duration(seconds: 0));
+                                _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                               },
                               children: <Widget>[
                                 const Divider(
-                                    height: 20,
-                                    color: Colors.grey,
-                                    indent: 15),
+                                    height: 20, color: Colors.grey, indent: 15),
                                 SizedBox(
                                   width: 390,
                                   child: Padding(
@@ -423,7 +515,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       children: [
                                         const Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               '기존 IP',
@@ -439,7 +531,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               startUrl!,
@@ -456,7 +548,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             const Text(
                                               '변경 할 IP',
@@ -471,41 +563,36 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                             FilledButton(
                                               onPressed: () async {
                                                 WidgetsBinding.instance
-                                                    .addPostFrameCallback(
-                                                        (_) {
-                                                      _effectPlayer.seek(
-                                                          const Duration(
-                                                              seconds: 0));
-                                                      _effectPlayer.play();
-                                                      _prefs.setString('robotIp',
-                                                          configController.text);
-                                                      setState(() {
-                                                        _networkProvider
-                                                            .startUrl =
+                                                    .addPostFrameCallback((_) {
+                                                  _effectPlayer.seek(
+                                                      const Duration(
+                                                          seconds: 0));
+                                                  _effectPlayer.play();
+                                                  _prefs.setString('robotIp',
+                                                      configController.text);
+                                                  setState(() {
+                                                    _networkProvider.startUrl =
                                                         "http://${configController.text}/";
-                                                        startUrl =
-                                                            _networkProvider
-                                                                .startUrl;
-                                                        configController.text =
-                                                        '';
-                                                      });
-                                                      getting(
-                                                          _networkProvider
-                                                              .startUrl!,
-                                                          _networkProvider
-                                                              .positionURL);
-                                                    });
+                                                    startUrl = _networkProvider
+                                                        .startUrl;
+                                                    configController.text = '';
+                                                  });
+                                                  getting(
+                                                      _networkProvider
+                                                          .startUrl!,
+                                                      _networkProvider
+                                                          .positionURL);
+                                                });
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,
                                                   backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      80, 80, 255, 0.7),
-                                                  shape:
-                                                  RoundedRectangleBorder(
+                                                      const Color.fromRGBO(
+                                                          80, 80, 255, 0.7),
+                                                  shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                   )),
                                               child: const Icon(
                                                 Icons.arrow_forward,
@@ -533,7 +620,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                                     width: 1),
                                               ),
                                               enabledBorder:
-                                              UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.white,
                                                     width: 1),
@@ -558,9 +645,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     _effectPlayer.play();
                                     _networkProvider.servTable = 'wait';
                                     PostApi(
-                                        url: startUrl,
-                                        endadr: navUrl,
-                                        keyBody: 'wait')
+                                            url: startUrl,
+                                            endadr: navUrl,
+                                            keyBody: 'wait')
                                         .Posting(context);
                                     _networkProvider.currentGoal = '대기장소';
                                     Future.delayed(
@@ -569,7 +656,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       navPage(
                                         context: context,
                                         page:
-                                        const NavigatorProgressModuleFinal(),
+                                            const NavigatorProgressModuleFinal(),
                                       ).navPageToPage();
                                     });
                                   });
@@ -580,7 +667,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     fixedSize: const Size(390, 58),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(0))),
+                                            BorderRadius.circular(0))),
                                 child: const Row(
                                   children: [
                                     Icon(Icons.add_to_home_screen,
@@ -624,7 +711,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     fixedSize: const Size(390, 58),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(0))),
+                                            BorderRadius.circular(0))),
                                 child: const Row(
                                   children: [
                                     Icon(Icons.sync,
@@ -676,15 +763,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               initiallyExpanded: false,
                               backgroundColor: Colors.transparent,
                               onExpansionChanged: (value) {
-                                _effectPlayer
-                                    .seek(const Duration(seconds: 0));
+                                _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
                               },
                               children: <Widget>[
                                 const Divider(
-                                    height: 20,
-                                    color: Colors.grey,
-                                    indent: 15),
+                                    height: 20, color: Colors.grey, indent: 15),
                                 SizedBox(
                                   width: 390,
                                   child: Padding(
@@ -694,7 +778,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       children: [
                                         const Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               '현재 설정',
@@ -710,7 +794,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Text(
                                               '$autoChargeConfig',
@@ -727,7 +811,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             const Text(
                                               '변경 할 설정',
@@ -742,42 +826,40 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                             FilledButton(
                                               onPressed: () async {
                                                 WidgetsBinding.instance
-                                                    .addPostFrameCallback(
-                                                        (_) {
-                                                      _effectPlayer.seek(
-                                                          const Duration(
-                                                              seconds: 0));
-                                                      _effectPlayer.play();
-                                                      _prefs.setInt(
-                                                          'autoCharge',
-                                                          int.parse(
-                                                              autoChargeController
-                                                                  .text));
+                                                    .addPostFrameCallback((_) {
+                                                  _effectPlayer.seek(
+                                                      const Duration(
+                                                          seconds: 0));
+                                                  _effectPlayer.play();
+                                                  _prefs.setInt(
+                                                      'autoCharge',
+                                                      int.parse(
+                                                          autoChargeController
+                                                              .text));
 
-                                                      setState(() {
-                                                        _mainStatusProvider
+                                                  setState(() {
+                                                    _mainStatusProvider
                                                             .autoCharge =
-                                                            int.parse(
-                                                                autoChargeController
-                                                                    .text);
-                                                        autoChargeConfig =
+                                                        int.parse(
+                                                            autoChargeController
+                                                                .text);
+                                                    autoChargeConfig =
                                                         _mainStatusProvider
                                                             .autoCharge!;
-                                                        autoChargeController
-                                                            .text = '';
-                                                      });
-                                                    });
+                                                    autoChargeController.text =
+                                                        '';
+                                                  });
+                                                });
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,
                                                   backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      80, 80, 255, 0.7),
-                                                  shape:
-                                                  RoundedRectangleBorder(
+                                                      const Color.fromRGBO(
+                                                          80, 80, 255, 0.7),
+                                                  shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                    BorderRadius.circular(
-                                                        15),
+                                                        BorderRadius.circular(
+                                                            15),
                                                   )),
                                               child: const Icon(
                                                 Icons.arrow_forward,
@@ -806,7 +888,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                                     width: 1),
                                               ),
                                               enabledBorder:
-                                              UnderlineInputBorder(
+                                                  UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.white,
                                                     width: 1),
@@ -830,11 +912,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         .seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                     _networkProvider.servTable =
-                                    'charging_pile';
+                                        'charging_pile';
                                     PostApi(
-                                        url: startUrl,
-                                        endadr: chgUrl,
-                                        keyBody: 'charging_pile')
+                                            url: startUrl,
+                                            endadr: chgUrl,
+                                            keyBody: 'charging_pile')
                                         .Posting(context);
                                     _networkProvider.currentGoal = '충전스테이션';
                                     Future.delayed(
@@ -843,7 +925,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       navPage(
                                         context: context,
                                         page:
-                                        const NavigatorProgressModuleFinal(),
+                                            const NavigatorProgressModuleFinal(),
                                       ).navPageToPage();
                                     });
                                   });
@@ -854,7 +936,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     fixedSize: const Size(390, 58),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(0))),
+                                            BorderRadius.circular(0))),
                                 child: const Row(
                                   children: [
                                     Icon(Icons.ev_station_outlined,
@@ -889,11 +971,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         .seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                     Future.delayed(
-                                        const Duration(milliseconds: 230),
-                                            () {
-                                          _effectPlayer.dispose();
-                                          serviceSelectPopup(context);
-                                        });
+                                        const Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      serviceSelectPopup(context);
+                                    });
                                   });
                                 },
                                 style: FilledButton.styleFrom(
@@ -902,7 +983,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     fixedSize: const Size(390, 58),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(0))),
+                                            BorderRadius.circular(0))),
                                 child: const Row(
                                   children: [
                                     Icon(Icons.change_circle_outlined,
@@ -949,54 +1030,47 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               children: [
                                 FilledButton(
                                   onPressed: () async {
-
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(
-                                          const Duration(seconds: 0));
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       _prefs.clear();
                                       Future.delayed(
                                           const Duration(milliseconds: 230),
-                                              () {
-                                            _effectPlayer.dispose();
-                                            navPage(
-                                              context: context,
-                                              page: const IntroScreen(),
-                                            ).navPageToPage();
-                                          });
+                                          () {
+                                        _effectPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page: const IntroScreen(),
+                                        ).navPageToPage();
+                                      });
                                       setState(() {
-                                        _networkProvider.getApiData =
-                                        [];
+                                        _networkProvider.getApiData = [];
                                         _networkProvider.startUrl = "";
                                       });
                                     });
                                   },
                                   style: FilledButton.styleFrom(
                                       enableFeedback: false,
-                                      backgroundColor:
-                                      Colors.transparent,
+                                      backgroundColor: Colors.transparent,
                                       fixedSize: const Size(390, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(
-                                              0))),
+                                              BorderRadius.circular(0))),
                                   child: const Row(
                                     children: [
                                       Icon(Icons.autorenew,
-                                          color: Colors.white,
-                                          size: 50),
+                                          color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '기본정보 초기화',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
                                               fontSize: 36,
-                                              fontWeight:
-                                              FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
                                         ),
@@ -1009,49 +1083,42 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                 ),
                                 FilledButton(
                                   onPressed: () {
-
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(
-                                          const Duration(seconds: 0));
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       Future.delayed(
                                           const Duration(milliseconds: 230),
-                                              () {
-                                            _effectPlayer.dispose();
-                                            navPage(
-                                              context: context,
-                                              page:
-                                              const NavigationPatrol(),
-                                            ).navPageToPage();
-                                          });
+                                          () {
+                                        _effectPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page: const NavigationPatrol(),
+                                        ).navPageToPage();
+                                      });
                                     });
                                   },
                                   style: FilledButton.styleFrom(
                                       enableFeedback: false,
-                                      backgroundColor:
-                                      Colors.transparent,
+                                      backgroundColor: Colors.transparent,
                                       fixedSize: const Size(390, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(
-                                              0))),
+                                              BorderRadius.circular(0))),
                                   child: const Row(
                                     children: [
                                       Icon(Icons.repeat,
-                                          color: Colors.white,
-                                          size: 50),
+                                          color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '순찰 기동',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
                                               fontSize: 36,
-                                              fontWeight:
-                                              FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
                                         ),
@@ -1069,48 +1136,42 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               children: [
                                 FilledButton(
                                   onPressed: () {
-
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
                                       _effectPlayer.play();
-                                      _effectPlayer.seek(
-                                          const Duration(seconds: 0));
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
                                       Future.delayed(
                                           const Duration(milliseconds: 230),
-                                              () {
-                                            _effectPlayer.dispose();
-                                            navPage(
-                                              context: context,
-                                              page: const TestPagesScreen(),
-                                            ).navPageToPage();
-                                          });
+                                          () {
+                                        _effectPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page: const TestPagesScreen(),
+                                        ).navPageToPage();
+                                      });
                                     });
                                   },
                                   style: FilledButton.styleFrom(
                                       enableFeedback: false,
-                                      backgroundColor:
-                                      Colors.transparent,
+                                      backgroundColor: Colors.transparent,
                                       fixedSize: const Size(390, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(
-                                              0))),
+                                              BorderRadius.circular(0))),
                                   child: const Row(
                                     children: [
                                       Icon(Icons.request_page,
-                                          color: Colors.white,
-                                          size: 50),
+                                          color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '테스트 페이지 이동',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
                                               fontSize: 36,
-                                              fontWeight:
-                                              FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
                                         ),
@@ -1125,45 +1186,40 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                   onPressed: () {
                                     WidgetsBinding.instance
                                         .addPostFrameCallback((_) {
-                                      _effectPlayer.seek(
-                                          const Duration(seconds: 0));
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
                                       Future.delayed(
                                           const Duration(milliseconds: 230),
-                                              () {
-                                            _effectPlayer.dispose();
-                                            navPage(
-                                              context: context,
-                                              page: const IntroScreen(),
-                                            ).navPageToPage();
-                                          });
+                                          () {
+                                        _effectPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page: const IntroScreen(),
+                                        ).navPageToPage();
+                                      });
                                     });
                                   },
                                   style: FilledButton.styleFrom(
                                       enableFeedback: false,
-                                      backgroundColor:
-                                      Colors.transparent,
+                                      backgroundColor: Colors.transparent,
                                       fixedSize: const Size(390, 58),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(
-                                              0))),
+                                              BorderRadius.circular(0))),
                                   child: const Row(
                                     children: [
                                       Icon(Icons.repeat,
-                                          color: Colors.white,
-                                          size: 50),
+                                          color: Colors.white, size: 50),
                                       Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 15),
+                                        padding: EdgeInsets.only(left: 15),
                                         child: Text(
                                           '인트로 화면 이동',
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
                                               fontSize: 36,
-                                              fontWeight:
-                                              FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
                                         ),
@@ -1201,11 +1257,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         children: [
                           TextButton(
                             onPressed: () {
-
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
-                                Future.delayed(const Duration(milliseconds: 230), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
                                   navPage(
                                     context: context,
@@ -1217,7 +1273,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                             style: TextButton.styleFrom(
                                 fixedSize: const Size(60, 60),
                                 enableFeedback: false,
-                                padding: const EdgeInsets.only(right: 0, bottom: 2),
+                                padding:
+                                    const EdgeInsets.only(right: 0, bottom: 2),
                                 backgroundColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
                                     side: const BorderSide(
@@ -1233,11 +1290,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
-                                Future.delayed(const Duration(milliseconds: 230), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
                                   navPage(
                                     context: context,
@@ -1249,7 +1306,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                             style: TextButton.styleFrom(
                                 fixedSize: const Size(60, 60),
                                 enableFeedback: false,
-                                padding: const EdgeInsets.only(right: 0, bottom: 2),
+                                padding:
+                                    const EdgeInsets.only(right: 0, bottom: 2),
                                 backgroundColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
                                     side: const BorderSide(
@@ -1265,11 +1323,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
-                                Future.delayed(const Duration(milliseconds: 230), () {
+                                Future.delayed(
+                                    const Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
                                   navPage(
                                     context: context,
@@ -1281,7 +1339,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                             style: TextButton.styleFrom(
                                 fixedSize: const Size(60, 60),
                                 enableFeedback: false,
-                                padding: const EdgeInsets.only(right: 0, bottom: 2),
+                                padding:
+                                    const EdgeInsets.only(right: 0, bottom: 2),
                                 backgroundColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
                                     side: const BorderSide(
@@ -1317,9 +1376,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         _effectPlayer.play();
                         Future.delayed(const Duration(milliseconds: 230), () {
                           _effectPlayer.dispose();
-                          if(_debugTray == true){
+                          if (_debugTray == true) {
                             enterAdmin(context);
-                          }else{
+                          } else {
                             setState(() {
                               _mainStatusProvider.debugMode = true;
                             });
@@ -1331,14 +1390,16 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         foregroundColor: Colors.transparent,
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(0),
+                          borderRadius: BorderRadius.circular(0),
                         ),
                         fixedSize: const Size(400, 150)),
-                    child: Text('관리자 모드', style: TextStyle(
-                        fontSize: 50,
-                        color: _debugTray==true ? Colors.white : Colors.red
-                    ),),
+                    child: Text(
+                      '관리자 모드',
+                      style: TextStyle(
+                          fontSize: 50,
+                          color:
+                              _debugTray == true ? Colors.white : Colors.red),
+                    ),
                   ),
                 ),
               ],
@@ -1346,7 +1407,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
           ),
           //전원 버튼
           Container(
-            margin: EdgeInsets.only(left: 700, top: 10),
+            margin: const EdgeInsets.only(left: 700, top: 10),
             width: 78,
             child: IconButton(
               onPressed: () {
@@ -1370,9 +1431,24 @@ class _FacilityScreenState extends State<FacilityScreen> {
               width: canvasX,
               height: canvasY,
               decoration: BoxDecoration(
-                border: Border.fromBorderSide(
+                border: const Border.fromBorderSide(
                     BorderSide(color: Colors.white, width: 2)),
-                image: DecorationImage(image: AssetImage(facilityMap), fit: BoxFit.fill),
+                image: DecorationImage(
+                    image: AssetImage(facilityMap), fit: BoxFit.fill),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 110,
+            left: (1080 * 0.1) / 2,
+            child: Container(
+              width: canvasX,
+              height: canvasY,
+              decoration: BoxDecoration(
+                border: const Border.fromBorderSide(
+                    BorderSide(color: Colors.white, width: 2)),
+                image: DecorationImage(
+                    image: AssetImage(facilityOfficeMap), fit: BoxFit.fill),
               ),
               child: Stack(children: [
                 for (int i = 0; i < officeQTY; i++)
@@ -1380,21 +1456,52 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       bottom: cordOffice('y', i),
                       left: cordOffice('x', i),
                       child: ConstrainedBox(
-                        constraints: BoxConstraints.tightFor(width: buttonWidth, height: buttonHeight),
+                        constraints: BoxConstraints.tightFor(
+                            width: buttonWidth, height: buttonHeight),
                         child: TextButton(
                           onPressed: () {
                             facilityInform(context, i);
                           },
-                          child: Text(
-                            '${officeNum[i]}',
-                            style: TextStyle(fontFamily: 'kor', fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
-                          ),
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.transparent,
                           ),
+                          child: officeNum[i] != '시설1'
+                              ? officeNum[i] != '시설2'
+                                  ? officeNum[i] != '시설3'
+                                      ? Text(
+                                          '${officeNum[i]}',
+                                          style: const TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        )
+                                      : const Text(
+                                          '화장실2',
+                                          style: TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        )
+                                  : const Text(
+                                      '화장실1',
+                                      style: TextStyle(
+                                          fontFamily: 'kor',
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    )
+                              : const Text(
+                                  '엘리베이터',
+                                  style: TextStyle(
+                                      fontFamily: 'kor',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
                         ),
-                      )
-                      ),
+                      )),
               ]),
             ),
           ),

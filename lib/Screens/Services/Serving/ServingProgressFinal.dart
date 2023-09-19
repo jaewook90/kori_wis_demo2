@@ -149,7 +149,7 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
             child: Stack(children: [
               Countdown(
                 controller: _controller,
-                seconds: 15,
+                seconds: 5,
                 build: (_, double time) {
                   return Container();
                 },

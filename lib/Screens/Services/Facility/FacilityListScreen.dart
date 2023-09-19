@@ -90,7 +90,7 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
               children: [
                 TextField(
                   controller: searchingController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     filled: true,
                     fillColor: Colors.grey,
                     hintText: '검색어를 입력해주세요.',
@@ -99,7 +99,7 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
                     prefixIcon:
                         Icon(Icons.search, size: 60, color: Colors.black),
                   ),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'kor',
                     fontSize: 40,
@@ -110,9 +110,9 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
                       searchingController.text = value;
                     });
                   },
-                  onTap: (){
+                  onTap: () {
                     setState(() {
-                      searchingController.text='';
+                      searchingController.text = '';
                     });
                   },
                 ),
@@ -121,13 +121,12 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
                   itemCount: officeQTY,
                   itemBuilder: (context, index) {
                     if (searchingController.text.isNotEmpty &&
-                        (!officeName[index]
-                            .toLowerCase()
-                            .contains(searchingController.text.toLowerCase())&&!officeNum[index]
-                            .contains(searchingController.text))) {
-                      return SizedBox.shrink();
-                    }
-                    else {
+                        (!officeName[index].toLowerCase().contains(
+                                searchingController.text.toLowerCase()) &&
+                            !officeNum[index]
+                                .contains(searchingController.text))) {
+                      return const SizedBox.shrink();
+                    } else {
                       return Card(
                         elevation: 3,
                         color: Colors.transparent,
@@ -136,11 +135,9 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
                         child: ListTile(
                           title: Row(
                             children: [
-                              Text(officeNum[index].toString()),
-                              VerticalDivider(
-                                color: Colors.white,
-                                thickness: 3,
-                                width: 40,
+                              SizedBox(
+                                  width: 120,
+                                  child: Text(officeNum[index].toString()),
                               ),
                               Text(officeName[index]),
                             ],

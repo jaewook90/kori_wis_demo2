@@ -135,7 +135,7 @@ class _FacilityModalState extends State<FacilityModal> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SizedBox(
-                            width: 150,
+                            width: 110,
                           ),
                           Text('${_mainStatusProvider.facilityNum![widget.number!]}',
                               style: const TextStyle(
@@ -144,7 +144,7 @@ class _FacilityModalState extends State<FacilityModal> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white)),
                           const SizedBox(
-                            width: 150,
+                            width: 110,
                           ),
                           Text(_mainStatusProvider.facilityName![widget.number!],
                               style: const TextStyle(

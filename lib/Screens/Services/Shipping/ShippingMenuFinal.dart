@@ -104,9 +104,6 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
     chgUrl = Provider.of<NetworkModel>(context, listen: false).chgUrl;
 
-    poseDataUpdate();
-    // poseDataUpdate();
-
     if (Provider.of<NetworkModel>(context, listen: false)
         .getPoseData!
         .isEmpty) {
@@ -257,7 +254,9 @@ class _ShippingMenuFinalState extends State<ShippingMenuFinal> {
     }
 
     print('pose : $positionList');
+    print('poseLeng : ${positionList.length}');
     print('cord : $positionCordList');
+    print('cordLeng : ${positionCordList.length}');
 
     if (CHGFlag == 1) {
       _mainStatusProvider.restartService = false;

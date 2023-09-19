@@ -95,7 +95,7 @@ class _ChangingCountDownModalFinalState
                 padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
                 child: Countdown(
                   controller: _controller,
-                  seconds: 30,
+                  seconds: 5,
                   build: (_, double time) => Text(
                     time.toInt().toString(),
                     textAlign: TextAlign.end,
