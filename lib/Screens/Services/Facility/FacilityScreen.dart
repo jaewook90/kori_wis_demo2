@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/adminPWModal.dart';
@@ -8,6 +7,7 @@ import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityDoneFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -36,8 +36,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
   final TextEditingController autoChargeController = TextEditingController();
   late SharedPreferences _prefs;
 
-  final String facilityMap = 'assets/images/officeFacility5.png';
-  final String facilityOfficeMap = 'assets/images/facility_test_v1.0.png';
+  final String facilityMap = 'assets/images/facility_map_v1.2.png';
+
+  // final String facilityOfficeMap = 'assets/images/facility_test_v1.0.png';
   late int officeQTY;
   late List<String> officeNum;
   late List<String> officeName;
@@ -58,17 +59,17 @@ class _FacilityScreenState extends State<FacilityScreen> {
   late double buttonWidth;
   late double buttonHeight;
 
-  late List<double> poseX;
-  late List<double> poseY;
-
-  late List<double> mapOrigin;
-  late List<double> originMove;
-
-  late double canvasX;
-  late double canvasY;
-
-  late double mapX;
-  late double mapY;
+  // late List<double> poseX;
+  // late List<double> poseY;
+  //
+  // late List<double> mapOrigin;
+  // late List<double> originMove;
+  //
+  // late double canvasX;
+  // late double canvasY;
+  //
+  // late double mapX;
+  // late double mapY;
 
   dynamic newPoseData;
   dynamic poseData;
@@ -109,23 +110,23 @@ class _FacilityScreenState extends State<FacilityScreen> {
     officeName = [];
     // officeDetail = [];
 
-    canvasX = 972;
-    canvasY = 1344;
+    // canvasX = 972;
+    // canvasY = 1344;
 
     buttonWidth = 100;
     buttonHeight = 30;
 
-    poseX = [];
-    poseY = [];
-    originMove = [];
-
-    mapX = 44.8;
-    mapY = 100.5;
-
-    mapOrigin = [3.1, 63.36];
-
-    originMove.add(mapOrigin[0] / mapX);
-    originMove.add(mapOrigin[1] / mapY);
+    // poseX = [];
+    // poseY = [];
+    // originMove = [];
+    //
+    // mapX = 44.8;
+    // mapY = 100.5;
+    //
+    // mapOrigin = [3.1, 63.36];
+    //
+    // originMove.add(mapOrigin[0] / mapX);
+    // originMove.add(mapOrigin[1] / mapY);
 
     officeQTY =
         Provider.of<MainStatusModel>(context, listen: false).cordList!.length;
@@ -133,12 +134,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
     print(officeQTY);
 
     for (int h = 0; h < officeQTY; h++) {
-      poseX.add(double.parse(
-          Provider.of<MainStatusModel>(context, listen: false).cordList![h]
-              [0]));
-      poseY.add(double.parse(
-          Provider.of<MainStatusModel>(context, listen: false).cordList![h]
-              [1]));
+      // poseX.add(double.parse(
+      //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
+      //         [0]));
+      // poseY.add(double.parse(
+      //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
+      //         [1]));
       officeNum.add(
           Provider.of<NetworkModel>(context, listen: false).getPoseData![h]);
 
@@ -292,19 +293,19 @@ class _FacilityScreenState extends State<FacilityScreen> {
     _effectPlayer.setVolume(0.4);
   }
 
-  cordOffice(String axis, int num) {
-    if (axis == 'x') {
-      double cordX =
-          (canvasX * (((poseX[num]) / mapX) + ((mapOrigin[0] / mapX))) -
-              (buttonWidth / 2));
-      return cordX;
-    } else if (axis == 'y') {
-      double cordY =
-          (canvasY * (((poseY[num]) / mapY) + ((mapOrigin[1] / mapY))) -
-              (buttonHeight / 2));
-      return cordY;
-    }
-  }
+  // cordOffice(String axis, int num) {
+  //   if (axis == 'x') {
+  //     double cordX =
+  //         (canvasX * (((poseX[num]) / mapX) + ((mapOrigin[0] / mapX))) -
+  //             (buttonWidth / 2));
+  //     return cordX;
+  //   } else if (axis == 'y') {
+  //     double cordY =
+  //         (canvasY * (((poseY[num]) / mapY) + ((mapOrigin[1] / mapY))) -
+  //             (buttonHeight / 2));
+  //     return cordY;
+  //   }
+  // }
 
   dynamic getting(String hostUrl, String endUrl) async {
     String hostIP = hostUrl;
@@ -413,7 +414,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
     _debugTray = _mainStatusProvider.debugMode!;
 
-    print(originMove);
+    // print(originMove);
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
@@ -432,7 +433,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                     left: 53,
                     child: TextButton(
                       onPressed: () {
-                        navPage(context: context, page: const FacilityListScreen())
+                        navPage(
+                                context: context,
+                                page: const FacilityListScreen())
                             .navPageToPage();
                       },
                       style: TextButton.styleFrom(
@@ -1147,7 +1150,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         _effectPlayer.dispose();
                                         navPage(
                                           context: context,
-                                          page: const TestPagesScreen(),
+                                          page: const FacilityDoneScreen(),
                                         ).navPageToPage();
                                       });
                                     });
@@ -1428,83 +1431,428 @@ class _FacilityScreenState extends State<FacilityScreen> {
             top: 110,
             left: (1080 * 0.1) / 2,
             child: Container(
-              width: canvasX,
-              height: canvasY,
+              width: 972,
+              height: 1344,
               decoration: BoxDecoration(
                 border: const Border.fromBorderSide(
                     BorderSide(color: Colors.white, width: 2)),
                 image: DecorationImage(
                     image: AssetImage(facilityMap), fit: BoxFit.fill),
               ),
+              // 반응형 오피스 위치
+              // child: Stack(children: [
+              //   for (int i = 0; i < officeQTY; i++)
+              //     Positioned(
+              //         bottom: cordOffice('y', i),
+              //         left: cordOffice('x', i),
+              //         child: ConstrainedBox(
+              //           constraints: BoxConstraints.tightFor(
+              //               width: buttonWidth, height: buttonHeight),
+              //           child: TextButton(
+              //             onPressed: () {
+              //               facilityInform(context, i);
+              //             },
+              //             style: TextButton.styleFrom(
+              //               backgroundColor: Colors.transparent,
+              //             ),
+              //             child: officeNum[i] != '시설1'
+              //                 ? officeNum[i] != '시설2'
+              //                     ? officeNum[i] != '시설3'
+              //                         ? Text(
+              //                             '${officeNum[i]}',
+              //                             style: const TextStyle(
+              //                                 fontFamily: 'kor',
+              //                                 fontSize: 10,
+              //                                 fontWeight: FontWeight.bold,
+              //                                 color: Colors.black),
+              //                           )
+              //                         : const Text(
+              //                             '화장실2',
+              //                             style: TextStyle(
+              //                                 fontFamily: 'kor',
+              //                                 fontSize: 10,
+              //                                 fontWeight: FontWeight.bold,
+              //                                 color: Colors.black),
+              //                           )
+              //                     : const Text(
+              //                         '화장실1',
+              //                         style: TextStyle(
+              //                             fontFamily: 'kor',
+              //                             fontSize: 10,
+              //                             fontWeight: FontWeight.bold,
+              //                             color: Colors.black),
+              //                       )
+              //                 : const Text(
+              //                     '엘리베이터',
+              //                     style: TextStyle(
+              //                         fontFamily: 'kor',
+              //                         fontSize: 10,
+              //                         fontWeight: FontWeight.bold,
+              //                         color: Colors.black),
+              //                   ),
+              //           ),
+              //         )),
+              // ]),
             ),
           ),
+          // 수동 위치 입력
           Positioned(
-            top: 110,
-            left: (1080 * 0.1) / 2,
-            child: Container(
-              width: canvasX,
-              height: canvasY,
-              decoration: BoxDecoration(
-                border: const Border.fromBorderSide(
-                    BorderSide(color: Colors.white, width: 2)),
-                image: DecorationImage(
-                    image: AssetImage(facilityOfficeMap), fit: BoxFit.fill),
-              ),
-              child: Stack(children: [
-                for (int i = 0; i < officeQTY; i++)
-                  Positioned(
-                      bottom: cordOffice('y', i),
-                      left: cordOffice('x', i),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints.tightFor(
-                            width: buttonWidth, height: buttonHeight),
-                        child: TextButton(
-                          onPressed: () {
-                            facilityInform(context, i);
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                          ),
-                          child: officeNum[i] != '시설1'
-                              ? officeNum[i] != '시설2'
-                                  ? officeNum[i] != '시설3'
-                                      ? Text(
-                                          '${officeNum[i]}',
-                                          style: const TextStyle(
-                                              fontFamily: 'kor',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        )
-                                      : const Text(
-                                          '화장실2',
-                                          style: TextStyle(
-                                              fontFamily: 'kor',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        )
-                                  : const Text(
-                                      '화장실1',
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    )
-                              : const Text(
-                                  '엘리베이터',
-                                  style: TextStyle(
-                                      fontFamily: 'kor',
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                        ),
-                      )),
-              ]),
-            ),
-          ),
+              top: 115,
+              left: 840,
+              child: GestureDetector(
+                child: Container(
+                  width: 180,
+                  height: 355,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        width: 2,
+                        color: Colors.transparent
+                      )
+                    )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 0);
+                },
+              )),
+          Positioned(
+              top: 480,
+              left: 850,
+              child: GestureDetector(
+                child: Container(
+                  width: 170,
+                  height: 245,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 1);
+                },
+              )),
+          Positioned(
+              top: 735,
+              left: 850,
+              child: GestureDetector(
+                child: Container(
+                  width: 165,
+                  height: 80,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 2);
+                },
+              )),
+          Positioned(
+              top: 820,
+              left: 850,
+              child: GestureDetector(
+                child: Container(
+                  width: 165,
+                  height: 80,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 3);
+                },
+              )),
+          Positioned(
+              top: 910,
+              left: 860,
+              child: GestureDetector(
+                child: Container(
+                  width: 160,
+                  height: 155,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 4);
+                },
+              )),
+          Positioned(
+              top: 1080,
+              left: 875,
+              child: GestureDetector(
+                child: Container(
+                  width: 145,
+                  height: 370,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 5);
+                },
+              )),
+          Positioned(
+              top: 1190,
+              left: 60,
+              child: GestureDetector(
+                child: Container(
+                  width: 395,
+                  height: 260,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 6);
+                },
+              )),
+          Positioned(
+              top: 1020,
+              left: 60,
+              child: GestureDetector(
+                child: Container(
+                  width: 500,
+                  height: 160,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 7);
+                },
+              )),
+          Positioned(
+              top: 715,
+              left: 60,
+              child: GestureDetector(
+                child: Container(
+                  width: 440,
+                  height: 295,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 8);
+                },
+              )),
+          Positioned(
+              top: 620,
+              left: 325,
+              child: GestureDetector(
+                child: Container(
+                  width: 175,
+                  height: 80,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 9);
+                },
+              )),
+          Positioned(
+              top: 485,
+              left: 60,
+              child: GestureDetector(
+                child: Container(
+                  width: 205,
+                  height: 215,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 10);
+                },
+              )),
+          Positioned(
+              top: 115,
+              left: 60,
+              child: GestureDetector(
+                child: Container(
+                  width: 435,
+                  height: 325,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 11);
+                },
+              )),
+          Positioned(
+              top: 115,
+              left: 515,
+              child: GestureDetector(
+                child: Container(
+                  width: 245,
+                  height: 325,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 12);
+                },
+              )),
+          Positioned(
+              top: 485,
+              left: 360,
+              child: GestureDetector(
+                child: Container(
+                  width: 140,
+                  height: 95,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 13);
+                },
+              )),
+          Positioned(
+              top: 770,
+              left: 575,
+              child: GestureDetector(
+                child: Container(
+                  width: 215,
+                  height: 60,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 14);
+                },
+              )),
+          Positioned(
+              top: 485,
+              left: 565,
+              child: GestureDetector(
+                child: Container(
+                  width: 210,
+                  height: 95,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 15);
+                },
+              )),
+          Positioned(
+              top: 1245,
+              left: 655,
+              child: GestureDetector(
+                child: Container(
+                  width: 150,
+                  height: 60,
+                  // color: Colors.transparent,
+                  decoration: BoxDecoration(
+                      border: Border.fromBorderSide(
+                          BorderSide(
+                              width: 2,
+                              color: Colors.transparent
+                          )
+                      )
+                  ),
+                ),
+                onTap: () {
+                  facilityInform(context, 16);
+                },
+              )),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -25,6 +26,7 @@ class _ChangingCountDownModalFinalState
     extends State<ChangingCountDownModalFinal> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late MainStatusModel _mainStatusProvider;
 
   final CountdownController _controller = CountdownController(autoStart: true);
 
@@ -68,16 +70,23 @@ class _ChangingCountDownModalFinalState
 
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
 
-    if((_servingProvider.tray1 == false&&_servingProvider.tray2==false)&&_servingProvider.tray3==false ){
+    if(_mainStatusProvider.robotServiceMode == 0){
+      if((_servingProvider.tray1 == false&&_servingProvider.tray2==false)&&_servingProvider.tray3==false ){
+        setState(() {
+          countDownMSG = '초 후 대기장소로 돌아갑니다.';
+        });
+      }else{
+        countDownMSG = '초 후 서빙을 시작합니다.';
+      }
+    }else if(_mainStatusProvider.robotServiceMode == 2){
       setState(() {
         countDownMSG = '초 후 대기장소로 돌아갑니다.';
       });
-    }else{
-      countDownMSG = '초 후 서빙을 시작합니다.';
     }
 
     return Container(
@@ -233,7 +242,6 @@ class _ChangingCountDownModalFinalState
                           page: const TraySelectionFinal(),
                         ).navPageToPage();
                       });
-
                     } else if (widget.modeState == 'serving') {
                       if (_servingProvider.targetTableNum != 'none') {
                         setState(() {
@@ -253,7 +261,6 @@ class _ChangingCountDownModalFinalState
                             page: const NavigatorProgressModuleFinal(),
                           ).navPageToPage();
                         });
-
                       } else {
                         _servingProvider.clearAllTray();
                         PostApi(
@@ -268,7 +275,26 @@ class _ChangingCountDownModalFinalState
                             page: const TraySelectionFinal(),
                           ).navPageToPage();
                         });
-
+                      }
+                    }else if(widget.modeState == 'guideDone'){
+                      if (_servingProvider.targetTableNum != 'none') {
+                        setState(() {
+                          _servingProvider.trayChange = true;
+                          _networkProvider.servTable =
+                              _servingProvider.targetTableNum;
+                        });
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                          ).navPageToPage();
+                        });
                       }
                     }
                   });

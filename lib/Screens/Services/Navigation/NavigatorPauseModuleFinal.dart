@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/ServingModules/tableSelectModalFinal.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -26,6 +28,7 @@ class NavigatorPauseModuleFinal extends StatefulWidget {
 
 class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
   late NetworkModel _networkProvider;
+  late MainStatusModel _mainStatusProvider;
 
   late String backgroundImage;
 
@@ -99,6 +102,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
   @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     startUrl = _networkProvider.startUrl;
     stpUrl = _networkProvider.stpUrl;
@@ -124,24 +128,39 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
 
     servTableNum = _networkProvider.servTable!;
 
-    if(servTableNum == 'charging_pile'){
+    if (servTableNum == 'charging_pile') {
       setState(() {
         serviceState = '[이동]';
         navSentence = '$serviceState이 일시중지 되었습니다';
         destinationSentence = '충전스테이션';
       });
-    }else if(servTableNum == 'wait'){
+    } else if (servTableNum == 'wait' || servTableNum == '716') {
       setState(() {
         serviceState = '[이동]';
         navSentence = '$serviceState이 일시중지 되었습니다';
         destinationSentence = '대기장소';
       });
-    }else{
-      setState(() {
-        serviceState = '[서빙]';
-        navSentence = '$serviceState이 일시중지 되었습니다';
-        destinationSentence = '$servTableNum번 테이블';
-      });
+    } else {
+      if (_mainStatusProvider.robotServiceMode == 0) {
+        setState(() {
+          serviceState = '[서빙]';
+          navSentence = '$serviceState이 일시중지 되었습니다';
+          destinationSentence = '$servTableNum번 테이블';
+        });
+      } else if (_mainStatusProvider.robotServiceMode == 1) {
+        setState(() {
+          serviceState = '[배송]';
+          navSentence = '$serviceState이 일시중지 되었습니다';
+          destinationSentence = '$servTableNum 호';
+        });
+      } else if (_mainStatusProvider.robotServiceMode == 2) {
+        setState(() {
+          serviceState = '[안내]';
+          navSentence = '$serviceState가 일시중지 되었습니다';
+          destinationSentence =
+              '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
+        });
+      }
     }
 
     return WillPopScope(
@@ -160,7 +179,10 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
               height: 108,
               child: const Stack(
                 children: [
-                  AppBarAction(homeButton: false, screenName: "NavigationPause",),
+                  AppBarAction(
+                    homeButton: false,
+                    screenName: "NavigationPause",
+                  ),
                   AppBarStatus(),
                 ],
               ),
@@ -204,8 +226,14 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.location_on_outlined, size: 65, color: Colors.white,),
-                          const SizedBox(width: 15,),
+                          const Icon(
+                            Icons.location_on_outlined,
+                            size: 65,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
                           Text(
                             destinationSentence,
                             textAlign: TextAlign.start,
@@ -240,28 +268,29 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                           if (i == 0) {
                             // 재시작 추가 필요
                             PostApi(
-                                url: startUrl,
-                                endadr: rsmUrl,
-                                keyBody: 'stop')
+                                    url: startUrl,
+                                    endadr: rsmUrl,
+                                    keyBody: 'stop')
                                 .Posting(context);
-                            Future.delayed(const Duration(milliseconds: 230), () {
+                            Future.delayed(const Duration(milliseconds: 230),
+                                () {
                               _effectPlayer.dispose();
                               navPage(
                                 context: context,
                                 page: const NavigatorProgressModuleFinal(),
                               ).navPageToPage();
                             });
-
                           } else if (i == 1) {
                             // 충전하러가기 기능
                             PostApi(
-                                url: startUrl,
-                                endadr: chgUrl,
-                                keyBody: 'charging_pile')
+                                    url: startUrl,
+                                    endadr: chgUrl,
+                                    keyBody: 'charging_pile')
                                 .Posting(context);
                             _networkProvider.currentGoal = '충전스테이션';
                             _networkProvider.servTable = 'charging_pile';
-                            Future.delayed(const Duration(milliseconds: 230), () {
+                            Future.delayed(const Duration(milliseconds: 230),
+                                () {
                               _effectPlayer.dispose();
                               navPage(
                                 context: context,
@@ -270,23 +299,66 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                             });
                           } else if (i == 2) {
                             // 추후에는 골 포지션 변경을 하며 자율주행 명령 추가
+                            Future.delayed(const Duration(milliseconds: 230),
+                                () {
+                              _effectPlayer.dispose();
+                              if (_mainStatusProvider.robotServiceMode == 2) {
+                                navPage(
+                                  context: context,
+                                  page: const FacilityScreen(),
+                                ).navPageToPage();
+                              }
+                            });
                             // showTableSelectPopup(context);
                           } else {
                             // 추후에는 거점으로 복귀
-                            PostApi(
-                                url: startUrl,
-                                endadr: navUrl,
-                                keyBody: 'wait')
-                                .Posting(context);
-                            _networkProvider.currentGoal = '충전스테이션';
-                            _networkProvider.servTable = 'wait';
-                            Future.delayed(const Duration(milliseconds: 230), () {
-                              _effectPlayer.dispose();
-                              navPage(
-                                context: context,
-                                page: const NavigatorProgressModuleFinal(),
-                              ).navPageToPage();
-                            });
+                            if (_mainStatusProvider.robotServiceMode == 0) {
+                              PostApi(
+                                      url: startUrl,
+                                      endadr: navUrl,
+                                      keyBody: 'wait')
+                                  .Posting(context);
+                              _networkProvider.servTable = 'wait';
+                              Future.delayed(const Duration(milliseconds: 230),
+                                  () {
+                                _effectPlayer.dispose();
+                                navPage(
+                                  context: context,
+                                  page: const NavigatorProgressModuleFinal(),
+                                ).navPageToPage();
+                              });
+                            }else if (_mainStatusProvider.robotServiceMode == 1) {
+                              PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: 'wait')
+                                  .Posting(context);
+                              _networkProvider.servTable = 'wait';
+                              Future.delayed(const Duration(milliseconds: 230),
+                                      () {
+                                    _effectPlayer.dispose();
+                                    navPage(
+                                      context: context,
+                                      page: const NavigatorProgressModuleFinal(),
+                                    ).navPageToPage();
+                                  });
+                            }else if (_mainStatusProvider.robotServiceMode == 2) {
+                              PostApi(
+                                  url: startUrl,
+                                  endadr: navUrl,
+                                  keyBody: '716')
+                                  .Posting(context);
+                              _networkProvider.servTable = '716';
+                              Future.delayed(const Duration(milliseconds: 230),
+                                      () {
+                                    _effectPlayer.dispose();
+                                    navPage(
+                                      context: context,
+                                      page: const NavigatorProgressModuleFinal(),
+                                    ).navPageToPage();
+                                  });
+                            }
+                            // _networkProvider.currentGoal = '충전스테이션';
                           }
                         });
                       },

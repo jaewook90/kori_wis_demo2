@@ -240,7 +240,6 @@ class _ServingProgressFinalState extends State<ServingProgressFinal> {
                               page: const NavigatorProgressModuleFinal(),
                             ).navPageToPage();
                           });
-
                         } else {
                           _servingProvider.clearAllTray();
                           PostApi(
