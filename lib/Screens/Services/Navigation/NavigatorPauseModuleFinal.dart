@@ -134,7 +134,7 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
         navSentence = '$serviceState이 일시중지 되었습니다';
         destinationSentence = '충전스테이션';
       });
-    } else if (servTableNum == 'wait' || servTableNum == '716') {
+    } else if (servTableNum == 'wait' || servTableNum == '시설1') {
       setState(() {
         serviceState = '[이동]';
         navSentence = '$serviceState이 일시중지 되었습니다';
@@ -346,9 +346,9 @@ class _NavigatorPauseModuleFinalState extends State<NavigatorPauseModuleFinal> {
                               PostApi(
                                   url: startUrl,
                                   endadr: navUrl,
-                                  keyBody: '716')
+                                  keyBody: '시설1')
                                   .Posting(context);
-                              _networkProvider.servTable = '716';
+                              _networkProvider.servTable = '시설1';
                               Future.delayed(const Duration(milliseconds: 230),
                                       () {
                                     _effectPlayer.dispose();

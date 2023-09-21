@@ -181,6 +181,7 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
+                    _controller.pause();
                     if (_servingProvider.targetTableNum != 'none') {
                       _servingProvider.trayChange = true;
                       _networkProvider.servTable =
