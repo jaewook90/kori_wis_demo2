@@ -100,6 +100,7 @@ class _FacilityModalState extends State<FacilityModal> {
   void dispose() {
     // TODO: implement dispose
     _effectPlayer.dispose();
+    _pwrTimer.cancel();
     super.dispose();
   }
 

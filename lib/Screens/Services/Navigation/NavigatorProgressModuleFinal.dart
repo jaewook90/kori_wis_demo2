@@ -153,7 +153,7 @@ class _NavigatorProgressModuleFinalState
         navSentence = '[이동] 중 입니다';
         destinationSentence = '충전스테이션';
       });
-    } else if (servTableNum == 'wait' || servTableNum == '716') {
+    } else if (servTableNum == 'wait' || servTableNum == '시설1') {
       setState(() {
         navSentence = '[이동] 중 입니다';
         destinationSentence = '대기장소';
@@ -226,7 +226,7 @@ class _NavigatorProgressModuleFinalState
     if (_mainStatusProvider.robotServiceMode == 1) {
         targetTableNum = 'wait';
     }else if (_mainStatusProvider.robotServiceMode == 2) {
-      targetTableNum = '716';
+      targetTableNum = '시설1';
     }
     _servingProvider.targetTableNum = targetTableNum;
 
@@ -250,8 +250,8 @@ class _NavigatorProgressModuleFinalState
               navPage(context: context, page: ShippingDoneFinal())
                   .navPageToPage();
             } else if (_mainStatusProvider.robotServiceMode == 2) {
-              // 테스트를 위하여 대기장소 시설1 에서 716으로 변경하여 점검 => 나갈땐 716을 다 시설1로 변경 필요(정지에서도)
-              if(servTableNum != '716'){
+              // 테스트를 위하여 대기장소 시설1 에서 시설1으로 변경하여 점검 => 나갈땐 시설1을 다 시설1로 변경 필요(정지에서도)
+              if(servTableNum != '시설1'){
                 navPage(context: context, page: FacilityDoneScreen()).navPageToPage();
               }else{
                 navPage(context: context, page: FacilityScreen()).navPageToPage();
@@ -344,7 +344,7 @@ class _NavigatorProgressModuleFinalState
                             PostApi(
                                 url: startUrl,
                                 endadr: navUrl,
-                                keyBody: '716')
+                                keyBody: '시설1')
                                 .Posting(context);
                           }
                         }

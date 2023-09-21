@@ -7,7 +7,13 @@ import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:provider/provider.dart';
 
 class AppBarStatus extends StatefulWidget {
-  const AppBarStatus({Key? key}) : super(key: key);
+  final double? batteryTextPos;
+  final double? batteryImgPos;
+  final double? EMGImgPos;
+
+  const AppBarStatus(
+      {Key? key, this.batteryTextPos, this.batteryImgPos, this.EMGImgPos})
+      : super(key: key);
 
   @override
   State<AppBarStatus> createState() => _AppBarStatusState();
@@ -20,10 +26,30 @@ class _AppBarStatusState extends State<AppBarStatus> {
   late int CHGFlag;
   late int EMGStatus;
 
+  late double batteryTextPos;
+  late double batteryImgPos;
+  late double EMGImgPos;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    if(widget.batteryTextPos == null){
+      batteryTextPos = 46;
+    }else{
+      batteryTextPos = widget.batteryTextPos!;
+    }
+    if(widget.batteryImgPos == null){
+      batteryImgPos = 50;
+    }else{
+      batteryImgPos = widget.batteryImgPos!;
+    }
+    if(widget.EMGImgPos == null){
+      EMGImgPos = 245;
+    }else{
+      EMGImgPos = widget.EMGImgPos!;
+    }
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -62,13 +88,13 @@ class _AppBarStatusState extends State<AppBarStatus> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Positioned(
-        right: 46,
-        top: 60,
+        right: batteryTextPos,
+        top: 80,
         child: Text(('${batData.toString()} %')),
       ),
       Positioned(
-        right: 50,
-        top: 20,
+        right: batteryImgPos,
+        top: 40,
         child: Container(
           height: 45,
           width: 50,
@@ -81,10 +107,10 @@ class _AppBarStatusState extends State<AppBarStatus> {
         ),
       ),
       EMGStatus == 0
-          ? const Positioned(
-              right: 245,
-              top: 15,
-              child: Stack(children: [
+          ? Positioned(
+              left: EMGImgPos,
+              top: 35,
+              child: const Stack(children: [
                 Icon(Icons.radio_button_checked,
                     color: Colors.red, size: 80, grade: 200, weight: 200),
                 Padding(
@@ -102,10 +128,10 @@ class _AppBarStatusState extends State<AppBarStatus> {
             )
           : Container(),
       CHGFlag == 3
-          ? const Positioned(
-              right: 50,
-              top: 18,
-              child: Icon(Icons.bolt, color: Colors.yellow, size: 50),
+          ? Positioned(
+              right: batteryImgPos,
+              top: 40,
+              child: const Icon(Icons.bolt, color: Colors.yellow, size: 50),
             )
           : Container(),
     ]);

@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -154,7 +155,7 @@ class _IntroScreenState extends State<IntroScreen>
       _playAudio();
     });
     await Future.delayed(const Duration(milliseconds: 500));
-    if(mounted){
+    if (mounted) {
       print('okay?');
       setState(() {
         updateComplete = true;
@@ -310,10 +311,15 @@ class _IntroScreenState extends State<IntroScreen>
                             context: context,
                             page: const TraySelectionFinal(),
                           ).navPageToPage();
-                        } else {
+                        } else if (_mainStatusProvider.robotServiceMode == 1) {
                           navPage(
                             context: context,
                             page: const ShippingMenuFinal(),
+                          ).navPageToPage();
+                        } else {
+                          navPage(
+                            context: context,
+                            page: const FacilityScreen(),
                           ).navPageToPage();
                         }
                       });
@@ -374,9 +380,9 @@ class _IntroScreenState extends State<IntroScreen>
                     ),
                   ),
                   Positioned(
-                    top: 1150,
+                    top: 1000,
                     child: SizedBox(
-                      height: 300,
+                      height: 450,
                       width: 1080,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -428,8 +434,12 @@ class _IntroScreenState extends State<IntroScreen>
                                                             'introStage2',
                                                             false);
                                                         setState(() {
-                                                          introStage1 = _prefs.getBool('introStage1')!;
-                                                          introStage2 = _prefs.getBool('introStage2')!;
+                                                          introStage1 =
+                                                              _prefs.getBool(
+                                                                  'introStage1')!;
+                                                          introStage2 =
+                                                              _prefs.getBool(
+                                                                  'introStage2')!;
                                                           _mainStatusProvider
                                                                   .robotServiceMode =
                                                               _prefs.getInt(
@@ -483,8 +493,12 @@ class _IntroScreenState extends State<IntroScreen>
                                                             'introStage2',
                                                             false);
                                                         setState(() {
-                                                          introStage1 = _prefs.getBool('introStage1')!;
-                                                          introStage2 = _prefs.getBool('introStage2')!;
+                                                          introStage1 =
+                                                              _prefs.getBool(
+                                                                  'introStage1')!;
+                                                          introStage2 =
+                                                              _prefs.getBool(
+                                                                  'introStage2')!;
                                                           _mainStatusProvider
                                                                   .robotServiceMode =
                                                               _prefs.getInt(
@@ -518,6 +532,70 @@ class _IntroScreenState extends State<IntroScreen>
                                                             color: Colors.white,
                                                             fontFamily: 'kor',
                                                             fontSize: 40))),
+                                              ]),
+                                          const SizedBox(
+                                            height: 50,
+                                          ),
+                                          Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      WidgetsBinding.instance
+                                                          .addPostFrameCallback(
+                                                              (_) {
+                                                        _effectPlayer.play();
+                                                        _prefs.setInt(
+                                                            'robotMode', 2);
+                                                        _prefs.setBool(
+                                                            'introStage1',
+                                                            true);
+                                                        _prefs.setBool(
+                                                            'introStage2',
+                                                            false);
+                                                        setState(() {
+                                                          introStage1 =
+                                                              _prefs.getBool(
+                                                                  'introStage1')!;
+                                                          introStage2 =
+                                                              _prefs.getBool(
+                                                                  'introStage2')!;
+                                                          _mainStatusProvider
+                                                                  .robotServiceMode =
+                                                              _prefs.getInt(
+                                                                  'robotMode');
+                                                        });
+                                                      });
+                                                    },
+                                                    style:
+                                                        FilledButton.styleFrom(
+                                                            enableFeedback:
+                                                                false,
+                                                            fixedSize:
+                                                                const Size(
+                                                                    450, 110),
+                                                            backgroundColor:
+                                                                const Color
+                                                                        .fromRGBO(
+                                                                    80,
+                                                                    80,
+                                                                    255,
+                                                                    0.7),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15),
+                                                            )),
+                                                    child: Text(
+                                                      '시설 안내',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: 'kor',
+                                                          fontSize: 40),
+                                                    )),
                                               ]),
                                           const SizedBox(
                                             height: 50,

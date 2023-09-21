@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
+import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/appBarAction.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_controller.dart';
@@ -25,6 +26,7 @@ class FacilityDoneScreen extends StatefulWidget {
 class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
+  late MainStatusModel _mainStatusProvider;
 
   // String backgroundImage = "assets/screens/Serving/koriZFinalReturn.png";
   String? startUrl;
@@ -32,6 +34,11 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
 
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
+
+  late AudioPlayer _audioPlayer;
+  final String _audioFile = 'assets/voices/KoriFacilityDone.wav';
+
+  late String backgroundImage;
 
   final CountdownController _controller = CountdownController(autoStart: true);
 
@@ -50,11 +57,14 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    backgroundImage = "assets/screens/Facility/FacilityGuideDone.png";
     _initAudio();
   }
 
   void _initAudio() {
     // AudioPlayer.clearAssetCache();
+    _audioPlayer = AudioPlayer()..setAsset(_audioFile);
+    _audioPlayer.setVolume(1);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
@@ -63,6 +73,7 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
   void dispose() {
     // TODO: implement dispose
     _effectPlayer.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -70,11 +81,15 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
     double screenWidth = 1080;
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
+
+    _audioPlayer.seek(const Duration(seconds: 0));
+    _audioPlayer.play();
 
     return Scaffold(
         appBar: AppBar(
@@ -87,10 +102,11 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
               height: 108,
               child: const Stack(
                 children: [
-                  AppBarAction(
-                    homeButton: true,
+                  const AppBarStatus(
+                    EMGImgPos: 500,
+                    batteryImgPos: 420,
+                    batteryTextPos: 410,
                   ),
-                  AppBarStatus()
                 ],
               ),
             )
@@ -100,6 +116,9 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
         extendBodyBehindAppBar: true,
         body: Container(
             constraints: const BoxConstraints.expand(),
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(backgroundImage), fit: BoxFit.cover)),
             child: Stack(children: [
               Countdown(
                 controller: _controller,
@@ -115,92 +134,103 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
                   });
                 },
               ),
-              const Positioned(
-                  top: 450,
+              Positioned(
+                  top: 250,
                   child: SizedBox(
                     width: 1080,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
                       children: [
-                        Text(
-                          '안내 완료',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 180,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]}호 ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}',
+                                style: const TextStyle(
+                                    fontFamily: 'kor',
+                                    fontSize: 70,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
+                          ],
+                        ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '[안내완료]',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   )),
               Positioned(
-                  top: 1200,
-                  left: 140,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                        fixedSize: Size(800, 150),
-                        backgroundColor: Colors.blue,
+                top: 1403,
+                left: 107,
+                child: FilledButton(
+                style: FilledButton.styleFrom(
+                    fixedSize: const Size((524-107), (1562-1403)),
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40)
+                    )),
+                onPressed: () {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+                    if (_servingProvider.targetTableNum != 'none') {
+                      _servingProvider.trayChange = true;
+                      _networkProvider.servTable =
+                          _servingProvider.targetTableNum;
+                      PostApi(
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: _servingProvider.targetTableNum)
+                          .Posting(context);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Future.delayed(const Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          _audioPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                          ).navPageToPage();
+                        });
+                      });
+                    }
+                  });
+                },
+                child: null),
+              ),
+              Positioned(
+                  top: 1403,
+                  left: 556,
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                        fixedSize: const Size((524-107), (1562-1403)),
+                        backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                            side: BorderSide(width: 1, color: Colors.white),
-                          borderRadius: BorderRadius.circular(30)
+                            borderRadius: BorderRadius.circular(40),
                         )),
                     onPressed: () {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
-                        if (_servingProvider.targetTableNum != 'none') {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                          PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.targetTableNum)
-                              .Posting(context);
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Future.delayed(const Duration(milliseconds: 230), () {
-                              _effectPlayer.dispose();
-                              navPage(
-                                context: context,
-                                page: const NavigatorProgressModuleFinal(),
-                              ).navPageToPage();
-                            });
-                          });
-                        }
+                        Future.delayed(const Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          _audioPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const FacilityScreen(),
+                          ).navPageToPage();
+                        });
                       });
                     },
-                    child: Text('복 귀', style: TextStyle(
-                      fontFamily: 'kor',
-                      color: Colors.black,
-                      fontSize: 60
-                    )),
+                    child: null
                   ))
-              // Positioned(
-              //   top: 450,
-              //   left: 0,
-              //   child: GestureDetector(
-              //       onTap: () {
-              //         PostApi(
-              //                 url: startUrl,
-              //                 endadr: navUrl,
-              //                 keyBody: _servingProvider.waitingPoint)
-              //             .Posting(context);
-              //         Future.delayed(const Duration(milliseconds: 230), () {
-              //           _effectPlayer.dispose();
-              //           navPage(
-              //             context: context,
-              //             page: const TraySelectionFinal(),
-              //           ).navPageToPage();
-              //         });
-              //       },
-              //       child: Container(
-              //           height: 1200,
-              //           width: 1080,
-              //           decoration: const BoxDecoration(
-              //               border: Border.fromBorderSide(BorderSide(
-              //                   color: Colors.transparent, width: 1))))),
-              // ),
-              // const ServingModuleButtonsFinal(screens: 3),
             ])));
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Shipping/ShippingMenuFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
@@ -148,7 +150,13 @@ class _AdminPWModalState extends State<AdminPWModal> {
                                 _mainStatusProvider.debugMode = false;
                                 pwrController.text = '';
                               });
-                              navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                              if(_mainStatusProvider.robotServiceMode==0){
+                                navPage(context: context, page: TraySelectionFinal()).navPageToPage();
+                              }else if(_mainStatusProvider.robotServiceMode==1){
+                                navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                              }else if(_mainStatusProvider.robotServiceMode==2){
+                                navPage(context: context, page: FacilityScreen()).navPageToPage();
+                              }
                             }else{
                               setState(() {
                                 _pwrCheck = false;

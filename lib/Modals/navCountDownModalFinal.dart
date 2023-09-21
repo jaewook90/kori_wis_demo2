@@ -63,11 +63,15 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     apiCallFlag = false;
     countDownNav = true;
 
+    // if(_mainStatusProvider.robotServiceMode == 0){
+    //   _audioFile = 'assets/voices/koriServingNavBegin.wav';
+    // }
+
     _initAudio();
   }
 
   void _initAudio() {
-    // AudioPlayer.clearAssetCache();
+    AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
@@ -140,7 +144,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   interval: const Duration(seconds: 1),
                   onFinished: () {
                     _audioPlayer.play();
-                    if (widget.serviceMode == 'Shipping') {
+                    if (widget.serviceMode == 'Shipping' ||
+                        widget.serviceMode == 'facilityGuide') {
                       _networkProvider.servTable = widget.goalPosition;
                     } else {
                       _servingProvider.trayChange = true;
@@ -148,9 +153,9 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                           _servingProvider.targetTableNum;
                     }
                     PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: targetTableNum)
+                        url: startUrl,
+                        endadr: navUrl,
+                        keyBody: targetTableNum)
                         .Posting(context);
                     Future.delayed(const Duration(milliseconds: 230), () {
                       _audioPlayer.dispose();

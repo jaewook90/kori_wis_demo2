@@ -126,30 +126,11 @@ class _ChangingCountDownModalFinalState
                         }
                       }
                     }
-                    if (_servingProvider.targetTableNum != 'none') {
-                      setState(() {
-                        _servingProvider.trayChange = true;
-                        _networkProvider.servTable =
-                            _servingProvider.targetTableNum;
-                      });
+                    if (widget.modeState == 'return') {
                       PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.targetTableNum)
-                          .Posting(context);
-                      Future.delayed(Duration(milliseconds: 230), () {
-                        _effectPlayer.dispose();
-                        navPage(
-                          context: context,
-                          page: const NavigatorProgressModuleFinal(),
-                        ).navPageToPage();
-                      });
-                    } else {
-                      _servingProvider.clearAllTray();
-                      PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.waitingPoint)
+                          url: startUrl,
+                          endadr: navUrl,
+                          keyBody: _servingProvider.waitingPoint)
                           .Posting(context);
                       Future.delayed(Duration(milliseconds: 230), () {
                         _effectPlayer.dispose();
@@ -158,7 +139,60 @@ class _ChangingCountDownModalFinalState
                           page: const TraySelectionFinal(),
                         ).navPageToPage();
                       });
-
+                    } else if (widget.modeState == 'serving') {
+                      if (_servingProvider.targetTableNum != 'none') {
+                        setState(() {
+                          _servingProvider.trayChange = true;
+                          _networkProvider.servTable =
+                              _servingProvider.targetTableNum;
+                        });
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                          ).navPageToPage();
+                        });
+                      } else {
+                        _servingProvider.clearAllTray();
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.waitingPoint)
+                            .Posting(context);
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const TraySelectionFinal(),
+                          ).navPageToPage();
+                        });
+                      }
+                    }else if(widget.modeState == 'guideDone'){
+                      if (_servingProvider.targetTableNum != 'none') {
+                        setState(() {
+                          _servingProvider.trayChange = true;
+                          _networkProvider.servTable =
+                              _servingProvider.targetTableNum;
+                        });
+                        PostApi(
+                            url: startUrl,
+                            endadr: navUrl,
+                            keyBody: _servingProvider.targetTableNum)
+                            .Posting(context);
+                        Future.delayed(Duration(milliseconds: 230), () {
+                          _effectPlayer.dispose();
+                          navPage(
+                            context: context,
+                            page: const NavigatorProgressModuleFinal(),
+                          ).navPageToPage();
+                        });
+                      }
                     }
                   },
                 ),
@@ -188,8 +222,12 @@ class _ChangingCountDownModalFinalState
                     _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
                     _controller.pause();
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    if(widget.modeState == 'guideDone'){
+                      Navigator.pop(context);
+                    }else{
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    }
                   });
                 },
                 child: const Center(

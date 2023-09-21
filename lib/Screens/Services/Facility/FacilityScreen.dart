@@ -50,6 +50,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
+  // 배경 화면
+  late String backgroundImage;
+
   late bool _debugTray;
 
   String? startUrl;
@@ -86,6 +89,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    backgroundImage = "assets/screens/Facility/FacilityMain.png";
 
     _initSharedPreferences();
 
@@ -128,158 +133,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
     // originMove.add(mapOrigin[0] / mapX);
     // originMove.add(mapOrigin[1] / mapY);
 
-    officeQTY =
-        Provider.of<MainStatusModel>(context, listen: false).cordList!.length;
-
-    print(officeQTY);
-
-    for (int h = 0; h < officeQTY; h++) {
-      // poseX.add(double.parse(
-      //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
-      //         [0]));
-      // poseY.add(double.parse(
-      //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
-      //         [1]));
-      officeNum.add(
-          Provider.of<NetworkModel>(context, listen: false).getPoseData![h]);
-
-      if (Provider.of<NetworkModel>(context, listen: false).getPoseData![h] !=
-          '시설1') {
-        if (Provider.of<NetworkModel>(context, listen: false).getPoseData![h] !=
-            '시설2') {
-          if (Provider.of<NetworkModel>(context, listen: false)
-                  .getPoseData![h] !=
-              '시설3') {
-            if (Provider.of<NetworkModel>(context, listen: false)
-                    .getPoseData![h] !=
-                '701') {
-              // officeName.add("D'LIVE  (주)딜라이브");
-              if (Provider.of<NetworkModel>(context, listen: false)
-                      .getPoseData![h] !=
-                  '704') {
-                if (Provider.of<NetworkModel>(context, listen: false)
-                        .getPoseData![h] !=
-                    '705') {
-                  if (Provider.of<NetworkModel>(context, listen: false)
-                          .getPoseData![h] !=
-                      '706') {
-                    if (Provider.of<NetworkModel>(context, listen: false)
-                            .getPoseData![h] !=
-                        '708') {
-                      if (Provider.of<NetworkModel>(context, listen: false)
-                              .getPoseData![h] !=
-                          '710') {
-                        if (Provider.of<NetworkModel>(context, listen: false)
-                                .getPoseData![h] !=
-                            '711') {
-                          if (Provider.of<NetworkModel>(context, listen: false)
-                                  .getPoseData![h] !=
-                              '712') {
-                            if (Provider.of<NetworkModel>(context,
-                                        listen: false)
-                                    .getPoseData![h] !=
-                                '713') {
-                              if (Provider.of<NetworkModel>(context,
-                                          listen: false)
-                                      .getPoseData![h] !=
-                                  '715') {
-                                if (Provider.of<NetworkModel>(context,
-                                            listen: false)
-                                        .getPoseData![h] !=
-                                    '716') {
-                                  if (Provider.of<NetworkModel>(context,
-                                              listen: false)
-                                          .getPoseData![h] !=
-                                      '717') {
-                                    if (Provider.of<NetworkModel>(context,
-                                                listen: false)
-                                            .getPoseData![h] !=
-                                        '718') {
-                                      if (Provider.of<NetworkModel>(context,
-                                                  listen: false)
-                                              .getPoseData![h] !=
-                                          '719') {
-                                      } else {
-                                        officeName.add("JS융합인재교육원(주)");
-                                      }
-                                    } else {
-                                      officeName.add("(주)딜라이브 자재실");
-                                    }
-                                  } else {
-                                    officeName.add("수성엔지니어링");
-                                  }
-                                } else {
-                                  officeName.add("(주)엑사로보틱스");
-                                }
-                              } else {
-                                officeName.add("HD인베스트");
-                              }
-                            } else {
-                              officeName.add("신영비엠이(주)");
-                            }
-                          } else {
-                            officeName.add("(주)엘렉시");
-                          }
-                        } else {
-                          officeName.add("Daily Vegan");
-                        }
-                      } else {
-                        officeName.add("(주)범건축종합건축사사무소");
-                      }
-                    } else {
-                      officeName.add("(주)드림디엔에스");
-                    }
-                  } else {
-                    officeName.add("DAWON Tax Office");
-                  }
-                } else {
-                  officeName.add("브레인컴퍼니");
-                }
-              } else {
-                officeName.add("아워팜");
-              }
-            } else {
-              officeName.add("(주)딜라이브");
-            }
-            // officeName.add('awsdfasdf');
-            // officeDetail.add('여기는 ${officeName[h]} 입니다.');
-          } else {
-            officeName.add('화장실2');
-            // officeDetail.add('여기는 화장실2 입니다.');
-          }
-        } else {
-          officeName.add('화장실1');
-          // officeDetail.add('여기는 화장실1 입니다.');
-        }
-      } else {
-        officeName.add('엘리베이터');
-        // officeDetail.add('여기는 엘리베이터 입니다.');
-      }
-    }
-
-    if (Provider.of<MainStatusModel>(context, listen: false)
-            .facilityNum!
-            .isEmpty ||
-        Provider.of<MainStatusModel>(context, listen: false)
-            .facilityName!
-            .isEmpty) {
-      for (int i = 0; i < officeQTY; i++) {
-        setState(() {
-          Provider.of<MainStatusModel>(context, listen: false)
-              .facilityNum!
-              .add(officeNum[i]);
-          Provider.of<MainStatusModel>(context, listen: false)
-              .facilityName!
-              .add(officeName[i]);
-          // Provider.of<MainStatusModel>(context, listen: false)
-          //     .facilityDetail!
-          //     .add(officeDetail[i]);
-        });
-      }
-      print(Provider.of<MainStatusModel>(context, listen: false).facilityNum);
-      print(Provider.of<MainStatusModel>(context, listen: false).facilityName);
-      print(
-          Provider.of<MainStatusModel>(context, listen: false).facilityDetail);
+    if (Provider.of<NetworkModel>(context, listen: false)
+        .getPoseData!
+        .isEmpty) {
+      poseDataUpdate();
     }
   }
 
@@ -412,7 +269,170 @@ class _FacilityScreenState extends State<FacilityScreen> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
+    if (positionList.isEmpty) {
+      positionList = _networkProvider.getPoseData!;
+      positionCordList = _mainStatusProvider.cordList!;
+    } else {
+      _networkProvider.getPoseData = positionList;
+      _mainStatusProvider.cordList = positionCordList;
+    }
+
     _debugTray = _mainStatusProvider.debugMode!;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      officeQTY =
+          Provider.of<MainStatusModel>(context, listen: false).cordList!.length;
+
+      print(officeQTY);
+
+      for (int h = 0; h < officeQTY; h++) {
+        // poseX.add(double.parse(
+        //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
+        //         [0]));
+        // poseY.add(double.parse(
+        //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
+        //         [1]));
+        officeNum.add(
+            Provider.of<NetworkModel>(context, listen: false).getPoseData![h]);
+
+        if (Provider.of<NetworkModel>(context, listen: false).getPoseData![h] !=
+            '시설1') {
+          if (Provider.of<NetworkModel>(context, listen: false)
+                  .getPoseData![h] !=
+              '시설2') {
+            if (Provider.of<NetworkModel>(context, listen: false)
+                    .getPoseData![h] !=
+                '시설3') {
+              if (Provider.of<NetworkModel>(context, listen: false)
+                      .getPoseData![h] !=
+                  '701') {
+                // officeName.add("D'LIVE  (주)딜라이브");
+                if (Provider.of<NetworkModel>(context, listen: false)
+                        .getPoseData![h] !=
+                    '704') {
+                  if (Provider.of<NetworkModel>(context, listen: false)
+                          .getPoseData![h] !=
+                      '705') {
+                    if (Provider.of<NetworkModel>(context, listen: false)
+                            .getPoseData![h] !=
+                        '706') {
+                      if (Provider.of<NetworkModel>(context, listen: false)
+                              .getPoseData![h] !=
+                          '708') {
+                        if (Provider.of<NetworkModel>(context, listen: false)
+                                .getPoseData![h] !=
+                            '710') {
+                          if (Provider.of<NetworkModel>(context, listen: false)
+                                  .getPoseData![h] !=
+                              '711') {
+                            if (Provider.of<NetworkModel>(context,
+                                        listen: false)
+                                    .getPoseData![h] !=
+                                '712') {
+                              if (Provider.of<NetworkModel>(context,
+                                          listen: false)
+                                      .getPoseData![h] !=
+                                  '713') {
+                                if (Provider.of<NetworkModel>(context,
+                                            listen: false)
+                                        .getPoseData![h] !=
+                                    '715') {
+                                  if (Provider.of<NetworkModel>(context,
+                                              listen: false)
+                                          .getPoseData![h] !=
+                                      '716') {
+                                    if (Provider.of<NetworkModel>(context,
+                                                listen: false)
+                                            .getPoseData![h] !=
+                                        '717') {
+                                      if (Provider.of<NetworkModel>(context,
+                                                  listen: false)
+                                              .getPoseData![h] !=
+                                          '718') {
+                                        if (Provider.of<NetworkModel>(context,
+                                                    listen: false)
+                                                .getPoseData![h] !=
+                                            '719') {
+                                        } else {
+                                          officeName.add("JS융합인재교육원(주)");
+                                        }
+                                      } else {
+                                        officeName.add("(주)딜라이브 자재실");
+                                      }
+                                    } else {
+                                      officeName.add("수성엔지니어링");
+                                    }
+                                  } else {
+                                    officeName.add("(주)엑사로보틱스");
+                                  }
+                                } else {
+                                  officeName.add("HD인베스트");
+                                }
+                              } else {
+                                officeName.add("신영비엠이(주)");
+                              }
+                            } else {
+                              officeName.add("(주)엘렉시");
+                            }
+                          } else {
+                            officeName.add("Daily Vegan");
+                          }
+                        } else {
+                          officeName.add("(주)범건축종합건축사사무소");
+                        }
+                      } else {
+                        officeName.add("(주)드림디엔에스");
+                      }
+                    } else {
+                      officeName.add("DAWON Tax Office");
+                    }
+                  } else {
+                    officeName.add("브레인컴퍼니");
+                  }
+                } else {
+                  officeName.add("아워팜");
+                }
+              } else {
+                officeName.add("(주)딜라이브");
+              }
+              // officeName.add('awsdfasdf');
+              // officeDetail.add('여기는 ${officeName[h]} 입니다.');
+            } else {
+              officeName.add('화장실2');
+              // officeDetail.add('여기는 화장실2 입니다.');
+            }
+          } else {
+            officeName.add('화장실1');
+            // officeDetail.add('여기는 화장실1 입니다.');
+          }
+        } else {
+          officeName.add('엘리베이터');
+        }
+      }
+
+      if (Provider.of<MainStatusModel>(context, listen: false)
+              .facilityNum!
+              .isEmpty ||
+          Provider.of<MainStatusModel>(context, listen: false)
+              .facilityName!
+              .isEmpty) {
+        for (int i = 0; i < officeQTY; i++) {
+          setState(() {
+            Provider.of<MainStatusModel>(context, listen: false)
+                .facilityNum!
+                .add(officeNum[i]);
+            Provider.of<MainStatusModel>(context, listen: false)
+                .facilityName!
+                .add(officeName[i]);
+          });
+        }
+        print(Provider.of<MainStatusModel>(context, listen: false).facilityNum);
+        print(
+            Provider.of<MainStatusModel>(context, listen: false).facilityName);
+        print(Provider.of<MainStatusModel>(context, listen: false)
+            .facilityDetail);
+      }
+    });
 
     // print(originMove);
     return Scaffold(
@@ -427,34 +447,75 @@ class _FacilityScreenState extends State<FacilityScreen> {
             height: 108,
             child: Stack(
               children: [
-                const AppBarStatus(),
+                // 장소 이름
+                // const Positioned(
+                //   left: 30,
+                //     child: Text('Habio 7F',
+                //     style: TextStyle(
+                //       fontFamily: 'kor',
+                //       fontSize: 70,
+                //       fontWeight: FontWeight.bold
+                //     ),)),
+                const AppBarStatus(
+                  EMGImgPos: 500,
+                  batteryImgPos: 420,
+                  batteryTextPos: 410,
+                ),
                 Positioned(
-                    top: 25,
-                    left: 53,
-                    child: TextButton(
+                    top: 30,
+                    right: 55,
+                    child: FilledButton(
                       onPressed: () {
-                        navPage(
-                                context: context,
-                                page: const FacilityListScreen())
-                            .navPageToPage();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                                    context: context,
+                                    page: const FacilityListScreen())
+                                .navPageToPage();
+                          });
+                        });
                       },
-                      style: TextButton.styleFrom(
-                          side:
-                              const BorderSide(color: Colors.white, width: 2)),
-                      child: const Text(
-                        '입주사 목록',
-                        style: TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
+                      style: FilledButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          fixedSize: Size(280, 85),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            // side: BorderSide(
+                            //     color: Colors.tealAccent, width: 1)
+                          )),
+                      child: null,
                     ))
+                // 버튼
+                // Positioned(
+                //     top: 30,
+                //     right: 33,
+                //     child: TextButton(
+                //       onPressed: () {
+                //         navPage(
+                //                 context: context,
+                //                 page: const FacilityListScreen())
+                //             .navPageToPage();
+                //       },
+                //       style: TextButton.styleFrom(
+                //           side:
+                //               const BorderSide(color: Colors.white, width: 2)),
+                //       child: const Text(
+                //         '입주사 목록',
+                //         style: TextStyle(
+                //             fontFamily: 'kor',
+                //             fontSize: 30,
+                //             fontWeight: FontWeight.bold,
+                //             color: Colors.white),
+                //       ),
+                //     ))
               ],
             ),
           )
         ],
-        toolbarHeight: 110,
+        toolbarHeight: 150,
       ),
       extendBodyBehindAppBar: true,
       drawerEdgeDragWidth: 70,
@@ -1425,435 +1486,532 @@ class _FacilityScreenState extends State<FacilityScreen> {
           ),
         ]),
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 110,
-            left: (1080 * 0.1) / 2,
-            child: Container(
-              width: 972,
-              height: 1344,
-              decoration: BoxDecoration(
-                border: const Border.fromBorderSide(
-                    BorderSide(color: Colors.white, width: 2)),
-                image: DecorationImage(
-                    image: AssetImage(facilityMap), fit: BoxFit.fill),
-              ),
-              // 반응형 오피스 위치
-              // child: Stack(children: [
-              //   for (int i = 0; i < officeQTY; i++)
-              //     Positioned(
-              //         bottom: cordOffice('y', i),
-              //         left: cordOffice('x', i),
-              //         child: ConstrainedBox(
-              //           constraints: BoxConstraints.tightFor(
-              //               width: buttonWidth, height: buttonHeight),
-              //           child: TextButton(
-              //             onPressed: () {
-              //               facilityInform(context, i);
-              //             },
-              //             style: TextButton.styleFrom(
-              //               backgroundColor: Colors.transparent,
-              //             ),
-              //             child: officeNum[i] != '시설1'
-              //                 ? officeNum[i] != '시설2'
-              //                     ? officeNum[i] != '시설3'
-              //                         ? Text(
-              //                             '${officeNum[i]}',
-              //                             style: const TextStyle(
-              //                                 fontFamily: 'kor',
-              //                                 fontSize: 10,
-              //                                 fontWeight: FontWeight.bold,
-              //                                 color: Colors.black),
-              //                           )
-              //                         : const Text(
-              //                             '화장실2',
-              //                             style: TextStyle(
-              //                                 fontFamily: 'kor',
-              //                                 fontSize: 10,
-              //                                 fontWeight: FontWeight.bold,
-              //                                 color: Colors.black),
-              //                           )
-              //                     : const Text(
-              //                         '화장실1',
-              //                         style: TextStyle(
-              //                             fontFamily: 'kor',
-              //                             fontSize: 10,
-              //                             fontWeight: FontWeight.bold,
-              //                             color: Colors.black),
-              //                       )
-              //                 : const Text(
-              //                     '엘리베이터',
-              //                     style: TextStyle(
-              //                         fontFamily: 'kor',
-              //                         fontSize: 10,
-              //                         fontWeight: FontWeight.bold,
-              //                         color: Colors.black),
-              //                   ),
-              //           ),
-              //         )),
-              // ]),
-            ),
-          ),
-          // 수동 위치 입력
-          Positioned(
-              top: 115,
-              left: 840,
-              child: GestureDetector(
-                child: Container(
-                  width: 180,
-                  height: 355,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                    border: Border.fromBorderSide(
-                      BorderSide(
-                        width: 2,
-                        color: Colors.transparent
-                      )
-                    )
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+        child: Stack(
+          children: [
+            // 지도
+            // Positioned(
+            //   top: 110,
+            //   left: (1080 * 0.1) / 2,
+            //   child: Container(
+            //     width: 972,
+            //     height: 1344,
+            //     decoration: BoxDecoration(
+            //       border: const Border.fromBorderSide(
+            //           BorderSide(color: Colors.white, width: 2)),
+            //       image: DecorationImage(
+            //           image: AssetImage(facilityMap), fit: BoxFit.fill),
+            //     ),
+            //     // 반응형 오피스 위치
+            //     // child: Stack(children: [
+            //     //   for (int i = 0; i < officeQTY; i++)
+            //     //     Positioned(
+            //     //         bottom: cordOffice('y', i),
+            //     //         left: cordOffice('x', i),
+            //     //         child: ConstrainedBox(
+            //     //           constraints: BoxConstraints.tightFor(
+            //     //               width: buttonWidth, height: buttonHeight),
+            //     //           child: TextButton(
+            //     //             onPressed: () {
+            //     //               facilityInform(context, i);
+            //     //             },
+            //     //             style: TextButton.styleFrom(
+            //     //               backgroundColor: Colors.transparent,
+            //     //             ),
+            //     //             child: officeNum[i] != '시설1'
+            //     //                 ? officeNum[i] != '시설2'
+            //     //                     ? officeNum[i] != '시설3'
+            //     //                         ? Text(
+            //     //                             '${officeNum[i]}',
+            //     //                             style: const TextStyle(
+            //     //                                 fontFamily: 'kor',
+            //     //                                 fontSize: 10,
+            //     //                                 fontWeight: FontWeight.bold,
+            //     //                                 color: Colors.black),
+            //     //                           )
+            //     //                         : const Text(
+            //     //                             '화장실2',
+            //     //                             style: TextStyle(
+            //     //                                 fontFamily: 'kor',
+            //     //                                 fontSize: 10,
+            //     //                                 fontWeight: FontWeight.bold,
+            //     //                                 color: Colors.black),
+            //     //                           )
+            //     //                     : const Text(
+            //     //                         '화장실1',
+            //     //                         style: TextStyle(
+            //     //                             fontFamily: 'kor',
+            //     //                             fontSize: 10,
+            //     //                             fontWeight: FontWeight.bold,
+            //     //                             color: Colors.black),
+            //     //                       )
+            //     //                 : const Text(
+            //     //                     '엘리베이터',
+            //     //                     style: TextStyle(
+            //     //                         fontFamily: 'kor',
+            //     //                         fontSize: 10,
+            //     //                         fontWeight: FontWeight.bold,
+            //     //                         color: Colors.black),
+            //     //                   ),
+            //     //           ),
+            //     //         )),
+            //     // ]),
+            //   ),
+            // ),
+            // 수동 위치 입력
+            Positioned(
+                top: 150,
+                left: 835,
+                child: GestureDetector(
+                  child: Container(
+                    width: 180,
+                    height: 320,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 0);
-                },
-              )),
-          Positioned(
-              top: 480,
-              left: 850,
-              child: GestureDetector(
-                child: Container(
-                  width: 170,
-                  height: 245,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 0);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 480,
+                left: 850,
+                child: GestureDetector(
+                  child: Container(
+                    width: 170,
+                    height: 275,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 1);
-                },
-              )),
-          Positioned(
-              top: 735,
-              left: 850,
-              child: GestureDetector(
-                child: Container(
-                  width: 165,
-                  height: 80,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 1);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 770,
+                left: 850,
+                child: GestureDetector(
+                  child: Container(
+                    width: 165,
+                    height: 75,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 2);
-                },
-              )),
-          Positioned(
-              top: 820,
-              left: 850,
-              child: GestureDetector(
-                child: Container(
-                  width: 165,
-                  height: 80,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 2);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 855,
+                left: 850,
+                child: GestureDetector(
+                  child: Container(
+                    width: 165,
+                    height: 70,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 3);
-                },
-              )),
-          Positioned(
-              top: 910,
-              left: 860,
-              child: GestureDetector(
-                child: Container(
-                  width: 160,
-                  height: 155,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 3);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 935,
+                left: 860,
+                child: GestureDetector(
+                  child: Container(
+                    width: 160,
+                    height: 165,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 4);
-                },
-              )),
-          Positioned(
-              top: 1080,
-              left: 875,
-              child: GestureDetector(
-                child: Container(
-                  width: 145,
-                  height: 370,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 4);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 1110,
+                left: 875,
+                child: GestureDetector(
+                  child: Container(
+                    width: 145,
+                    height: 360,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 5);
-                },
-              )),
-          Positioned(
-              top: 1190,
-              left: 60,
-              child: GestureDetector(
-                child: Container(
-                  width: 395,
-                  height: 260,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 5);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 1220,
+                left: 60,
+                child: GestureDetector(
+                  child: Container(
+                    width: 395,
+                    height: 250,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 6);
-                },
-              )),
-          Positioned(
-              top: 1020,
-              left: 60,
-              child: GestureDetector(
-                child: Container(
-                  width: 500,
-                  height: 160,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 6);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 1050,
+                left: 60,
+                child: GestureDetector(
+                  child: Container(
+                    width: 500,
+                    height: 160,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 7);
-                },
-              )),
-          Positioned(
-              top: 715,
-              left: 60,
-              child: GestureDetector(
-                child: Container(
-                  width: 440,
-                  height: 295,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 7);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 745,
+                left: 60,
+                child: GestureDetector(
+                  child: Container(
+                    width: 440,
+                    height: 295,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 8);
-                },
-              )),
-          Positioned(
-              top: 620,
-              left: 325,
-              child: GestureDetector(
-                child: Container(
-                  width: 175,
-                  height: 80,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 8);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 655,
+                left: 325,
+                child: GestureDetector(
+                  child: Container(
+                    width: 175,
+                    height: 80,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 9);
-                },
-              )),
-          Positioned(
-              top: 485,
-              left: 60,
-              child: GestureDetector(
-                child: Container(
-                  width: 205,
-                  height: 215,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 9);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 520,
+                left: 60,
+                child: GestureDetector(
+                  child: Container(
+                    width: 215,
+                    height: 215,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 10);
-                },
-              )),
-          Positioned(
-              top: 115,
-              left: 60,
-              child: GestureDetector(
-                child: Container(
-                  width: 435,
-                  height: 325,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 10);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 150,
+                left: 60,
+                child: GestureDetector(
+                  child: Container(
+                    width: 435,
+                    height: 320,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 11);
-                },
-              )),
-          Positioned(
-              top: 115,
-              left: 515,
-              child: GestureDetector(
-                child: Container(
-                  width: 245,
-                  height: 325,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 11);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 150,
+                left: 515,
+                child: GestureDetector(
+                  child: Container(
+                    width: 245,
+                    height: 320,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 12);
-                },
-              )),
-          Positioned(
-              top: 485,
-              left: 360,
-              child: GestureDetector(
-                child: Container(
-                  width: 140,
-                  height: 95,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 12);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 520,
+                left: 362,
+                child: GestureDetector(
+                  child: Container(
+                    width: 140,
+                    height: 90,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 13);
-                },
-              )),
-          Positioned(
-              top: 770,
-              left: 575,
-              child: GestureDetector(
-                child: Container(
-                  width: 215,
-                  height: 60,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 13);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 800,
+                left: 575,
+                child: GestureDetector(
+                  child: Container(
+                    width: 215,
+                    height: 60,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 14);
-                },
-              )),
-          Positioned(
-              top: 485,
-              left: 565,
-              child: GestureDetector(
-                child: Container(
-                  width: 210,
-                  height: 95,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 14);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 520,
+                left: 565,
+                child: GestureDetector(
+                  child: Container(
+                    width: 210,
+                    height: 95,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 15);
-                },
-              )),
-          Positioned(
-              top: 1245,
-              left: 655,
-              child: GestureDetector(
-                child: Container(
-                  width: 150,
-                  height: 60,
-                  // color: Colors.transparent,
-                  decoration: BoxDecoration(
-                      border: Border.fromBorderSide(
-                          BorderSide(
-                              width: 2,
-                              color: Colors.transparent
-                          )
-                      )
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 15);
+                    });
+                  },
+                )),
+            Positioned(
+                top: 1270,
+                left: 655,
+                child: GestureDetector(
+                  child: Container(
+                    width: 150,
+                    height: 60,
+                    // color: Colors.transparent,
+                    decoration: const BoxDecoration(
+                        border: Border.fromBorderSide(
+                            BorderSide(width: 2, color: Colors.transparent))),
                   ),
-                ),
-                onTap: () {
-                  facilityInform(context, 16);
-                },
-              )),
-        ],
+                  onTap: () {
+                    _effectPlayer.seek(const Duration(seconds: 0));
+                    _effectPlayer.play();
+
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      facilityInform(context, 16);
+                    });
+                  },
+                )),
+            // 중단 바
+            // Positioned(
+            //   top: 1482,
+            //     left: (1080 * 0.1) / 2,
+            //     child: Container(
+            //       width: 972,
+            //       height: 100,
+            //       decoration: BoxDecoration(
+            //         border: Border.fromBorderSide(
+            //           BorderSide(
+            //             width: 1,
+            //             color: Colors.white
+            //           )
+            //         )
+            //       ),
+            //       child: Text('중단바'),
+            //     )),
+            // 하단 바
+            // Positioned(
+            //     top: 1622,
+            //     left: (1080 * 0.1) / 2,
+            //     child: Container(
+            //       width: 972,
+            //       height: 250,
+            //       decoration: BoxDecoration(
+            //           border: Border.fromBorderSide(
+            //               BorderSide(
+            //                   width: 1,
+            //                   color: Colors.white
+            //               )
+            //           )
+            //       ),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Container(
+            //             width: 954/3,
+            //             height: 250,
+            //             decoration: BoxDecoration(
+            //               color: Colors.red,
+            //                 border: Border.fromBorderSide(
+            //                     BorderSide(
+            //                         width: 1,
+            //                         color: Colors.white
+            //                     )
+            //                 )
+            //             ),
+            //             child: Text('하'),
+            //           ),
+            //           Container(
+            //             width: 954/3,
+            //             height: 250,
+            //             decoration: BoxDecoration(
+            //                 color: Colors.blue,
+            //                 border: Border.fromBorderSide(
+            //                     BorderSide(
+            //                         width: 1,
+            //                         color: Colors.white
+            //                     )
+            //                 )
+            //             ),
+            //             child: Text('단'),
+            //           ),
+            //           Container(
+            //             width: 954/3,
+            //             height: 250,
+            //             decoration: BoxDecoration(
+            //                 color: Colors.green,
+            //                 border: Border.fromBorderSide(
+            //                     BorderSide(
+            //                         width: 1,
+            //                         color: Colors.white
+            //                     )
+            //                 )
+            //             ),
+            //             child: Text('바'),
+            //           )
+            //         ],
+            //       ),
+            //     )),
+            // VerticalDivider(
+            //   color: Colors.white,
+            //   thickness: 10,
+            //   width: 1080,
+            // ),
+            // Divider(
+            //   color: Colors.white,
+            //   thickness: 10,
+            //   height: 1920,
+            // ),
+          ],
+        ),
       ),
     );
   }
