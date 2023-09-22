@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
@@ -647,6 +648,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                                       _networkProvider
                                                           .positionURL);
                                                 });
+                                                FocusScope.of(context).unfocus();
+                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                    overlays: []);
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,
@@ -914,6 +918,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                                         '';
                                                   });
                                                 });
+                                                FocusScope.of(context).unfocus();
+                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                    overlays: []);
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,

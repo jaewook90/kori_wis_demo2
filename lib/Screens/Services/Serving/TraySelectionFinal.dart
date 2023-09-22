@@ -714,6 +714,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                                             _networkProvider
                                                                 .positionURL);
                                                       });
+                                                  FocusScope.of(context).unfocus();
+                                                  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                      overlays: []);
                                                 },
                                                 style: FilledButton.styleFrom(
                                                     enableFeedback: false,
@@ -987,6 +990,9 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                                                               .text = '';
                                                         });
                                                       });
+                                                  FocusScope.of(context).unfocus();
+                                                  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                      overlays: []);
                                                 },
                                                 style: FilledButton.styleFrom(
                                                     enableFeedback: false,

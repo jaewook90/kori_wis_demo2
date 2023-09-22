@@ -32,7 +32,8 @@ class _ChangingCountDownModalFinalState
 
   late bool countDownNav;
 
-  late String countDownPopup;
+  late String countDownModalBg;
+  late String countDownModalBtn;
 
   late String countDownMSG;
 
@@ -66,7 +67,8 @@ class _ChangingCountDownModalFinalState
 
   @override
   Widget build(BuildContext context) {
-    countDownPopup = 'assets/screens/Serving/koriServingCountDown.png';
+    countDownModalBg = 'assets/images/modalIMG/bg.png';
+    countDownModalBtn = 'assets/images/modalIMG/btn.png';
 
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
@@ -90,76 +92,333 @@ class _ChangingCountDownModalFinalState
     }
 
     return Container(
-        padding: const EdgeInsets.only(top: 607),
         child: AlertDialog(
           alignment: Alignment.topCenter,
           content: Stack(children: [
-            Container(
-              width: 740,
-              height: 362,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(countDownPopup), fit: BoxFit.fill)),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
-                child: Countdown(
-                  controller: _controller,
-                  seconds: 5,
-                  build: (_, double time) => Text(
-                    time.toInt().toString(),
-                    textAlign: TextAlign.end,
-                    style: const TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 80,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  interval: const Duration(seconds: 1),
-                  onFinished: () {
-                    if(_servingProvider.tray1 == true){
-                      _servingProvider.tray1 = false;
-                    }else{
-                      if(_servingProvider.tray2 == true){
-                        _servingProvider.tray2 = false;
+            Center(
+              child: Container(
+                width: 828,
+                height: 531,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(countDownModalBg), fit: BoxFit.fill)),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 25),
+                      height: 320,
+                      width: 828,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        verticalDirection: VerticalDirection.down,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(6),
+                            width: 640,
+                            height: 80,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Countdown(
+                                  controller: _controller,
+                                  seconds: 5,
+                                  build: (_, double time) => Text(
+                                    time.toInt().toString(),
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        height: 1.2,
+                                        fontFamily: 'kor',
+                                        fontSize: 65,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  interval: const Duration(seconds: 1),
+                                  onFinished: () {
+                                    if(_servingProvider.tray1 == true){
+                                      _servingProvider.tray1 = false;
+                                    }else{
+                                      if(_servingProvider.tray2 == true){
+                                        _servingProvider.tray2 = false;
+                                      }else{
+                                        if(_servingProvider.tray3 == true){
+                                          _servingProvider.tray3 = false;
+                                        }
+                                      }
+                                    }
+                                    if (widget.modeState == 'return') {
+                                      PostApi(
+                                          url: startUrl,
+                                          endadr: navUrl,
+                                          keyBody: _servingProvider.waitingPoint)
+                                          .Posting(context);
+                                      Future.delayed(Duration(milliseconds: 230), () {
+                                        _effectPlayer.dispose();
+                                        navPage(
+                                          context: context,
+                                          page: const TraySelectionFinal(),
+                                        ).navPageToPage();
+                                      });
+                                    } else if (widget.modeState == 'serving') {
+                                      if (_servingProvider.targetTableNum != 'none') {
+                                        setState(() {
+                                          _servingProvider.trayChange = true;
+                                          _networkProvider.servTable =
+                                              _servingProvider.targetTableNum;
+                                        });
+                                        PostApi(
+                                            url: startUrl,
+                                            endadr: navUrl,
+                                            keyBody: _servingProvider.targetTableNum)
+                                            .Posting(context);
+                                        Future.delayed(Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const NavigatorProgressModuleFinal(),
+                                          ).navPageToPage();
+                                        });
+                                      } else {
+                                        _servingProvider.clearAllTray();
+                                        PostApi(
+                                            url: startUrl,
+                                            endadr: navUrl,
+                                            keyBody: _servingProvider.waitingPoint)
+                                            .Posting(context);
+                                        Future.delayed(Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const TraySelectionFinal(),
+                                          ).navPageToPage();
+                                        });
+                                      }
+                                    }else if(widget.modeState == 'guideDone'){
+                                      if (_servingProvider.targetTableNum != 'none') {
+                                        setState(() {
+                                          _servingProvider.trayChange = true;
+                                          _networkProvider.servTable =
+                                              _servingProvider.targetTableNum;
+                                        });
+                                        PostApi(
+                                            url: startUrl,
+                                            endadr: navUrl,
+                                            keyBody: _servingProvider.targetTableNum)
+                                            .Posting(context);
+                                        Future.delayed(Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          navPage(
+                                            context: context,
+                                            page: const NavigatorProgressModuleFinal(),
+                                          ).navPageToPage();
+                                        });
+                                      }
+                                    }
+                                  },
+                                ),
+                                SizedBox(width: 15,),
+                                Text(countDownMSG,
+                                    style: TextStyle(
+                                        fontFamily: 'kor',
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 50),
+                          width: 336,
+                          height: 102,
+                          decoration: BoxDecoration(
+                            // border: Border.fromBorderSide(
+                            //     BorderSide(width: 5, color: Colors.tealAccent)),
+                              image: DecorationImage(
+                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                                enableFeedback: false,
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                fixedSize: const Size(370, 120)),
+                            onPressed: () {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.seek(const Duration(seconds: 0));
+                                _effectPlayer.play();
+                                _controller.pause();
+                                if(widget.modeState == 'guideDone'){
+                                  Navigator.pop(context);
+                                }else{
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
+                              });
+                            },
+                            child: const Center(
+                              child: Text(
+                                '취소',
+                                style: TextStyle(
+                                    height: 1.2,
+                                    fontFamily: 'kor',
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(right: 50),
+                          width: 336,
+                          height: 102,
+                          decoration: BoxDecoration(
+                            // border: Border.fromBorderSide(
+                            //     BorderSide(width: 5, color: Colors.tealAccent)),
+                              image: DecorationImage(
+                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                                enableFeedback: false,
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                fixedSize: const Size(370, 120)),
+                            onPressed: () {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.seek(const Duration(seconds: 0));
+                                _effectPlayer.play();
+                                _controller.pause();
+                                if(_servingProvider.tray1 == true){
+                                  _servingProvider.tray1 = false;
+                                }else{
+                                  if(_servingProvider.tray2 == true){
+                                    _servingProvider.tray2 = false;
+                                  }else{
+                                    if(_servingProvider.tray3 == true){
+                                      _servingProvider.tray3 = false;
+                                    }
+                                  }
+                                }
+                                if (widget.modeState == 'return') {
+                                  PostApi(
+                                      url: startUrl,
+                                      endadr: navUrl,
+                                      keyBody: _servingProvider.waitingPoint)
+                                      .Posting(context);
+                                  Future.delayed(Duration(milliseconds: 230), () {
+                                    _effectPlayer.dispose();
+                                    navPage(
+                                      context: context,
+                                      page: const TraySelectionFinal(),
+                                    ).navPageToPage();
+                                  });
+                                } else if (widget.modeState == 'serving') {
+                                  if (_servingProvider.targetTableNum != 'none') {
+                                    setState(() {
+                                      _servingProvider.trayChange = true;
+                                      _networkProvider.servTable =
+                                          _servingProvider.targetTableNum;
+                                    });
+                                    PostApi(
+                                        url: startUrl,
+                                        endadr: navUrl,
+                                        keyBody: _servingProvider.targetTableNum)
+                                        .Posting(context);
+                                    Future.delayed(Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      navPage(
+                                        context: context,
+                                        page: const NavigatorProgressModuleFinal(),
+                                      ).navPageToPage();
+                                    });
+                                  } else {
+                                    _servingProvider.clearAllTray();
+                                    PostApi(
+                                        url: startUrl,
+                                        endadr: navUrl,
+                                        keyBody: _servingProvider.waitingPoint)
+                                        .Posting(context);
+                                    Future.delayed(Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      navPage(
+                                        context: context,
+                                        page: const TraySelectionFinal(),
+                                      ).navPageToPage();
+                                    });
+                                  }
+                                }else if(widget.modeState == 'guideDone'){
+                                  if (_servingProvider.targetTableNum != 'none') {
+                                    setState(() {
+                                      _servingProvider.trayChange = true;
+                                      _networkProvider.servTable =
+                                          _servingProvider.targetTableNum;
+                                    });
+                                    PostApi(
+                                        url: startUrl,
+                                        endadr: navUrl,
+                                        keyBody: _servingProvider.targetTableNum)
+                                        .Posting(context);
+                                    Future.delayed(Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      navPage(
+                                        context: context,
+                                        page: const NavigatorProgressModuleFinal(),
+                                      ).navPageToPage();
+                                    });
+                                  }
+                                }
+                              });
+                            },
+                            child: const Center(
+                              child: Text(
+                                '시작',
+                                style: TextStyle(
+                                    height: 1.2,
+                                    fontFamily: 'kor',
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+
+                /**
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
+                  child: Countdown(
+                    controller: _controller,
+                    seconds: 5,
+                    build: (_, double time) => Text(
+                      time.toInt().toString(),
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
+                          fontFamily: 'kor',
+                          fontSize: 80,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    interval: const Duration(seconds: 1),
+                    onFinished: () {
+                      if(_servingProvider.tray1 == true){
+                        _servingProvider.tray1 = false;
                       }else{
-                        if(_servingProvider.tray3 == true){
-                          _servingProvider.tray3 = false;
+                        if(_servingProvider.tray2 == true){
+                          _servingProvider.tray2 = false;
+                        }else{
+                          if(_servingProvider.tray3 == true){
+                            _servingProvider.tray3 = false;
+                          }
                         }
                       }
-                    }
-                    if (widget.modeState == 'return') {
-                      PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: _servingProvider.waitingPoint)
-                          .Posting(context);
-                      Future.delayed(Duration(milliseconds: 230), () {
-                        _effectPlayer.dispose();
-                        navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                        ).navPageToPage();
-                      });
-                    } else if (widget.modeState == 'serving') {
-                      if (_servingProvider.targetTableNum != 'none') {
-                        setState(() {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                        });
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                          ).navPageToPage();
-                        });
-                      } else {
-                        _servingProvider.clearAllTray();
+                      if (widget.modeState == 'return') {
                         PostApi(
                             url: startUrl,
                             endadr: navUrl,
@@ -172,180 +431,65 @@ class _ChangingCountDownModalFinalState
                             page: const TraySelectionFinal(),
                           ).navPageToPage();
                         });
-                      }
-                    }else if(widget.modeState == 'guideDone'){
-                      if (_servingProvider.targetTableNum != 'none') {
-                        setState(() {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                        });
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                          ).navPageToPage();
-                        });
-                      }
-                    }
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-                left: 240,
-                top: 100,
-                child: Text(countDownMSG,
-                    style: const TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white))),
-            Positioned(
-              left: 0,
-              top: 242,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                    enableFeedback: false,
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    fixedSize: const Size(370, 120)),
-                onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
-                    _controller.pause();
-                    if(widget.modeState == 'guideDone'){
-                      Navigator.pop(context);
-                    }else{
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    }
-                  });
-                },
-                child: const Center(
-                  child: Text(
-                    '취소',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 370,
-              top: 242,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                    enableFeedback: false,
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    fixedSize: const Size(370, 120)),
-                onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
-                    _controller.pause();
-                    if(_servingProvider.tray1 == true){
-                      _servingProvider.tray1 = false;
-                    }else{
-                      if(_servingProvider.tray2 == true){
-                        _servingProvider.tray2 = false;
-                      }else{
-                        if(_servingProvider.tray3 == true){
-                          _servingProvider.tray3 = false;
+                      } else if (widget.modeState == 'serving') {
+                        if (_servingProvider.targetTableNum != 'none') {
+                          setState(() {
+                            _servingProvider.trayChange = true;
+                            _networkProvider.servTable =
+                                _servingProvider.targetTableNum;
+                          });
+                          PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.targetTableNum)
+                              .Posting(context);
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(),
+                            ).navPageToPage();
+                          });
+                        } else {
+                          _servingProvider.clearAllTray();
+                          PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.waitingPoint)
+                              .Posting(context);
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const TraySelectionFinal(),
+                            ).navPageToPage();
+                          });
+                        }
+                      }else if(widget.modeState == 'guideDone'){
+                        if (_servingProvider.targetTableNum != 'none') {
+                          setState(() {
+                            _servingProvider.trayChange = true;
+                            _networkProvider.servTable =
+                                _servingProvider.targetTableNum;
+                          });
+                          PostApi(
+                              url: startUrl,
+                              endadr: navUrl,
+                              keyBody: _servingProvider.targetTableNum)
+                              .Posting(context);
+                          Future.delayed(Duration(milliseconds: 230), () {
+                            _effectPlayer.dispose();
+                            navPage(
+                              context: context,
+                              page: const NavigatorProgressModuleFinal(),
+                            ).navPageToPage();
+                          });
                         }
                       }
-                    }
-                    if (widget.modeState == 'return') {
-                      PostApi(
-                          url: startUrl,
-                          endadr: navUrl,
-                          keyBody: _servingProvider.waitingPoint)
-                          .Posting(context);
-                      Future.delayed(Duration(milliseconds: 230), () {
-                        _effectPlayer.dispose();
-                        navPage(
-                          context: context,
-                          page: const TraySelectionFinal(),
-                        ).navPageToPage();
-                      });
-                    } else if (widget.modeState == 'serving') {
-                      if (_servingProvider.targetTableNum != 'none') {
-                        setState(() {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                        });
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                          ).navPageToPage();
-                        });
-                      } else {
-                        _servingProvider.clearAllTray();
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.waitingPoint)
-                            .Posting(context);
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
-                        });
-                      }
-                    }else if(widget.modeState == 'guideDone'){
-                      if (_servingProvider.targetTableNum != 'none') {
-                        setState(() {
-                          _servingProvider.trayChange = true;
-                          _networkProvider.servTable =
-                              _servingProvider.targetTableNum;
-                        });
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.targetTableNum)
-                            .Posting(context);
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const NavigatorProgressModuleFinal(),
-                          ).navPageToPage();
-                        });
-                      }
-                    }
-                  });
-                },
-                child: const Center(
-                  child: Text(
-                    '시작',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
+                    },
                   ),
                 ),
+                **/
               ),
             ),
           ]),

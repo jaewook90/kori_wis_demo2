@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
@@ -396,6 +397,9 @@ class _ChargingStationState extends State<ChargingStation> {
                                                           _networkProvider
                                                               .positionURL);
                                                     });
+                                                FocusScope.of(context).unfocus();
+                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                    overlays: []);
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,
@@ -668,6 +672,9 @@ class _ChargingStationState extends State<ChargingStation> {
                                                             .text = '';
                                                       });
                                                     });
+                                                FocusScope.of(context).unfocus();
+                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                    overlays: []);
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,

@@ -51,7 +51,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
 
   late bool apiCallFlag;
 
-  late String countDownPopup;
+  late String countDownModalBg;
+  late String countDownModalBtn;
 
   @override
   void initState() {
@@ -95,7 +96,9 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     navUrl = _networkProvider.navUrl;
     chgUrl = _networkProvider.chgUrl;
 
-    countDownPopup = 'assets/screens/Serving/koriServingCountDown.png';
+    countDownModalBg = 'assets/images/modalIMG/bg.png';
+    countDownModalBtn = 'assets/images/modalIMG/btn.png';
+
     if (widget.serviceMode == 'Serving') {
       if (_servingProvider.trayCheckAll == true) {
         targetTableNum = _servingProvider.allTable!;
@@ -118,201 +121,439 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     }
 
     return Container(
-        padding: const EdgeInsets.only(top: 607),
+        // padding: const EdgeInsets.only(top: 607),
         child: AlertDialog(
-          alignment: Alignment.topCenter,
-          content: Stack(children: [
-            Container(
-              width: 740,
-              height: 362,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(countDownPopup), fit: BoxFit.fill)),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
-                child: Countdown(
-                  controller: _controller,
-                  seconds: 5,
-                  build: (_, double time) => Text(
-                    time.toInt().toString(),
-                    textAlign: TextAlign.end,
-                    style: const TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 80,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  interval: const Duration(seconds: 1),
-                  onFinished: () {
-                    _audioPlayer.play();
-                    if (widget.serviceMode == 'Shipping' ||
-                        widget.serviceMode == 'facilityGuide') {
-                      _networkProvider.servTable = widget.goalPosition;
-                    } else {
-                      _servingProvider.trayChange = true;
-                      _networkProvider.servTable =
-                          _servingProvider.targetTableNum;
-                    }
-                    PostApi(
-                        url: startUrl,
-                        endadr: navUrl,
-                        keyBody: targetTableNum)
-                        .Posting(context);
-                    Future.delayed(const Duration(milliseconds: 230), () {
-                      _audioPlayer.dispose();
-                      _effectPlayer.dispose();
-                      navPage(
-                        context: context,
-                        page: const NavigatorProgressModuleFinal(),
-                      ).navPageToPage();
-                    });
-                  },
-                ),
-              ),
-            ),
-            _mainStatusProvider.robotServiceMode == 0
-                ? const Positioned(
-                    left: 240,
-                    top: 100,
-                    child: Text('초 후 서빙을 시작합니다.',
-                        style: TextStyle(
-                            fontFamily: 'kor',
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)))
-                : _mainStatusProvider.robotServiceMode == 1
-                    ? const Positioned(
-                        left: 240,
-                        top: 100,
-                        child: Text('초 후 배송을 시작합니다.',
-                            style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)))
-                    : _mainStatusProvider.robotServiceMode == 2
-                        ? const Positioned(
-                            left: 240,
-                            top: 100,
-                            child: Text('초 후 안내를 시작합니다.',
+      alignment: Alignment.topCenter,
+      content: Stack(children: [
+        Center(
+          child: Container(
+            width: 828,
+            height: 531,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(countDownModalBg), fit: BoxFit.fill)),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 25),
+                  height: 320,
+                  width: 828,
+                  child: _mainStatusProvider.robotServiceMode == 0
+                      ? Positioned(
+                          left: 240,
+                          top: 100,
+                          child: Container(
+                            height: 42,
+                            child: Text('초 후 서빙을 시작합니다.',
                                 style: TextStyle(
                                     fontFamily: 'kor',
                                     fontSize: 35,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white)))
-                        : Container(),
-            Positioned(
-              left: 0,
-              top: 242,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                    enableFeedback: false,
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    fixedSize: const Size(370, 120)),
-                onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
-                    _controller.pause();
-                    if(_mainStatusProvider.robotServiceMode==0){
-                      if (_servingProvider.table1 != "" ||
-                          (_servingProvider.table2 != "" ||
-                              _servingProvider.table3 != "")) {
-                        Future.delayed(const Duration(milliseconds: 230), () {
-                          _audioPlayer.dispose();
-                          _effectPlayer.dispose();
-                          navPage(
-                              context: context,
-                              page: const TraySelectionFinal())
-                              .navPageToPage();
-                        });
-                      } else {
-                        Future.delayed(const Duration(milliseconds: 230), () {
-                          _audioPlayer.dispose();
-                          _effectPlayer.dispose();
-                          navPage(
-                              context: context,
-                              page: const TraySelectionFinal())
-                              .navPageToPage();
-                        });
-                      }
-                    }else if(_mainStatusProvider.robotServiceMode==2){
-                      Future.delayed(const Duration(milliseconds: 230), () {
-                        _audioPlayer.dispose();
-                        _effectPlayer.dispose();
-                        navPage(
-                            context: context,
-                            page: const FacilityScreen())
-                            .navPageToPage();
-                      });
-                    }
-                  });
-                },
-                child: const Center(
-                  child: Text(
-                    '취소',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
-                  ),
+                                    color: Colors.white,
+                                    height: 1.2)),
+                          ))
+                      : _mainStatusProvider.robotServiceMode == 1
+                          ? Positioned(
+                              left: 240,
+                              top: 100,
+                              child: Container(
+                                height: 42,
+                                child: Text('초 후 배송을 시작합니다.',
+                                    style: TextStyle(
+                                        fontFamily: 'kor',
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2)),
+                              ))
+                          : _mainStatusProvider.robotServiceMode == 2
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  verticalDirection: VerticalDirection.down,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.all(6),
+                                      width: 640,
+                                      height: 80,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Countdown(
+                                            controller: _controller,
+                                            seconds: 5,
+                                            build: (_, double time) => Text(
+                                              time.toInt().toString(),
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(
+                                                height: 1.2,
+                                                  fontFamily: 'kor',
+                                                  fontSize: 65,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            interval: const Duration(seconds: 1),
+                                            onFinished: () {
+                                              _audioPlayer.play();
+                                              if (widget.serviceMode == 'Shipping' ||
+                                                  widget.serviceMode == 'facilityGuide') {
+                                                _networkProvider.servTable = widget.goalPosition;
+                                              } else {
+                                                _servingProvider.trayChange = true;
+                                                _networkProvider.servTable =
+                                                    _servingProvider.targetTableNum;
+                                              }
+                                              PostApi(
+                                                  url: startUrl,
+                                                  endadr: navUrl,
+                                                  keyBody: targetTableNum)
+                                                  .Posting(context);
+                                              Future.delayed(const Duration(milliseconds: 230), () {
+                                                _audioPlayer.dispose();
+                                                _effectPlayer.dispose();
+                                                navPage(
+                                                  context: context,
+                                                  page: const NavigatorProgressModuleFinal(),
+                                                ).navPageToPage();
+                                              });
+                                            },
+                                          ),
+                                          SizedBox(width: 15,),
+                                          Text('초 후 안내를 시작합니다.',
+                                              style: TextStyle(
+                                                  fontFamily: 'kor',
+                                                  fontSize: 35,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  height: 1.2)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
                 ),
-              ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 50),
+                      width: 336,
+                      height: 102,
+                      decoration: BoxDecoration(
+                          // border: Border.fromBorderSide(
+                          //     BorderSide(width: 5, color: Colors.tealAccent)),
+                          image: DecorationImage(
+                              image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                            enableFeedback: false,
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            fixedSize: const Size(370, 120)),
+                        onPressed: () {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.seek(const Duration(seconds: 0));
+                            _effectPlayer.play();
+                            _controller.pause();
+                            if (_mainStatusProvider.robotServiceMode == 0) {
+                              if (_servingProvider.table1 != "" ||
+                                  (_servingProvider.table2 != "" ||
+                                      _servingProvider.table3 != "")) {
+                                Future.delayed(const Duration(milliseconds: 230),
+                                    () {
+                                  _audioPlayer.dispose();
+                                  _effectPlayer.dispose();
+                                  navPage(
+                                          context: context,
+                                          page: const TraySelectionFinal())
+                                      .navPageToPage();
+                                });
+                              } else {
+                                Future.delayed(const Duration(milliseconds: 230),
+                                    () {
+                                  _audioPlayer.dispose();
+                                  _effectPlayer.dispose();
+                                  navPage(
+                                          context: context,
+                                          page: const TraySelectionFinal())
+                                      .navPageToPage();
+                                });
+                              }
+                            } else if (_mainStatusProvider.robotServiceMode ==
+                                2) {
+                              Future.delayed(const Duration(milliseconds: 230),
+                                  () {
+                                _audioPlayer.dispose();
+                                _effectPlayer.dispose();
+                                navPage(
+                                        context: context,
+                                        page: const FacilityScreen())
+                                    .navPageToPage();
+                              });
+                            }
+                          });
+                        },
+                        child: const Center(
+                          child: Text(
+                            '취소',
+                            style: TextStyle(
+                              height: 1.2,
+                                fontFamily: 'kor',
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(right: 50),
+                      width: 336,
+                      height: 102,
+                      decoration: BoxDecoration(
+                        // border: Border.fromBorderSide(
+                        //     BorderSide(width: 5, color: Colors.tealAccent)),
+                          image: DecorationImage(
+                              image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                            enableFeedback: false,
+                            backgroundColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            fixedSize: const Size(370, 120)),
+                        onPressed: () {
+                          _audioPlayer.play();
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.seek(const Duration(seconds: 0));
+                            _effectPlayer.play();
+                            _controller.pause();
+                            if (widget.serviceMode == 'Shipping' ||
+                                widget.serviceMode == 'facilityGuide') {
+                              _networkProvider.servTable = widget.goalPosition;
+                            } else {
+                              _servingProvider.trayChange = true;
+                              _networkProvider.servTable = _servingProvider.targetTableNum;
+                            }
+                            PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
+                                .Posting(context);
+                            Future.delayed(const Duration(milliseconds: 230), () {
+                              _audioPlayer.dispose();
+                              _effectPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(),
+                              ).navPageToPage();
+                            });
+                          });
+                        },
+                        child: const Center(
+                          child: Text(
+                            '시작',
+                            style: TextStyle(
+                                height: 1.2,
+                                fontFamily: 'kor',
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            Positioned(
-              left: 370,
-              top: 242,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                    enableFeedback: false,
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    fixedSize: const Size(370, 120)),
-                onPressed: () {
-                  _audioPlayer.play();
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
-                    _controller.pause();
-                    if (widget.serviceMode == 'Shipping' ||
-                        widget.serviceMode == 'facilityGuide') {
-                      _networkProvider.servTable = widget.goalPosition;
-                    } else {
-                      _servingProvider.trayChange = true;
-                      _networkProvider.servTable =
-                          _servingProvider.targetTableNum;
-                    }
-                    PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: targetTableNum)
-                        .Posting(context);
-                    Future.delayed(const Duration(milliseconds: 230), () {
-                      _audioPlayer.dispose();
-                      _effectPlayer.dispose();
-                      navPage(
-                        context: context,
-                        page: const NavigatorProgressModuleFinal(),
-                      ).navPageToPage();
-                    });
-                  });
-                },
-                child: const Center(
-                  child: Text(
-                    '시작',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
-          ]),
-          backgroundColor: Colors.transparent,
-          contentTextStyle: Theme.of(context).textTheme.headlineLarge,
-        ));
+            // child: Padding(
+            //   padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
+            //   child: Countdown(
+            //     controller: _controller,
+            //     seconds: 5,
+            //     build: (_, double time) => Text(
+            //       time.toInt().toString(),
+            //       textAlign: TextAlign.end,
+            //       style: const TextStyle(
+            //           fontFamily: 'kor',
+            //           fontSize: 80,
+            //           fontWeight: FontWeight.bold),
+            //     ),
+            //     interval: const Duration(seconds: 1),
+            //     onFinished: () {
+            //       // _audioPlayer.play();
+            //       // if (widget.serviceMode == 'Shipping' ||
+            //       //     widget.serviceMode == 'facilityGuide') {
+            //       //   _networkProvider.servTable = widget.goalPosition;
+            //       // } else {
+            //       //   _servingProvider.trayChange = true;
+            //       //   _networkProvider.servTable =
+            //       //       _servingProvider.targetTableNum;
+            //       // }
+            //       // PostApi(
+            //       //     url: startUrl,
+            //       //     endadr: navUrl,
+            //       //     keyBody: targetTableNum)
+            //       //     .Posting(context);
+            //       // Future.delayed(const Duration(milliseconds: 230), () {
+            //       //   _audioPlayer.dispose();
+            //       //   _effectPlayer.dispose();
+            //       //   navPage(
+            //       //     context: context,
+            //       //     page: const NavigatorProgressModuleFinal(),
+            //       //   ).navPageToPage();
+            //       // });
+            //     },
+            //   ),
+            // ),
+          ),
+        ),
+        // _mainStatusProvider.robotServiceMode == 0
+        //     ? Positioned(
+        //         left: 240,
+        //         top: 100,
+        //         child: Container(
+        //           height: 42,
+        //           child: Text('초 후 서빙을 시작합니다.',
+        //               style: TextStyle(
+        //                   fontFamily: 'kor',
+        //                   fontSize: 35,
+        //                   fontWeight: FontWeight.bold,
+        //                   color: Colors.white,
+        //                   height: 1.2)),
+        //         ))
+        //     : _mainStatusProvider.robotServiceMode == 1
+        //         ? Positioned(
+        //             left: 240,
+        //             top: 100,
+        //             child: Container(
+        //               height: 42,
+        //               child: Text('초 후 배송을 시작합니다.',
+        //                   style: TextStyle(
+        //                       fontFamily: 'kor',
+        //                       fontSize: 35,
+        //                       fontWeight: FontWeight.bold,
+        //                       color: Colors.white,
+        //                       height: 1.2)),
+        //             ))
+        //         : _mainStatusProvider.robotServiceMode == 2
+        //             ? Positioned(
+        //                 left: 240,
+        //                 top: 100,
+        //                 child: Container(
+        //                   height: 42,
+        //                   child: Text('초 후 안내를 시작합니다.',
+        //                       style: TextStyle(
+        //                           fontFamily: 'kor',
+        //                           fontSize: 35,
+        //                           fontWeight: FontWeight.bold,
+        //                           color: Colors.white,
+        //                           height: 1.2)),
+        //                 ))
+        //             : Container(),
+        // Positioned(
+        //   left: 0,
+        //   top: 242,
+        //   child: FilledButton(
+        //     style: FilledButton.styleFrom(
+        //         enableFeedback: false,
+        //         backgroundColor: Colors.transparent,
+        //         shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(0)),
+        //         fixedSize: const Size(370, 120)),
+        //     onPressed: () {
+        //       WidgetsBinding.instance.addPostFrameCallback((_) {
+        //         _effectPlayer.seek(const Duration(seconds: 0));
+        //         _effectPlayer.play();
+        //         _controller.pause();
+        //         if (_mainStatusProvider.robotServiceMode == 0) {
+        //           if (_servingProvider.table1 != "" ||
+        //               (_servingProvider.table2 != "" ||
+        //                   _servingProvider.table3 != "")) {
+        //             Future.delayed(const Duration(milliseconds: 230), () {
+        //               _audioPlayer.dispose();
+        //               _effectPlayer.dispose();
+        //               navPage(
+        //                       context: context,
+        //                       page: const TraySelectionFinal())
+        //                   .navPageToPage();
+        //             });
+        //           } else {
+        //             Future.delayed(const Duration(milliseconds: 230), () {
+        //               _audioPlayer.dispose();
+        //               _effectPlayer.dispose();
+        //               navPage(
+        //                       context: context,
+        //                       page: const TraySelectionFinal())
+        //                   .navPageToPage();
+        //             });
+        //           }
+        //         } else if (_mainStatusProvider.robotServiceMode == 2) {
+        //           Future.delayed(const Duration(milliseconds: 230), () {
+        //             _audioPlayer.dispose();
+        //             _effectPlayer.dispose();
+        //             navPage(context: context, page: const FacilityScreen())
+        //                 .navPageToPage();
+        //           });
+        //         }
+        //       });
+        //     },
+        //     child: const Center(
+        //       child: Text(
+        //         '취소',
+        //         style: TextStyle(
+        //             fontFamily: 'kor',
+        //             fontSize: 35,
+        //             fontWeight: FontWeight.bold),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // Positioned(
+        //   left: 370,
+        //   top: 242,
+        //   child: FilledButton(
+        //     style: FilledButton.styleFrom(
+        //         enableFeedback: false,
+        //         backgroundColor: Colors.transparent,
+        //         shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(0)),
+        //         fixedSize: const Size(370, 120)),
+        //     onPressed: () {
+        //       _audioPlayer.play();
+        //       WidgetsBinding.instance.addPostFrameCallback((_) {
+        //         _effectPlayer.seek(const Duration(seconds: 0));
+        //         _effectPlayer.play();
+        //         _controller.pause();
+        //         if (widget.serviceMode == 'Shipping' ||
+        //             widget.serviceMode == 'facilityGuide') {
+        //           _networkProvider.servTable = widget.goalPosition;
+        //         } else {
+        //           _servingProvider.trayChange = true;
+        //           _networkProvider.servTable = _servingProvider.targetTableNum;
+        //         }
+        //         PostApi(url: startUrl, endadr: navUrl, keyBody: targetTableNum)
+        //             .Posting(context);
+        //         Future.delayed(const Duration(milliseconds: 230), () {
+        //           _audioPlayer.dispose();
+        //           _effectPlayer.dispose();
+        //           navPage(
+        //             context: context,
+        //             page: const NavigatorProgressModuleFinal(),
+        //           ).navPageToPage();
+        //         });
+        //       });
+        //     },
+        //     child: const Center(
+        //       child: Text(
+        //         '시작',
+        //         style: TextStyle(
+        //             fontFamily: 'kor',
+        //             fontSize: 35,
+        //             fontWeight: FontWeight.bold),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ]),
+      backgroundColor: Colors.transparent,
+      contentTextStyle: Theme.of(context).textTheme.headlineLarge,
+    ));
   }
 }

@@ -84,6 +84,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/modalIMG/
     - assets/images/adPics/daechan/
     - assets/images/serving_item_imgs/
     - assets/fonts/

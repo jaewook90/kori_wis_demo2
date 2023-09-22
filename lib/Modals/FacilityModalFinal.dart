@@ -32,6 +32,9 @@ class _FacilityModalState extends State<FacilityModal> {
   late int CHGFlag;
   late int EMGStatus;
 
+  late String countDownModalBg;
+  late String countDownModalBtn;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -108,191 +111,158 @@ class _FacilityModalState extends State<FacilityModal> {
   Widget build(BuildContext context) {
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
+    countDownModalBg = 'assets/images/modalIMG/bg.png';
+    countDownModalBtn = 'assets/images/modalIMG/btn.png';
+
     _mainStatusProvider.targetFacilityIndex = widget.number;
 
     return Container(
-        padding: const EdgeInsets.only(top: 588),
+        // padding: const EdgeInsets.only(top: 588),
         child: AlertDialog(
           alignment: Alignment.topCenter,
-          content: Container(
-            width: 740,
-            height: 300,
-            decoration: const BoxDecoration(
-              color: Colors.black,
-              border: Border.fromBorderSide(
-                BorderSide(
-                  width: 3,
-                  color: Colors.white
-                )
-              )
-            ),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 60),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+          content: Stack(children: [
+            Center(
+              child: Container(
+                width: 828,
+                height: 531,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(countDownModalBg), fit: BoxFit.fill)),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 25),
+                      height: 320,
+                      width: 828,
+                      child:Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        verticalDirection: VerticalDirection.down,
                         children: [
-                          const SizedBox(
-                            width: 110,
-                          ),
-                          Text('${_mainStatusProvider.facilityNum![widget.number!]}',
-                              style: const TextStyle(
-                                  fontFamily: 'kor',
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                          const SizedBox(
-                            width: 110,
-                          ),
-                          Text(_mainStatusProvider.facilityName![widget.number!],
-                              style: const TextStyle(
-                                  fontFamily: 'kor',
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        ],
-                      ),
-                      // const Divider(
-                      //   height: 60,
-                      //   color: Colors.white,
-                      //   indent: 50,
-                      //   endIndent: 50,
-                      //   thickness: 3,
-                      // ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: [
-                      //     const SizedBox(
-                      //       width: 100,
-                      //     ),
-                      //     Text(_mainStatusProvider.facilityDetail![widget.number!].toString(),
-                      //         style: const TextStyle(
-                      //             fontFamily: 'kor',
-                      //             fontSize: 35,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.white)),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  top: 170,
-                  child: Row(
-                    children: [
-                      FilledButton(
-                        style: FilledButton.styleFrom(
-                            enableFeedback: false,
-                            backgroundColor: Colors.transparent,
-                            shape: LinearBorder(
-                                side: BorderSide(
-                                    width: 1,
-                                    color: Colors.white
+                          Container(
+                            margin: EdgeInsets.all(6),
+                            width: 640,
+                            height: 80,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${_mainStatusProvider.facilityNum![widget.number!]}',
+                                    style: TextStyle(
+                                        fontFamily: 'kor',
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2)),
+                                const SizedBox(
+                                  width: 110,
                                 ),
-                                top: LinearBorderEdge(size: 1),
-                              end: LinearBorderEdge(size: 1)
+                                Text(_mainStatusProvider.facilityName![widget.number!],
+                                    style: TextStyle(
+                                        fontFamily: 'kor',
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        height: 1.2)),
+
+                                SizedBox(width: 15,),
+                              ],
                             ),
-                            fixedSize: const Size(370, 120)),
-                        onPressed: () {
-                          if (EMGStatus == 0) {
-                            showEMGAlert(context);
-                          } else {
-                            if (CHGFlag == 3) {
-                              showAdaptorCableAlert(context);
-                            } else {
+                          ),
+                        ],
+                      )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 50),
+                          width: 336,
+                          height: 102,
+                          decoration: BoxDecoration(
+                            // border: Border.fromBorderSide(
+                            //     BorderSide(width: 5, color: Colors.tealAccent)),
+                              image: DecorationImage(
+                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                                enableFeedback: false,
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                fixedSize: const Size(370, 120)),
+                            onPressed: () {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
-                                  _pwrTimer.cancel();
-                                  Future.delayed(
-                                      const Duration(milliseconds: 230), () {
-                                    _effectPlayer.dispose();
-                                    // 우선 8포인트까지 존재하여 나머지 함수를 이용함
-                                    showCountDownPopup(context, _mainStatusProvider.facilityNum![widget.number!]);
-                                  });
-
+                                Navigator.pop(context);
                               });
-                            }
-                          }
-                        },
-                        child: const Center(
-                          child: Text(
-                            '안내',
-                            style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      FilledButton(
-                        style: FilledButton.styleFrom(
-                            enableFeedback: false,
-                            backgroundColor: Colors.transparent,
-                            shape: LinearBorder(
-                                side: BorderSide(
-                                    width: 1,
-                                    color: Colors.white
-                                ),
-                                top: LinearBorderEdge(size: 1),
-                              start: LinearBorderEdge(size: 1)
+                            },
+                            child: const Center(
+                              child: Text(
+                                '취소',
+                                style: TextStyle(
+                                    height: 1.2,
+                                    fontFamily: 'kor',
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                            fixedSize: const Size(370, 120)),
-                        onPressed: () {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _effectPlayer.seek(const Duration(seconds: 0));
-                            _effectPlayer.play();
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: const Center(
-                          child: Text(
-                            '닫기',
-                            style: TextStyle(
-                                fontFamily: 'kor',
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        Container(
+                          margin: EdgeInsets.only(right: 50),
+                          width: 336,
+                          height: 102,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                                enableFeedback: false,
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                fixedSize: const Size(370, 120)),
+                            onPressed: () {
+                              if (EMGStatus == 0) {
+                                showEMGAlert(context);
+                              } else {
+                                if (CHGFlag == 3) {
+                                  showAdaptorCableAlert(context);
+                                } else {
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    _effectPlayer.seek(const Duration(seconds: 0));
+                                    _effectPlayer.play();
+                                    _pwrTimer.cancel();
+                                    Future.delayed(
+                                        const Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      // 우선 8포인트까지 존재하여 나머지 함수를 이용함
+                                      showCountDownPopup(context, _mainStatusProvider.facilityNum![widget.number!]);
+                                    });
+
+                                  });
+                                }
+                              }
+                            },
+                            child: const Center(
+                              child: Text(
+                                '시작',
+                                style: TextStyle(
+                                    height: 1.2,
+                                    fontFamily: 'kor',
+                                    fontSize: 35,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-                // Positioned(
-                //   left: 0,
-                //   top: 800,
-                //   child: FilledButton(
-                //     style: FilledButton.styleFrom(
-                //         enableFeedback: false,
-                //         backgroundColor: Colors.transparent,
-                //         shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(0)),
-                //         fixedSize: const Size(370, 120)),
-                //     onPressed: () {
-                //       WidgetsBinding.instance.addPostFrameCallback((_) {
-                //         _effectPlayer.seek(const Duration(seconds: 0));
-                //         _effectPlayer.play();
-                //         Navigator.pop(context);
-                //       });
-                //     },
-                //     child: const Center(
-                //       child: Text(
-                //         '닫기',
-                //         style: TextStyle(
-                //             fontFamily: 'kor',
-                //             fontSize: 35,
-                //             fontWeight: FontWeight.bold),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+              ),
             ),
-          ),
+          ]),
           backgroundColor: Colors.transparent,
           contentTextStyle: Theme.of(context).textTheme.headlineLarge,
         ));

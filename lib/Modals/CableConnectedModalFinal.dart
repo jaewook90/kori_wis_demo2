@@ -20,6 +20,9 @@ class _CableConnectedModalFinalState
   late AudioPlayer _effectPlayer;
   final String _effectFile = 'assets/sounds/button_click.wav';
 
+  late String countDownModalBg;
+  late String countDownModalBtn;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,69 +49,107 @@ class _CableConnectedModalFinalState
 
   @override
   Widget build(BuildContext context) {
-    countDownPopup = 'assets/screens/Serving/koriServingEMGAlert.png';
-
+    countDownModalBg = 'assets/images/modalIMG/bg.png';
+    countDownModalBtn = 'assets/images/modalIMG/btn.png';
     return Container(
-        padding: const EdgeInsets.only(top: 607),
+      // padding: const EdgeInsets.only(top: 588),
         child: AlertDialog(
           alignment: Alignment.topCenter,
           content: Stack(children: [
-            Container(
-              width: 740,
-              height: 362,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(countDownPopup), fit: BoxFit.fill)),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 75),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text('충전 케이블이 연결되어 있습니다.',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                      Text('분리 후 다시 시도해 주세요.',
-                          style: TextStyle(
-                              fontFamily: 'kor',
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              left: 0,
-              top: 242,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                    enableFeedback: false,
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    fixedSize: const Size(740, 120)),
-                onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
-                    Navigator.pop(context);
-                  });
-                },
-                child: const Center(
-                  child: Text(
-                    '확인',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold),
-                  ),
+            Center(
+              child: Container(
+                width: 828,
+                height: 531,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(countDownModalBg), fit: BoxFit.fill)),
+                child: Column(
+                  children: [
+                    Container(
+                        padding: EdgeInsets.only(top: 25),
+                        height: 320,
+                        width: 828,
+                        child:Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          verticalDirection: VerticalDirection.down,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.all(6),
+                              width: 640,
+                              height: 80,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('충전 케이블이 연결되어 있습니다.',
+                                      style: TextStyle(
+                                          fontFamily: 'kor',
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          height: 1.2)),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(6),
+                              width: 640,
+                              height: 80,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('분리 후 다시 시도해 주세요.',
+                                      style: TextStyle(
+                                          fontFamily: 'kor',
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          height: 1.2)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: 672,
+                          height: 102,
+                          decoration: BoxDecoration(
+                            // border: Border.fromBorderSide(
+                            //     BorderSide(width: 5, color: Colors.tealAccent)),
+                              image: DecorationImage(
+                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                                enableFeedback: false,
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                fixedSize: const Size(370, 120)),
+                            onPressed: () {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _effectPlayer.seek(const Duration(seconds: 0));
+                                _effectPlayer.play();
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: const Center(
+                              child: Text(
+                                '확인',
+                                style: TextStyle(
+                                    height: 1.2,
+                                    fontFamily: 'kor',
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),

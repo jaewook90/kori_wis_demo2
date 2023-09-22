@@ -98,16 +98,14 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                             endadr: navUrl,
                             keyBody: _servingProvider.targetTableNum)
                             .Posting(context);
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Future.delayed(const Duration(milliseconds: 230),
-                                  () {
-                                _effectPlayer.dispose();
-                                navPage(
-                                  context: context,
-                                  page: const NavigatorProgressModuleFinal(),
-                                ).navPageToPage();
-                              });
-                        });
+                        Future.delayed(const Duration(milliseconds: 230),
+                                () {
+                              _effectPlayer.dispose();
+                              navPage(
+                                context: context,
+                                page: const NavigatorProgressModuleFinal(),
+                              ).navPageToPage();
+                            });
                       });
                     },
                   ),

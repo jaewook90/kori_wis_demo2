@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
@@ -646,6 +647,8 @@ class _IntroScreenState extends State<IntroScreen>
                                                         navTrigger = false;
                                                       });
                                                     });
+                                                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                        overlays: []);
                                                   },
                                                   style: FilledButton.styleFrom(
                                                       enableFeedback: false,
@@ -722,6 +725,9 @@ class _IntroScreenState extends State<IntroScreen>
                                                   _networkProvider.hostIP();
                                                   navTrigger = false;
                                                 });
+                                                FocusScope.of(context).unfocus();
+                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                                    overlays: []);
                                               },
                                             ),
                                           ),

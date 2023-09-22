@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
@@ -157,6 +158,9 @@ class _AdminPWModalState extends State<AdminPWModal> {
                               }else if(_mainStatusProvider.robotServiceMode==2){
                                 navPage(context: context, page: FacilityScreen()).navPageToPage();
                               }
+                              FocusScope.of(context).unfocus();
+                              SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+                                  overlays: []);
                             }else{
                               setState(() {
                                 _pwrCheck = false;
