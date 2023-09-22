@@ -192,28 +192,28 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                             ),
                                             interval: const Duration(seconds: 1),
                                             onFinished: () {
-                                              _audioPlayer.play();
-                                              if (widget.serviceMode == 'Shipping' ||
-                                                  widget.serviceMode == 'facilityGuide') {
-                                                _networkProvider.servTable = widget.goalPosition;
-                                              } else {
-                                                _servingProvider.trayChange = true;
-                                                _networkProvider.servTable =
-                                                    _servingProvider.targetTableNum;
-                                              }
-                                              PostApi(
-                                                  url: startUrl,
-                                                  endadr: navUrl,
-                                                  keyBody: targetTableNum)
-                                                  .Posting(context);
-                                              Future.delayed(const Duration(milliseconds: 230), () {
-                                                _audioPlayer.dispose();
-                                                _effectPlayer.dispose();
-                                                navPage(
-                                                  context: context,
-                                                  page: const NavigatorProgressModuleFinal(),
-                                                ).navPageToPage();
-                                              });
+                                              // _audioPlayer.play();
+                                              // if (widget.serviceMode == 'Shipping' ||
+                                              //     widget.serviceMode == 'facilityGuide') {
+                                              //   _networkProvider.servTable = widget.goalPosition;
+                                              // } else {
+                                              //   _servingProvider.trayChange = true;
+                                              //   _networkProvider.servTable =
+                                              //       _servingProvider.targetTableNum;
+                                              // }
+                                              // PostApi(
+                                              //     url: startUrl,
+                                              //     endadr: navUrl,
+                                              //     keyBody: targetTableNum)
+                                              //     .Posting(context);
+                                              // Future.delayed(const Duration(milliseconds: 230), () {
+                                              //   _audioPlayer.dispose();
+                                              //   _effectPlayer.dispose();
+                                              //   navPage(
+                                              //     context: context,
+                                              //     page: const NavigatorProgressModuleFinal(),
+                                              //   ).navPageToPage();
+                                              // });
                                             },
                                           ),
                                           SizedBox(width: 15,),
@@ -297,6 +297,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                           child: Text(
                             '취소',
                             style: TextStyle(
+                                color: Color.fromRGBO(238, 238, 238, 0.7),
                               height: 1.2,
                                 fontFamily: 'kor',
                                 fontSize: 36,
@@ -350,6 +351,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                           child: Text(
                             '시작',
                             style: TextStyle(
+                                color: Color.fromRGBO(238, 238, 238, 0.7),
                                 height: 1.2,
                                 fontFamily: 'kor',
                                 fontSize: 35,

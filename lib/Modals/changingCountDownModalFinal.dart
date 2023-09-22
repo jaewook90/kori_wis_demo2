@@ -264,6 +264,7 @@ class _ChangingCountDownModalFinalState
                               child: Text(
                                 '취소',
                                 style: TextStyle(
+                                    color: Color.fromRGBO(238, 238, 238, 0.7),
                                     height: 1.2,
                                     fontFamily: 'kor',
                                     fontSize: 36,
@@ -378,6 +379,7 @@ class _ChangingCountDownModalFinalState
                               child: Text(
                                 '시작',
                                 style: TextStyle(
+                                    color: Color.fromRGBO(238, 238, 238, 0.7),
                                     height: 1.2,
                                     fontFamily: 'kor',
                                     fontSize: 35,
@@ -390,106 +392,6 @@ class _ChangingCountDownModalFinalState
                     )
                   ],
                 ),
-
-                /**
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(100, 60, 540, 200),
-                  child: Countdown(
-                    controller: _controller,
-                    seconds: 5,
-                    build: (_, double time) => Text(
-                      time.toInt().toString(),
-                      textAlign: TextAlign.end,
-                      style: const TextStyle(
-                          fontFamily: 'kor',
-                          fontSize: 80,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    interval: const Duration(seconds: 1),
-                    onFinished: () {
-                      if(_servingProvider.tray1 == true){
-                        _servingProvider.tray1 = false;
-                      }else{
-                        if(_servingProvider.tray2 == true){
-                          _servingProvider.tray2 = false;
-                        }else{
-                          if(_servingProvider.tray3 == true){
-                            _servingProvider.tray3 = false;
-                          }
-                        }
-                      }
-                      if (widget.modeState == 'return') {
-                        PostApi(
-                            url: startUrl,
-                            endadr: navUrl,
-                            keyBody: _servingProvider.waitingPoint)
-                            .Posting(context);
-                        Future.delayed(Duration(milliseconds: 230), () {
-                          _effectPlayer.dispose();
-                          navPage(
-                            context: context,
-                            page: const TraySelectionFinal(),
-                          ).navPageToPage();
-                        });
-                      } else if (widget.modeState == 'serving') {
-                        if (_servingProvider.targetTableNum != 'none') {
-                          setState(() {
-                            _servingProvider.trayChange = true;
-                            _networkProvider.servTable =
-                                _servingProvider.targetTableNum;
-                          });
-                          PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.targetTableNum)
-                              .Posting(context);
-                          Future.delayed(Duration(milliseconds: 230), () {
-                            _effectPlayer.dispose();
-                            navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                            ).navPageToPage();
-                          });
-                        } else {
-                          _servingProvider.clearAllTray();
-                          PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.waitingPoint)
-                              .Posting(context);
-                          Future.delayed(Duration(milliseconds: 230), () {
-                            _effectPlayer.dispose();
-                            navPage(
-                              context: context,
-                              page: const TraySelectionFinal(),
-                            ).navPageToPage();
-                          });
-                        }
-                      }else if(widget.modeState == 'guideDone'){
-                        if (_servingProvider.targetTableNum != 'none') {
-                          setState(() {
-                            _servingProvider.trayChange = true;
-                            _networkProvider.servTable =
-                                _servingProvider.targetTableNum;
-                          });
-                          PostApi(
-                              url: startUrl,
-                              endadr: navUrl,
-                              keyBody: _servingProvider.targetTableNum)
-                              .Posting(context);
-                          Future.delayed(Duration(milliseconds: 230), () {
-                            _effectPlayer.dispose();
-                            navPage(
-                              context: context,
-                              page: const NavigatorProgressModuleFinal(),
-                            ).navPageToPage();
-                          });
-                        }
-                      }
-                    },
-                  ),
-                ),
-                **/
               ),
             ),
           ]),

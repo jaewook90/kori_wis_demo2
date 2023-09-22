@@ -131,7 +131,7 @@ class _FacilityModalState extends State<FacilityModal> {
                 child: Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.only(top: 25),
+                      padding: EdgeInsets.only(top: 35),
                       height: 320,
                       width: 828,
                       child:Column(
@@ -170,6 +170,7 @@ class _FacilityModalState extends State<FacilityModal> {
                         ],
                       )
                     ),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -200,6 +201,7 @@ class _FacilityModalState extends State<FacilityModal> {
                               child: Text(
                                 '취소',
                                 style: TextStyle(
+                                  color: Color.fromRGBO(238, 238, 238, 0.7),
                                     height: 1.2,
                                     fontFamily: 'kor',
                                     fontSize: 36,
@@ -248,6 +250,7 @@ class _FacilityModalState extends State<FacilityModal> {
                               child: Text(
                                 '시작',
                                 style: TextStyle(
+                                    color: Color.fromRGBO(238, 238, 238, 0.7),
                                     height: 1.2,
                                     fontFamily: 'kor',
                                     fontSize: 35,

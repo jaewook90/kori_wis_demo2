@@ -124,6 +124,7 @@ class _EMGPopModalFinalState
                               child: Text(
                                 '확인',
                                 style: TextStyle(
+                                    color: Color.fromRGBO(238, 238, 238, 0.7),
                                     height: 1.2,
                                     fontFamily: 'kor',
                                     fontSize: 36,
