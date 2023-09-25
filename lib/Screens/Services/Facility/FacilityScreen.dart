@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/adminPWModal.dart';
@@ -8,13 +9,13 @@ import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilityDoneFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
+import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
@@ -139,6 +140,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
         .isEmpty) {
       poseDataUpdate();
     }
+
+    Provider.of<MainStatusModel>(context, listen: false).robotReturning = false;
   }
 
   Future<void> _initSharedPreferences() async {
@@ -1218,7 +1221,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         _effectPlayer.dispose();
                                         navPage(
                                           context: context,
-                                          page: const FacilityDoneScreen(),
+                                          page: const TestPagesScreen(),
                                         ).navPageToPage();
                                       });
                                     });
@@ -1500,6 +1503,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                 image: AssetImage(backgroundImage), fit: BoxFit.cover)),
         child: Stack(
           children: [
+            FacilityCurrentPositionScreen(),
             // 지도
             // Positioned(
             //   top: 110,

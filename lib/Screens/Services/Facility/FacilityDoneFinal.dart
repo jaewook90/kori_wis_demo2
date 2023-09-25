@@ -183,6 +183,7 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
                     _effectPlayer.play();
                     _controller.pause();
                     if (_servingProvider.targetTableNum != 'none') {
+                      _mainStatusProvider.robotReturning = true;
                       _servingProvider.trayChange = true;
                       _networkProvider.servTable =
                           _servingProvider.targetTableNum;

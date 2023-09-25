@@ -5,6 +5,12 @@ class MainStatusModel with ChangeNotifier {
   int? chargeFlag;
   int? emgButton;
 
+  double? robotX;
+  double? robotY;
+  double? robotTheta;
+
+  bool? robotReturning;
+
   int? autoCharge;
 
   bool? fromDocking;
@@ -36,7 +42,10 @@ class MainStatusModel with ChangeNotifier {
     this.autoCharge,
     this.facilityDetail,
     this.facilityName,
-    this.facilityNum
+    this.facilityNum,
+    this.robotX,
+    this.robotY,
+    this.robotTheta
   });
 // 서빙 이송 중 광고 재생
 }

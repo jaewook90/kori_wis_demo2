@@ -25,6 +25,9 @@ void main() async {
         ChangeNotifierProvider(
             create: (context) => MainStatusModel(
                 debugMode: true,
+                robotX: 0,
+                robotY: 0,
+                robotTheta: 0,
                 batBal: 0,
                 chargeFlag: 0,
                 emgButton: 0,

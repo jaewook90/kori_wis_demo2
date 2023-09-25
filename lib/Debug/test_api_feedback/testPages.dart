@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/saveDataTest.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityDoneFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
+import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 
 class TestPagesScreen extends StatefulWidget {
@@ -106,7 +108,42 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
                           fontFamily: 'kor', fontSize: 40, color: Colors.white),
                     ),)
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    navPage(context: context, page: const FacilityDoneScreen(), ).navPageToPage();
+                  },
+                  style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(30),
+                      side: const BorderSide(
+                          color: Colors.white, width: 3
+                      )
+                  ),
+                  child: const Text(
+                    '안내 완료 페이지',
+                    style: TextStyle(
+                        fontFamily: 'kor', fontSize: 40, color: Colors.white),
+                  ),),
+                TextButton(
+                  onPressed: () {
+                    navPage(context: context, page: const FacilityCurrentPositionScreen(), ).navPageToPage();
+                  },
+                  style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(30),
+                      side: const BorderSide(
+                          color: Colors.white, width: 3
+                      )
+                  ),
+                  child: const Text(
+                    '현재 위치 포인팅 페이지',
+                    style: TextStyle(
+                        fontFamily: 'kor', fontSize: 40, color: Colors.white),
+                  ),)
+              ],
+            ),
           ],
         ),
       ),
