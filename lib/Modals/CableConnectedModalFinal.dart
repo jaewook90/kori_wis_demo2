@@ -110,6 +110,7 @@ class _CableConnectedModalFinalState
                           ],
                         )
                     ),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

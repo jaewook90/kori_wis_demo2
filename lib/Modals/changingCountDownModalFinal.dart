@@ -228,6 +228,7 @@ class _ChangingCountDownModalFinalState
                         ],
                       )
                     ),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

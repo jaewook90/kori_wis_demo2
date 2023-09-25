@@ -95,6 +95,7 @@ class _EMGPopModalFinalState
                           ],
                         )
                     ),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

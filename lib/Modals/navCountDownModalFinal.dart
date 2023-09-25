@@ -135,7 +135,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 25),
+                  padding: EdgeInsets.only(top: 35),
                   height: 320,
                   width: 828,
                   child: _mainStatusProvider.robotServiceMode == 0
@@ -192,28 +192,28 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                             ),
                                             interval: const Duration(seconds: 1),
                                             onFinished: () {
-                                              // _audioPlayer.play();
-                                              // if (widget.serviceMode == 'Shipping' ||
-                                              //     widget.serviceMode == 'facilityGuide') {
-                                              //   _networkProvider.servTable = widget.goalPosition;
-                                              // } else {
-                                              //   _servingProvider.trayChange = true;
-                                              //   _networkProvider.servTable =
-                                              //       _servingProvider.targetTableNum;
-                                              // }
-                                              // PostApi(
-                                              //     url: startUrl,
-                                              //     endadr: navUrl,
-                                              //     keyBody: targetTableNum)
-                                              //     .Posting(context);
-                                              // Future.delayed(const Duration(milliseconds: 230), () {
-                                              //   _audioPlayer.dispose();
-                                              //   _effectPlayer.dispose();
-                                              //   navPage(
-                                              //     context: context,
-                                              //     page: const NavigatorProgressModuleFinal(),
-                                              //   ).navPageToPage();
-                                              // });
+                                              _audioPlayer.play();
+                                              if (widget.serviceMode == 'Shipping' ||
+                                                  widget.serviceMode == 'facilityGuide') {
+                                                _networkProvider.servTable = widget.goalPosition;
+                                              } else {
+                                                _servingProvider.trayChange = true;
+                                                _networkProvider.servTable =
+                                                    _servingProvider.targetTableNum;
+                                              }
+                                              PostApi(
+                                                  url: startUrl,
+                                                  endadr: navUrl,
+                                                  keyBody: targetTableNum)
+                                                  .Posting(context);
+                                              Future.delayed(const Duration(milliseconds: 230), () {
+                                                _audioPlayer.dispose();
+                                                _effectPlayer.dispose();
+                                                navPage(
+                                                  context: context,
+                                                  page: const NavigatorProgressModuleFinal(),
+                                                ).navPageToPage();
+                                              });
                                             },
                                           ),
                                           SizedBox(width: 15,),
@@ -231,6 +231,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                 )
                               : Container(),
                 ),
+                SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
