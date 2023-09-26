@@ -465,11 +465,16 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     height: 108,
                     child: Stack(
                       children: [
-                        const AppBarStatus(),
+                        const AppBarStatus(
+                          EMGImgPos: 630,
+                          batteryImgPos: 550,
+                          batteryTextPos: 540,
+                          paddingTop: 20,
+                        ),
                         // 퀵 서비스 버튼
                         Positioned(
-                            left: 20,
-                            top: 25,
+                            right: 190,
+                            top: 30,
                             child: TextButton(
                               onPressed: () {
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -503,8 +508,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                               ),
                             )),
                         Positioned(
-                            left: 220,
-                            top: 25,
+                            right: 55,
+                            top: 30,
                             child: TextButton(
                               onPressed: () {
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -536,8 +541,8 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                             )),
                         // 사운드 온오프 스위치
                         Positioned(
-                          right: 150,
-                          top: 25,
+                          right: 450,
+                          top: 30,
                           child: FilledButton(
                             onPressed: () {
                               if (volumeOnOff == true) {

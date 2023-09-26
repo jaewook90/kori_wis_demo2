@@ -10,9 +10,10 @@ class AppBarStatus extends StatefulWidget {
   final double? batteryTextPos;
   final double? batteryImgPos;
   final double? EMGImgPos;
+  final double? paddingTop;
 
   const AppBarStatus(
-      {Key? key, this.batteryTextPos, this.batteryImgPos, this.EMGImgPos})
+      {Key? key, this.batteryTextPos, this.batteryImgPos, this.EMGImgPos, this.paddingTop})
       : super(key: key);
 
   @override
@@ -29,6 +30,7 @@ class _AppBarStatusState extends State<AppBarStatus> {
   late double batteryTextPos;
   late double batteryImgPos;
   late double EMGImgPos;
+  late double paddingTop;
 
   @override
   void initState() {
@@ -49,6 +51,11 @@ class _AppBarStatusState extends State<AppBarStatus> {
       EMGImgPos = 245;
     }else{
       EMGImgPos = widget.EMGImgPos!;
+    }
+    if(widget.paddingTop == null){
+      paddingTop = 35;
+    }else{
+      paddingTop = widget.paddingTop!;
     }
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
@@ -89,12 +96,12 @@ class _AppBarStatusState extends State<AppBarStatus> {
     return Stack(children: [
       Positioned(
         right: batteryTextPos,
-        top: 80,
+        top: paddingTop+45,
         child: Text(('${batData.toString()} %')),
       ),
       Positioned(
         right: batteryImgPos,
-        top: 40,
+        top: paddingTop+5,
         child: Container(
           height: 45,
           width: 50,
@@ -109,7 +116,7 @@ class _AppBarStatusState extends State<AppBarStatus> {
       EMGStatus == 0
           ? Positioned(
               left: EMGImgPos,
-              top: 35,
+              top: paddingTop,
               child: const Stack(children: [
                 Icon(Icons.radio_button_checked,
                     color: Colors.red, size: 80, grade: 200, weight: 200),
@@ -130,7 +137,7 @@ class _AppBarStatusState extends State<AppBarStatus> {
       CHGFlag == 3
           ? Positioned(
               right: batteryImgPos,
-              top: 40,
+              top: paddingTop+5,
               child: const Icon(Icons.bolt, color: Colors.yellow, size: 50),
             )
           : Container(),
