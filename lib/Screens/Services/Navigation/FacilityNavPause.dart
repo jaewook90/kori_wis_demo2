@@ -126,12 +126,12 @@ class _FacilityNavigatorPauseModuleFinalState
     } else if (servTableNum == '시설1') {
       if(_mainStatusProvider.robotReturning == true){
         setState(() {
-          navSentence = '[이동] 중 입니다';
+          navSentence = '[이동]이 일시중지 되었습니다';
           destinationSentence = '대기장소';
         });
       }else{
         setState(() {
-          navSentence = '[안내] 중 입니다';
+          navSentence = '[안내]가 일시중지 되었습니다';
           destinationSentence =
           '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
         });

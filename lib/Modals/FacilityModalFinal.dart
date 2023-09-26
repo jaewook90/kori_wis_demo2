@@ -35,6 +35,8 @@ class _FacilityModalState extends State<FacilityModal> {
   late String countDownModalBg;
   late String countDownModalBtn;
 
+  late Timer _timer;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,6 +48,14 @@ class _FacilityModalState extends State<FacilityModal> {
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
+
+    if (mounted) {
+      _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pop(context);
+        });
+      });
+    }
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
@@ -104,6 +114,7 @@ class _FacilityModalState extends State<FacilityModal> {
     // TODO: implement dispose
     _effectPlayer.dispose();
     _pwrTimer.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -194,6 +205,7 @@ class _FacilityModalState extends State<FacilityModal> {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 _effectPlayer.seek(const Duration(seconds: 0));
                                 _effectPlayer.play();
+                                _timer.cancel();
                                 Navigator.pop(context);
                               });
                             },
@@ -235,6 +247,7 @@ class _FacilityModalState extends State<FacilityModal> {
                                     _effectPlayer.seek(const Duration(seconds: 0));
                                     _effectPlayer.play();
                                     _pwrTimer.cancel();
+                                    _timer.cancel();
                                     Future.delayed(
                                         const Duration(milliseconds: 230), () {
                                       _effectPlayer.dispose();
