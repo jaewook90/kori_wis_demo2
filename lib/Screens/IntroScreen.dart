@@ -326,6 +326,7 @@ class _IntroScreenState extends State<IntroScreen>
                       });
                     } else {
                       setState(() {
+                        _prefs.clear();
                         robotInit = false;
                         navTrigger = true;
                       });

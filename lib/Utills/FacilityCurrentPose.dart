@@ -15,7 +15,15 @@ class FacilityCurrentPositionScreen extends StatefulWidget {
 }
 
 class _FacilityCurrentPositionScreenState
-    extends State<FacilityCurrentPositionScreen> {
+    extends State<FacilityCurrentPositionScreen> with TickerProviderStateMixin {
+  // late Animation<double> animation1;
+  // late Animation<double> animation2;
+  //
+  // late AnimationController animationController1;
+  // late AnimationController animationController2;
+
+  late AnimationController _animationController;
+  late Animation _animation;
 
   String? startUrl;
   String? chgUrl;
@@ -46,6 +54,32 @@ class _FacilityCurrentPositionScreenState
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController.repeat(reverse: true);
+    _animation = Tween(begin: 0, end: 10.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    // animationController1 = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    // animationController2 = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    //
+    // animationController1.repeat();
+    // animationController2.repeat();
+    //
+    // animation1 = Tween<double>(begin: 30, end: 50).animate(animationController1);
+    // animation2 = Tween<double>(begin: 50, end: 70).animate(animationController2);
+
+    // animation1.addListener(() {
+    //   setState(() {
+    //   });
+    // });
+    // animation2.addListener(() {
+    //   setState(() {
+    //   });
+    // });
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
@@ -119,11 +153,13 @@ class _FacilityCurrentPositionScreenState
     // TODO: implement dispose
     super.dispose();
     _poseTimer.cancel();
+    _animationController.dispose();
+    // animationController1.dispose();
+    // animationController2.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // print(originMove);
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -137,15 +173,135 @@ class _FacilityCurrentPositionScreenState
               height: 1344,
               child: Stack(children: [
                 Positioned(
+                    // bottom: 900,
+                    // left: 300,
                     bottom: cordOffice('y'),
                     left: cordOffice('x'),
-                    child: Transform.rotate(
-                        angle: ((3.14 / 2) - robotTheta),
-                        child: Icon(
-                          Icons.navigation,
-                          color: Colors.redAccent,
-                          size: 30,
-                        ))),
+                    child: Container(
+                        width: 100,
+                        height: 100,
+                        child: Transform.rotate(
+                          angle: ((3.14 / 2) - robotTheta),
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.transparent,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.teal.withOpacity(0.4),
+                                            blurStyle: BlurStyle.solid,
+                                            blurRadius: _animation.value,
+                                            spreadRadius: _animation.value)
+                                      ]),
+                                ),
+                              ),
+                              Center(
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                child:  Icon(
+                                            Icons.navigation,
+                                            color: Colors.white,
+                                            size: 22,
+                                          ),
+                                decoration: BoxDecoration(
+                                  border: Border.fromBorderSide(
+                                    BorderSide(color: Colors.white, width: 2)
+                                  ),
+                                    shape: BoxShape.circle,
+                                    color: Colors.tealAccent,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.tealAccent.withOpacity(0.5),
+                                          blurStyle: BlurStyle.solid,
+                                          blurRadius: _animation.value,
+                                          spreadRadius: (_animation.value+1))
+                                    ]),
+                              ),
+                            ),
+                            ]
+                          ),
+                          // Image.asset('assets/icons/radilal_B.gif')
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //     color: Colors.blue,
+                          //   ),
+                          //   width: animation2.value,
+                          //   height: animation2.value,
+                          //   // child: CircleAvatar(
+                          //   //   radius: animation2.value,
+                          //   //   // foregroundColor: Colors.blue,
+                          //   // ),
+                          //   child: Center(
+                          //     child:  Container(
+                          //       decoration: BoxDecoration(
+                          //         shape: BoxShape.circle,
+                          //         color: Colors.white,
+                          //       ),
+                          //       width: animation1.value,
+                          //       height: animation1.value,
+                          //       child: Center(
+                          //         child: Icon(
+                          //           Icons.navigation,
+                          //           color: Colors.redAccent,
+                          //           size: 25,
+                          //         ),
+                          //       ),
+                          //       // child: CircleAvatar(
+                          //       //   radius: animation2.value,
+                          //       //   // foregroundColor: Colors.blue,
+                          //       // ),
+                          //     ),
+                          //   ),
+                          // )
+                        )
+                        // Center(
+                        //   child: Transform.rotate(
+                        //       angle: ((3.14 / 2) - robotTheta),
+                        //       child:
+                        //       // Image.asset('assets/icons/radilal_B.gif')
+                        //       // Container(
+                        //       //   decoration: BoxDecoration(
+                        //       //     shape: BoxShape.circle,
+                        //       //     color: Colors.blue,
+                        //       //   ),
+                        //       //   width: animation2.value,
+                        //       //   height: animation2.value,
+                        //       //   // child: CircleAvatar(
+                        //       //   //   radius: animation2.value,
+                        //       //   //   // foregroundColor: Colors.blue,
+                        //       //   // ),
+                        //       //   child: Center(
+                        //       //     child:  Container(
+                        //       //       decoration: BoxDecoration(
+                        //       //         shape: BoxShape.circle,
+                        //       //         color: Colors.white,
+                        //       //       ),
+                        //       //       width: animation1.value,
+                        //       //       height: animation1.value,
+                        //       //       child: Center(
+                        //       //         child: Icon(
+                        //       //           Icons.navigation,
+                        //       //           color: Colors.redAccent,
+                        //       //           size: 25,
+                        //       //         ),
+                        //       //       ),
+                        //       //       // child: CircleAvatar(
+                        //       //       //   radius: animation2.value,
+                        //       //       //   // foregroundColor: Colors.blue,
+                        //       //       // ),
+                        //       //     ),
+                        //       //   ),
+                        //       // )
+                        //   ),
+                        // ),
+                        )),
               ]),
             ),
           ),
