@@ -532,7 +532,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
         width: 800,
         child: Stack(children: [
           Container(
-            padding: const EdgeInsets.only(top: 100, left: 15),
+            padding: const EdgeInsets.only(top: 100),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -540,12 +540,13 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
-                      width: 390,
+                      width: 405,
                       height: 500,
                       child: Column(
                         children: [
                           //ip 변경
                           ExpansionTile(
+                            tilePadding: EdgeInsets.only(left: 30),
                               title: const Row(
                                 children: [
                                   Icon(Icons.track_changes,
@@ -557,7 +558,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           fontFamily: 'kor',
-                                          fontSize: 36,
+                                          fontSize: 34,
                                           fontWeight: FontWeight.bold,
                                           height: 1.2,
                                           color: Colors.white),
@@ -578,7 +579,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                   width: 390,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 50, bottom: 30),
+                                        left: 50, bottom: 10),
                                     child: Column(
                                       children: [
                                         const Row(
@@ -589,13 +590,13 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               '기존 IP',
                                               style: TextStyle(
                                                   fontFamily: 'kor',
-                                                  fontSize: 30,
+                                                  fontSize: 27,
                                                   color: Colors.white),
                                             ),
                                           ],
                                         ),
                                         const SizedBox(
-                                          height: 12,
+                                          height: 10,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -605,14 +606,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               startUrl!,
                                               style: const TextStyle(
                                                   fontFamily: 'kor',
-                                                  fontSize: 25,
+                                                  fontSize: 23,
                                                   color: Colors.white),
                                             ),
                                           ],
                                         ),
                                         const Divider(
                                           color: Colors.grey,
-                                          height: 30,
+                                          height: 15,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -622,7 +623,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               '변경 할 IP',
                                               style: TextStyle(
                                                   fontFamily: 'kor',
-                                                  fontSize: 30,
+                                                  fontSize: 27,
                                                   color: Colors.white),
                                             ),
                                             const SizedBox(
@@ -672,6 +673,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
                                         TextField(
                                           onTap: () {
                                             setState(() {
@@ -681,10 +685,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           controller: configController,
                                           style: const TextStyle(
                                               fontFamily: 'kor',
-                                              fontSize: 25,
+                                              fontSize: 23,
                                               color: Colors.white),
                                           keyboardType: TextInputType.url,
                                           decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.all(0),
                                               border: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.grey,
@@ -735,7 +740,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                 style: FilledButton.styleFrom(
                                     enableFeedback: false,
                                     backgroundColor: Colors.transparent,
-                                    fixedSize: const Size(390, 58),
+                                    fixedSize: const Size(395, 58),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(0))),
@@ -750,7 +755,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontFamily: 'kor',
-                                            fontSize: 36,
+                                            fontSize: 34,
                                             fontWeight: FontWeight.bold,
                                             height: 1.2,
                                             color: Colors.white),
@@ -794,7 +799,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontFamily: 'kor',
-                                            fontSize: 36,
+                                            fontSize: 34,
                                             fontWeight: FontWeight.bold,
                                             height: 1.2,
                                             color: Colors.white),
@@ -812,6 +817,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       child: Column(
                         children: [
                           ExpansionTile(
+                            tilePadding: EdgeInsets.only(left: 25),
                               title: const Row(
                                 children: [
                                   Icon(Icons.battery_saver,
@@ -823,7 +829,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           fontFamily: 'kor',
-                                          fontSize: 36,
+                                          fontSize: 34,
                                           fontWeight: FontWeight.bold,
                                           height: 1.2,
                                           color: Colors.white),
@@ -844,7 +850,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                   width: 390,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 50, bottom: 30),
+                                        left: 50, bottom: 10),
                                     child: Column(
                                       children: [
                                         const Row(
@@ -855,13 +861,13 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               '현재 설정',
                                               style: TextStyle(
                                                   fontFamily: 'kor',
-                                                  fontSize: 30,
+                                                  fontSize: 27,
                                                   color: Colors.white),
                                             ),
                                           ],
                                         ),
                                         const SizedBox(
-                                          height: 12,
+                                          height: 10,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -871,14 +877,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               '$autoChargeConfig',
                                               style: const TextStyle(
                                                   fontFamily: 'kor',
-                                                  fontSize: 25,
+                                                  fontSize: 23,
                                                   color: Colors.white),
                                             ),
                                           ],
                                         ),
                                         const Divider(
                                           color: Colors.grey,
-                                          height: 30,
+                                          height: 15,
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -888,11 +894,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               '변경 할 설정',
                                               style: TextStyle(
                                                   fontFamily: 'kor',
-                                                  fontSize: 30,
+                                                  fontSize: 27,
                                                   color: Colors.white),
                                             ),
                                             const SizedBox(
-                                              width: 120,
+                                              width: 100,
                                             ),
                                             FilledButton(
                                               onPressed: () async {
@@ -942,6 +948,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                             ),
                                           ],
                                         ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
                                         TextField(
                                           onTap: () {
                                             setState(() {
@@ -951,11 +960,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           controller: autoChargeController,
                                           style: const TextStyle(
                                               fontFamily: 'kor',
-                                              fontSize: 25,
+                                              fontSize: 23,
                                               color: Colors.white),
                                           keyboardType: const TextInputType
                                               .numberWithOptions(),
                                           decoration: const InputDecoration(
+                                              contentPadding: EdgeInsets.all(0),
                                               border: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.grey,
@@ -1022,7 +1032,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontFamily: 'kor',
-                                            fontSize: 36,
+                                            fontSize: 34,
                                             fontWeight: FontWeight.bold,
                                             height: 1.2,
                                             color: Colors.white),
@@ -1069,7 +1079,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                             fontFamily: 'kor',
-                                            fontSize: 36,
+                                            fontSize: 34,
                                             fontWeight: FontWeight.bold,
                                             height: 1.2,
                                             color: Colors.white),
@@ -1143,7 +1153,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
-                                              fontSize: 36,
+                                              fontSize: 34,
                                               fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
@@ -1191,7 +1201,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
-                                              fontSize: 36,
+                                              fontSize: 34,
                                               fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
@@ -1244,7 +1254,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
-                                              fontSize: 36,
+                                              fontSize: 34,
                                               fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),
@@ -1292,7 +1302,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                               fontFamily: 'kor',
-                                              fontSize: 36,
+                                              fontSize: 34,
                                               fontWeight: FontWeight.bold,
                                               height: 1.2,
                                               color: Colors.white),

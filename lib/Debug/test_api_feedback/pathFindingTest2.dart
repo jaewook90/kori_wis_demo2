@@ -148,7 +148,7 @@ class _PathFindingTest2State extends State<PathFindingTest2> {
         spot.addNeighbors(grid, columns, rows);
       }
     }
-    start = grid[70][50];
+    start = grid[61][50];
     end = grid[columns - 1][rows - 1];
     start!.isWall = false;
     end!.isWall = false;
@@ -225,7 +225,7 @@ class _PathFindingTest2State extends State<PathFindingTest2> {
         }
       }
     }
-    setState(() {});
+    // setState(() {});
     print("no Solution!!");
     return;
   }
