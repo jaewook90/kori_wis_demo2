@@ -1,0 +1,10 @@
+<svg width="103" height="32" viewBox="0 0 103 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="103" height="32" rx="5" fill="#555"/>
+    <rect x=".25" y=".25" width="102.5" height="31.5" rx="4.75" stroke="url(#umqe64qvba)" stroke-opacity=".15" stroke-width=".5"/>
+    <defs>
+        <linearGradient id="umqe64qvba" x1="51.5" y1="0" x2="51.5" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fff"/>
+            <stop offset="1" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+</svg>

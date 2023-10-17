@@ -129,9 +129,7 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
                         },
                         child: null)),
                 const AppBarStatus(
-                  EMGImgPos: 500,
-                  batteryImgPos: 420,
-                  batteryTextPos: 410,
+
                 ),
               ],
             ),

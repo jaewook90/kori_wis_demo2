@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
@@ -38,9 +39,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
   final TextEditingController autoChargeController = TextEditingController();
   late SharedPreferences _prefs;
 
-  final String facilityMap = 'assets/images/facility_map_v1.2.png';
-
-  // final String facilityOfficeMap = 'assets/images/facility_test_v1.0.png';
   late int officeQTY;
   late List<String> officeNum;
   late List<String> officeName;
@@ -50,10 +48,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
   late int autoChargeConfig;
 
   late AudioPlayer _effectPlayer;
-  final String _effectFile = 'assets/sounds/button_click.wav';
 
-  // 배경 화면
-  late String backgroundImage;
+  // assets
+  final String _effectFile = 'assets/sounds/button_click.wav';
+  final String mainMap = 'assets/images/facility/323_black_map_modified.svg';
+  final String bottomBanner = 'assets/images/facility/bottom.png';
+  final String listBtn = 'assets/images/facility/btn.svg';
+  final String facilityName = 'assets/images/facility/habio_7_f.svg';
+  final String notiBox = 'assets/images/facility/noti_box.svg';
 
   late bool _debugTray;
 
@@ -92,7 +94,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
     // TODO: implement initState
     super.initState();
 
-    backgroundImage = "assets/screens/Facility/FacilityMain.png";
+    // backgroundImage = "assets/screens/Facility/FacilityMain.png";
 
     _initSharedPreferences();
 
@@ -266,6 +268,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
         builder: (context) {
           return const AdminPWModal();
         });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -448,78 +456,46 @@ class _FacilityScreenState extends State<FacilityScreen> {
         actions: [
           SizedBox(
             width: 1080,
-            height: 108,
+            height: 132,
             child: Stack(
               children: [
-                // 장소 이름
-                // const Positioned(
-                //   left: 30,
-                //     child: Text('Habio 7F',
-                //     style: TextStyle(
-                //       fontFamily: 'kor',
-                //       fontSize: 70,
-                //       fontWeight: FontWeight.bold
-                //     ),)),
-                const AppBarStatus(
-                  EMGImgPos: 500,
-                  batteryImgPos: 420,
-                  batteryTextPos: 410,
-                ),
+                const AppBarStatus(),
                 Positioned(
                     top: 30,
-                    right: 55,
-                    child: FilledButton(
-                      onPressed: () {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _effectPlayer.seek(const Duration(seconds: 0));
-                          _effectPlayer.play();
-                          Future.delayed(const Duration(milliseconds: 230), () {
-                            _effectPlayer.dispose();
-                            navPage(
-                                    context: context,
-                                    page: const FacilityListScreen())
-                                .navPageToPage();
+                    right: 51,
+                    child: Stack(children: [
+                      SvgPicture.asset(listBtn, width: 240, height: 72),
+                      FilledButton(
+                        onPressed: () {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _effectPlayer.seek(const Duration(seconds: 0));
+                            _effectPlayer.play();
+                            Future.delayed(const Duration(milliseconds: 230),
+                                () {
+                              _effectPlayer.dispose();
+                              navPage(
+                                      context: context,
+                                      page: const FacilityListScreen())
+                                  .navPageToPage();
+                            });
                           });
-                        });
-                      },
-                      style: FilledButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          fixedSize: Size(280, 85),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            // side: BorderSide(
-                            //     color: Colors.tealAccent, width: 1)
-                          )),
-                      child: null,
-                    ))
-                // 버튼
-                // Positioned(
-                //     top: 30,
-                //     right: 33,
-                //     child: TextButton(
-                //       onPressed: () {
-                //         navPage(
-                //                 context: context,
-                //                 page: const FacilityListScreen())
-                //             .navPageToPage();
-                //       },
-                //       style: TextButton.styleFrom(
-                //           side:
-                //               const BorderSide(color: Colors.white, width: 2)),
-                //       child: const Text(
-                //         '입주사 목록',
-                //         style: TextStyle(
-                //             fontFamily: 'kor',
-                //             fontSize: 30,
-                //             fontWeight: FontWeight.bold,
-                //             color: Colors.white),
-                //       ),
-                //     ))
+                        },
+                        style: FilledButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            fixedSize: const Size(240, 72),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                // side: BorderSide(
+                                //     color: Colors.tealAccent, width: 1)
+                            )),
+                        child: null,
+                      ),
+                    ])),
               ],
             ),
           )
         ],
-        toolbarHeight: 150,
+        toolbarHeight: 132,
       ),
       extendBodyBehindAppBar: true,
       drawerEdgeDragWidth: 70,
@@ -546,7 +522,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         children: [
                           //ip 변경
                           ExpansionTile(
-                            tilePadding: EdgeInsets.only(left: 30),
+                              tilePadding: const EdgeInsets.only(left: 30),
                               title: const Row(
                                 children: [
                                   Icon(Icons.track_changes,
@@ -652,9 +628,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                                       _networkProvider
                                                           .positionURL);
                                                 });
-                                                FocusScope.of(context).unfocus();
-                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                                                    overlays: []);
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                SystemChrome
+                                                    .setEnabledSystemUIMode(
+                                                        SystemUiMode.manual,
+                                                        overlays: []);
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,
@@ -689,7 +668,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                               color: Colors.white),
                                           keyboardType: TextInputType.url,
                                           decoration: const InputDecoration(
-                                            contentPadding: EdgeInsets.all(0),
+                                              contentPadding: EdgeInsets.all(0),
                                               border: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Colors.grey,
@@ -817,7 +796,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       child: Column(
                         children: [
                           ExpansionTile(
-                            tilePadding: EdgeInsets.only(left: 25),
+                              tilePadding: const EdgeInsets.only(left: 25),
                               title: const Row(
                                 children: [
                                   Icon(Icons.battery_saver,
@@ -927,9 +906,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                                         '';
                                                   });
                                                 });
-                                                FocusScope.of(context).unfocus();
-                                                SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-                                                    overlays: []);
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                SystemChrome
+                                                    .setEnabledSystemUIMode(
+                                                        SystemUiMode.manual,
+                                                        overlays: []);
                                               },
                                               style: FilledButton.styleFrom(
                                                   enableFeedback: false,
@@ -1508,12 +1490,24 @@ class _FacilityScreenState extends State<FacilityScreen> {
       ),
       body: Container(
         constraints: const BoxConstraints.expand(),
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(backgroundImage), fit: BoxFit.cover)),
+        decoration: const BoxDecoration(color: Color(0xff191919)),
         child: Stack(
           children: [
-            FacilityCurrentPositionScreen(),
+            Padding(
+              padding: const EdgeInsets.only(left: 54, top: 36),
+              child: SvgPicture.asset(
+                facilityName,
+                width: 252,
+                height: 63,
+              ),
+            ),
+            Padding(padding:  const EdgeInsets.only(top: 135), child: SvgPicture.asset(notiBox, width: 1080, height: 96,),),
+            Padding(padding:  const EdgeInsets.only(top: 255, left: 51), child: SvgPicture.asset(mainMap, width: 978, height: 1335,),),
+            Padding(
+              padding: const EdgeInsets.only(top: 255, left: 51),
+              child: const FacilityCurrentPositionScreen(),
+            ),
+            Padding(padding: const EdgeInsets.only(top: 1614, left: 51), child: Container(width: 978, height: 255, decoration: BoxDecoration(image: DecorationImage(image: AssetImage(bottomBanner)))),),
             // 지도
             // Positioned(
             //   top: 110,
@@ -1599,7 +1593,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   onTap: () {
                     _effectPlayer.seek(const Duration(seconds: 0));
                     _effectPlayer.play();
-
                     Future.delayed(const Duration(milliseconds: 100), () {
                       facilityInform(context, 0);
                     });

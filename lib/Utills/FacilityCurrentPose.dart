@@ -117,8 +117,8 @@ class _FacilityCurrentPositionScreenState
               .toStringAsFixed(2));
     });
 
-    canvasX = 972;
-    canvasY = 1344;
+    canvasX = 978;
+    canvasY = 1335;
 
     buttonWidth = 100;
     buttonHeight = 30;
@@ -166,11 +166,9 @@ class _FacilityCurrentPositionScreenState
       body: Stack(
         children: [
           Positioned(
-            top: 110,
-            left: (1080 * 0.1) / 2,
             child: Container(
-              width: 972,
-              height: 1344,
+              width: 978,
+              height: 1335,
               child: Stack(children: [
                 Positioned(
                     // bottom: 900,
@@ -226,82 +224,8 @@ class _FacilityCurrentPositionScreenState
                             ),
                             ]
                           ),
-                          // Image.asset('assets/icons/radilal_B.gif')
-                          // Container(
-                          //   decoration: BoxDecoration(
-                          //     shape: BoxShape.circle,
-                          //     color: Colors.blue,
-                          //   ),
-                          //   width: animation2.value,
-                          //   height: animation2.value,
-                          //   // child: CircleAvatar(
-                          //   //   radius: animation2.value,
-                          //   //   // foregroundColor: Colors.blue,
-                          //   // ),
-                          //   child: Center(
-                          //     child:  Container(
-                          //       decoration: BoxDecoration(
-                          //         shape: BoxShape.circle,
-                          //         color: Colors.white,
-                          //       ),
-                          //       width: animation1.value,
-                          //       height: animation1.value,
-                          //       child: Center(
-                          //         child: Icon(
-                          //           Icons.navigation,
-                          //           color: Colors.redAccent,
-                          //           size: 25,
-                          //         ),
-                          //       ),
-                          //       // child: CircleAvatar(
-                          //       //   radius: animation2.value,
-                          //       //   // foregroundColor: Colors.blue,
-                          //       // ),
-                          //     ),
-                          //   ),
-                          // )
                         )
-                        // Center(
-                        //   child: Transform.rotate(
-                        //       angle: ((3.14 / 2) - robotTheta),
-                        //       child:
-                        //       // Image.asset('assets/icons/radilal_B.gif')
-                        //       // Container(
-                        //       //   decoration: BoxDecoration(
-                        //       //     shape: BoxShape.circle,
-                        //       //     color: Colors.blue,
-                        //       //   ),
-                        //       //   width: animation2.value,
-                        //       //   height: animation2.value,
-                        //       //   // child: CircleAvatar(
-                        //       //   //   radius: animation2.value,
-                        //       //   //   // foregroundColor: Colors.blue,
-                        //       //   // ),
-                        //       //   child: Center(
-                        //       //     child:  Container(
-                        //       //       decoration: BoxDecoration(
-                        //       //         shape: BoxShape.circle,
-                        //       //         color: Colors.white,
-                        //       //       ),
-                        //       //       width: animation1.value,
-                        //       //       height: animation1.value,
-                        //       //       child: Center(
-                        //       //         child: Icon(
-                        //       //           Icons.navigation,
-                        //       //           color: Colors.redAccent,
-                        //       //           size: 25,
-                        //       //         ),
-                        //       //       ),
-                        //       //       // child: CircleAvatar(
-                        //       //       //   radius: animation2.value,
-                        //       //       //   // foregroundColor: Colors.blue,
-                        //       //       // ),
-                        //       //     ),
-                        //       //   ),
-                        //       // )
-                        //   ),
-                        // ),
-                        )),
+                    )),
               ]),
             ),
           ),

@@ -102,11 +102,7 @@ class _FacilityDoneScreenState extends State<FacilityDoneScreen> {
               height: 108,
               child: const Stack(
                 children: [
-                  const AppBarStatus(
-                    EMGImgPos: 500,
-                    batteryImgPos: 420,
-                    batteryTextPos: 410,
-                  ),
+                  const AppBarStatus(),
                 ],
               ),
             )

@@ -32,7 +32,6 @@ class _FacilityModalState extends State<FacilityModal> {
   late int CHGFlag;
   late int EMGStatus;
 
-  late String countDownModalBg;
   late String countDownModalBtn;
 
   late Timer _timer;
@@ -122,162 +121,146 @@ class _FacilityModalState extends State<FacilityModal> {
   Widget build(BuildContext context) {
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
-    countDownModalBg = 'assets/images/modalIMG/bg.png';
     countDownModalBtn = 'assets/images/modalIMG/btn.png';
 
     _mainStatusProvider.targetFacilityIndex = widget.number;
 
     return Container(
-        // padding: const EdgeInsets.only(top: 588),
+        padding: const EdgeInsets.only(top: 144),
         child: AlertDialog(
           alignment: Alignment.topCenter,
           content: Stack(children: [
-            Center(
-              child: Container(
-                width: 828,
-                height: 531,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(countDownModalBg), fit: BoxFit.fill)),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(top: 35),
-                      height: 320,
-                      width: 828,
-                      child:Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        verticalDirection: VerticalDirection.down,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(6),
-                            width: 640,
-                            height: 80,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('${_mainStatusProvider.facilityNum![widget.number!]}',
-                                    style: TextStyle(
-                                        fontFamily: 'kor',
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        height: 1.2)),
-                                const SizedBox(
-                                  width: 110,
-                                ),
-                                Text(_mainStatusProvider.facilityName![widget.number!],
-                                    style: TextStyle(
-                                        fontFamily: 'kor',
-                                        fontSize: 35,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        height: 1.2)),
-
-                                SizedBox(width: 15,),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ),
-                    SizedBox(height: 25),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Container(
+              width: 738,
+              height: 441,
+              decoration: BoxDecoration(
+                border: Border.fromBorderSide(BorderSide(color: Color(0xff4cffffff), width: 0.5)),
+                borderRadius: BorderRadius.circular(18),
+                gradient: LinearGradient(
+                  colors: [Color(0xff4e4e4e), Color(0xff444444)]
+                )
+              ),
+              child: Stack(
+                children: [Container(
+                  margin: EdgeInsets.only(top: 36, left: 27),
+                  height: 240,
+                  width: 684,
+                  child:Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 50),
-                          width: 336,
-                          height: 102,
-                          decoration: BoxDecoration(
-                            // border: Border.fromBorderSide(
-                            //     BorderSide(width: 5, color: Colors.tealAccent)),
-                              image: DecorationImage(
-                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
-                          child: FilledButton(
-                            style: FilledButton.styleFrom(
-                                enableFeedback: false,
-                                backgroundColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0)),
-                                fixedSize: const Size(370, 120)),
-                            onPressed: () {
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _effectPlayer.seek(const Duration(seconds: 0));
-                                _effectPlayer.play();
-                                _timer.cancel();
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: const Center(
-                              child: Text(
-                                '취소',
-                                style: TextStyle(
-                                  color: Color.fromRGBO(238, 238, 238, 0.7),
-                                    height: 1.2,
-                                    fontFamily: 'kor',
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.bold),
+                        Text('${_mainStatusProvider.facilityNum![widget.number!]}',
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 42,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              letterSpacing: -0.04
+                            )),
+                        const SizedBox(
+                          width: 30,
+                        ),
+                        Text(_mainStatusProvider.facilityName![widget.number!],
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 42,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: -0.04
+                            )),
+                      ],
+                    ),
+                  )
+                ),
+                  Container(
+                    width: 684,
+                    height: 102,
+                    margin: EdgeInsets.only(top: 312, left: 27),
+                    child: Row(
+                      children: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              enableFeedback: false,
+                              foregroundColor: Color(0xff222222),
+                              backgroundColor: Color(0xffb3333333),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              textStyle: TextStyle(
+
                               ),
-                            ),
+                              fixedSize: const Size(336, 102)),
+                          onPressed: () {
+                            if (EMGStatus == 0) {
+                              showEMGAlert(context);
+                            } else {
+                              if (CHGFlag == 3) {
+                                showAdaptorCableAlert(context);
+                              } else {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  _effectPlayer.seek(const Duration(seconds: 0));
+                                  _effectPlayer.play();
+                                  _pwrTimer.cancel();
+                                  _timer.cancel();
+                                  Future.delayed(
+                                      const Duration(milliseconds: 230), () {
+                                    _effectPlayer.dispose();
+                                    // 우선 8포인트까지 존재하여 나머지 함수를 이용함
+                                    showCountDownPopup(context, _mainStatusProvider.facilityNum![widget.number!]);
+                                  });
+
+                                });
+                              }
+                            }
+                          },
+                          child: Text(
+                            '로봇 길안내',
+                            style: TextStyle(
+                                color: Color(0xffffffff),
+                                fontFamily: 'kor',
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                            letterSpacing: -0.03),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(right: 50),
-                          width: 336,
-                          height: 102,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(countDownModalBtn), fit: BoxFit.fill)),
-                          child: FilledButton(
-                            style: FilledButton.styleFrom(
-                                enableFeedback: false,
-                                backgroundColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0)),
-                                fixedSize: const Size(370, 120)),
-                            onPressed: () {
-                              if (EMGStatus == 0) {
-                                showEMGAlert(context);
-                              } else {
-                                if (CHGFlag == 3) {
-                                  showAdaptorCableAlert(context);
-                                } else {
-                                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    _effectPlayer.seek(const Duration(seconds: 0));
-                                    _effectPlayer.play();
-                                    _pwrTimer.cancel();
-                                    _timer.cancel();
-                                    Future.delayed(
-                                        const Duration(milliseconds: 230), () {
-                                      _effectPlayer.dispose();
-                                      // 우선 8포인트까지 존재하여 나머지 함수를 이용함
-                                      showCountDownPopup(context, _mainStatusProvider.facilityNum![widget.number!]);
-                                    });
+                        SizedBox(width: 11,),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                              enableFeedback: false,
+                              foregroundColor: Color(0xff222222),
+                              backgroundColor: Color(0xffb3333333),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              textStyle: TextStyle(
 
-                                  });
-                                }
-                              }
-                            },
-                            child: const Center(
-                              child: Text(
-                                '시작',
-                                style: TextStyle(
-                                    color: Color.fromRGBO(238, 238, 238, 0.7),
-                                    height: 1.2,
-                                    fontFamily: 'kor',
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold),
                               ),
+                              fixedSize: const Size(336, 102)),
+                          onPressed: () {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _effectPlayer.seek(const Duration(seconds: 0));
+                              _effectPlayer.play();
+                              _timer.cancel();
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: Center(
+                            child: Text(
+                              '지도안내',
+                              style: TextStyle(
+                                  color: Color(0xffffffff).withOpacity(0.7),
+                                  fontFamily: 'kor',
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: -0.03),
                             ),
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                ]
               ),
             ),
+
           ]),
           backgroundColor: Colors.transparent,
           contentTextStyle: Theme.of(context).textTheme.headlineLarge,

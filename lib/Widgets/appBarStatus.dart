@@ -1,62 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:provider/provider.dart';
 
 class AppBarStatus extends StatefulWidget {
-  final double? batteryTextPos;
-  final double? batteryImgPos;
-  final double? EMGImgPos;
-  final double? paddingTop;
-
-  const AppBarStatus(
-      {Key? key, this.batteryTextPos, this.batteryImgPos, this.EMGImgPos, this.paddingTop})
-      : super(key: key);
+  const AppBarStatus({Key? key}) : super(key: key);
 
   @override
   State<AppBarStatus> createState() => _AppBarStatusState();
 }
 
 class _AppBarStatusState extends State<AppBarStatus> {
+  final String batteryIcon = 'assets/icons/appBar/icon_bettry.svg';
+
   late Timer _pwrTimer;
 
   late int batData;
   late int CHGFlag;
   late int EMGStatus;
 
-  late double batteryTextPos;
-  late double batteryImgPos;
-  late double EMGImgPos;
-  late double paddingTop;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    if(widget.batteryTextPos == null){
-      batteryTextPos = 46;
-    }else{
-      batteryTextPos = widget.batteryTextPos!;
-    }
-    if(widget.batteryImgPos == null){
-      batteryImgPos = 50;
-    }else{
-      batteryImgPos = widget.batteryImgPos!;
-    }
-    if(widget.EMGImgPos == null){
-      EMGImgPos = 245;
-    }else{
-      EMGImgPos = widget.EMGImgPos!;
-    }
-    if(widget.paddingTop == null){
-      paddingTop = 35;
-    }else{
-      paddingTop = widget.paddingTop!;
-    }
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -94,40 +64,57 @@ class _AppBarStatusState extends State<AppBarStatus> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Positioned(
-        right: batteryTextPos,
-        top: paddingTop+45,
-        child: Text(('${batData.toString()} %')),
-      ),
-      Positioned(
-        right: batteryImgPos,
-        top: paddingTop+5,
+      Padding(
+        padding: const EdgeInsets.only(left: 591, top: 33),
         child: Container(
-          height: 45,
-          width: 50,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                    'assets/icons/appBar/appBar_Battery.png',
-                  ),
-                  fit: BoxFit.fill)),
+          width: 51,
+          height: 57.5,
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                batteryIcon,
+                width: 42,
+                height: 31.5,
+              ),
+              Text(('${batData.toString()}%'),
+                  style: const TextStyle(color: Colors.white, fontSize: 18, letterSpacing: -0.04))
+            ],
+          ),
         ),
       ),
+      // Positioned(
+      //   right: batteryTextPos,
+      //   top: paddingTop+45,
+      //   child: Text(('${batData.toString()} %'), style: TextStyle(color: Colors.white)),
+      // ),
+      // Positioned(
+      //   right: batteryImgPos,
+      //   top: paddingTop+5,
+      //   child: Container(
+      //     height: 45,
+      //     width: 50,
+      //     decoration: const BoxDecoration(
+      //         image: DecorationImage(
+      //             image: AssetImage(
+      //               'assets/icons/appBar/appBar_Battery.png',
+      //             ),
+      //             fit: BoxFit.fill)),
+      //   ),
+      // ),
       EMGStatus == 0
-          ? Positioned(
-              left: EMGImgPos,
-              top: paddingTop,
-              child: const Stack(children: [
+          ? const Padding(
+              padding: EdgeInsets.only(left: 501, top: 33),
+              child: Stack(children: [
                 Icon(Icons.radio_button_checked,
-                    color: Colors.red, size: 80, grade: 200, weight: 200),
+                    color: Colors.red, size: 66, grade: 200, weight: 200),
                 Padding(
-                  padding: EdgeInsets.only(top: 20, left: 12),
+                  padding: EdgeInsets.only(top: 20, left: 13),
                   child: Text(
                     'EMG',
                     style: TextStyle(
                         fontFamily: 'kor',
                         fontWeight: FontWeight.bold,
-                        fontSize: 25,
+                        fontSize: 18,
                         color: Colors.yellow),
                   ),
                 )
@@ -135,12 +122,46 @@ class _AppBarStatusState extends State<AppBarStatus> {
             )
           : Container(),
       CHGFlag == 3
-          ? Positioned(
-              right: batteryImgPos,
-              top: paddingTop+5,
-              child: const Icon(Icons.bolt, color: Colors.yellow, size: 50),
-            )
+          ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
           : Container(),
+      Padding(
+        padding: EdgeInsets.only(left: 666, top: 33),
+        child: (Container(
+          width: 99,
+          height: 60,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 99,
+                height: 30,
+                child: Text(
+                  '10월17일',
+                  style: TextStyle(
+                      fontSize: 20.5,
+                      letterSpacing: -0.05,
+                      color: Color(0xff555555),
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              Container(
+                width: 99,
+                height: 30,
+                child: Text(
+                  '15:38',
+                  style: TextStyle(
+                    fontSize: 20.5,
+                    letterSpacing: -0.05,
+                    color: Color(0xff555555),
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
+        )),
+      )
     ]);
   }
 }

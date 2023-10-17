@@ -466,10 +466,6 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
                     child: Stack(
                       children: [
                         const AppBarStatus(
-                          EMGImgPos: 630,
-                          batteryImgPos: 550,
-                          batteryTextPos: 540,
-                          paddingTop: 20,
                         ),
                         // 퀵 서비스 버튼
                         Positioned(
