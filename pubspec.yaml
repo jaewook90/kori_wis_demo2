@@ -88,6 +88,8 @@ flutter:
     - assets/images/
     - assets/images/modalIMG/
     - assets/images/facility/
+    - assets/images/facility/facNav/
+    - assets/images/facility/facNav/navDone/
     - assets/images/adPics/daechan/
     - assets/images/serving_item_imgs/
     - assets/fonts/

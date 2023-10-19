@@ -3,6 +3,7 @@ import 'package:kori_wis_demo/Debug/test_api_feedback/pathFindingTest.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/pathFindingTest2.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/saveDataTest.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityDoneFinal.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -164,21 +165,22 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
                     style: TextStyle(
                         fontFamily: 'kor', fontSize: 40, color: Colors.white),
                   ),),
-                // TextButton(
-                //   onPressed: () {
-                //     navPage(context: context, page: const FacilityCurrentPositionScreen(), ).navPageToPage();
-                //   },
-                //   style: TextButton.styleFrom(
-                //       padding: const EdgeInsets.all(30),
-                //       side: const BorderSide(
-                //           color: Colors.white, width: 3
-                //       )
-                //   ),
-                //   child: const Text(
-                //     '현재 위치 포인팅 페이지',
-                //     style: TextStyle(
-                //         fontFamily: 'kor', fontSize: 40, color: Colors.white),
-                //   ),)
+                SizedBox(),
+                TextButton(
+                  onPressed: () {
+                    navPage(context: context, page: const FacilityNavigationNew(), ).navPageToPage();
+                  },
+                  style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(30),
+                      side: const BorderSide(
+                          color: Colors.white, width: 3
+                      )
+                  ),
+                  child: const Text(
+                    '상단 모달 테스트',
+                    style: TextStyle(
+                        fontFamily: 'kor', fontSize: 40, color: Colors.white),
+                  ),)
               ],
             ),
           ],

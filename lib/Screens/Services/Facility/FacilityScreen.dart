@@ -459,7 +459,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
             height: 132,
             child: Stack(
               children: [
-                const AppBarStatus(),
+                const AppBarStatus(
+                  iconPoseSide: 167*3,
+                  iconPoseTop: 11*3,
+                ),
                 Positioned(
                     top: 30,
                     right: 51,
@@ -1503,10 +1506,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
             ),
             Padding(padding:  const EdgeInsets.only(top: 135), child: SvgPicture.asset(notiBox, width: 1080, height: 96,),),
             Padding(padding:  const EdgeInsets.only(top: 255, left: 51), child: SvgPicture.asset(mainMap, width: 978, height: 1335,),),
-            Padding(
-              padding: const EdgeInsets.only(top: 255, left: 51),
-              child: const FacilityCurrentPositionScreen(),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 255, left: 51),
+            //   child: const FacilityCurrentPositionScreen(),
+            // ),
             Padding(padding: const EdgeInsets.only(top: 1614, left: 51), child: Container(width: 978, height: 255, decoration: BoxDecoration(image: DecorationImage(image: AssetImage(bottomBanner)))),),
             // 지도
             // Positioned(

@@ -8,7 +8,9 @@ import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:provider/provider.dart';
 
 class AppBarStatus extends StatefulWidget {
-  const AppBarStatus({Key? key}) : super(key: key);
+  final double? iconPoseTop;
+  final double? iconPoseSide;
+  const AppBarStatus({Key? key, this.iconPoseSide, this.iconPoseTop}) : super(key: key);
 
   @override
   State<AppBarStatus> createState() => _AppBarStatusState();
@@ -65,23 +67,106 @@ class _AppBarStatusState extends State<AppBarStatus> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Padding(
-        padding: const EdgeInsets.only(left: 591, top: 33),
+        padding: EdgeInsets.only(
+            left: widget.iconPoseSide == null ? 167*1 : widget.iconPoseSide!, top: widget.iconPoseTop == null ? 11*1 : widget.iconPoseTop!),
         child: Container(
-          width: 51,
-          height: 57.5,
-          child: Column(
+          width: 88*3,
+          height: 22*3,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SvgPicture.asset(
-                batteryIcon,
-                width: 42,
-                height: 31.5,
+              Container(
+                width: 51,
+                height: 57.5,
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      batteryIcon,
+                      width: 42,
+                      height: 31.5,
+                    ),
+                    Text(('${batData.toString()}%'),
+                        style: const TextStyle(color: Color(0xff888888), fontSize: 18, letterSpacing: -0.04))
+                  ],
+                ),
               ),
-              Text(('${batData.toString()}%'),
-                  style: const TextStyle(color: Colors.white, fontSize: 18, letterSpacing: -0.04))
+              EMGStatus == 0
+                  ? Stack(children: [
+                  Icon(Icons.radio_button_checked,
+                      color: Colors.red, size: 66, grade: 200, weight: 200),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20, left: 13),
+                    child: Text(
+                      'EMG',
+                      style: TextStyle(
+                          fontFamily: 'kor',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.yellow),
+                    ),
+                  )
+                ])
+                  : Container(),
+              CHGFlag == 3
+                  ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
+                  : Container(),
+              Container(
+                width: 99,
+                height: 60,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 99,
+                      height: 30,
+                      child: Text(
+                        '10월17일',
+                        style: TextStyle(
+                          fontSize: 20.5,
+                          letterSpacing: -0.05,
+                          color: Color(0xff888888),
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                    Container(
+                      width: 99,
+                      height: 30,
+                      child: Text(
+                        '15:38',
+                        style: TextStyle(
+                          fontSize: 20.5,
+                          letterSpacing: -0.05,
+                          color: Color(0xff888888),
+                        ),
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
       ),
+      // Padding(
+      //   padding: const EdgeInsets.only(left: 591, top: 33),
+      //   child: Container(
+      //     width: 51,
+      //     height: 57.5,
+      //     child: Column(
+      //       children: [
+      //         SvgPicture.asset(
+      //           batteryIcon,
+      //           width: 42,
+      //           height: 31.5,
+      //         ),
+      //         Text(('${batData.toString()}%'),
+      //             style: const TextStyle(color: Colors.white, fontSize: 18, letterSpacing: -0.04))
+      //       ],
+      //     ),
+      //   ),
+      // ),
       // Positioned(
       //   right: batteryTextPos,
       //   top: paddingTop+45,
@@ -101,67 +186,67 @@ class _AppBarStatusState extends State<AppBarStatus> {
       //             fit: BoxFit.fill)),
       //   ),
       // ),
-      EMGStatus == 0
-          ? const Padding(
-              padding: EdgeInsets.only(left: 501, top: 33),
-              child: Stack(children: [
-                Icon(Icons.radio_button_checked,
-                    color: Colors.red, size: 66, grade: 200, weight: 200),
-                Padding(
-                  padding: EdgeInsets.only(top: 20, left: 13),
-                  child: Text(
-                    'EMG',
-                    style: TextStyle(
-                        fontFamily: 'kor',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.yellow),
-                  ),
-                )
-              ]),
-            )
-          : Container(),
-      CHGFlag == 3
-          ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
-          : Container(),
-      Padding(
-        padding: EdgeInsets.only(left: 666, top: 33),
-        child: (Container(
-          width: 99,
-          height: 60,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                width: 99,
-                height: 30,
-                child: Text(
-                  '10월17일',
-                  style: TextStyle(
-                      fontSize: 20.5,
-                      letterSpacing: -0.05,
-                      color: Color(0xff555555),
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-              Container(
-                width: 99,
-                height: 30,
-                child: Text(
-                  '15:38',
-                  style: TextStyle(
-                    fontSize: 20.5,
-                    letterSpacing: -0.05,
-                    color: Color(0xff555555),
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-            ],
-          ),
-        )),
-      )
+      // EMGStatus == 0
+      //     ? const Padding(
+      //         padding: EdgeInsets.only(left: 501, top: 33),
+      //         child: Stack(children: [
+      //           Icon(Icons.radio_button_checked,
+      //               color: Colors.red, size: 66, grade: 200, weight: 200),
+      //           Padding(
+      //             padding: EdgeInsets.only(top: 20, left: 13),
+      //             child: Text(
+      //               'EMG',
+      //               style: TextStyle(
+      //                   fontFamily: 'kor',
+      //                   fontWeight: FontWeight.bold,
+      //                   fontSize: 18,
+      //                   color: Colors.yellow),
+      //             ),
+      //           )
+      //         ]),
+      //       )
+      //     : Container(),
+      // CHGFlag == 3
+      //     ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
+      //     : Container(),
+      // Padding(
+      //   padding: EdgeInsets.only(left: 666, top: 33),
+      //   child: (Container(
+      //     width: 99,
+      //     height: 60,
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.start,
+      //       children: [
+      //         Container(
+      //           width: 99,
+      //           height: 30,
+      //           child: Text(
+      //             '10월17일',
+      //             style: TextStyle(
+      //                 fontSize: 20.5,
+      //                 letterSpacing: -0.05,
+      //                 color: Color(0xff555555),
+      //             ),
+      //             textAlign: TextAlign.right,
+      //           ),
+      //         ),
+      //         Container(
+      //           width: 99,
+      //           height: 30,
+      //           child: Text(
+      //             '15:38',
+      //             style: TextStyle(
+      //               fontSize: 20.5,
+      //               letterSpacing: -0.05,
+      //               color: Color(0xff555555),
+      //             ),
+      //             textAlign: TextAlign.right,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   )),
+      // )
     ]);
   }
 }

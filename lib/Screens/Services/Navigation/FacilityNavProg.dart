@@ -36,6 +36,8 @@ class _FacilityNavigatorProgressModuleFinalState
   late MainStatusModel _mainStatusProvider;
 
   late AudioPlayer _effectPlayer;
+
+  //assets
   final String _effectFile = 'assets/sounds/button_click.wav';
 
   late int hiddenCounter;

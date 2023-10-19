@@ -16,11 +16,6 @@ class FacilityCurrentPositionScreen extends StatefulWidget {
 
 class _FacilityCurrentPositionScreenState
     extends State<FacilityCurrentPositionScreen> with TickerProviderStateMixin {
-  // late Animation<double> animation1;
-  // late Animation<double> animation2;
-  //
-  // late AnimationController animationController1;
-  // late AnimationController animationController2;
 
   late AnimationController _animationController;
   late Animation _animation;
@@ -62,24 +57,6 @@ class _FacilityCurrentPositionScreenState
       ..addListener(() {
         setState(() {});
       });
-
-    // animationController1 = AnimationController(vsync: this, duration: Duration(seconds: 1));
-    // animationController2 = AnimationController(vsync: this, duration: Duration(seconds: 1));
-    //
-    // animationController1.repeat();
-    // animationController2.repeat();
-    //
-    // animation1 = Tween<double>(begin: 30, end: 50).animate(animationController1);
-    // animation2 = Tween<double>(begin: 50, end: 70).animate(animationController2);
-
-    // animation1.addListener(() {
-    //   setState(() {
-    //   });
-    // });
-    // animation2.addListener(() {
-    //   setState(() {
-    //   });
-    // });
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
     navUrl = Provider.of<NetworkModel>(context, listen: false).navUrl;
@@ -154,8 +131,6 @@ class _FacilityCurrentPositionScreenState
     super.dispose();
     _poseTimer.cancel();
     _animationController.dispose();
-    // animationController1.dispose();
-    // animationController2.dispose();
   }
 
   @override
