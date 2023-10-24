@@ -4,6 +4,7 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavProg.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -128,8 +129,8 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
       content: Stack(children: [
         Center(
           child: Container(
-            width: 828,
-            height: 531,
+            width: 738,
+            height: 441,
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage(countDownModalBg), fit: BoxFit.fill)),
@@ -187,7 +188,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                       navPage(
                                               context: context,
                                               page:
-                                                  const FacilityNavigatorProgressModuleFinal())
+                                                  const FacilityNavigationNew())
                                           .navPageToPage();
                                     } else {
                                       navPage(
@@ -353,7 +354,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                 navPage(
                                         context: context,
                                         page:
-                                            const FacilityNavigatorProgressModuleFinal())
+                                            const FacilityNavigationNew())
                                     .navPageToPage();
                               } else {
                                 navPage(

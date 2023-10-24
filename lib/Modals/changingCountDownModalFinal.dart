@@ -3,6 +3,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavProg.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
@@ -209,7 +210,7 @@ class _ChangingCountDownModalFinalState
                                           _effectPlayer.dispose();
                                           navPage(
                                             context: context,
-                                            page: const FacilityNavigatorProgressModuleFinal(),
+                                            page: const FacilityNavigationNew(),
                                           ).navPageToPage();
                                         });
                                       }

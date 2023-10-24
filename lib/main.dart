@@ -36,7 +36,10 @@ void main() async {
                 autoCharge: 20,
               facilityDetail: [],
               facilityName: [],
-              facilityNum: []
+              facilityNum: [],
+              facilityNavDone: false,
+              lastFacilityNum: '',
+              lastFacilityName: '',
             )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(

@@ -28,7 +28,10 @@ class MainStatusModel with ChangeNotifier {
   List<String>? facilityNum;
   List<String>? facilityName;
   List<String>? facilityDetail;
+  String? lastFacilityNum;
+  String? lastFacilityName;
   int? targetFacilityIndex;
+  bool? facilityNavDone;
 
   List<List<String>>? cordList;
 
@@ -43,6 +46,9 @@ class MainStatusModel with ChangeNotifier {
     this.facilityDetail,
     this.facilityName,
     this.facilityNum,
+    this.facilityNavDone,
+    this.lastFacilityNum,
+    this.lastFacilityName,
     this.robotX,
     this.robotY,
     this.robotTheta
