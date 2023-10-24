@@ -1,16 +1,22 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
+import 'package:kori_wis_demo/Modals/CableConnectedModalFinal.dart';
+import 'package:kori_wis_demo/Modals/EMGPopModalFinal.dart';
 import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/adminPWModal.dart';
+import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilitySelection.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
@@ -18,11 +24,14 @@ import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview2.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview3.dart';
 import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
+import 'package:kori_wis_demo/Utills/getPowerInform.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class FacilityScreen extends StatefulWidget {
   const FacilityScreen({Key? key}) : super(key: key);
@@ -37,11 +46,18 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
   final TextEditingController configController = TextEditingController();
   final TextEditingController autoChargeController = TextEditingController();
+  final CountdownController _controller = CountdownController(autoStart: true);
   late SharedPreferences _prefs;
 
   late int officeQTY;
   late List<String> officeNum;
   late List<String> officeName;
+  late String officePic;
+
+  late int officeNumber;
+
+  late Timer _timer;
+  late Timer _pwrTimer;
 
   // late List<String> officeDetail;
 
@@ -58,6 +74,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
   final String notiBox = 'assets/images/facility/noti_box.svg';
 
   late bool _debugTray;
+  late bool officeSelected;
+  late bool officeSelectionTimeOut;
 
   String? startUrl;
   String? chgUrl;
@@ -78,6 +96,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
   // late double mapX;
   // late double mapY;
 
+  late int CHGFlag;
+  late int EMGStatus;
+
   dynamic newPoseData;
   dynamic poseData;
   dynamic newCordData;
@@ -95,10 +116,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
     super.initState();
 
     // backgroundImage = "assets/screens/Facility/FacilityMain.png";
+    officeNumber = 0;
+    officePic = 'assets/images/facility/facNav/navDone/image.png';
 
     _initSharedPreferences();
 
     _debugTray = true;
+    officeSelected = false;
+    officeSelectionTimeOut = false;
 
     _initAudio();
 
@@ -108,6 +133,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
     autoChargeConfig =
         Provider.of<MainStatusModel>(context, listen: false).autoCharge!;
+
+    CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+    EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
 
     positioningList = [];
     positionList = [];
@@ -144,6 +172,32 @@ class _FacilityScreenState extends State<FacilityScreen> {
     }
 
     Provider.of<MainStatusModel>(context, listen: false).robotReturning = false;
+
+    // if (mounted) {
+    //   _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       Navigator.pop(context);
+    //     });
+    //   });
+    // }
+
+    _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      StatusManagements(context,
+              Provider.of<NetworkModel>(context, listen: false).startUrl!)
+          .gettingPWRdata();
+      if (EMGStatus !=
+              Provider.of<MainStatusModel>(context, listen: false).emgButton! ||
+          CHGFlag !=
+              Provider.of<MainStatusModel>(context, listen: false)
+                  .chargeFlag!) {
+        setState(() {});
+      }
+      // batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
+      CHGFlag =
+          Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
+      EMGStatus =
+          Provider.of<MainStatusModel>(context, listen: false).emgButton!;
+    });
   }
 
   Future<void> _initSharedPreferences() async {
@@ -237,7 +291,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return FacilityModal(
+          return FacilitySelection(
             number: number,
           );
         });
@@ -267,6 +321,36 @@ class _FacilityScreenState extends State<FacilityScreen> {
         context: context,
         builder: (context) {
           return const AdminPWModal();
+        });
+  }
+
+  void showEMGAlert(context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return const EMGPopModalFinal();
+        });
+  }
+
+  void showAdaptorCableAlert(context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return const CableConnectedModalFinal();
+        });
+  }
+
+  void showCountDownPopup(context, officeLocation) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return NavCountDownModalFinal(
+            serviceMode: 'facilityGuide',
+            goalPosition: officeLocation,
+          );
         });
   }
 
@@ -460,8 +544,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
             child: Stack(
               children: [
                 const AppBarStatus(
-                  iconPoseSide: 167*3,
-                  iconPoseTop: 11*3,
+                  iconPoseSide: 167 * 3,
+                  iconPoseTop: 11 * 3,
                 ),
                 Positioned(
                     top: 30,
@@ -487,13 +571,21 @@ class _FacilityScreenState extends State<FacilityScreen> {
                             backgroundColor: Colors.transparent,
                             fixedSize: const Size(240, 72),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                // side: BorderSide(
-                                //     color: Colors.tealAccent, width: 1)
+                              borderRadius: BorderRadius.circular(15),
+                              // side: BorderSide(
+                              //     color: Colors.tealAccent, width: 1)
                             )),
                         child: null,
                       ),
                     ])),
+                Padding(
+                  padding: const EdgeInsets.only(left: 54, top: 36),
+                  child: SvgPicture.asset(
+                    facilityName,
+                    width: 252,
+                    height: 63,
+                  ),
+                ),
               ],
             ),
           )
@@ -1496,21 +1588,40 @@ class _FacilityScreenState extends State<FacilityScreen> {
         decoration: const BoxDecoration(color: Color(0xff191919)),
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 54, top: 36),
-              child: SvgPicture.asset(
-                facilityName,
-                width: 252,
-                height: 63,
+            Offstage(
+              offstage: officeSelected,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 135),
+                child: SvgPicture.asset(
+                  notiBox,
+                  width: 1080,
+                  height: 96,
+                ),
               ),
             ),
-            Padding(padding:  const EdgeInsets.only(top: 135), child: SvgPicture.asset(notiBox, width: 1080, height: 96,),),
-            Padding(padding:  const EdgeInsets.only(top: 255, left: 51), child: SvgPicture.asset(mainMap, width: 978, height: 1335,),),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 255, left: 51),
-            //   child: const FacilityCurrentPositionScreen(),
-            // ),
-            Padding(padding: const EdgeInsets.only(top: 1614, left: 51), child: Container(width: 978, height: 255, decoration: BoxDecoration(image: DecorationImage(image: AssetImage(bottomBanner)))),),
+            Offstage(
+              offstage: officeSelected,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 1614, left: 51),
+                child: Container(
+                    width: 978,
+                    height: 255,
+                    decoration: BoxDecoration(
+                        image:
+                            DecorationImage(image: AssetImage(bottomBanner)))),
+              ),
+            ),
+            AnimatedPadding(
+              padding: EdgeInsets.only(
+                  top: officeSelected ? 176 * 3 : 255, left: 51),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              child: SvgPicture.asset(
+                mainMap,
+                width: 978,
+                height: 1335,
+              ),
+            ),
             // 지도
             // Positioned(
             //   top: 110,
@@ -1581,452 +1692,678 @@ class _FacilityScreenState extends State<FacilityScreen> {
             //   ),
             // ),
             // 수동 위치 입력
-            Positioned(
-                top: 263,
-                left: 833,
-                child: GestureDetector(
-                  child: Container(
-                    width: 190,
-                    height: 300,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 0);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 575,
-                left: 845,
-                child: GestureDetector(
-                  child: Container(
-                    width: 175,
-                    height: 275,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+            AnimatedPadding(
+              padding: EdgeInsets.only(
+                  top: officeSelected ? (176 - 85) * 3 : 0, left: 0),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              child: Stack(
+                children: [
+                  Positioned(
+                      top: 263,
+                      left: 833,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 190,
+                          height: 300,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              _controller.restart();
+                              officeNumber = 0;
+                            });
+                            // facilityInform(context, 0);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 575,
+                      left: 845,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 175,
+                          height: 275,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 1);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 860,
-                left: 845,
-                child: GestureDetector(
-                  child: Container(
-                    width: 175,
-                    height: 85,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 1;
+                            });
+                            // facilityInform(context, 1);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 860,
+                      left: 845,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 175,
+                          height: 85,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 2);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 955,
-                left: 850,
-                child: GestureDetector(
-                  child: Container(
-                    width: 170,
-                    height: 95,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 2;
+                            });
+                            // facilityInform(context, 2);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 955,
+                      left: 850,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 170,
+                          height: 95,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 3);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 1060,
-                left: 855,
-                child: GestureDetector(
-                  child: Container(
-                    width: 165,
-                    height: 145,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 3;
+                            });
+                            // facilityInform(context, 3);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 1060,
+                      left: 855,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 165,
+                          height: 145,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 4);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 1215,
-                left: 870,
-                child: GestureDetector(
-                  child: Container(
-                    width: 150,
-                    height: 370,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 4;
+                            });
+                            // facilityInform(context, 4);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 1215,
+                      left: 870,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 150,
+                          height: 370,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 5);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 1330,
-                left: 60,
-                child: GestureDetector(
-                  child: Container(
-                    width: 390,
-                    height: 255,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 5;
+                            });
+                            // facilityInform(context, 5);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 1330,
+                      left: 60,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 390,
+                          height: 255,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 6);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 1160,
-                left: 60,
-                child: GestureDetector(
-                  child: Container(
-                    width: 495,
-                    height: 160,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 6;
+                            });
+                            // facilityInform(context, 6);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 1160,
+                      left: 60,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 495,
+                          height: 160,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 7);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 860,
-                left: 60,
-                child: GestureDetector(
-                  child: Container(
-                    width: 440,
-                    height: 290,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 7;
+                            });
+                            // facilityInform(context, 7);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 860,
+                      left: 60,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 440,
+                          height: 290,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 8);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 770,
-                left: 290,
-                child: GestureDetector(
-                  child: Container(
-                    width: 210,
-                    height: 80,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 8;
+                            });
+                            // facilityInform(context, 8);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 770,
+                      left: 290,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 210,
+                          height: 80,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 9);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 630,
-                left: 60,
-                child: GestureDetector(
-                  child: Container(
-                    width: 215,
-                    height: 215,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 9;
+                            });
+                            // facilityInform(context, 9);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 630,
+                      left: 60,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 215,
+                          height: 215,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 10);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 265,
-                left: 60,
-                child: GestureDetector(
-                  child: Container(
-                    width: 435,
-                    height: 300,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 10;
+                            });
+                            // facilityInform(context, 10);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 265,
+                      left: 60,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 435,
+                          height: 300,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 11);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 265,
-                left: 510,
-                child: GestureDetector(
-                  child: Container(
-                    width: 250,
-                    height: 300,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 11;
+                            });
+                            // facilityInform(context, 11);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 265,
+                      left: 510,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 250,
+                          height: 300,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 12);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 630,
-                left: 355,
-                child: GestureDetector(
-                  child: Container(
-                    width: 140,
-                    height: 75,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 12;
+                            });
+                            // facilityInform(context, 12);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 630,
+                      left: 355,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 140,
+                          height: 75,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 13);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 915,
-                left: 585,
-                child: GestureDetector(
-                  child: Container(
-                    width: 195,
-                    height: 85,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 13;
+                            });
+                            // facilityInform(context, 13);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 915,
+                      left: 585,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 195,
+                          height: 85,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 14);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 630,
-                left: 565,
-                child: GestureDetector(
-                  child: Container(
-                    width: 205,
-                    height: 90,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 14;
+                            });
+                            // facilityInform(context, 14);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 630,
+                      left: 565,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 205,
+                          height: 90,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 15);
-                    });
-                  },
-                )),
-            Positioned(
-                top: 1330,
-                left: 655,
-                child: GestureDetector(
-                  child: Container(
-                    width: 145,
-                    height: 98,
-                    // color: Colors.transparent,
-                    decoration: const BoxDecoration(
-                        border: Border.fromBorderSide(
-                            BorderSide(width: 2, color: Colors.transparent))),
-                  ),
-                  onTap: () {
-                    _effectPlayer.seek(const Duration(seconds: 0));
-                    _effectPlayer.play();
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 15;
+                            });
+                            // facilityInform(context, 15);
+                          });
+                        },
+                      )),
+                  Positioned(
+                      top: 1330,
+                      left: 655,
+                      child: GestureDetector(
+                        child: Container(
+                          width: 145,
+                          height: 98,
+                          // color: Colors.transparent,
+                          decoration: const BoxDecoration(
+                              border: Border.fromBorderSide(BorderSide(
+                                  width: 2, color: Colors.transparent))),
+                        ),
+                        onTap: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
 
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      facilityInform(context, 16);
-                    });
-                  },
-                )),
-            // 중단 바
-            // Positioned(
-            //   top: 1482,
-            //     left: (1080 * 0.1) / 2,
-            //     child: Container(
-            //       width: 972,
-            //       height: 100,
-            //       decoration: BoxDecoration(
-            //         border: Border.fromBorderSide(
-            //           BorderSide(
-            //             width: 1,
-            //             color: Colors.white
-            //           )
-            //         )
-            //       ),
-            //       child: Text('중단바'),
-            //     )),
-            // 하단 바
-            // Positioned(
-            //     top: 1622,
-            //     left: (1080 * 0.1) / 2,
-            //     child: Container(
-            //       width: 972,
-            //       height: 250,
-            //       decoration: BoxDecoration(
-            //           border: Border.fromBorderSide(
-            //               BorderSide(
-            //                   width: 1,
-            //                   color: Colors.white
-            //               )
-            //           )
-            //       ),
-            //       child: Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           Container(
-            //             width: 954/3,
-            //             height: 250,
-            //             decoration: BoxDecoration(
-            //               color: Colors.red,
-            //                 border: Border.fromBorderSide(
-            //                     BorderSide(
-            //                         width: 1,
-            //                         color: Colors.white
-            //                     )
-            //                 )
-            //             ),
-            //             child: Text('하'),
-            //           ),
-            //           Container(
-            //             width: 954/3,
-            //             height: 250,
-            //             decoration: BoxDecoration(
-            //                 color: Colors.blue,
-            //                 border: Border.fromBorderSide(
-            //                     BorderSide(
-            //                         width: 1,
-            //                         color: Colors.white
-            //                     )
-            //                 )
-            //             ),
-            //             child: Text('단'),
-            //           ),
-            //           Container(
-            //             width: 954/3,
-            //             height: 250,
-            //             decoration: BoxDecoration(
-            //                 color: Colors.green,
-            //                 border: Border.fromBorderSide(
-            //                     BorderSide(
-            //                         width: 1,
-            //                         color: Colors.white
-            //                     )
-            //                 )
-            //             ),
-            //             child: Text('바'),
-            //           )
-            //         ],
-            //       ),
-            //     )),
-            // VerticalDivider(
-            //   color: Colors.white,
-            //   thickness: 10,
-            //   width: 1080,
-            // ),
-            // Divider(
-            //   color: Colors.white,
-            //   thickness: 10,
-            //   height: 1920,
-            // ),
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            setState(() {
+                              officeSelected = true;
+                              _controller.restart();
+                              officeNumber = 16;
+                            });
+                            // facilityInform(context, 16);
+                          });
+                        },
+                      )),
+                ],
+              ),
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              height: officeSelected ? 181 * 3
+                  : officeSelectionTimeOut ? 146*3 : 0,
+              width: 1080,
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color(0xff2e2e2e).withOpacity(0.5),
+                        spreadRadius: 20,
+                        blurRadius: 25,
+                        offset: const Offset(0, 5))
+                  ],
+                  border: const Border.fromBorderSide(
+                      BorderSide(color: Color(0x4cffffff), width: 1.5)),
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(45),
+                      bottomRight: Radius.circular(45)),
+                  gradient: const LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [Color(0xff222222), Color(0xff4d4d4d)])),
+              child: Offstage(
+                offstage: !officeSelected,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 54 * 3, left: 17 * 3),
+                      child: Container(
+                        width: 280 * 3,
+                        height: 62 * 3,
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2 * 3),
+                              child: Container(
+                                width: 103 * 3,
+                                height: 59 * 3,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(officePic))),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 114 * 3),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: (280 - 105) * 3,
+                                    child: Text(
+                                      '${_mainStatusProvider.facilityNum![officeNumber]}호',
+                                      style: const TextStyle(
+                                          fontFamily: 'kor',
+                                          fontSize: 14 * 3,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xffffffff),
+                                          letterSpacing: -0.24),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: (280 - 105) * 3,
+                                    child: Text(
+                                      _mainStatusProvider
+                                          .facilityName![officeNumber],
+                                      style: const TextStyle(
+                                          fontFamily: 'kor',
+                                          fontSize: 14 * 3,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xffffffff),
+                                          letterSpacing: -0.24),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 4 * 3,
+                                  ),
+                                  const SizedBox(
+                                    width: (280 - 105) * 3,
+                                    child: Text(
+                                      '업종 추가 추후',
+                                      style: TextStyle(
+                                          fontFamily: 'kor',
+                                          fontSize: 12 * 3,
+                                          fontWeight: FontWeight.w100,
+                                          color: Color(0xffffffff),
+                                          letterSpacing: -0.21),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // 버튼
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 130 * 3, left: 17 * 3),
+                      child: SizedBox(
+                        width: 326 * 3,
+                        height: 34 * 3,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  if (EMGStatus == 0) {
+                                    showEMGAlert(context);
+                                  } else {
+                                    if (CHGFlag == 3) {
+                                      showAdaptorCableAlert(context);
+                                    } else {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
+                                        _effectPlayer.play();
+                                        _pwrTimer.cancel();
+                                        // _timer.cancel();
+                                        Future.delayed(
+                                            const Duration(milliseconds: 230),
+                                            () {
+                                          _effectPlayer.dispose();
+                                          // 우선 8포인트까지 존재하여 나머지 함수를 이용함
+                                          showCountDownPopup(
+                                              context,
+                                              _mainStatusProvider
+                                                  .facilityNum![officeNumber]);
+                                        });
+                                      });
+                                    }
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                    fixedSize: const Size(159 * 3, 34 * 3),
+                                    backgroundColor: const Color(0xff000000)
+                                        .withOpacity(0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12))),
+                                child: const Center(
+                                    child: Text(
+                                  '로봇 길안내',
+                                  style: TextStyle(
+                                    fontFamily: 'kor',
+                                    color: Color(0xffffffff),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14 * 3,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ))),
+                            TextButton(
+                                onPressed: () {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _effectPlayer
+                                        .seek(const Duration(seconds: 0));
+                                    _effectPlayer.play();
+                                    _pwrTimer.cancel();
+                                    // _timer.cancel();
+                                    Future.delayed(
+                                        const Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      // 우선 8포인트까지 존재하여 나머지 함수를 이용함
+                                      // Navigator.pop(context);
+                                      setState(() {
+                                        officeSelected = false;
+                                      });
+                                    });
+                                  });
+                                },
+                                style: TextButton.styleFrom(
+                                    fixedSize: const Size(159 * 3, 34 * 3),
+                                    backgroundColor: const Color(0xff000000)
+                                        .withOpacity(0.5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12))),
+                                child: const Center(
+                                    child: Text(
+                                  '새로운 안내',
+                                  style: TextStyle(
+                                    fontFamily: 'kor',
+                                    color: Color(0xffffffff),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14 * 3,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ))),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Countdown(
+                      controller: _controller,
+                      seconds: 3,
+                      build: (_, double time) {
+                        if (!officeSelected) {
+                          _controller.restart();
+                          _controller.pause();
+                        }
+                        return Container();
+                      },
+                      interval: const Duration(seconds: 1),
+                      onFinished: () {
+                        setState(() {
+                          officeSelected = !officeSelected;
+                          officeSelectionTimeOut = true;
+                          print('tiemOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),

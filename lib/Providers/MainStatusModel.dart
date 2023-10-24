@@ -33,9 +33,12 @@ class MainStatusModel with ChangeNotifier {
   int? targetFacilityIndex;
   bool? facilityNavDone;
 
+  bool? facilityOfficeSelected;
+
   List<List<String>>? cordList;
 
   MainStatusModel({
+    this.facilityOfficeSelected,
     this.debugMode,
     this.batBal,
     this.chargeFlag,
