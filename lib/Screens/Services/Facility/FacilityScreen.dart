@@ -1622,81 +1622,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                 height: 1335,
               ),
             ),
-            // 지도
-            // Positioned(
-            //   top: 110,
-            //   left: (1080 * 0.1) / 2,
-            //   child: Container(
-            //     width: 972,
-            //     height: 1344,
-            //     decoration: BoxDecoration(
-            //       border: const Border.fromBorderSide(
-            //           BorderSide(color: Colors.white, width: 2)),
-            //       image: DecorationImage(
-            //           image: AssetImage(facilityMap), fit: BoxFit.fill),
-            //     ),
-            //     // 반응형 오피스 위치
-            //     // child: Stack(children: [
-            //     //   for (int i = 0; i < officeQTY; i++)
-            //     //     Positioned(
-            //     //         bottom: cordOffice('y', i),
-            //     //         left: cordOffice('x', i),
-            //     //         child: ConstrainedBox(
-            //     //           constraints: BoxConstraints.tightFor(
-            //     //               width: buttonWidth, height: buttonHeight),
-            //     //           child: TextButton(
-            //     //             onPressed: () {
-            //     //               facilityInform(context, i);
-            //     //             },
-            //     //             style: TextButton.styleFrom(
-            //     //               backgroundColor: Colors.transparent,
-            //     //             ),
-            //     //             child: officeNum[i] != '시설1'
-            //     //                 ? officeNum[i] != '시설2'
-            //     //                     ? officeNum[i] != '시설3'
-            //     //                         ? Text(
-            //     //                             '${officeNum[i]}',
-            //     //                             style: const TextStyle(
-            //     //                                 fontFamily: 'kor',
-            //     //                                 fontSize: 10,
-            //     //                                 fontWeight: FontWeight.bold,
-            //     //                                 color: Colors.black),
-            //     //                           )
-            //     //                         : const Text(
-            //     //                             '화장실2',
-            //     //                             style: TextStyle(
-            //     //                                 fontFamily: 'kor',
-            //     //                                 fontSize: 10,
-            //     //                                 fontWeight: FontWeight.bold,
-            //     //                                 color: Colors.black),
-            //     //                           )
-            //     //                     : const Text(
-            //     //                         '화장실1',
-            //     //                         style: TextStyle(
-            //     //                             fontFamily: 'kor',
-            //     //                             fontSize: 10,
-            //     //                             fontWeight: FontWeight.bold,
-            //     //                             color: Colors.black),
-            //     //                       )
-            //     //                 : const Text(
-            //     //                     '엘리베이터',
-            //     //                     style: TextStyle(
-            //     //                         fontFamily: 'kor',
-            //     //                         fontSize: 10,
-            //     //                         fontWeight: FontWeight.bold,
-            //     //                         color: Colors.black),
-            //     //                   ),
-            //     //           ),
-            //     //         )),
-            //     // ]),
-            //   ),
-            // ),
-            // 수동 위치 입력
-            AnimatedPadding(
-              padding: EdgeInsets.only(
-                  top: officeSelected ? (176 - 85) * 3 : 0, left: 0),
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn,
+            // 입주사 화면 버튼
+            Offstage(
+              offstage: officeSelected,
               child: Stack(
                 children: [
                   Positioned(
@@ -1717,7 +1645,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
-                              _controller.restart();
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 0;
                             });
@@ -1744,6 +1672,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 1;
                             });
@@ -1770,6 +1699,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 2;
                             });
@@ -1796,6 +1726,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 3;
                             });
@@ -1822,6 +1753,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 4;
                             });
@@ -1848,6 +1780,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 5;
                             });
@@ -1874,6 +1807,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 6;
                             });
@@ -1900,6 +1834,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 7;
                             });
@@ -1926,6 +1861,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 8;
                             });
@@ -1952,6 +1888,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 9;
                             });
@@ -1978,6 +1915,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 10;
                             });
@@ -2004,6 +1942,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 11;
                             });
@@ -2030,6 +1969,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 12;
                             });
@@ -2056,6 +1996,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 13;
                             });
@@ -2082,6 +2023,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 14;
                             });
@@ -2108,6 +2050,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 15;
                             });
@@ -2134,6 +2077,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
+                              officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 16;
                             });
@@ -2144,11 +2088,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                 ],
               ),
             ),
+            // 상단 팝업
             AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
-              height: officeSelected ? 181 * 3
-                  : officeSelectionTimeOut ? 146*3 : 0,
+              height: officeSelected ? officeSelectionTimeOut ? 146*3 : 181 * 3
+                  : 0,
               width: 1080,
               decoration: BoxDecoration(
                   boxShadow: [
@@ -2167,201 +2112,309 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [Color(0xff222222), Color(0xff4d4d4d)])),
-              child: Offstage(
-                offstage: !officeSelected,
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 54 * 3, left: 17 * 3),
-                      child: Container(
-                        width: 280 * 3,
-                        height: 62 * 3,
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2 * 3),
-                              child: Container(
-                                width: 103 * 3,
-                                height: 59 * 3,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(officePic))),
+              child: Stack(
+                children: [
+                  Offstage(
+                  offstage: officeSelectionTimeOut,
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 54 * 3, left: 17 * 3),
+                        child: Container(
+                          width: 280 * 3,
+                          height: 62 * 3,
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2 * 3),
+                                child: Container(
+                                  width: 103 * 3,
+                                  height: 59 * 3,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(officePic))),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 114 * 3),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    width: (280 - 105) * 3,
-                                    child: Text(
-                                      '${_mainStatusProvider.facilityNum![officeNumber]}호',
-                                      style: const TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 14 * 3,
-                                          fontWeight: FontWeight.w400,
-                                          color: Color(0xffffffff),
-                                          letterSpacing: -0.24),
-                                      textAlign: TextAlign.start,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 114 * 3),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      width: (280 - 105) * 3,
+                                      child: Text(
+                                        '${_mainStatusProvider.facilityNum![officeNumber]}호',
+                                        style: const TextStyle(
+                                            fontFamily: 'kor',
+                                            fontSize: 14 * 3,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xffffffff),
+                                            letterSpacing: -0.24),
+                                        textAlign: TextAlign.start,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: (280 - 105) * 3,
-                                    child: Text(
-                                      _mainStatusProvider
-                                          .facilityName![officeNumber],
-                                      style: const TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 14 * 3,
-                                          fontWeight: FontWeight.w400,
-                                          color: Color(0xffffffff),
-                                          letterSpacing: -0.24),
-                                      textAlign: TextAlign.start,
+                                    SizedBox(
+                                      width: (280 - 105) * 3,
+                                      child: Text(
+                                        _mainStatusProvider
+                                            .facilityName![officeNumber],
+                                        style: const TextStyle(
+                                            fontFamily: 'kor',
+                                            fontSize: 14 * 3,
+                                            fontWeight: FontWeight.w400,
+                                            color: Color(0xffffffff),
+                                            letterSpacing: -0.24),
+                                        textAlign: TextAlign.start,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 4 * 3,
-                                  ),
-                                  const SizedBox(
-                                    width: (280 - 105) * 3,
-                                    child: Text(
-                                      '업종 추가 추후',
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontSize: 12 * 3,
-                                          fontWeight: FontWeight.w100,
-                                          color: Color(0xffffffff),
-                                          letterSpacing: -0.21),
-                                      textAlign: TextAlign.start,
+                                    const SizedBox(
+                                      height: 4 * 3,
                                     ),
-                                  )
-                                ],
+                                    const SizedBox(
+                                      width: (280 - 105) * 3,
+                                      child: Text(
+                                        '업종 추가 추후',
+                                        style: TextStyle(
+                                            fontFamily: 'kor',
+                                            fontSize: 12 * 3,
+                                            fontWeight: FontWeight.w100,
+                                            color: Color(0xffffffff),
+                                            letterSpacing: -0.21),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    // 버튼
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 130 * 3, left: 17 * 3),
-                      child: SizedBox(
-                        width: 326 * 3,
-                        height: 34 * 3,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  if (EMGStatus == 0) {
-                                    showEMGAlert(context);
-                                  } else {
-                                    if (CHGFlag == 3) {
-                                      showAdaptorCableAlert(context);
+                      // 버튼
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 130 * 3, left: 17 * 3),
+                        child: SizedBox(
+                          width: 326 * 3,
+                          height: 34 * 3,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    _controller.pause();
+                                    setState(() {
+                                      officeSelected = false;
+                                    });
+                                    if (EMGStatus == 0) {
+                                      showEMGAlert(context);
                                     } else {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        _effectPlayer
-                                            .seek(const Duration(seconds: 0));
-                                        _effectPlayer.play();
-                                        _pwrTimer.cancel();
-                                        // _timer.cancel();
-                                        Future.delayed(
-                                            const Duration(milliseconds: 230),
-                                            () {
-                                          _effectPlayer.dispose();
-                                          // 우선 8포인트까지 존재하여 나머지 함수를 이용함
-                                          showCountDownPopup(
-                                              context,
-                                              _mainStatusProvider
-                                                  .facilityNum![officeNumber]);
+                                      if (CHGFlag == 3) {
+                                        showAdaptorCableAlert(context);
+                                      } else {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((_) {
+                                          _effectPlayer
+                                              .seek(const Duration(seconds: 0));
+                                          _effectPlayer.play();
+                                          _pwrTimer.cancel();
+                                          // _timer.cancel();
+                                          Future.delayed(
+                                              const Duration(milliseconds: 230),
+                                              () {
+                                            _effectPlayer.dispose();
+                                            // 우선 8포인트까지 존재하여 나머지 함수를 이용함
+                                            showCountDownPopup(
+                                                context,
+                                                _mainStatusProvider
+                                                    .facilityNum![officeNumber]);
+                                          });
+                                        });
+                                      }
+                                    }
+                                  },
+                                  style: TextButton.styleFrom(
+                                      fixedSize: const Size(159 * 3, 34 * 3),
+                                      backgroundColor: const Color(0xff000000)
+                                          .withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12))),
+                                  child: const Center(
+                                      child: Text(
+                                    '로봇 길안내',
+                                    style: TextStyle(
+                                      fontFamily: 'kor',
+                                      color: Color(0xffffffff),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14 * 3,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ))),
+                              TextButton(
+                                  onPressed: () {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      _effectPlayer
+                                          .seek(const Duration(seconds: 0));
+                                      _effectPlayer.play();
+                                      _pwrTimer.cancel();
+                                      // _timer.cancel();
+                                      Future.delayed(
+                                          const Duration(milliseconds: 230), () {
+                                        _effectPlayer.dispose();
+                                        // 우선 8포인트까지 존재하여 나머지 함수를 이용함
+                                        // Navigator.pop(context);
+                                        setState(() {
+                                          officeSelected = false;
                                         });
                                       });
-                                    }
-                                  }
-                                },
-                                style: TextButton.styleFrom(
-                                    fixedSize: const Size(159 * 3, 34 * 3),
-                                    backgroundColor: const Color(0xff000000)
-                                        .withOpacity(0.5),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12))),
-                                child: const Center(
-                                    child: Text(
-                                  '로봇 길안내',
-                                  style: TextStyle(
-                                    fontFamily: 'kor',
-                                    color: Color(0xffffffff),
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14 * 3,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ))),
-                            TextButton(
-                                onPressed: () {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    _effectPlayer
-                                        .seek(const Duration(seconds: 0));
-                                    _effectPlayer.play();
-                                    _pwrTimer.cancel();
-                                    // _timer.cancel();
-                                    Future.delayed(
-                                        const Duration(milliseconds: 230), () {
-                                      _effectPlayer.dispose();
-                                      // 우선 8포인트까지 존재하여 나머지 함수를 이용함
-                                      // Navigator.pop(context);
-                                      setState(() {
-                                        officeSelected = false;
-                                      });
                                     });
-                                  });
-                                },
-                                style: TextButton.styleFrom(
-                                    fixedSize: const Size(159 * 3, 34 * 3),
-                                    backgroundColor: const Color(0xff000000)
-                                        .withOpacity(0.5),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12))),
-                                child: const Center(
-                                    child: Text(
-                                  '새로운 안내',
-                                  style: TextStyle(
-                                    fontFamily: 'kor',
-                                    color: Color(0xffffffff),
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14 * 3,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ))),
-                          ],
+                                  },
+                                  style: TextButton.styleFrom(
+                                      fixedSize: const Size(159 * 3, 34 * 3),
+                                      backgroundColor: const Color(0xff000000)
+                                          .withOpacity(0.5),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12))),
+                                  child: const Center(
+                                      child: Text(
+                                    '새로운 안내',
+                                    style: TextStyle(
+                                      fontFamily: 'kor',
+                                      color: Color(0xffffffff),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14 * 3,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ))),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Countdown(
-                      controller: _controller,
-                      seconds: 3,
-                      build: (_, double time) {
-                        if (!officeSelected) {
-                          _controller.restart();
-                          _controller.pause();
-                        }
-                        return Container();
-                      },
-                      interval: const Duration(seconds: 1),
-                      onFinished: () {
-                        setState(() {
-                          officeSelected = !officeSelected;
-                          officeSelectionTimeOut = true;
-                          print('tiemOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-                        });
-                      },
-                    ),
-                  ],
+                      Countdown(
+                        controller: _controller,
+                        seconds: 10,
+                        build: (_, double time) {
+                          if (!officeSelected) {
+                            _controller.restart();
+                            _controller.pause();
+                          }
+                          return Container();
+                        },
+                        interval: const Duration(seconds: 1),
+                        onFinished: () {
+                          setState(() {
+                            // officeSelected = !officeSelected;
+                            officeSelectionTimeOut = true;
+                            print('tiemOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+                  Offstage(
+                    offstage: !officeSelectionTimeOut,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50 * 3, left: 70 * 3),
+                          child: Container(
+                            width: 230 * 3,
+                            // height: 13 * 3,
+                            child: Text(
+                              '"다른 장소 안내를 원하시나요?"',
+                              style: const TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 17 * 3,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xffffffff)),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ),
+                        // 버튼
+                        Padding(
+                          padding:
+                          const EdgeInsets.only(top: 95 * 3, left: 17 * 3),
+                          child: SizedBox(
+                            width: 326 * 3,
+                            height: 34 * 3,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        _effectPlayer.seek(const Duration(seconds: 0));
+                                        _effectPlayer.play();
+                                        Future.delayed(const Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          setState(() {
+                                            officeSelectionTimeOut = false;
+                                          });
+                                          _controller.restart();
+                                        });
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        fixedSize: const Size(159 * 3, 34 * 3),
+                                        backgroundColor: const Color(0xff000000)
+                                            .withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(12))),
+                                    child: const Center(
+                                        child: Text(
+                                          '취소',
+                                          style: TextStyle(
+                                            fontFamily: 'kor',
+                                            color: Color(0xffffffff),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14 * 3,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ))),
+                                TextButton(
+                                    onPressed: () {
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        _effectPlayer.seek(const Duration(seconds: 0));
+                                        _effectPlayer.play();
+                                        Future.delayed(const Duration(milliseconds: 230), () {
+                                          _effectPlayer.dispose();
+                                          setState(() {
+                                            officeSelectionTimeOut = false;
+                                            officeSelected = false;
+                                          });
+                                        });
+                                      });
+                                    },
+                                    style: TextButton.styleFrom(
+                                        fixedSize: const Size(159 * 3, 34 * 3),
+                                        backgroundColor: const Color(0xff0a84ff),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(12))),
+                                    child: const Center(
+                                        child: Text(
+                                          '확인',
+                                          style: TextStyle(
+                                            fontFamily: 'kor',
+                                            color: Color(0xffffffff),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14 * 3,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ))),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]
               ),
             )
           ],
