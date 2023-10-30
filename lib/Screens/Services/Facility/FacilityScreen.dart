@@ -286,16 +286,16 @@ class _FacilityScreenState extends State<FacilityScreen> {
     }
   }
 
-  void facilityInform(context, int number) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return FacilitySelection(
-            number: number,
-          );
-        });
-  }
+  // void facilityInform(context, int number) {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) {
+  //         return FacilitySelection(
+  //           number: number,
+  //         );
+  //       });
+  // }
 
   void serviceSelectPopup(context) {
     showDialog(
@@ -530,7 +530,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
       }
     });
 
-    // print(originMove);
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
@@ -582,8 +581,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   padding: const EdgeInsets.only(left: 54, top: 36),
                   child: SvgPicture.asset(
                     facilityName,
-                    width: 252,
-                    height: 63,
+                    width: 82*3,
+                    height: 14*3,
                   ),
                 ),
               ],
@@ -1623,8 +1622,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
               ),
             ),
             // 입주사 화면 버튼
-            Offstage(
-              offstage: officeSelected,
+            AnimatedPadding(
+              padding: EdgeInsets.only(
+                  top: officeSelected ? (176 - 85) * 3 : 0, left: 0),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
               child: Stack(
                 children: [
                   Positioned(
@@ -1648,6 +1650,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 0;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 0);
                           });
@@ -1675,6 +1678,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 1;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 1);
                           });
@@ -1702,6 +1706,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 2;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 2);
                           });
@@ -1729,6 +1734,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 3;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 3);
                           });
@@ -1756,6 +1762,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 4;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 4);
                           });
@@ -1783,6 +1790,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 5;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 5);
                           });
@@ -1810,6 +1818,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 6;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 6);
                           });
@@ -1837,6 +1846,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 7;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 7);
                           });
@@ -1864,6 +1874,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 8;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 8);
                           });
@@ -1891,6 +1902,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 9;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 9);
                           });
@@ -1918,6 +1930,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 10;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 10);
                           });
@@ -1945,6 +1958,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 11;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 11);
                           });
@@ -1972,6 +1986,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 12;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 12);
                           });
@@ -1999,6 +2014,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 13;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 13);
                           });
@@ -2026,6 +2042,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 14;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 14);
                           });
@@ -2053,6 +2070,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 15;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 15);
                           });
@@ -2080,6 +2098,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 16;
+                              _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
                             // facilityInform(context, 16);
                           });
@@ -2088,7 +2107,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                 ],
               ),
             ),
-            // 상단 팝업
+            // 상단 팝업 화면
             AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
@@ -2114,6 +2133,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       colors: [Color(0xff222222), Color(0xff4d4d4d)])),
               child: Stack(
                 children: [
+                  //업장 선택
                   Offstage(
                   offstage: officeSelectionTimeOut,
                   child: Stack(
@@ -2132,7 +2152,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                   height: 59 * 3,
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                          image: AssetImage(officePic))),
+                                          image: AssetImage('assets/images/facility/banners/${_mainStatusProvider.facilityNum![officeNumber]}.png'))),
                                 ),
                               ),
                               Padding(
@@ -2307,13 +2327,13 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           setState(() {
                             // officeSelected = !officeSelected;
                             officeSelectionTimeOut = true;
-                            print('tiemOUT!!!!!!!!!!!!!!!!!!!!!!!!!!!');
                           });
                         },
                       ),
                     ],
                   ),
                 ),
+                  //시간 초과
                   Offstage(
                     offstage: !officeSelectionTimeOut,
                     child: Stack(

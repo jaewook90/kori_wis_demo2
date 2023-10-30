@@ -25,6 +25,8 @@ class MainStatusModel with ChangeNotifier {
 
   String? targetRoomNum;
 
+  bool? facilityArrived;
+
   List<String>? facilityNum;
   List<String>? facilityName;
   List<String>? facilityDetail;
@@ -38,6 +40,7 @@ class MainStatusModel with ChangeNotifier {
   List<List<String>>? cordList;
 
   MainStatusModel({
+    this.facilityArrived,
     this.facilityOfficeSelected,
     this.debugMode,
     this.batBal,

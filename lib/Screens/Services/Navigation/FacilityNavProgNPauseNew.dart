@@ -96,7 +96,6 @@ class _FacilityNavigationNewProgNPauseState
 
     _modalTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (_networkProvider.servTable == '시설1') {
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaa');
           setState(() {});
       }
     });
@@ -139,15 +138,6 @@ class _FacilityNavigationNewProgNPauseState
         departureSentence = '[${_mainStatusProvider.lastFacilityNum!} 호] ${_mainStatusProvider.lastFacilityName!}';
       });
     }
-
-    print('servTableNum : $servTableNum');
-    print('servTableNum : $servTableNum');
-    print('servTableNum : $servTableNum');
-    print('servTableNum : $servTableNum');
-    print('servTableNum : $servTableNum');
-    print('servTableNum : $servTableNum');
-    print('servTableNum : $servTableNum');
-
 
     if (servTableNum == 'charging_pile') {
       setState(() {

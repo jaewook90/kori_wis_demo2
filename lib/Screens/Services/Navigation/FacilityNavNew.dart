@@ -158,6 +158,8 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
 
     servTableNum = _networkProvider.servTable!;
 
+    arrivedServingTable = _mainStatusProvider.facilityArrived!;
+
     // _controller.pause();
     //
     // if(_mainStatusProvider.facilityNavDone == true){
@@ -166,13 +168,15 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
     //   _controller.start();
     // }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 1000), () {
         Getting(startUrl!, moveBaseStatusUrl!);
       });
+
       if (navStatus == 3 && arrivedServingTable == false) {
         setState(() {
-          arrivedServingTable = true;
+          _mainStatusProvider.facilityArrived = true;
           navStatus = 0;
         });
         if (servTableNum != '시설1' && servTableNum != 'charging_pile') {
@@ -182,7 +186,8 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
             });
           });
         } else if (servTableNum == '시설1') {
-          _servingProvider.clearAllTray();
+          _mainStatusProvider.lastFacilityNum = '';
+          _mainStatusProvider.lastFacilityName = '';
           Future.delayed(const Duration(milliseconds: 230), () {
             navPage(context: context, page: FacilityScreen()).navPageToPage();
           });
@@ -197,12 +202,12 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
       }
       if (navStatus == 4 && arrivedServingTable == false) {
         setState(() {
-          arrivedServingTable = true;
+          _mainStatusProvider.facilityArrived = true;
           navStatus = 0;
         });
         showCountDownPopup(context);
       }
-    });
+    // });
 
     return Scaffold(
       appBar: AppBar(
@@ -251,7 +256,7 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
             Padding(
               padding: const EdgeInsets.only(top: 36, left: 54),
               child:
-                  SvgPicture.asset(facilityName, width: 84 * 3, height: 21 * 3),
+                  SvgPicture.asset(facilityName, width: 82 * 3, height: 14 * 3),
             ),
             Offstage(
               offstage: _mainStatusProvider.facilityNavDone!,

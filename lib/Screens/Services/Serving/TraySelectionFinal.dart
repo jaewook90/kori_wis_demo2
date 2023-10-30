@@ -403,7 +403,7 @@ class _TraySelectionFinalState extends State<TraySelectionFinal> {
       if (_mainStatusProvider.mainSoundMute == true) {
         if(_audioPlayer.playing != true){
           _audioPlayer.seek(const Duration(seconds: 0));
-          print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+          // print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
           _audioPlayer.play();
         }
       } else {

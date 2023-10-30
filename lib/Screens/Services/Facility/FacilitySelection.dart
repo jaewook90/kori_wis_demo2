@@ -45,7 +45,7 @@ class _FacilitySelectionState extends State<FacilitySelection> {
   late int CHGFlag;
   late int EMGStatus;
 
-  late String officePic;
+  // late String officePic;
 
   // late Timer _timer;
 
@@ -55,7 +55,7 @@ class _FacilitySelectionState extends State<FacilitySelection> {
     super.initState();
     _initAudio();
 
-    officePic = 'assets/images/facility/facNav/navDone/image.png';
+    // officePic = 'assets/images/facility/facNav/navDone/image.png';
 
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
     EMGStatus = Provider.of<MainStatusModel>(context, listen: false).emgButton!;
@@ -169,7 +169,7 @@ class _FacilitySelectionState extends State<FacilitySelection> {
                       width: 103 * 3,
                       height: 59 * 3,
                       decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage(officePic))),
+                          image: DecorationImage(image: AssetImage('assets/images/facility/banners/${_mainStatusProvider.facilityNum![widget.number!]}.png'))),
                     ),
                   ),
                   Padding(

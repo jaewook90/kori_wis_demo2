@@ -35,7 +35,6 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
   String? startUrl;
   String? navUrl;
 
-  late String officePic;
   late String extendLine;
   late String arrivedIcon;
 
@@ -51,7 +50,6 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    officePic = 'assets/images/facility/facNav/navDone/image.png';
     extendLine = 'assets/images/facility/facNav/navDone/line_5.svg';
     arrivedIcon = 'assets/images/facility/facNav/navDone/frame.svg';
 
@@ -137,7 +135,7 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                       width: 103 * 3,
                       height: 59 * 3,
                       decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage(officePic))),
+                          image: DecorationImage(image: AssetImage('assets/images/facility/banners/${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]}.png'))),
                     ),
                   ),
                   Padding(
@@ -290,13 +288,14 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                             PostApi(
                                     url: startUrl,
                                     endadr: navUrl,
-                                    keyBody: _servingProvider.targetTableNum)
+                                    keyBody: '시설1')
                                 .Posting(context);
                           }
                           Future.delayed(const Duration(milliseconds: 230), () {
                             // _audioPlayer.dispose();
                             setState(() {
                               _mainStatusProvider.facilityNavDone = false;
+                              _mainStatusProvider.facilityArrived = false;
                             });
                           });
                         });

@@ -41,6 +41,7 @@ void main() async {
                   lastFacilityNum: '',
                   lastFacilityName: '',
                   facilityOfficeSelected: false,
+              facilityArrived: false,
                 )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(
