@@ -67,7 +67,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
   // assets
   final String _effectFile = 'assets/sounds/button_click.wav';
-  final String mainMap = 'assets/images/facility/323_black_map_modified.svg';
+  final String mainMap = 'assets/images/facility/323_black_map_modified_v_1_2.svg';
+  final String mainMapBG = 'assets/images/facility/map_bg.svg';
   final String bottomBanner = 'assets/images/facility/bottom.png';
   final String listBtn = 'assets/images/facility/btn.svg';
   final String facilityName = 'assets/images/facility/habio_7_f.svg';
@@ -1610,6 +1611,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
                             DecorationImage(image: AssetImage(bottomBanner)))),
               ),
             ),
+            Offstage(
+              offstage: !officeSelected,
+              child:SvgPicture.asset(
+                mainMapBG,
+                width: 1080,
+                height: 1920,
+              ),
+            ),
             AnimatedPadding(
               padding: EdgeInsets.only(
                   top: officeSelected ? 176 * 3 : 255, left: 51),
@@ -1635,7 +1644,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       child: GestureDetector(
                         child: Container(
                           width: 190,
-                          height: 300,
+                          height: 350,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1657,12 +1666,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 575,
-                      left: 845,
+                      top: 620,
+                      left: 840,
                       child: GestureDetector(
                         child: Container(
-                          width: 175,
-                          height: 275,
+                          width: 180,
+                          height: 240,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1685,12 +1694,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 860,
-                      left: 845,
+                      top: 865,
+                      left: 842,
                       child: GestureDetector(
                         child: Container(
-                          width: 175,
-                          height: 85,
+                          width: 181,
+                          height: 80,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1713,11 +1722,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 955,
-                      left: 850,
+                      top: 952,
+                      left: 847,
                       child: GestureDetector(
                         child: Container(
-                          width: 170,
+                          width: 173,
                           height: 95,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
@@ -1741,12 +1750,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 1060,
-                      left: 855,
+                      top: 1053,
+                      left: 853,
                       child: GestureDetector(
                         child: Container(
-                          width: 165,
-                          height: 145,
+                          width: 167,
+                          height: 147,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1769,12 +1778,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 1215,
-                      left: 870,
+                      top: 1210,
+                      left: 868,
                       child: GestureDetector(
                         child: Container(
-                          width: 150,
-                          height: 370,
+                          width: 152,
+                          height: 375,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1797,12 +1806,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 1330,
+                      top: 1323,
                       left: 60,
                       child: GestureDetector(
                         child: Container(
                           width: 390,
-                          height: 255,
+                          height: 262,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1825,7 +1834,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 1160,
+                      top: 1155,
                       left: 60,
                       child: GestureDetector(
                         child: Container(
@@ -1853,7 +1862,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 860,
+                      top: 856,
                       left: 60,
                       child: GestureDetector(
                         child: Container(
@@ -1881,8 +1890,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 770,
-                      left: 290,
+                      top: 767,
+                      left: 287,
                       child: GestureDetector(
                         child: Container(
                           width: 210,
@@ -1909,12 +1918,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 630,
+                      top: 628,
                       left: 60,
                       child: GestureDetector(
                         child: Container(
                           width: 215,
-                          height: 215,
+                          height: 220,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1937,12 +1946,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 265,
-                      left: 60,
+                      top: 260,
+                      left: 57,
                       child: GestureDetector(
                         child: Container(
-                          width: 435,
-                          height: 300,
+                          width: 489,
+                          height: 305,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1965,12 +1974,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 265,
-                      left: 510,
+                      top: 260,
+                      left: 553,
                       child: GestureDetector(
                         child: Container(
-                          width: 250,
-                          height: 300,
+                          width: 205,
+                          height: 305,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -1993,12 +2002,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 630,
-                      left: 355,
+                      top: 625,
+                      left: 350,
                       child: GestureDetector(
                         child: Container(
-                          width: 140,
-                          height: 75,
+                          width: 150,
+                          height: 83,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -2022,10 +2031,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       )),
                   Positioned(
                       top: 915,
-                      left: 585,
+                      left: 580,
                       child: GestureDetector(
                         child: Container(
-                          width: 195,
+                          width: 200,
                           height: 85,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
@@ -2049,12 +2058,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 630,
-                      left: 565,
+                      top: 620,
+                      left: 560,
                       child: GestureDetector(
                         child: Container(
-                          width: 205,
-                          height: 90,
+                          width: 210,
+                          height: 100,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
@@ -2077,12 +2086,12 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         },
                       )),
                   Positioned(
-                      top: 1330,
-                      left: 655,
+                      top: 1322,
+                      left: 647,
                       child: GestureDetector(
                         child: Container(
-                          width: 145,
-                          height: 98,
+                          width: 147,
+                          height: 101,
                           // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(

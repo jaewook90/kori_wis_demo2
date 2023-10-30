@@ -5,7 +5,6 @@ import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilityDoneFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/ServingProgressFinal.dart';
@@ -169,12 +168,6 @@ class _NavigatorProgressModuleFinalState
           navSentence = '[배송] 중 입니다';
           destinationSentence = '${_mainStatusProvider.targetRoomNum} 호';
         });
-      } else if (_mainStatusProvider.robotServiceMode == 2) {
-        setState(() {
-          navSentence = '[안내] 중 입니다';
-          destinationSentence =
-              '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
-        });
       }
     }
 
@@ -225,8 +218,6 @@ class _NavigatorProgressModuleFinalState
     }
     if (_mainStatusProvider.robotServiceMode == 1) {
         targetTableNum = 'wait';
-    }else if (_mainStatusProvider.robotServiceMode == 2) {
-      targetTableNum = '시설1';
     }
     _servingProvider.targetTableNum = targetTableNum;
 
@@ -249,13 +240,6 @@ class _NavigatorProgressModuleFinalState
             } else if (_mainStatusProvider.robotServiceMode == 1) {
               navPage(context: context, page: ShippingDoneFinal())
                   .navPageToPage();
-            } else if (_mainStatusProvider.robotServiceMode == 2) {
-              // 테스트를 위하여 대기장소 시설1 에서 시설1으로 변경하여 점검 => 나갈땐 시설1을 다 시설1로 변경 필요(정지에서도)
-              if(servTableNum != '시설1'){
-                navPage(context: context, page: FacilityDoneScreen()).navPageToPage();
-              }else{
-                navPage(context: context, page: FacilityScreen()).navPageToPage();
-              }
             }
           });
         } else if (servTableNum == 'wait') {
