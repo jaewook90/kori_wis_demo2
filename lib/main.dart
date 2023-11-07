@@ -38,6 +38,8 @@ void main() async {
                   facilityName: [],
                   facilityNum: [],
                   facilityNavDone: false,
+                  facilityNavDoneScroll: false,
+                  facilityNavPause: false,
                   lastFacilityNum: '',
                   lastFacilityName: '',
                   facilityOfficeSelected: false,

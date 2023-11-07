@@ -3,16 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
-import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
 class FacilityNavigationNewProgNPause extends StatefulWidget {
@@ -96,7 +92,7 @@ class _FacilityNavigationNewProgNPauseState
 
     _modalTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (_networkProvider.servTable == '시설1') {
-          setState(() {});
+        setState(() {});
       }
     });
 
@@ -129,13 +125,15 @@ class _FacilityNavigationNewProgNPauseState
 
     servTableNum = _networkProvider.servTable!;
 
-    if(_mainStatusProvider.lastFacilityNum!.isEmpty || _mainStatusProvider.lastFacilityName!.isEmpty){
+    if (_mainStatusProvider.lastFacilityNum!.isEmpty ||
+        _mainStatusProvider.lastFacilityName!.isEmpty) {
       setState(() {
         departureSentence = '엘리베이터';
       });
-    }else{
+    } else {
       setState(() {
-        departureSentence = '[${_mainStatusProvider.lastFacilityNum!} 호] ${_mainStatusProvider.lastFacilityName!}';
+        departureSentence =
+            '[${_mainStatusProvider.lastFacilityNum!} 호] ${_mainStatusProvider.lastFacilityName!}';
       });
     }
 
@@ -180,7 +178,7 @@ class _FacilityNavigationNewProgNPauseState
               child: Stack(
                 children: [
                   // 출발지
-                   SizedBox(
+                  SizedBox(
                     width: (28 + 224) * 3,
                     height: 18 * 3,
                     child: Row(
@@ -311,6 +309,38 @@ class _FacilityNavigationNewProgNPauseState
                         children: [
                           SvgPicture.asset(navTopSubBTNBG,
                               width: 103 * 3, height: 32 * 3),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 8 * 3, left: 30 * 3),
+                            child: SizedBox(
+                              width: 44 * 3,
+                              height: 16 * 3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SvgPicture.asset(navTopSubBTNBatIcon,
+                                      width: 16 * 3, height: 16 * 3),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 22 * 3,
+                                    height: 14 * 3,
+                                    child: Text(
+                                      '충전',
+                                      style: TextStyle(
+                                          fontFamily: 'kor',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12 * 3,
+                                          letterSpacing: -0.21,
+                                          height: 0.95),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                           Offstage(
                             offstage: navState,
                             child: FilledButton(
@@ -361,38 +391,6 @@ class _FacilityNavigationNewProgNPauseState
                                     )),
                                 child: null),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8 * 3, left: 30 * 3),
-                            child: SizedBox(
-                              width: 44 * 3,
-                              height: 16 * 3,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  SvgPicture.asset(navTopSubBTNBatIcon,
-                                      width: 16 * 3, height: 16 * 3),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  const SizedBox(
-                                    width: 22 * 3,
-                                    height: 14 * 3,
-                                    child: Text(
-                                      '충전',
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12 * 3,
-                                          letterSpacing: -0.21,
-                                          height: 0.95),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -406,39 +404,6 @@ class _FacilityNavigationNewProgNPauseState
                         children: [
                           SvgPicture.asset(navTopSubBTNBG,
                               width: 103 * 3, height: 32 * 3),
-                          Offstage(
-                            offstage: navState,
-                            child: FilledButton(
-                                onPressed: () {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    _effectPlayer
-                                        .seek(const Duration(seconds: 0));
-                                    _effectPlayer.play();
-                                    Future.delayed(
-                                        const Duration(milliseconds: 230), () {
-                                      _effectPlayer.dispose();
-                                      if (_mainStatusProvider
-                                              .robotServiceMode ==
-                                          2) {
-                                        navPage(
-                                          context: context,
-                                          page: const FacilityScreen(),
-                                        ).navPageToPage();
-                                      }
-                                    });
-                                  });
-                                },
-                                style: FilledButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    fixedSize: const Size(103 * 3, 32 * 3),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(13),
-                                      // side: BorderSide(
-                                      //     color: Colors.tealAccent, width: 1)
-                                    )),
-                                child: null),
-                          ),
                           Padding(
                             padding:
                                 const EdgeInsets.only(top: 8 * 3, left: 13 * 3),
@@ -476,7 +441,40 @@ class _FacilityNavigationNewProgNPauseState
                                 ],
                               ),
                             ),
-                          )
+                          ),
+                          Offstage(
+                            offstage: navState,
+                            child: FilledButton(
+                                onPressed: () {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _effectPlayer
+                                        .seek(const Duration(seconds: 0));
+                                    _effectPlayer.play();
+                                    Future.delayed(
+                                        const Duration(milliseconds: 230), () {
+                                      _effectPlayer.dispose();
+                                      if (_mainStatusProvider
+                                              .robotServiceMode ==
+                                          2) {
+                                        navPage(
+                                          context: context,
+                                          page: const FacilityScreen(),
+                                        ).navPageToPage();
+                                      }
+                                    });
+                                  });
+                                },
+                                style: FilledButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    fixedSize: const Size(103 * 3, 32 * 3),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(13),
+                                      // side: BorderSide(
+                                      //     color: Colors.tealAccent, width: 1)
+                                    )),
+                                child: null),
+                          ),
                         ],
                       ),
                     ),
@@ -490,6 +488,38 @@ class _FacilityNavigationNewProgNPauseState
                         children: [
                           SvgPicture.asset(navTopSubBTNBG,
                               width: 103 * 3, height: 32 * 3),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 8 * 3, left: 30 * 3),
+                            child: SizedBox(
+                              width: 44 * 3,
+                              height: 16 * 3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SvgPicture.asset(navTopSubBTNReturnIcon,
+                                      width: 16 * 3, height: 16 * 3),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 22 * 3,
+                                    height: 14 * 3,
+                                    child: Text(
+                                      '복귀',
+                                      style: TextStyle(
+                                          fontFamily: 'kor',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12 * 3,
+                                          letterSpacing: -0.21,
+                                          height: 0.95),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                           Offstage(
                             offstage: navState,
                             child: FilledButton(
@@ -542,38 +572,6 @@ class _FacilityNavigationNewProgNPauseState
                                     )),
                                 child: null),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 8 * 3, left: 30 * 3),
-                            child: SizedBox(
-                              width: 44 * 3,
-                              height: 16 * 3,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  SvgPicture.asset(navTopSubBTNReturnIcon,
-                                      width: 16 * 3, height: 16 * 3),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  const SizedBox(
-                                    width: 22 * 3,
-                                    height: 14 * 3,
-                                    child: Text(
-                                      '복귀',
-                                      style: TextStyle(
-                                          fontFamily: 'kor',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12 * 3,
-                                          letterSpacing: -0.21,
-                                          height: 0.95),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -595,7 +593,9 @@ class _FacilityNavigationNewProgNPauseState
                   children: [
                     TextButton(
                         onPressed: () {
-                          navPage(context: context, page: const FacilityScreen())
+                          navPage(
+                                  context: context,
+                                  page: const FacilityScreen())
                               .navPageToPage();
                         },
                         style: TextButton.styleFrom(
@@ -625,7 +625,8 @@ class _FacilityNavigationNewProgNPauseState
                                     endadr: stpUrl,
                                     keyBody: 'stop')
                                 .Posting(context);
-                            Future.delayed(const Duration(milliseconds: 230), () {
+                            Future.delayed(const Duration(milliseconds: 230),
+                                () {
                               setState(() {
                                 navState = false;
                                 subButtonOpacity = 1;
@@ -640,8 +641,10 @@ class _FacilityNavigationNewProgNPauseState
                                 navTopTextBoxIconSize = 14;
                                 navTopTextBoxIconPaddingTop = 5 * 3;
                                 navTopTextBoxTextPaddingLeft = 24.5 * 3;
-                                navTopTextBoxTextColor = const Color(0xffffffff);
+                                navTopTextBoxTextColor =
+                                    const Color(0xffffffff);
                                 navTopTextBoxText = '일시정지';
+                                _mainStatusProvider.facilityNavPause = true;
                               });
                             });
                           });
@@ -698,6 +701,7 @@ class _FacilityNavigationNewProgNPauseState
                             navTopTextBoxTextPaddingLeft = 22.5 * 3;
                             navTopTextBoxTextColor = const Color(0xff00d7d4);
                             navTopTextBoxText = '이동중';
+                            _mainStatusProvider.facilityNavPause = false;
                           });
                         });
                       });

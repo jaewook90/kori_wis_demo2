@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Modals/changingCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
-import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -11,12 +8,11 @@ import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavDoneNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavProgNPauseNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
+import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
-import 'package:timer_count_down/timer_controller.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 
 class FacilityNavigationNew extends StatefulWidget {
   const FacilityNavigationNew({Key? key}) : super(key: key);
@@ -27,7 +23,9 @@ class FacilityNavigationNew extends StatefulWidget {
 
 class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
   final String facilityName = 'assets/images/facility/facNav/habio_7_f.svg';
-  final String navMapBG = 'assets/images/facility/facNav/360_map.svg';
+  final String navMap =
+      'assets/images/facility/323_black_map_modified_v_1_2.svg';
+  final String navMapBG = 'assets/images/facility/map_bg.svg';
   final String navTopBG = 'assets/images/facility/facNav/bg.svg';
 
   final String navTopDot1 = 'assets/images/facility/facNav/ellipse_33.svg';
@@ -43,6 +41,8 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
   late int navStatus;
 
   late bool initNavStatus;
+  late bool navPause;
+  late bool navDone;
 
   String? startUrl;
   String? moveBaseStatusUrl;
@@ -50,6 +50,7 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
   late bool arrivedServingTable;
   late String targetTableNum;
   late String servTableNum;
+
   //
   // final CountdownController _controller = CountdownController(autoStart: true);
   //
@@ -60,32 +61,17 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // navDone = false;
+    navDone = false;
     initNavStatus = true;
     navStatus = 99;
 
     arrivedServingTable = false;
     targetTableNum = "";
 
-    // _initAudio();
+    navPause = false;
+    navDone = false;
+
   }
-
-  // void _initAudio() {
-  //   // AudioPlayer.clearAssetCache();
-  //   _audioPlayer = AudioPlayer()..setAsset(_audioFile);
-  //   _audioPlayer.setVolume(1);
-  // }
-
-  // void showReturnCountDownPopup(context) {
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //         return const ChangingCountDownModalFinal(
-  //           modeState: 'guideDone',
-  //         );
-  //       });
-  // }
 
   void showCountDownPopup(context) {
     showDialog(
@@ -153,6 +139,9 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
+    navPause = _mainStatusProvider.facilityNavPause!;
+    navDone = _mainStatusProvider.facilityNavDoneScroll!;
+
     startUrl = _networkProvider.startUrl;
     moveBaseStatusUrl = _networkProvider.moveBaseStatusUrl;
 
@@ -160,53 +149,44 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
 
     arrivedServingTable = _mainStatusProvider.facilityArrived!;
 
-    // _controller.pause();
-    //
-    // if(_mainStatusProvider.facilityNavDone == true){
-    //   _audioPlayer.seek(const Duration(seconds: 0));
-    //   _audioPlayer.play();
-    //   _controller.start();
-    // }
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      Getting(startUrl!, moveBaseStatusUrl!);
+    });
 
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        Getting(startUrl!, moveBaseStatusUrl!);
+    if (navStatus == 3 && arrivedServingTable == false) {
+      setState(() {
+        _mainStatusProvider.facilityArrived = true;
+        navStatus = 0;
       });
-
-      if (navStatus == 3 && arrivedServingTable == false) {
-        setState(() {
-          _mainStatusProvider.facilityArrived = true;
-          navStatus = 0;
+      if (servTableNum != '시설1' && servTableNum != 'charging_pile') {
+        Future.delayed(const Duration(milliseconds: 230), () {
+          setState(() {
+            _mainStatusProvider.facilityNavDone = true;
+          });
         });
-        if (servTableNum != '시설1' && servTableNum != 'charging_pile') {
-          Future.delayed(const Duration(milliseconds: 230), () {
-            setState(() {
-              _mainStatusProvider.facilityNavDone = true;
-            });
-          });
-        } else if (servTableNum == '시설1') {
-          _mainStatusProvider.lastFacilityNum = '';
-          _mainStatusProvider.lastFacilityName = '';
-          Future.delayed(const Duration(milliseconds: 230), () {
-            navPage(context: context, page: FacilityScreen()).navPageToPage();
-          });
-        } else if (servTableNum == 'charging_pile') {
-          Future.delayed(const Duration(milliseconds: 230), () {
-            navPage(
-              context: context,
-              page: const KoriDocking(),
-            ).navPageToPage();
-          });
-        }
-      }
-      if (navStatus == 4 && arrivedServingTable == false) {
-        setState(() {
-          _mainStatusProvider.facilityArrived = true;
-          navStatus = 0;
+      } else if (servTableNum == '시설1') {
+        _mainStatusProvider.lastFacilityNum = '';
+        _mainStatusProvider.lastFacilityName = '';
+        Future.delayed(const Duration(milliseconds: 230), () {
+          navPage(context: context, page: const FacilityScreen())
+              .navPageToPage();
         });
-        showCountDownPopup(context);
+      } else if (servTableNum == 'charging_pile') {
+        Future.delayed(const Duration(milliseconds: 230), () {
+          navPage(
+            context: context,
+            page: const KoriDocking(),
+          ).navPageToPage();
+        });
       }
+    }
+    if (navStatus == 4 && arrivedServingTable == false) {
+      setState(() {
+        _mainStatusProvider.facilityArrived = true;
+        navStatus = 0;
+      });
+      showCountDownPopup(context);
+    }
     // });
 
     return Scaffold(
@@ -231,22 +211,40 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
         constraints: const BoxConstraints.expand(),
         child: Stack(
           children: [
-            // Countdown(
-            //   controller: _controller,
-            //   seconds: 10,
-            //   build: (_, double time) {
-            //     return Container();
-            //   },
-            //   interval: const Duration(seconds: 1),
-            //   onFinished: () {
-            //     Future.delayed(const Duration(milliseconds: 230), () {
-            //       showReturnCountDownPopup(context);
-            //     });
-            //   },
-            // ),
-            Padding(
-              padding: const EdgeInsets.only(top: 447),
-              child: SvgPicture.asset(navMapBG, width: 1080, height: 1473),
+            AnimatedPadding(
+              padding: EdgeInsets.only(
+                  top: navPause
+                      ? 176 * 3
+                      : navDone
+                          ? 181 * 3
+                          : 264 * 3,
+                  left: 17 * 3),
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              child: Stack(children: [
+                SvgPicture.asset(
+                  navMapBG,
+                  width: 1080,
+                  height: 1920,
+                ),
+                SvgPicture.asset(
+                  navMap,
+                  width: 978,
+                  height: 447 * 3,
+                  fit: BoxFit.cover,
+                ),
+              ]),
+            ),
+            AnimatedPositioned(
+              top: navPause
+                  ? 176 * 3
+                  : navDone
+                      ? 181 * 3
+                      : 230 * 3,
+              left: 17 * 3,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              child: const FacilityCurrentPositionScreen(),
             ),
             SvgPicture.asset(
               navTopBG,
@@ -302,33 +300,6 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
                 child:
                     // 주행 정보 묶음 출발지, 도착지, 이동상태
                     const FacilityNavigationNewDone()),
-            Padding(
-              padding: const EdgeInsets.only(top: 1500, left: 500),
-              child: FilledButton(
-                  onPressed: () {
-                    navPage(context: context, page: const FacilityScreen())
-                        .navPageToPage();
-                  },
-                  child: null),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 1500, left: 700),
-              child: FilledButton(
-                  onPressed: () {
-                    setState(() {
-                      if(_mainStatusProvider.facilityNavDone! == false){
-                        _mainStatusProvider.facilityNavDone = true;
-                      }else{
-                        _mainStatusProvider.facilityNavDone = false;
-                      }
-                    });
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.teal
-                  ),
-                  child: null),
-            )
-            // SvgPicture.asset(navTopBG, width: 1080, height: 269*3)
           ],
         ),
       ),

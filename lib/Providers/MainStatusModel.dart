@@ -34,6 +34,8 @@ class MainStatusModel with ChangeNotifier {
   String? lastFacilityName;
   int? targetFacilityIndex;
   bool? facilityNavDone;
+  bool? facilityNavDoneScroll;
+  bool? facilityNavPause;
 
   bool? facilitySelectByBTN;
 
@@ -59,6 +61,8 @@ class MainStatusModel with ChangeNotifier {
     this.facilityName,
     this.facilityNum,
     this.facilityNavDone,
+    this.facilityNavDoneScroll,
+    this.facilityNavPause,
     this.lastFacilityNum,
     this.lastFacilityName,
     this.robotX,

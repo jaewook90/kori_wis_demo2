@@ -8,12 +8,8 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavNew.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavProgNPauseNew.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
-import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -61,6 +57,7 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
       if (navDoneFlag == true) {
         if (_mainStatusProvider.facilityNavDone == true) {
           setState(() {
+            _mainStatusProvider.facilityNavDoneScroll = true;
             navDoneFlag = false;
           });
         }
@@ -139,14 +136,14 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 114 * 3),
+                    padding: const EdgeInsets.only(left: 114 * 3),
                     child: Column(
                       children: [
                         SizedBox(
                           width: (280 - 105) * 3,
                           child: Text(
                             '${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]}호',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'kor',
                                 fontSize: 14 * 3,
                                 fontWeight: FontWeight.w400,
@@ -158,8 +155,8 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                         SizedBox(
                           width: (280 - 105) * 3,
                           child: Text(
-                            '${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}',
-                            style: TextStyle(
+                            _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!],
+                            style: const TextStyle(
                                 fontFamily: 'kor',
                                 fontSize: 14 * 3,
                                 fontWeight: FontWeight.w400,
@@ -168,16 +165,16 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                             textAlign: TextAlign.start,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 4 * 3,
                         ),
                         SizedBox(
                           width: (280 - 105) * 3,
                           child: Text(
-                            '업종 추가 추후',
-                            style: TextStyle(
+                            _mainStatusProvider.facilityDetail![_mainStatusProvider.targetFacilityIndex!],
+                            style: const TextStyle(
                                 fontFamily: 'kor',
-                                fontSize: 12 * 3,
+                                fontSize: 11 * 3,
                                 fontWeight: FontWeight.w100,
                                 color: Color(0xffffffff),
                                 letterSpacing: -0.21),
@@ -294,6 +291,7 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                           Future.delayed(const Duration(milliseconds: 230), () {
                             // _audioPlayer.dispose();
                             setState(() {
+                              _mainStatusProvider.facilityNavDoneScroll = false;
                               _mainStatusProvider.facilityNavDone = false;
                               _mainStatusProvider.facilityArrived = false;
                             });
@@ -321,9 +319,10 @@ class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
                       onPressed: () {
                         setState(() {
                           _mainStatusProvider.facilityNavDone = false;
+                          _mainStatusProvider.facilityNavDoneScroll = false;
                         });
                         // _audioPlayer.dispose();
-                        navPage(context: context, page: FacilityScreen())
+                        navPage(context: context, page: const FacilityScreen())
                             .navPageToPage();
                       },
                       style: TextButton.styleFrom(

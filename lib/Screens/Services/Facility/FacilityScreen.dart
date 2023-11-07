@@ -560,7 +560,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
             height: 132,
             child: Stack(
               children: [
-                AppBarStatus(
+                const AppBarStatus(
                   iconPoseSide: 167 * 3,
                   iconPoseTop: 11 * 3,
                 ),
@@ -1641,10 +1641,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   top: officeSelected ? 176 * 3 : 255, left: 51),
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
-              child: SvgPicture.asset(
-                mainMap,
-                width: 978,
-                height: 1335,
+              child: Stack(
+                children: [SvgPicture.asset(
+                  mainMap,
+                  width: 978,
+                  height: 1335,
+                ),
+                  const FacilityCurrentPositionScreen()
+                ]
               ),
             ),
             // 입주사 화면 버튼
@@ -2367,9 +2371,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           child: Container(
                             width: 230 * 3,
                             // height: 13 * 3,
-                            child: Text(
+                            child: const Text(
                               '"다른 장소 안내를 원하시나요?"',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontFamily: 'kor',
                                   fontSize: 17 * 3,
                                   fontWeight: FontWeight.w400,

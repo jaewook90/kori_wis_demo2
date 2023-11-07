@@ -211,6 +211,7 @@ class _ChangingCountDownModalFinalState
                                         _servingProvider.trayChange = true;
                                         _networkProvider.servTable =
                                             _servingProvider.targetTableNum;
+                                        _mainStatusProvider.facilityNavDoneScroll = false;
                                       });
                                       PostApi(
                                               url: startUrl,
@@ -383,6 +384,7 @@ class _ChangingCountDownModalFinalState
                                   _servingProvider.trayChange = true;
                                   _networkProvider.servTable =
                                       _servingProvider.targetTableNum;
+                                  _mainStatusProvider.facilityNavDoneScroll = false;
                                 });
                                 PostApi(
                                         url: startUrl,

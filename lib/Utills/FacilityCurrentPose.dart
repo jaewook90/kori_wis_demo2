@@ -95,7 +95,7 @@ class _FacilityCurrentPositionScreenState
     });
 
     canvasX = 978;
-    canvasY = 1335;
+    canvasY = 447*3;
 
     buttonWidth = 100;
     buttonHeight = 30;
@@ -116,11 +116,11 @@ class _FacilityCurrentPositionScreenState
   cordOffice(String axis) {
     if (axis == 'x') {
       double cordX =
-          (canvasX * (((robotX / mapX)) + ((mapOrigin[0] / mapX))) - 5);
+          (canvasX * (((robotX / mapX)) + ((mapOrigin[0] / mapX))) - 30);
       return cordX;
     } else if (axis == 'y') {
       double cordY =
-          (canvasY * ((robotY / mapY) + ((mapOrigin[1] / mapY))) - 45);
+          (canvasY * ((robotY / mapY) + ((mapOrigin[1] / mapY))) - 40);
       return cordY;
     }
   }
@@ -136,14 +136,18 @@ class _FacilityCurrentPositionScreenState
   @override
   Widget build(BuildContext context) {
     // print(originMove);
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
+    return Container(
+
+      // backgroundColor: Colors.transparent,
+      child: Stack(
         children: [
           Positioned(
             child: Container(
               width: 978,
-              height: 1335,
+              height: 447*3,
+              // decoration: BoxDecoration(
+              //   border: Border.fromBorderSide(BorderSide(color: Colors.red, width: 1))
+              // ),
               child: Stack(children: [
                 Positioned(
                     // bottom: 900,
