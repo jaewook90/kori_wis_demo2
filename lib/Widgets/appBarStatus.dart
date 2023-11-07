@@ -22,7 +22,9 @@ class AppBarStatus extends StatefulWidget {
 class _AppBarStatusState extends State<AppBarStatus> {
   late MainStatusModel _mainStatusProvider;
 
-  final String batteryIcon = 'assets/icons/appBar/icon_bettry.svg';
+  final String batteryFrameIcon = 'assets/icons/appBar/icon_bettry_frame.svg';
+  final String batteryBalanceIcon =
+      'assets/icons/appBar/icon_bettry_balance.svg';
   final String EMGIcon = 'assets/icons/appBar/emgicon.svg';
 
   late Timer _pwrTimer;
@@ -35,12 +37,22 @@ class _AppBarStatusState extends State<AppBarStatus> {
 
   late bool EMGModalChange;
 
+  late bool battery10;
+  late bool battery25;
+  late bool battery50;
+  late bool battery100;
+
   late bool initFinish;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    battery10 = false;
+    battery25 = false;
+    battery50 = false;
+    battery100 = false;
 
     EMGModalChange = false;
     EMGPushed = false;
@@ -72,13 +84,11 @@ class _AppBarStatusState extends State<AppBarStatus> {
           Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     });
 
-
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         initFinish = true;
       });
     });
-
   }
 
   void showEMGStateModal(context) {
@@ -89,7 +99,6 @@ class _AppBarStatusState extends State<AppBarStatus> {
           return const EMGStateModalScreen();
         });
   }
-
 
   @override
   void dispose() {
@@ -102,27 +111,46 @@ class _AppBarStatusState extends State<AppBarStatus> {
   Widget build(BuildContext context) {
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
+    if(batData < 100){
+        battery100 = true;
+      if(batData < 51){
+        battery50 = true;
+        if(batData < 26){
+          battery25 = true;
+          if(batData <10){
+            battery10 = true;
+          }else{
+            battery10 = false;
+          }
+        }else{
+          battery25 = false;
+        }
+      }else{
+        battery50 = false;
+      }
+    }else{
+      battery100 = false;
+    }
+
     EMGModalChange = _mainStatusProvider.EMGModalChange!;
-    if(initFinish == true){
-      if(EMGModalChange == false){
-        if(((EMGStatus == 0 && EMGPushed == false))){
-          WidgetsBinding.instance.addPostFrameCallback((_){
+    if (initFinish == true) {
+      if (EMGModalChange == false) {
+        if (((EMGStatus == 0 && EMGPushed == false))) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
               _mainStatusProvider.EMGModalChange = true;
               EMGPushed = true;
             });
             showEMGStateModal(context);
-            print('a');
           });
         }
-        if((EMGStatus == 1 && EMGPushed == true)){
-          WidgetsBinding.instance.addPostFrameCallback((_){
+        if ((EMGStatus == 1 && EMGPushed == true)) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
               _mainStatusProvider.EMGModalChange = true;
               EMGPushed = false;
             });
             showEMGStateModal(context);
-            print('b');
           });
         }
       }
@@ -146,8 +174,8 @@ class _AppBarStatusState extends State<AppBarStatus> {
               children: [
                 EMGStatus == 0
                     ? Container(
-                        width: 24*3,
-                        height: 23*3,
+                        width: 24 * 3,
+                        height: 23 * 3,
                         // decoration: BoxDecoration(
                         //   border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
                         // ),
@@ -156,55 +184,139 @@ class _AppBarStatusState extends State<AppBarStatus> {
                           children: [
                             SvgPicture.asset(
                               EMGIcon,
-                              width: 14*3,
-                              height: 14*3,
+                              width: 14 * 3,
+                              height: 14 * 3,
                             ),
                             Text(('비상정지'),
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
-                                  fontFamily: 'kor',
+                                    fontFamily: 'kor',
                                     color: Color(0xffff453a),
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 5.5*3,
+                                    fontSize: 5.5 * 3,
                                     letterSpacing: -0.12))
                           ],
                         ),
                       )
                     : Container(
-                  width: 24*3,
-                  height: 23*3,
-                  // decoration: BoxDecoration(
-                  //     border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
-                  // ),
-                ),
+                        width: 24 * 3,
+                        height: 23 * 3,
+                        // decoration: BoxDecoration(
+                        //     border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                        // ),
+                      ),
                 Container(
-                  width: 15*3,
-                  height: 22*3,
+                  width: 15 * 3,
+                  height: 21 * 3,
                   // decoration: BoxDecoration(
                   //     border: Border.fromBorderSide(BorderSide(color: Colors.blue, width: 2))
                   // ),
-                  child: Column(
-                    children: [
-                      SvgPicture.asset(
-                        batteryIcon,
-                        width: 42,
-                        height: 31.5,
+                  child: Stack(children: [
+                    Column(
+                      children: [
+                        Stack(children: [
+                          SvgPicture.asset(
+                            batteryFrameIcon,
+                            width: 42,
+                            height: 31.5,
+                          ),
+                        ]),
+                        Text(('${batData.toString()}'),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: Color(0xff888888),
+                                fontSize: 7 * 3,
+                                letterSpacing: -0.15))
+                      ],
+                    ),
+                    Positioned(
+                      top: 7,
+                      left: 3.4,
+                      child: Offstage(
+                        offstage: battery10,
+                        child: SvgPicture.asset(
+                          batteryBalanceIcon,
+                          width: 2 * 3,
+                          height: 5 * 3,
+                        ),
                       ),
-                      Text(('${batData.toString()}'),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              color: Color(0xff888888),
-                              fontSize: 7*3,
-                              letterSpacing: -0.15))
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      top: 7,
+                      left: 8.7,
+                      child:Offstage(
+                        offstage: battery25,
+                        child: SvgPicture.asset(
+                          batteryBalanceIcon,
+                          width: 2 * 3,
+                          height: 5 * 3,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 7,
+                      left: 14,
+                      child:Offstage(
+                        offstage: battery50,
+                        child: SvgPicture.asset(
+                          batteryBalanceIcon,
+                          width: 2 * 3,
+                          height: 5 * 3,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 7,
+                      left: 19.3,
+                      child: Offstage(
+                        offstage: battery100,
+                        child: SvgPicture.asset(
+                          batteryBalanceIcon,
+                          width: 2 * 3,
+                          height: 5 * 3,
+                        ),
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 5.4*3, left: 3.7*3),
+                    //   child: SvgPicture.asset(
+                    //     batteryBalanceIcon,
+                    //     width: 1*3,
+                    //     height: 3*3,
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 7, left: 5*3),
+                    //   child: SvgPicture.asset(
+                    //     batteryBalanceIcon,
+                    //     width: 2*3,
+                    //     height: 5*3,
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 2.2*3, left: 6.2*3),
+                    //   child: SvgPicture.asset(
+                    //     batteryBalanceIcon,
+                    //     width: 1*3,
+                    //     height: 3*3,
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 2.2*3, left: 8.4*3),
+                    //   child: SvgPicture.asset(
+                    //     batteryBalanceIcon,
+                    //     width: 1*3,
+                    //     height: 3*3,
+                    //   ),
+                    // ),
+                  ]),
                 ),
                 // CHGFlag == 3
                 //     ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
                 //     : Container(),
                 Container(
-                  width: 34*3,
-                  height: 24*3,
+                  width: 34 * 3,
+                  height: 24 * 3,
                   // decoration: BoxDecoration(
                   //     border: Border.fromBorderSide(BorderSide(color: Colors.green, width: 2))
                   // ),
@@ -217,15 +329,15 @@ class _AppBarStatusState extends State<AppBarStatus> {
                         child: Text(
                           '10월17일',
                           style: TextStyle(
-                            fontSize: 8*3,
-                            letterSpacing: -0.05*3,
+                            fontSize: 8 * 3,
+                            letterSpacing: -0.05 * 3,
                             color: Color(0xff555555),
                           ),
                           textAlign: TextAlign.right,
                         ),
                       ),
                       SizedBox(
-                        height: 1*3,
+                        height: 1 * 3,
                       ),
                       Container(
                         width: 99,
@@ -233,8 +345,8 @@ class _AppBarStatusState extends State<AppBarStatus> {
                         child: Text(
                           '15:38',
                           style: TextStyle(
-                            fontSize: 8*3,
-                            letterSpacing: -0.05*3,
+                            fontSize: 8 * 3,
+                            letterSpacing: -0.05 * 3,
                             color: Color(0xff555555),
                           ),
                           textAlign: TextAlign.right,
