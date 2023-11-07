@@ -7,6 +7,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/CableConnectedModalFinal.dart';
 import 'package:kori_wis_demo/Modals/EMGPopModalFinal.dart';
+import 'package:kori_wis_demo/Modals/EmgStatusModal.dart';
 import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/adminPWModal.dart';
@@ -15,7 +16,7 @@ import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreen.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreenNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilitySelection.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
@@ -56,8 +57,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
   late int officeNumber;
 
-  late Timer _timer;
   late Timer _pwrTimer;
+  late Timer _timer;
 
   // late List<String> officeDetail;
 
@@ -297,6 +298,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
   //         );
   //       });
   // }
+  void showEMGStateModal(context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return const EMGStateModalScreen();
+        });
+  }
 
   void serviceSelectPopup(context) {
     showDialog(
@@ -365,6 +374,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
+
+    if(_mainStatusProvider.facilitySelectByBTN == true){
+      setState(() {
+        officeSelected = true;
+        officeNumber = _mainStatusProvider.targetFacilityIndex!;
+        _mainStatusProvider.facilitySelectByBTN = false;
+      });
+    }
 
     if (positionList.isEmpty) {
       positionList = _networkProvider.getPoseData!;
@@ -543,7 +560,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
             height: 132,
             child: Stack(
               children: [
-                const AppBarStatus(
+                AppBarStatus(
                   iconPoseSide: 167 * 3,
                   iconPoseTop: 11 * 3,
                 ),
@@ -562,7 +579,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               _effectPlayer.dispose();
                               navPage(
                                       context: context,
-                                      page: const FacilityListScreen())
+                                      page: const FacilityListScreenNew(hideThings: false,))
                                   .navPageToPage();
                             });
                           });
@@ -2044,7 +2061,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         onTap: () {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-
                           Future.delayed(const Duration(milliseconds: 100), () {
                             setState(() {
                               officeSelected = true;
@@ -2198,13 +2214,13 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     const SizedBox(
                                       height: 4 * 3,
                                     ),
-                                    const SizedBox(
+                                    SizedBox(
                                       width: (280 - 105) * 3,
                                       child: Text(
-                                        '업종 추가 추후',
-                                        style: TextStyle(
+                                        _mainStatusProvider.facilityDetail![officeNumber],
+                                        style: const TextStyle(
                                             fontFamily: 'kor',
-                                            fontSize: 12 * 3,
+                                            fontSize: 10 * 3,
                                             fontWeight: FontWeight.w100,
                                             color: Color(0xffffffff),
                                             letterSpacing: -0.21),
@@ -2235,7 +2251,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       officeSelected = false;
                                     });
                                     if (EMGStatus == 0) {
-                                      showEMGAlert(context);
+                                      showEMGStateModal(context);
+                                      // showEMGAlert(context);
                                     } else {
                                       if (CHGFlag == 3) {
                                         showAdaptorCableAlert(context);
@@ -2245,7 +2262,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           _effectPlayer
                                               .seek(const Duration(seconds: 0));
                                           _effectPlayer.play();
-                                          _pwrTimer.cancel();
                                           // _timer.cancel();
                                           Future.delayed(
                                               const Duration(milliseconds: 230),
@@ -2286,7 +2302,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       _effectPlayer
                                           .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
-                                      _pwrTimer.cancel();
                                       // _timer.cancel();
                                       Future.delayed(
                                           const Duration(milliseconds: 230), () {

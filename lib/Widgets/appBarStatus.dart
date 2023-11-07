@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kori_wis_demo/Modals/EmgStatusModal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Utills/getPowerInform.dart';
@@ -10,14 +11,19 @@ import 'package:provider/provider.dart';
 class AppBarStatus extends StatefulWidget {
   final double? iconPoseTop;
   final double? iconPoseSide;
-  const AppBarStatus({Key? key, this.iconPoseSide, this.iconPoseTop}) : super(key: key);
+
+  const AppBarStatus({Key? key, this.iconPoseSide, this.iconPoseTop})
+      : super(key: key);
 
   @override
   State<AppBarStatus> createState() => _AppBarStatusState();
 }
 
 class _AppBarStatusState extends State<AppBarStatus> {
+  late MainStatusModel _mainStatusProvider;
+
   final String batteryIcon = 'assets/icons/appBar/icon_bettry.svg';
+  final String EMGIcon = 'assets/icons/appBar/emgicon.svg';
 
   late Timer _pwrTimer;
 
@@ -25,10 +31,21 @@ class _AppBarStatusState extends State<AppBarStatus> {
   late int CHGFlag;
   late int EMGStatus;
 
+  late bool EMGPushed;
+
+  late bool EMGModalChange;
+
+  late bool initFinish;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    EMGModalChange = false;
+    EMGPushed = false;
+
+    initFinish = false;
 
     batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
     CHGFlag = Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
@@ -54,7 +71,25 @@ class _AppBarStatusState extends State<AppBarStatus> {
       EMGStatus =
           Provider.of<MainStatusModel>(context, listen: false).emgButton!;
     });
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      setState(() {
+        initFinish = true;
+      });
+    });
+
   }
+
+  void showEMGStateModal(context) {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return const EMGStateModalScreen();
+        });
+  }
+
 
   @override
   void dispose() {
@@ -65,87 +100,151 @@ class _AppBarStatusState extends State<AppBarStatus> {
 
   @override
   Widget build(BuildContext context) {
+    _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
+
+    EMGModalChange = _mainStatusProvider.EMGModalChange!;
+    if(initFinish == true){
+      if(EMGModalChange == false){
+        if(((EMGStatus == 0 && EMGPushed == false))){
+          WidgetsBinding.instance.addPostFrameCallback((_){
+            setState(() {
+              _mainStatusProvider.EMGModalChange = true;
+              EMGPushed = true;
+            });
+            showEMGStateModal(context);
+            print('a');
+          });
+        }
+        if((EMGStatus == 1 && EMGPushed == true)){
+          WidgetsBinding.instance.addPostFrameCallback((_){
+            setState(() {
+              _mainStatusProvider.EMGModalChange = true;
+              EMGPushed = false;
+            });
+            showEMGStateModal(context);
+            print('b');
+          });
+        }
+      }
+    }
     return Stack(children: [
       Padding(
         padding: EdgeInsets.only(
-            left: widget.iconPoseSide == null ? 167*1 : widget.iconPoseSide!, top: widget.iconPoseTop == null ? 11*1 : widget.iconPoseTop!),
+            left: widget.iconPoseSide == null ? 167 * 1 : widget.iconPoseSide!,
+            top: widget.iconPoseTop == null ? 11 * 1 : widget.iconPoseTop!),
         child: Container(
-          width: 88*3,
-          height: 22*3,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                width: 51,
-                height: 57.5,
-                child: Column(
-                  children: [
-                    SvgPicture.asset(
-                      batteryIcon,
-                      width: 42,
-                      height: 31.5,
-                    ),
-                    Text(('${batData.toString()}%'),
-                        style: const TextStyle(color: Color(0xff888888), fontSize: 18, letterSpacing: -0.04))
-                  ],
-                ),
-              ),
-              EMGStatus == 0
-                  ? Stack(children: [
-                  Icon(Icons.radio_button_checked,
-                      color: Colors.red, size: 66, grade: 200, weight: 200),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20, left: 13),
-                    child: Text(
-                      'EMG',
-                      style: TextStyle(
-                          fontFamily: 'kor',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.yellow),
-                    ),
-                  )
-                ])
-                  : Container(),
-              CHGFlag == 3
-                  ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
-                  : Container(),
-              Container(
-                width: 99,
-                height: 60,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 99,
-                      height: 30,
-                      child: Text(
-                        '10월17일',
-                        style: TextStyle(
-                          fontSize: 20.5,
-                          letterSpacing: -0.05,
-                          color: Color(0xff888888),
+          width: 86 * 3,
+          height: 25 * 3,
+          // decoration: BoxDecoration(
+          //   border: Border.fromBorderSide(BorderSide(color: Colors.teal, width: 1))
+          // ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 1),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                EMGStatus == 0
+                    ? Container(
+                        width: 24*3,
+                        height: 23*3,
+                        // decoration: BoxDecoration(
+                        //   border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                        // ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SvgPicture.asset(
+                              EMGIcon,
+                              width: 14*3,
+                              height: 14*3,
+                            ),
+                            Text(('비상정지'),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontFamily: 'kor',
+                                    color: Color(0xffff453a),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 5.5*3,
+                                    letterSpacing: -0.12))
+                          ],
                         ),
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                    Container(
-                      width: 99,
-                      height: 30,
-                      child: Text(
-                        '15:38',
-                        style: TextStyle(
-                          fontSize: 20.5,
-                          letterSpacing: -0.05,
-                          color: Color(0xff888888),
-                        ),
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
-                  ],
+                      )
+                    : Container(
+                  width: 24*3,
+                  height: 23*3,
+                  // decoration: BoxDecoration(
+                  //     border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 1))
+                  // ),
                 ),
-              )
-            ],
+                Container(
+                  width: 15*3,
+                  height: 22*3,
+                  // decoration: BoxDecoration(
+                  //     border: Border.fromBorderSide(BorderSide(color: Colors.blue, width: 2))
+                  // ),
+                  child: Column(
+                    children: [
+                      SvgPicture.asset(
+                        batteryIcon,
+                        width: 42,
+                        height: 31.5,
+                      ),
+                      Text(('${batData.toString()}'),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              color: Color(0xff888888),
+                              fontSize: 7*3,
+                              letterSpacing: -0.15))
+                    ],
+                  ),
+                ),
+                // CHGFlag == 3
+                //     ? const Icon(Icons.bolt, color: Colors.yellow, size: 50)
+                //     : Container(),
+                Container(
+                  width: 34*3,
+                  height: 24*3,
+                  // decoration: BoxDecoration(
+                  //     border: Border.fromBorderSide(BorderSide(color: Colors.green, width: 2))
+                  // ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 99,
+                        height: 30,
+                        child: Text(
+                          '10월17일',
+                          style: TextStyle(
+                            fontSize: 8*3,
+                            letterSpacing: -0.05*3,
+                            color: Color(0xff555555),
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1*3,
+                      ),
+                      Container(
+                        width: 99,
+                        height: 30,
+                        child: Text(
+                          '15:38',
+                          style: TextStyle(
+                            fontSize: 8*3,
+                            letterSpacing: -0.05*3,
+                            color: Color(0xff555555),
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

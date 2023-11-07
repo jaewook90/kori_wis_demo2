@@ -30,11 +30,11 @@ void main() async {
                   robotTheta: 0,
                   batBal: 0,
                   chargeFlag: 0,
-                  emgButton: 0,
+                  emgButton: 1,
                   mainSoundMute: true,
                   restartService: false,
                   autoCharge: 20,
-                  facilityDetail: [],
+                  facilityDetail: ['유선 방송업', '곡물 및 유지작물 도매업', '의류도소매업', '세무업무', '보안시스템 전문기업', '건축설계 및 관련 서비스업', '건강식품 전문업체', '데이터 기반 AI 솔루션 전문회사', '기타 엔지니어링 서비스업', '대부업', '산업용 로봇 제조업', '설계, 감리, 환경디자인/부동산 개발', '유선 방송업', '교육서비스업'],
                   facilityName: [],
                   facilityNum: [],
                   facilityNavDone: false,
@@ -42,6 +42,9 @@ void main() async {
                   lastFacilityName: '',
                   facilityOfficeSelected: false,
               facilityArrived: false,
+                facilitySelectByBTN: false,
+              facilityOnSearchScreen: false,
+                EMGModalChange: false
                 )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(

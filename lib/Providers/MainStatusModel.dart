@@ -35,7 +35,13 @@ class MainStatusModel with ChangeNotifier {
   int? targetFacilityIndex;
   bool? facilityNavDone;
 
+  bool? facilitySelectByBTN;
+
   bool? facilityOfficeSelected;
+
+  bool? facilityOnSearchScreen;
+
+  bool? EMGModalChange;
 
   List<List<String>>? cordList;
 
@@ -57,7 +63,10 @@ class MainStatusModel with ChangeNotifier {
     this.lastFacilityName,
     this.robotX,
     this.robotY,
-    this.robotTheta
+    this.robotTheta,
+    this.facilitySelectByBTN,
+    this.facilityOnSearchScreen,
+    this.EMGModalChange
   });
 // 서빙 이송 중 광고 재생
 }
