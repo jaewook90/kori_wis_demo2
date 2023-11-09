@@ -31,6 +31,10 @@ class _FacilityListSearchScreenNewState
   final String findingBTN = 'assets/images/facility/listView/findBTN.svg';
   final String searchBTN = 'assets/images/facility/listView/btn_2.svg';
   final String informName = 'assets/images/facility/listView/7_f.svg';
+  final String resultDecoTop = 'assets/images/facility/listView/rectangle_top.svg';
+  final String resultDecoRight = 'assets/images/facility/listView/rectangle_right.svg';
+  final String resultDecoLeft = 'assets/images/facility/listView/rectangle_left.svg';
+  final String resultDecoBottom = 'assets/images/facility/listView/rectangle_bottom.svg';
   final String informBottomBanner =
       'assets/images/facility/listView/bottom.png';
 
@@ -323,10 +327,10 @@ class _FacilityListSearchScreenNewState
                 child: FilledButton(
                   style: FilledButton.styleFrom(
                       fixedSize: Size(106 * 3, 86 * 3),
-                      backgroundColor: Color(0xff333333).withOpacity(0.7),
+                      backgroundColor: Color(0xff444444),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4 * 3),
-                        side: BorderSide(width: 1, color: Colors.tealAccent),
+                        side: BorderSide(width: 2*3, color: Color(0xff555555)),
                       )),
                   onPressed: () {
                     _effectPlayer.seek(const Duration(seconds: 0));
@@ -365,9 +369,9 @@ class _FacilityListSearchScreenNewState
                       Container(
                         width: 106 * 3,
                         height: 27.5 * 3,
-                        decoration: BoxDecoration(
-                            border: Border.fromBorderSide(
-                                BorderSide(width: 1, color: Colors.red))),
+                        // decoration: BoxDecoration(
+                        //     border: Border.fromBorderSide(
+                        //         BorderSide(width: 1, color: Colors.red))),
                         child: Center(
                           child: Text(
                             officeName[searchIndex],
@@ -384,6 +388,38 @@ class _FacilityListSearchScreenNewState
                     ],
                   ),
                 ),
+              ),
+            ),
+            Positioned(
+              top: 89 * 3,
+              left: 127 * 3,
+              child: Offstage(
+                offstage: !searchDone,
+                child: SvgPicture.asset(resultDecoTop, width: 106*3, height: 86*3,),
+              ),
+            ),
+            Positioned(
+              top: 179 * 3,
+              left: 237 * 3,
+              child: Offstage(
+                offstage: !searchDone,
+                child: SvgPicture.asset(resultDecoRight, width: 106*3, height: 86*3,),
+              ),
+            ),
+            Positioned(
+              top: 269 * 3,
+              left: 127 * 3,
+              child: Offstage(
+                offstage: !searchDone,
+                child: SvgPicture.asset(resultDecoBottom, width: 106*3, height: 86*3,),
+              ),
+            ),
+            Positioned(
+              top: 179 * 3,
+              left: 17 * 3,
+              child: Offstage(
+                offstage: !searchDone,
+                child: SvgPicture.asset(resultDecoLeft, width: 106*3, height: 86*3,),
               ),
             ),
           ],

@@ -121,6 +121,7 @@ class _PathFindingTest2State extends State<PathFindingTest2> {
   // 도착점 설정 함수
   onSpotTap(Spot spot) {
     if (!spot.isWall) {
+      // print('a');
       setState(() {
         end = grid[spot.i][spot.j];
       });
@@ -129,22 +130,27 @@ class _PathFindingTest2State extends State<PathFindingTest2> {
 
   // randome init for spots and walls positions
   init() {
+    // print('b');
     grid.clear();
     openSet.clear();
     closedSet.clear();
     path.clear();
     for (var i = 0; i < columns; i++) {
+      // print('c');
       grid.add([]);
     }
 
     for (var i = 0; i < columns; i++) {
+      // print('d');
       for (var j = 0; j < rows; j++) {
+        // print('e');
         grid[i].add(Spot(i: i, j: j, h: 0, g: 0, f: 0));
       }
     }
 
     for (List<Spot> row in grid) {
       for (Spot spot in row) {
+        // print('g');
         spot.addNeighbors(grid, columns, rows);
       }
     }
@@ -158,21 +164,26 @@ class _PathFindingTest2State extends State<PathFindingTest2> {
 
   // start the algorithm
   startSearching() async {
+    // print('h');
     openSet.clear();
     closedSet.clear();
     path.clear();
     openSet.add(start!);
     while (openSet.isNotEmpty) {
+      // print('i');
       // some delaytion just for whatching the operation on the screen
       await Future.delayed(const Duration(milliseconds: 100));
       int winner = 0;
       for (int i = 0; i < openSet.length; i++) {
+        // print('j');
         if (openSet[i].f < openSet[winner].f) {
+          // print('k');
           winner = i;
         }
       }
       Spot current = openSet[winner];
       if (current == end) {
+        // print('l');
         // find the path
         setState(() {
           path.clear();
@@ -194,34 +205,51 @@ class _PathFindingTest2State extends State<PathFindingTest2> {
 
       final neighbors = current.neighbors;
       for (int i = 0; i < neighbors.length; i++) {
+        // print('m');
         var neighbor = neighbors[i];
         if (!closedSet.contains(neighbor) && !neighbor.isWall) {
+          // print('n');
           var tempG = current.g + neighbor.distanceFrom(current);
           var newPath = false;
           if (openSet.contains(neighbor)) {
+            // print('o');
             if (neighbor.g > tempG) {
+              // print('p');
               neighbor.g = tempG;
               newPath = true;
             }
           } else {
+            // print('q');
             neighbor.g = tempG;
             newPath = true;
             openSet.add(neighbor);
           }
           if (newPath) {
+            // print('r');
             neighbor.h = neighbor.distanceFrom(end!);
             neighbor.f = neighbor.g + neighbor.h;
             neighbor.previous = current;
           }
-          setState(() {
-            path.clear();
-            var temp = current;
-            path.add(temp);
-            while (temp.previous != null) {
-              path.add(temp.previous!);
-              temp = temp.previous!;
-            }
-          });
+          // print('s');
+          path.clear();
+          var temp = current;
+          path.add(temp);
+          while (temp.previous != null) {
+            // print('t');
+            path.add(temp.previous!);
+            temp = temp.previous!;
+          }
+          // setState(() {
+          //   print('s');
+          //   path.clear();
+          //   var temp = current;
+          //   path.add(temp);
+          //   while (temp.previous != null) {
+          //     print('t');
+          //     path.add(temp.previous!);
+          //     temp = temp.previous!;
+          //   }
+          // });
         }
       }
     }

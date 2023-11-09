@@ -88,19 +88,19 @@ class Spot {
     if (j > 0) {
       neighbors.add(grid[i][j - 1]);
     }
-    // 대각선 제한
-    if (i > 0 && j > 0) {
-      neighbors.add(grid[i - 1][j - 1]);
-    }
-    if (i < columns - 1 && j > 0) {
-      neighbors.add(grid[i + 1][j - 1]);
-    }
-    if (i > 0 && j < rows - 1) {
-      neighbors.add(grid[i - 1][j + 1]);
-    }
-    if (i < columns - 1 && j < rows - 1) {
-      neighbors.add(grid[i + 1][j + 1]);
-    }
+    // // 대각선 제한
+    // if (i > 0 && j > 0) {
+    //   neighbors.add(grid[i - 1][j - 1]);
+    // }
+    // if (i < columns - 1 && j > 0) {
+    //   neighbors.add(grid[i + 1][j - 1]);
+    // }
+    // if (i > 0 && j < rows - 1) {
+    //   neighbors.add(grid[i - 1][j + 1]);
+    // }
+    // if (i < columns - 1 && j < rows - 1) {
+    //   neighbors.add(grid[i + 1][j + 1]);
+    // }
   }
 
   Spot copyWith({
