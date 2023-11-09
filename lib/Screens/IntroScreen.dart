@@ -39,19 +39,13 @@ class _IntroScreenState extends State<IntroScreen>
   String positionURL = "";
   String hostAdr = "";
 
-  // 블루투스 연결
-  final String robotId = 'serv1';
-
   late bool robotInit;
   late bool navTrigger;
 
-  late bool skipIntro;
   late bool playingVideo;
 
   late bool introStage1; // 모드 선택
   late bool introStage2; // IP 설정
-
-  late int robotServiceMode;
 
   late Duration mediaDuration;
 
@@ -84,7 +78,6 @@ class _IntroScreenState extends State<IntroScreen>
   @override
   void initState() {
     super.initState();
-    skipIntro = false;
     playingVideo = true;
     _initSharedPreferences();
     _controller = VideoPlayerController.asset(introVideo)
@@ -104,7 +97,6 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   void _initAudio() {
-    // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _audioPlayer.setVolume(1);

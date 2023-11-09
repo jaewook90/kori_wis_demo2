@@ -64,10 +64,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
     apiCallFlag = false;
     countDownNav = true;
 
-    // if(_mainStatusProvider.robotServiceMode == 0){
-    //   _audioFile = 'assets/voices/koriServingNavBegin.wav';
-    // }
-
     _initAudio();
   }
 
@@ -128,10 +124,10 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
               width: 738,
               height: 441,
               decoration: BoxDecoration(
-                  border: Border.fromBorderSide(
-                      BorderSide(color: Color(0xff4cffffff), width: 0.5)),
+                  border: const Border.fromBorderSide(
+                      BorderSide(color: Color(0x4cffffff), width: 0.5)),
                   borderRadius: BorderRadius.circular(18),
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                       colors: [Color(0xff4e4e4e), Color(0xff444444)])),
               child: Stack(
                 children: [
@@ -244,17 +240,17 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                   Container(
                     width: 684,
                     height: 102,
-                    margin: EdgeInsets.only(top: 312, left: 27),
+                    margin: const EdgeInsets.only(top: 312, left: 27),
                     child: Row(
                       children: [
                         TextButton(
                           style: TextButton.styleFrom(
                               enableFeedback: false,
-                              foregroundColor: Color(0xff222222),
-                              backgroundColor: Color(0xffb3333333),
+                              foregroundColor: const Color(0xff222222),
+                              backgroundColor: const Color(0xb3333333),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
 
                               ),
                               fixedSize: const Size(336, 102)),
@@ -302,7 +298,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                               }
                             });
                           },
-                          child: Text(
+                          child: const Text(
                             '취소',
                             style: TextStyle(
                                 color: Color(0xffffffff),
@@ -312,15 +308,15 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                 letterSpacing: -0.03),
                           ),
                         ),
-                        SizedBox(width: 11,),
+                        const SizedBox(width: 11,),
                         TextButton(
                           style: TextButton.styleFrom(
                               enableFeedback: false,
-                              foregroundColor: Color(0xff222222),
-                              backgroundColor: Color(0xffb3333333),
+                              foregroundColor: const Color(0xff222222),
+                              backgroundColor: const Color(0xb3333333),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
 
                               ),
                               fixedSize: const Size(336, 102)),
@@ -368,7 +364,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             child: Text(
                               '시작',
                               style: TextStyle(
-                                  color: Color(0xffffffff).withOpacity(0.7),
+                                  color: const Color(0xffffffff).withOpacity(0.7),
                                   fontFamily: 'kor',
                                   fontSize: 36,
                                   fontWeight: FontWeight.bold,
@@ -376,149 +372,6 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                             ),
                           ),
                         ),
-                        // Container(
-                        //   margin: const EdgeInsets.only(left: 50),
-                        //   width: 336,
-                        //   height: 102,
-                        //   decoration: BoxDecoration(
-                        //       // border: Border.fromBorderSide(
-                        //       //     BorderSide(width: 5, color: Colors.tealAccent)),
-                        //       image: DecorationImage(
-                        //           image: AssetImage(countDownModalBtn),
-                        //           fit: BoxFit.fill)),
-                        //   child: FilledButton(
-                        //     style: FilledButton.styleFrom(
-                        //         enableFeedback: false,
-                        //         backgroundColor: Colors.transparent,
-                        //         shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.circular(0)),
-                        //         fixedSize: const Size(370, 120)),
-                        //     onPressed: () {
-                        //       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        //         _effectPlayer.seek(const Duration(seconds: 0));
-                        //         _effectPlayer.play();
-                        //         _controller.pause();
-                        //         if (_mainStatusProvider.robotServiceMode == 0) {
-                        //           if (_servingProvider.table1 != "" ||
-                        //               (_servingProvider.table2 != "" ||
-                        //                   _servingProvider.table3 != "")) {
-                        //             Future.delayed(
-                        //                 const Duration(milliseconds: 230), () {
-                        //               _audioPlayer.dispose();
-                        //               _effectPlayer.dispose();
-                        //               navPage(
-                        //                       context: context,
-                        //                       page: const TraySelectionFinal())
-                        //                   .navPageToPage();
-                        //             });
-                        //           } else {
-                        //             Future.delayed(
-                        //                 const Duration(milliseconds: 230), () {
-                        //               _audioPlayer.dispose();
-                        //               _effectPlayer.dispose();
-                        //               navPage(
-                        //                       context: context,
-                        //                       page: const TraySelectionFinal())
-                        //                   .navPageToPage();
-                        //             });
-                        //           }
-                        //         } else if (_mainStatusProvider
-                        //                 .robotServiceMode ==
-                        //             2) {
-                        //           Future.delayed(
-                        //               const Duration(milliseconds: 230), () {
-                        //             _audioPlayer.dispose();
-                        //             _effectPlayer.dispose();
-                        //             navPage(
-                        //                     context: context,
-                        //                     page: const FacilityScreen())
-                        //                 .navPageToPage();
-                        //           });
-                        //         }
-                        //       });
-                        //     },
-                        //     child: const Center(
-                        //       child: Text(
-                        //         '취소',
-                        //         style: TextStyle(
-                        //             color: Color.fromRGBO(238, 238, 238, 0.7),
-                        //             height: 1.2,
-                        //             fontFamily: 'kor',
-                        //             fontSize: 36,
-                        //             fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   margin: const EdgeInsets.only(right: 50),
-                        //   width: 336,
-                        //   height: 102,
-                        //   decoration: BoxDecoration(
-                        //       // border: Border.fromBorderSide(
-                        //       //     BorderSide(width: 5, color: Colors.tealAccent)),
-                        //       image: DecorationImage(
-                        //           image: AssetImage(countDownModalBtn),
-                        //           fit: BoxFit.fill)),
-                        //   child: FilledButton(
-                        //     style: FilledButton.styleFrom(
-                        //         enableFeedback: false,
-                        //         backgroundColor: Colors.transparent,
-                        //         shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.circular(0)),
-                        //         fixedSize: const Size(370, 120)),
-                        //     onPressed: () {
-                        //       _audioPlayer.play();
-                        //       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        //         _effectPlayer.seek(const Duration(seconds: 0));
-                        //         _effectPlayer.play();
-                        //         _controller.pause();
-                        //         if (widget.serviceMode == 'Shipping' ||
-                        //             widget.serviceMode == 'facilityGuide') {
-                        //           _networkProvider.servTable =
-                        //               widget.goalPosition;
-                        //         } else {
-                        //           _servingProvider.trayChange = true;
-                        //           _networkProvider.servTable =
-                        //               _servingProvider.targetTableNum;
-                        //         }
-                        //         PostApi(
-                        //                 url: startUrl,
-                        //                 endadr: navUrl,
-                        //                 keyBody: targetTableNum)
-                        //             .Posting(context);
-                        //         Future.delayed(
-                        //             const Duration(milliseconds: 230), () {
-                        //           _audioPlayer.dispose();
-                        //           _effectPlayer.dispose();
-                        //           if (widget.serviceMode == 'facilityGuide') {
-                        //             navPage(
-                        //                     context: context,
-                        //                     page: const FacilityNavigationNew())
-                        //                 .navPageToPage();
-                        //           } else {
-                        //             navPage(
-                        //               context: context,
-                        //               page:
-                        //                   const NavigatorProgressModuleFinal(),
-                        //             ).navPageToPage();
-                        //           }
-                        //         });
-                        //       });
-                        //     },
-                        //     child: const Center(
-                        //       child: Text(
-                        //         '시작',
-                        //         style: TextStyle(
-                        //             color: Color.fromRGBO(238, 238, 238, 0.7),
-                        //             height: 1.2,
-                        //             fontFamily: 'kor',
-                        //             fontSize: 35,
-                        //             fontWeight: FontWeight.bold),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   )

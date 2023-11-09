@@ -48,9 +48,6 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
 
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
-
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
 
@@ -110,9 +107,6 @@ class _ShippingDoneFinalState extends State<ShippingDoneFinal> {
                     },
                   ),
                 ),
-                // const ShippingModuleButtonsFinal(
-                //   screens: 3,
-                // )
               ])),
         ));
   }

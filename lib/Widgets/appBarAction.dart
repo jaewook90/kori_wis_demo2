@@ -80,7 +80,7 @@ class _AppBarActionState extends State<AppBarAction> {
     _initAudio();
     if (widget.screenName != null) {
       if(widget.screenName != 'Shipping'){
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           _audioPlayer.play();
         });
       }
@@ -135,7 +135,7 @@ class _AppBarActionState extends State<AppBarAction> {
                         _mainStatusProvider.restartService = true;
                         PostApi(url: startUrl, endadr: navUrl, keyBody: 'wait')
                             .Posting(context);
-                        Future.delayed(Duration(milliseconds: 500), () {
+                        Future.delayed(const Duration(milliseconds: 500), () {
                           navPage(
                             context: context,
                             page: const TraySelectionFinal(),
@@ -145,7 +145,7 @@ class _AppBarActionState extends State<AppBarAction> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          Future.delayed(Duration(milliseconds: 230), () {
+                          Future.delayed(const Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
                             Navigator.pop(context);
                           });
@@ -154,26 +154,26 @@ class _AppBarActionState extends State<AppBarAction> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          Future.delayed(Duration(milliseconds: 230), () {
+                          Future.delayed(const Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
-                            navPage(context: context, page: ShippingMenuFinal()).navPageToPage();
+                            navPage(context: context, page: const ShippingMenuFinal()).navPageToPage();
                           });
                         });
                       } else if (widget.screenName == 'facilityList'){
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
-                          Future.delayed(Duration(milliseconds: 230), () {
+                          Future.delayed(const Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
-                            navPage(context: context, page: FacilityScreen()).navPageToPage();
+                            navPage(context: context, page: const FacilityScreen()).navPageToPage();
                           });
                         });
                       }
                       else {
-                        _effectPlayer.seek(Duration(seconds: 0));
+                        _effectPlayer.seek(const Duration(seconds: 0));
                         _effectPlayer.play();
                         if (widget.screenName != null) {
-                          Future.delayed(Duration(milliseconds: 230), () {
+                          Future.delayed(const Duration(milliseconds: 230), () {
                             _effectPlayer.dispose();
                             _audioPlayer.dispose();
                             navPage(

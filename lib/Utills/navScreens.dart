@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class navPage {
   final BuildContext context;
   final Widget page;
-  // final bool enablePop;
 
-  // navPage({required this.context, required this.page, required this.enablePop});
   navPage({required this.context, required this.page});
 
   void navPageToPage() {

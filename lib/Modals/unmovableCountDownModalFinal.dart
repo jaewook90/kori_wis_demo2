@@ -45,7 +45,6 @@ class _UnmovableCountDownModalFinalState extends State<UnmovableCountDownModalFi
   }
 
   void _initAudio() {
-    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);

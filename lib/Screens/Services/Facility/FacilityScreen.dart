@@ -8,7 +8,6 @@ import 'package:kori_wis_demo/Debug/test_api_feedback/testPages.dart';
 import 'package:kori_wis_demo/Modals/CableConnectedModalFinal.dart';
 import 'package:kori_wis_demo/Modals/EMGPopModalFinal.dart';
 import 'package:kori_wis_demo/Modals/EmgStatusModal.dart';
-import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Modals/ServiceSelectModal.dart';
 import 'package:kori_wis_demo/Modals/adminPWModal.dart';
 import 'package:kori_wis_demo/Modals/navCountDownModalFinal.dart';
@@ -17,7 +16,6 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreenNew.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilitySelection.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
@@ -58,9 +56,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
   late int officeNumber;
 
   late Timer _pwrTimer;
-  late Timer _timer;
-
-  // late List<String> officeDetail;
 
   late int autoChargeConfig;
 
@@ -86,18 +81,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
   late double buttonWidth;
   late double buttonHeight;
 
-  // late List<double> poseX;
-  // late List<double> poseY;
-  //
-  // late List<double> mapOrigin;
-  // late List<double> originMove;
-  //
-  // late double canvasX;
-  // late double canvasY;
-  //
-  // late double mapX;
-  // late double mapY;
-
   late int CHGFlag;
   late int EMGStatus;
 
@@ -117,7 +100,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
     // TODO: implement initState
     super.initState();
 
-    // backgroundImage = "assets/screens/Facility/FacilityMain.png";
     officeNumber = 0;
     officePic = 'assets/images/facility/facNav/navDone/image.png';
 
@@ -147,25 +129,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
     officeNum = [];
     officeName = [];
-    // officeDetail = [];
-
-    // canvasX = 972;
-    // canvasY = 1344;
 
     buttonWidth = 100;
     buttonHeight = 30;
-
-    // poseX = [];
-    // poseY = [];
-    // originMove = [];
-    //
-    // mapX = 44.8;
-    // mapY = 100.5;
-    //
-    // mapOrigin = [3.1, 63.36];
-    //
-    // originMove.add(mapOrigin[0] / mapX);
-    // originMove.add(mapOrigin[1] / mapY);
 
     if (Provider.of<NetworkModel>(context, listen: false)
         .getPoseData!
@@ -174,14 +140,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
     }
 
     Provider.of<MainStatusModel>(context, listen: false).robotReturning = false;
-
-    // if (mounted) {
-    //   _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-    //     WidgetsBinding.instance.addPostFrameCallback((_) {
-    //       Navigator.pop(context);
-    //     });
-    //   });
-    // }
 
     _pwrTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       StatusManagements(context,
@@ -194,7 +152,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   .chargeFlag!) {
         setState(() {});
       }
-      // batData = Provider.of<MainStatusModel>(context, listen: false).batBal!;
       CHGFlag =
           Provider.of<MainStatusModel>(context, listen: false).chargeFlag!;
       EMGStatus =
@@ -207,24 +164,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
   }
 
   void _initAudio() {
-    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
   }
-
-  // cordOffice(String axis, int num) {
-  //   if (axis == 'x') {
-  //     double cordX =
-  //         (canvasX * (((poseX[num]) / mapX) + ((mapOrigin[0] / mapX))) -
-  //             (buttonWidth / 2));
-  //     return cordX;
-  //   } else if (axis == 'y') {
-  //     double cordY =
-  //         (canvasY * (((poseY[num]) / mapY) + ((mapOrigin[1] / mapY))) -
-  //             (buttonHeight / 2));
-  //     return cordY;
-  //   }
-  // }
 
   dynamic getting(String hostUrl, String endUrl) async {
     String hostIP = hostUrl;
@@ -288,16 +230,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
     }
   }
 
-  // void facilityInform(context, int number) {
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //         return FacilitySelection(
-  //           number: number,
-  //         );
-  //       });
-  // }
   void showEMGStateModal(context) {
     showDialog(
         barrierDismissible: true,
@@ -368,6 +300,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _pwrTimer.cancel();
   }
 
   @override
@@ -400,12 +333,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
       print(officeQTY);
 
       for (int h = 0; h < officeQTY; h++) {
-        // poseX.add(double.parse(
-        //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
-        //         [0]));
-        // poseY.add(double.parse(
-        //     Provider.of<MainStatusModel>(context, listen: false).cordList![h]
-        //         [1]));
         officeNum.add(
             Provider.of<NetworkModel>(context, listen: false).getPoseData![h]);
 
@@ -509,15 +436,11 @@ class _FacilityScreenState extends State<FacilityScreen> {
               } else {
                 officeName.add("(주)딜라이브");
               }
-              // officeName.add('awsdfasdf');
-              // officeDetail.add('여기는 ${officeName[h]} 입니다.');
             } else {
               officeName.add('화장실2');
-              // officeDetail.add('여기는 화장실2 입니다.');
             }
           } else {
             officeName.add('화장실1');
-            // officeDetail.add('여기는 화장실1 입니다.');
           }
         } else {
           officeName.add('엘리베이터');
@@ -540,11 +463,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                 .add(officeName[i]);
           });
         }
-        print(Provider.of<MainStatusModel>(context, listen: false).facilityNum);
-        print(
-            Provider.of<MainStatusModel>(context, listen: false).facilityName);
-        print(Provider.of<MainStatusModel>(context, listen: false)
-            .facilityDetail);
       }
     });
 
@@ -589,8 +507,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                             fixedSize: const Size(240, 72),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
-                              // side: BorderSide(
-                              //     color: Colors.tealAccent, width: 1)
                             )),
                         child: null,
                       ),
@@ -613,7 +529,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
       drawerEdgeDragWidth: 70,
       endDrawerEnableOpenDragGesture: true,
       endDrawer:
-          // ConfigDrawerMenu(),
           Drawer(
         backgroundColor: const Color(0xff292929),
         shadowColor: const Color(0xff191919),
@@ -1666,7 +1581,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 190,
                           height: 350,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1682,7 +1596,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 0;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 0);
                           });
                         },
                       )),
@@ -1693,7 +1606,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 180,
                           height: 240,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1710,7 +1622,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 1;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 1);
                           });
                         },
                       )),
@@ -1721,7 +1632,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 181,
                           height: 80,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1738,7 +1648,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 2;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 2);
                           });
                         },
                       )),
@@ -1749,7 +1658,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 173,
                           height: 95,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1766,7 +1674,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 3;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 3);
                           });
                         },
                       )),
@@ -1777,7 +1684,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 167,
                           height: 147,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1794,7 +1700,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 4;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 4);
                           });
                         },
                       )),
@@ -1805,7 +1710,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 152,
                           height: 375,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1822,7 +1726,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 5;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 5);
                           });
                         },
                       )),
@@ -1833,7 +1736,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 390,
                           height: 262,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1850,7 +1752,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 6;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 6);
                           });
                         },
                       )),
@@ -1861,7 +1762,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 495,
                           height: 160,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1878,7 +1778,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 7;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 7);
                           });
                         },
                       )),
@@ -1889,7 +1788,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 440,
                           height: 290,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1906,7 +1804,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 8;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 8);
                           });
                         },
                       )),
@@ -1917,7 +1814,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 210,
                           height: 80,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1934,7 +1830,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 9;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 9);
                           });
                         },
                       )),
@@ -1945,7 +1840,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 215,
                           height: 220,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1962,7 +1856,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 10;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 10);
                           });
                         },
                       )),
@@ -1973,7 +1866,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 489,
                           height: 305,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -1990,7 +1882,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 11;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 11);
                           });
                         },
                       )),
@@ -2001,7 +1892,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 205,
                           height: 305,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -2018,7 +1908,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 12;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 12);
                           });
                         },
                       )),
@@ -2029,7 +1918,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 150,
                           height: 83,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -2046,7 +1934,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 13;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 13);
                           });
                         },
                       )),
@@ -2057,7 +1944,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 200,
                           height: 85,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -2073,7 +1959,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 14;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 14);
                           });
                         },
                       )),
@@ -2084,7 +1969,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 210,
                           height: 100,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -2101,7 +1985,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 15;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 15);
                           });
                         },
                       )),
@@ -2112,7 +1995,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         child: Container(
                           width: 147,
                           height: 101,
-                          // color: Colors.transparent,
                           decoration: const BoxDecoration(
                               border: Border.fromBorderSide(BorderSide(
                                   width: 2, color: Colors.transparent))),
@@ -2129,7 +2011,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeNumber = 16;
                               _mainStatusProvider.targetFacilityIndex = officeNumber;
                             });
-                            // facilityInform(context, 16);
                           });
                         },
                       )),
@@ -2256,7 +2137,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     });
                                     if (EMGStatus == 0) {
                                       showEMGStateModal(context);
-                                      // showEMGAlert(context);
                                     } else {
                                       if (CHGFlag == 3) {
                                         showAdaptorCableAlert(context);
@@ -2266,12 +2146,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                           _effectPlayer
                                               .seek(const Duration(seconds: 0));
                                           _effectPlayer.play();
-                                          // _timer.cancel();
                                           Future.delayed(
                                               const Duration(milliseconds: 230),
                                               () {
                                             _effectPlayer.dispose();
-                                            // 우선 8포인트까지 존재하여 나머지 함수를 이용함
                                             showCountDownPopup(
                                                 context,
                                                 _mainStatusProvider
@@ -2306,12 +2184,9 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                       _effectPlayer
                                           .seek(const Duration(seconds: 0));
                                       _effectPlayer.play();
-                                      // _timer.cancel();
                                       Future.delayed(
                                           const Duration(milliseconds: 230), () {
                                         _effectPlayer.dispose();
-                                        // 우선 8포인트까지 존재하여 나머지 함수를 이용함
-                                        // Navigator.pop(context);
                                         setState(() {
                                           officeSelected = false;
                                         });
@@ -2353,7 +2228,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         interval: const Duration(seconds: 1),
                         onFinished: () {
                           setState(() {
-                            // officeSelected = !officeSelected;
                             officeSelectionTimeOut = true;
                           });
                         },
@@ -2370,7 +2244,6 @@ class _FacilityScreenState extends State<FacilityScreen> {
                           padding: const EdgeInsets.only(top: 50 * 3, left: 70 * 3),
                           child: Container(
                             width: 230 * 3,
-                            // height: 13 * 3,
                             child: const Text(
                               '"다른 장소 안내를 원하시나요?"',
                               style: TextStyle(

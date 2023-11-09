@@ -69,15 +69,6 @@ class _ShippingDestinationNewFinalState
         });
   }
 
-  // void showDestinationListPopup(context) {
-  //   showDialog(
-  //       barrierDismissible: false,
-  //       context: context,
-  //       builder: (context) {
-  //         return const ShippingDestinationModalFinal();
-  //       });
-  // }
-
   // 목적지 미입력 혹은 오입력 시 알람
   void showGoalFalsePopup(context) {
     showDialog(
@@ -217,7 +208,7 @@ class _ShippingDestinationNewFinalState
                 image: AssetImage(shippingKeyPadIMG), fit: BoxFit.cover)),
         child: Stack(
           children: [
-            Positioned(
+            const Positioned(
               top: 278,
               left: 700,
               child: Text(
@@ -330,10 +321,6 @@ class _ShippingDestinationNewFinalState
                   child: null,
                 ),
               ),
-
-            // ShippingModuleButtonsFinal(
-            //   screens: 1,
-            // )
           ],
         ),
       ),

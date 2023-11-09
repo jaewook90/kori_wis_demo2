@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kori_wis_demo/Debug/test_api_feedback/pathFindingTest2.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
@@ -135,7 +134,6 @@ void main() async {
           ),
         ),
         home: const IntroScreen(),
-        // home: PathFindingTest2(),
       ),
     ),
   );

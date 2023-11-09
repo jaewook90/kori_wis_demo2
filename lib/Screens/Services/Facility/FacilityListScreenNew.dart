@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:kori_wis_demo/Modals/FacilityModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListSearchScreenNew.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
-import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
 class FacilityListScreenNew extends StatefulWidget {
@@ -67,26 +65,13 @@ class _FacilityListScreenNewState extends State<FacilityListScreenNew> {
       });
     }
     officeQTY = officeNum.length;
-    // }
 
     listViewOffstage = widget.hideThings!;
   }
 
   void _initAudio() {
-    // AudioPlayer.clearAssetCache();
     _effectPlayer = AudioPlayer()..setAsset(_effectFile);
     _effectPlayer.setVolume(0.4);
-  }
-
-  void facilityInform(context, int number) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return FacilityModal(
-            number: number,
-          );
-        });
   }
 
   void facilitySearching(context) {
@@ -109,9 +94,6 @@ class _FacilityListScreenNewState extends State<FacilityListScreenNew> {
   Widget build(BuildContext context) {
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
-    print(officeNum);
-    print(officeName);
-    print(officeDetail);
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
@@ -248,7 +230,6 @@ class _FacilityListScreenNewState extends State<FacilityListScreenNew> {
                                           _mainStatusProvider.facilitySelectByBTN = true;
                                         });
                                         navPage(context: context, page: FacilityScreen()).navPageToPage();
-                                        // facilityInform(context, 15);
                                       });
                                     },
                                     child: Column(
