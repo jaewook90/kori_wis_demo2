@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Modals/unmovableCountDownModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
@@ -32,6 +33,9 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
   final String navTopDot2 = 'assets/images/facility/facNav/ellipse_34.svg';
   final String navTopDot3 = 'assets/images/facility/facNav/ellipse_35.svg';
 
+  late AudioPlayer _effectPlayer;
+  final String _effectFile = 'assets/sounds/button_click.wav';
+
   // late bool navDone;
 
   late MainStatusModel _mainStatusProvider;
@@ -61,6 +65,9 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _initAudio();
+
     navDone = false;
     initNavStatus = true;
     navStatus = 99;
@@ -71,6 +78,11 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
     navPause = false;
     navDone = false;
 
+  }
+
+  void _initAudio() {
+    _effectPlayer = AudioPlayer()..setAsset(_effectFile);
+    _effectPlayer.setVolume(0.4);
   }
 
   void showCountDownPopup(context) {
@@ -131,6 +143,7 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _effectPlayer.dispose();
   }
 
   @override
@@ -235,17 +248,17 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
                 ),
               ]),
             ),
-            AnimatedPositioned(
-              top: navPause
-                  ? 176 * 3
-                  : navDone
-                      ? 181 * 3
-                      : 230 * 3,
-              left: 17 * 3,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn,
-              child: const FacilityCurrentPositionScreen(),
-            ),
+            // AnimatedPositioned(
+            //   top: navPause
+            //       ? 176 * 3
+            //       : navDone
+            //           ? 181 * 3
+            //           : 230 * 3,
+            //   left: 17 * 3,
+            //   duration: const Duration(milliseconds: 500),
+            //   curve: Curves.easeIn,
+            //   child: const FacilityCurrentPositionScreen(),
+            // ),
             SvgPicture.asset(
               navTopBG,
               width: 1080,

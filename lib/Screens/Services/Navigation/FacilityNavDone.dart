@@ -34,6 +34,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
   late String extendLine;
   late String arrivedIcon;
 
+  late bool audioOn1;
+
   late Timer _modalTimer;
 
   final CountdownController _controller = CountdownController(autoStart: true);
@@ -41,6 +43,7 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
 
   late AudioPlayer _audioPlayer;
   final String _audioFile = 'assets/voices/KoriFacilityDone.wav';
+
 
   @override
   void initState() {
@@ -52,6 +55,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
     navDoneFlag = true;
 
     _initAudio();
+
+    audioOn1 = true;
 
     _modalTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (navDoneFlag == true) {
@@ -86,6 +91,13 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _audioPlayer.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _servingProvider = Provider.of<ServingModel>(context, listen: false);
@@ -93,6 +105,17 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
 
     startUrl = _networkProvider.startUrl;
     navUrl = _networkProvider.navUrl;
+
+
+    if(audioOn1 == true){
+      if(_mainStatusProvider.facilityNavDone == true){
+        _audioPlayer.seek(const Duration(seconds: 0));
+        _audioPlayer.play();
+        setState(() {
+          audioOn1 = false;
+        });
+      }
+    }
 
     return Container(
       constraints: const BoxConstraints.expand(),
@@ -103,8 +126,6 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
             seconds: 10,
             build: (_, double time) {
               if (_mainStatusProvider.facilityNavDone == true) {
-                _audioPlayer.seek(const Duration(seconds: 0));
-                _audioPlayer.play();
                 _controller.resume();
               } else {
                 _controller.pause();
@@ -114,6 +135,7 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
             interval: const Duration(seconds: 1),
             onFinished: () {
               Future.delayed(const Duration(milliseconds: 230), () {
+                _audioPlayer.dispose();
                 showReturnCountDownPopup(context);
               });
             },
@@ -277,6 +299,7 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
                       onPressed: () {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           // _controller.pause();
+                          _audioPlayer.dispose();
                           if (_servingProvider.targetTableNum != 'none') {
                             _mainStatusProvider.robotReturning = true;
                             _servingProvider.trayChange = true;
@@ -317,6 +340,7 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
                       ))),
                   TextButton(
                       onPressed: () {
+                        _audioPlayer.dispose();
                         setState(() {
                           _mainStatusProvider.facilityNavDone = false;
                           _mainStatusProvider.facilityNavDoneScroll = false;

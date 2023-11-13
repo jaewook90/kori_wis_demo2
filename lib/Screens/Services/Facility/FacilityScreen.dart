@@ -1589,7 +1589,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   width: 978,
                   height: 1335,
                 ),
-                  const FacilityCurrentPositionScreen()
+                  // const FacilityCurrentPositionScreen()
                 ]
               ),
             ),

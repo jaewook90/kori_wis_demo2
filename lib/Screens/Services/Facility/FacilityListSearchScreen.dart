@@ -194,6 +194,7 @@ class _FacilityListSearchScreenState
                       ),
                     ),
                   ),
+
                   textAlignVertical: TextAlignVertical.bottom,
                   style: const TextStyle(
                     fontFamily: 'kor',
@@ -215,18 +216,23 @@ class _FacilityListSearchScreenState
                         overlays: []);
                     setState(() {
                       searchResult = searchingController.text;
-                      for(int i = 0; i<officeName.length; i++){
-                        if(searchDone == false){
-                          if(!officeName[i].toLowerCase().contains(searchResult.toLowerCase())){
-                            searchFail = true;
-                            searchBorderLine = const Color(0xffff453a);
-                          }else{
-                            searchFail = false;
-                            searchDone = true;
-                            searchIndex = i;
-                            searchBorderLine = const Color(0xff00d7d4);
+                      if(searchResult.isNotEmpty){
+                        for(int i = 0; i<officeName.length; i++){
+                          if(searchDone == false){
+                            if(!officeName[i].toLowerCase().contains(searchResult.toLowerCase())){
+                              searchFail = true;
+                              searchBorderLine = const Color(0xffff453a);
+                            }else{
+                              searchFail = false;
+                              searchDone = true;
+                              searchIndex = i;
+                              searchBorderLine = const Color(0xff00d7d4);
+                            }
                           }
                         }
+                      }else{
+                        searchFail = true;
+                        searchBorderLine = const Color(0xffff453a);
                       }
                     });
                   },

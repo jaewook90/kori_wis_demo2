@@ -40,6 +40,7 @@ class _FacilityNavigationProgNPauseState
       'assets/images/facility/facNav/frame.svg';
 
   // parameters
+  late bool audioOn;
   late double subButtonOpacity;
   late bool navState;
   late double navTopDividerWidth;
@@ -72,6 +73,7 @@ class _FacilityNavigationProgNPauseState
   void initState() {
     // TODO: implement initState
     super.initState();
+    audioOn = true;
     navTopDivider = 'assets/images/facility/facNav/line_4.svg';
     navTopTextBoxIcon = 'assets/images/facility/facNav/frame_2.svg';
     navState = true;
@@ -539,9 +541,6 @@ class _FacilityNavigationProgNPauseState
                                     Future.delayed(
                                         const Duration(milliseconds: 230), () {
                                       setState(() {
-                                        _networkProvider.currentGoal = '충전스테이션';
-                                        _networkProvider.servTable =
-                                            'charging_pile';
                                         navTopDivider =
                                             'assets/images/facility/facNav/line_4.svg';
                                         navTopTextBoxIcon =
@@ -593,6 +592,13 @@ class _FacilityNavigationProgNPauseState
                   children: [
                     TextButton(
                         onPressed: () {
+                          _effectPlayer.seek(const Duration(seconds: 0));
+                          _effectPlayer.play();
+                          PostApi(
+                              url: startUrl,
+                              endadr: stpUrl,
+                              keyBody: 'stop')
+                              .Posting(context);
                           navPage(
                                   context: context,
                                   page: const FacilityScreen())
