@@ -3,21 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreenNew.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
-class FacilityListSearchScreenNew extends StatefulWidget {
-  const FacilityListSearchScreenNew({Key? key}) : super(key: key);
+class FacilityListSearchScreen extends StatefulWidget {
+  const FacilityListSearchScreen({Key? key}) : super(key: key);
 
   @override
-  State<FacilityListSearchScreenNew> createState() =>
-      _FacilityListSearchScreenNewState();
+  State<FacilityListSearchScreen> createState() =>
+      _FacilityListSearchScreenState();
 }
 
-class _FacilityListSearchScreenNewState
-    extends State<FacilityListSearchScreenNew> {
+class _FacilityListSearchScreenState
+    extends State<FacilityListSearchScreen> {
   late int officeQTY;
   late List<String> officeNum;
   late List<String> officeName;
@@ -145,7 +145,7 @@ class _FacilityListSearchScreenNewState
                           _effectPlayer.dispose();
                           navPage(
                               context: context,
-                              page: const FacilityListScreenNew(
+                              page: const FacilityListScreen(
                                 hideThings: false,
                               )).navPageToPage();
                         });

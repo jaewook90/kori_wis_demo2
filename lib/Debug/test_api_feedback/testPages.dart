@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/pathFindingTest2.dart';
 import 'package:kori_wis_demo/Debug/test_api_feedback/saveDataTest.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavNew.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNav.dart';
 import 'package:kori_wis_demo/Screens/Services/Serving/TraySelectionFinal.dart';
 import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
@@ -151,7 +151,7 @@ class _TestPagesScreenState extends State<TestPagesScreen> {
                 SizedBox(),
                 TextButton(
                   onPressed: () {
-                    navPage(context: context, page: const FacilityNavigationNew(), ).navPageToPage();
+                    navPage(context: context, page: const FacilityNavigation(), ).navPageToPage();
                   },
                   style: TextButton.styleFrom(
                       padding: const EdgeInsets.all(30),

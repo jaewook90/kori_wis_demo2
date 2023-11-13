@@ -11,16 +11,16 @@ import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Utills/postAPI.dart';
 import 'package:provider/provider.dart';
 
-class FacilityNavigationNewProgNPause extends StatefulWidget {
-  const FacilityNavigationNewProgNPause({Key? key}) : super(key: key);
+class FacilityNavigationProgNPause extends StatefulWidget {
+  const FacilityNavigationProgNPause({Key? key}) : super(key: key);
 
   @override
-  State<FacilityNavigationNewProgNPause> createState() =>
-      _FacilityNavigationNewProgNPauseState();
+  State<FacilityNavigationProgNPause> createState() =>
+      _FacilityNavigationProgNPauseState();
 }
 
-class _FacilityNavigationNewProgNPauseState
-    extends State<FacilityNavigationNewProgNPause> {
+class _FacilityNavigationProgNPauseState
+    extends State<FacilityNavigationProgNPause> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
   late MainStatusModel _mainStatusProvider;

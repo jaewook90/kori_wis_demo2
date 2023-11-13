@@ -15,7 +15,7 @@ import 'package:kori_wis_demo/Modals/powerOffModalFinal.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Screens/IntroScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreenNew.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigationPatrol.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/NavigatorProgressModuleFinal.dart';
 import 'package:kori_wis_demo/Screens/Services/WebviewPage/Webview.dart';
@@ -497,7 +497,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               _effectPlayer.dispose();
                               navPage(
                                       context: context,
-                                      page: const FacilityListScreenNew(hideThings: false,))
+                                      page: const FacilityListScreen(hideThings: false,))
                                   .navPageToPage();
                             });
                           });
@@ -1540,7 +1540,34 @@ class _FacilityScreenState extends State<FacilityScreen> {
                     height: 255,
                     decoration: BoxDecoration(
                         image:
-                            DecorationImage(image: AssetImage(bottomBanner)))),
+                            DecorationImage(image: AssetImage(bottomBanner))),
+                  child: Stack(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 25*3, left: 146*3),
+                        width: 34*3,
+                        height: 13*3,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.location_on_outlined, size: 11*3, color: Color(0xffffffff).withOpacity(0.6),),
+                            Text('주소', style: TextStyle(fontFamily: 'kor', fontSize: 11*3, color: Color(0xffffffff).withOpacity(0.6), fontWeight: FontWeight.w700, height: 1.1),)
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 44*3, left: 108*3),
+                        width: 109*3,
+                        height: 16*3,
+                        child: Text(
+                          '서울특별시 송파구 송파대로 111\n파크하비오 205동 _7층',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontFamily: 'kor', fontSize: 7*3, color: Color(0xffffffff).withOpacity(0.4), fontWeight: FontWeight.w400, height: 1.1, letterSpacing: -0.04*3)
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
             Offstage(

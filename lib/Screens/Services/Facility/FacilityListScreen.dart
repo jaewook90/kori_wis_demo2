@@ -3,20 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
-import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListSearchScreenNew.dart';
+import 'package:kori_wis_demo/Screens/Services/Facility/FacilityListSearchScreen.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
 import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:provider/provider.dart';
 
-class FacilityListScreenNew extends StatefulWidget {
+class FacilityListScreen extends StatefulWidget {
   final bool? hideThings;
-  const FacilityListScreenNew({Key? key, this.hideThings}) : super(key: key);
+  const FacilityListScreen({Key? key, this.hideThings}) : super(key: key);
 
   @override
-  State<FacilityListScreenNew> createState() => _FacilityListScreenNewState();
+  State<FacilityListScreen> createState() => _FacilityListScreenState();
 }
 
-class _FacilityListScreenNewState extends State<FacilityListScreenNew> {
+class _FacilityListScreenState extends State<FacilityListScreen> {
   late int officeQTY;
   late List<String> officeNum;
   late List<String> officeName;
@@ -79,7 +79,7 @@ class _FacilityListScreenNewState extends State<FacilityListScreenNew> {
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return FacilityListSearchScreenNew();
+          return FacilityListSearchScreen();
         });
   }
 

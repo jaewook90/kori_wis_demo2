@@ -14,15 +14,15 @@ import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
-class FacilityNavigationNewDone extends StatefulWidget {
-  const FacilityNavigationNewDone({Key? key}) : super(key: key);
+class FacilityNavigationDone extends StatefulWidget {
+  const FacilityNavigationDone({Key? key}) : super(key: key);
 
   @override
-  State<FacilityNavigationNewDone> createState() =>
-      _FacilityNavigationNewDoneState();
+  State<FacilityNavigationDone> createState() =>
+      _FacilityNavigationDoneState();
 }
 
-class _FacilityNavigationNewDoneState extends State<FacilityNavigationNewDone> {
+class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
   late NetworkModel _networkProvider;
   late ServingModel _servingProvider;
   late MainStatusModel _mainStatusProvider;

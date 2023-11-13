@@ -5,8 +5,8 @@ import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
 import 'package:kori_wis_demo/Providers/NetworkModel.dart';
 import 'package:kori_wis_demo/Providers/ServingModel.dart';
 import 'package:kori_wis_demo/Screens/Services/Facility/FacilityScreen.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavDoneNew.dart';
-import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavProgNPauseNew.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavDone.dart';
+import 'package:kori_wis_demo/Screens/Services/Navigation/FacilityNavProgNPause.dart';
 import 'package:kori_wis_demo/Screens/Services/Navigation/KoriZDocking.dart';
 import 'package:kori_wis_demo/Utills/FacilityCurrentPose.dart';
 import 'package:kori_wis_demo/Utills/callApi.dart';
@@ -14,14 +14,14 @@ import 'package:kori_wis_demo/Utills/navScreens.dart';
 import 'package:kori_wis_demo/Widgets/appBarStatus.dart';
 import 'package:provider/provider.dart';
 
-class FacilityNavigationNew extends StatefulWidget {
-  const FacilityNavigationNew({Key? key}) : super(key: key);
+class FacilityNavigation extends StatefulWidget {
+  const FacilityNavigation({Key? key}) : super(key: key);
 
   @override
-  State<FacilityNavigationNew> createState() => _FacilityNavigationNewState();
+  State<FacilityNavigation> createState() => _FacilityNavigationState();
 }
 
-class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
+class _FacilityNavigationState extends State<FacilityNavigation> {
   final String facilityName = 'assets/images/facility/facNav/habio_7_f.svg';
   final String navMap =
       'assets/images/facility/323_black_map_modified_v_1_2.svg';
@@ -291,7 +291,7 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
                       ),
                     ),
                   ),
-                  const FacilityNavigationNewProgNPause()
+                  const FacilityNavigationProgNPause()
                 ],
               ),
             ),
@@ -299,7 +299,7 @@ class _FacilityNavigationNewState extends State<FacilityNavigationNew> {
                 offstage: !_mainStatusProvider.facilityNavDone!,
                 child:
                     // 주행 정보 묶음 출발지, 도착지, 이동상태
-                    const FacilityNavigationNewDone()),
+                    const FacilityNavigationDone()),
           ],
         ),
       ),
