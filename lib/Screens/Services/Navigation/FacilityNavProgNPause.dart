@@ -26,7 +26,6 @@ class _FacilityNavigationProgNPauseState
   late MainStatusModel _mainStatusProvider;
 
   late AudioPlayer _effectPlayer;
-
   final String _effectFile = 'assets/sounds/button_click.wav';
   late String navTopDivider;
   final String navTopDestinationIcon =
@@ -40,7 +39,6 @@ class _FacilityNavigationProgNPauseState
       'assets/images/facility/facNav/frame.svg';
 
   // parameters
-  late bool audioOn;
   late double subButtonOpacity;
   late bool navState;
   late double navTopDividerWidth;
@@ -73,7 +71,6 @@ class _FacilityNavigationProgNPauseState
   void initState() {
     // TODO: implement initState
     super.initState();
-    audioOn = true;
     navTopDivider = 'assets/images/facility/facNav/line_4.svg';
     navTopTextBoxIcon = 'assets/images/facility/facNav/frame_2.svg';
     navState = true;
@@ -160,8 +157,6 @@ class _FacilityNavigationProgNPauseState
             '[${_mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!]} 호] ${_mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!]}';
       });
     }
-
-    // servTableNum = 'asdf';
 
     targetTableNum = '시설1';
 
@@ -360,6 +355,7 @@ class _FacilityNavigationProgNPauseState
                                     Future.delayed(
                                         const Duration(milliseconds: 230), () {
                                       setState(() {
+                                        _mainStatusProvider.audioState = true;
                                         _networkProvider.currentGoal = '충전스테이션';
                                         _networkProvider.servTable =
                                             'charging_pile';
@@ -541,6 +537,7 @@ class _FacilityNavigationProgNPauseState
                                     Future.delayed(
                                         const Duration(milliseconds: 230), () {
                                       setState(() {
+                                        _mainStatusProvider.audioState = true;
                                         navTopDivider =
                                             'assets/images/facility/facNav/line_4.svg';
                                         navTopTextBoxIcon =
@@ -595,14 +592,17 @@ class _FacilityNavigationProgNPauseState
                           _effectPlayer.seek(const Duration(seconds: 0));
                           _effectPlayer.play();
                           PostApi(
-                              url: startUrl,
-                              endadr: stpUrl,
-                              keyBody: 'stop')
+                                  url: startUrl,
+                                  endadr: stpUrl,
+                                  keyBody: 'stop')
                               .Posting(context);
                           navPage(
                                   context: context,
                                   page: const FacilityScreen())
                               .navPageToPage();
+                          setState(() {
+                            _mainStatusProvider.audioState = false;
+                          });
                         },
                         style: TextButton.styleFrom(
                             fixedSize: const Size(159 * 3, 34 * 3),
@@ -651,6 +651,7 @@ class _FacilityNavigationProgNPauseState
                                     const Color(0xffffffff);
                                 navTopTextBoxText = '일시정지';
                                 _mainStatusProvider.facilityNavPause = true;
+                                _mainStatusProvider.audioState = false;
                               });
                             });
                           });
@@ -708,6 +709,7 @@ class _FacilityNavigationProgNPauseState
                             navTopTextBoxTextColor = const Color(0xff00d7d4);
                             navTopTextBoxText = '이동중';
                             _mainStatusProvider.facilityNavPause = false;
+                            _mainStatusProvider.audioState = true;
                           });
                         });
                       });

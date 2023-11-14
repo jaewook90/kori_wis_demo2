@@ -212,6 +212,7 @@ class _ChangingCountDownModalFinalState
                                         _networkProvider.servTable =
                                             _servingProvider.targetTableNum;
                                         _mainStatusProvider.facilityNavDoneScroll = false;
+                                        _mainStatusProvider.audioState = true;
                                       });
                                       PostApi(
                                               url: startUrl,
@@ -380,6 +381,7 @@ class _ChangingCountDownModalFinalState
                             } else if (widget.modeState == 'guideDone') {
                               if (_servingProvider.targetTableNum != 'none') {
                                 setState(() {
+                                  _mainStatusProvider.audioState = true;
                                   _mainStatusProvider.robotReturning = true;
                                   _servingProvider.trayChange = true;
                                   _networkProvider.servTable =

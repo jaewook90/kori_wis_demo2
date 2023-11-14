@@ -35,6 +35,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
   late String arrivedIcon;
 
   late bool audioOn1;
+  late bool audioOn2;
+  late bool audioOff2;
 
   late Timer _modalTimer;
 
@@ -44,6 +46,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
   late AudioPlayer _audioPlayer;
   final String _audioFile = 'assets/voices/KoriFacilityDone.wav';
 
+  late AudioPlayer _audioPlayer2;
+  final String _audioFile2 = 'assets/sounds/sound_moving_bg.wav';
 
   @override
   void initState() {
@@ -57,6 +61,7 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
     _initAudio();
 
     audioOn1 = true;
+    audioOn2 = true;
 
     _modalTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (navDoneFlag == true) {
@@ -67,16 +72,25 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
           });
         }
       }
+      if (_mainStatusProvider.audioState == false){
+        _audioPlayer2.stop();
+      }
+      if(audioOn2 == false){
+        if(_audioPlayer2.playing == false && _mainStatusProvider.audioState == true){
+          setState(() {
+            audioOn2 = true;
+          });
+        }
+      }
     });
-
-    Provider.of<MainStatusModel>(context, listen: false).lastFacilityNum = Provider.of<MainStatusModel>(context, listen: false).facilityNum![Provider.of<MainStatusModel>(context, listen: false).targetFacilityIndex!];
-    Provider.of<MainStatusModel>(context, listen: false).lastFacilityName = Provider.of<MainStatusModel>(context, listen: false).facilityName![Provider.of<MainStatusModel>(context, listen: false).targetFacilityIndex!];
   }
 
   void _initAudio() {
     // AudioPlayer.clearAssetCache();
     _audioPlayer = AudioPlayer()..setAsset(_audioFile);
     _audioPlayer.setVolume(1);
+    _audioPlayer2 = AudioPlayer()..setAsset(_audioFile2);
+    _audioPlayer2.setVolume(1);
   }
 
   void showReturnCountDownPopup(context) {
@@ -95,6 +109,7 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
     // TODO: implement dispose
     super.dispose();
     _audioPlayer.dispose();
+    _audioPlayer2.dispose();
   }
 
   @override
@@ -109,12 +124,20 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
 
     if(audioOn1 == true){
       if(_mainStatusProvider.facilityNavDone == true){
+        _audioPlayer2.stop();
         _audioPlayer.seek(const Duration(seconds: 0));
         _audioPlayer.play();
         setState(() {
           audioOn1 = false;
         });
       }
+    }
+    if (audioOn2 == true) {
+      _audioPlayer2.seek(const Duration(seconds: 0));
+      _audioPlayer2.play();
+      setState(() {
+        audioOn2 = false;
+      });
     }
 
     return Container(
@@ -314,9 +337,12 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
                           Future.delayed(const Duration(milliseconds: 230), () {
                             // _audioPlayer.dispose();
                             setState(() {
+                              _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
+                              _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
                               _mainStatusProvider.facilityNavDoneScroll = false;
                               _mainStatusProvider.facilityNavDone = false;
                               _mainStatusProvider.facilityArrived = false;
+                              _mainStatusProvider.audioState = true;
                             });
                           });
                         });
@@ -342,6 +368,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
                       onPressed: () {
                         _audioPlayer.dispose();
                         setState(() {
+                          _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
+                          _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
                           _mainStatusProvider.facilityNavDone = false;
                           _mainStatusProvider.facilityNavDoneScroll = false;
                         });

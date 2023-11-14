@@ -46,7 +46,8 @@ void main() async {
               facilityArrived: false,
                 facilitySelectByBTN: false,
               facilityOnSearchScreen: false,
-                EMGModalChange: false
+                EMGModalChange: false,
+              audioState: true,
                 )),
         ChangeNotifierProvider(
             create: (context) => NetworkModel(

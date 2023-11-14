@@ -183,6 +183,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                       _effectPlayer.dispose();
                                       if (widget.serviceMode == 'facilityGuide') {
                                         _mainStatusProvider.facilityArrived = false;
+                                        _mainStatusProvider.audioState = true;
                                         navPage(
                                                 context: context,
                                                 page:
@@ -345,6 +346,7 @@ class _NavCountDownModalFinalState extends State<NavCountDownModalFinal> {
                                 _audioPlayer.dispose();
                                 _effectPlayer.dispose();
                                 if (widget.serviceMode == 'facilityGuide') {
+                                  _mainStatusProvider.audioState = true;
                                   _mainStatusProvider.facilityArrived = false;
                                   navPage(
                                       context: context,

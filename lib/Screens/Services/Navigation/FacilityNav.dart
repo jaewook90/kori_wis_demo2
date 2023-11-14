@@ -175,6 +175,7 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
         Future.delayed(const Duration(milliseconds: 230), () {
           setState(() {
             _mainStatusProvider.facilityNavDone = true;
+            _mainStatusProvider.audioState = false;
           });
         });
       } else if (servTableNum == '시설1') {
@@ -248,17 +249,17 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
                 ),
               ]),
             ),
-            // AnimatedPositioned(
-            //   top: navPause
-            //       ? 176 * 3
-            //       : navDone
-            //           ? 181 * 3
-            //           : 230 * 3,
-            //   left: 17 * 3,
-            //   duration: const Duration(milliseconds: 500),
-            //   curve: Curves.easeIn,
-            //   child: const FacilityCurrentPositionScreen(),
-            // ),
+            AnimatedPositioned(
+              top: navPause
+                  ? 176 * 3
+                  : navDone
+                      ? 181 * 3
+                      : 230 * 3,
+              left: 17 * 3,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeIn,
+              child: const FacilityCurrentPositionScreen(),
+            ),
             SvgPicture.asset(
               navTopBG,
               width: 1080,

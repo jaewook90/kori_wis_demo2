@@ -45,9 +45,12 @@ class MainStatusModel with ChangeNotifier {
 
   bool? EMGModalChange;
 
+  bool? audioState;
+
   List<List<String>>? cordList;
 
   MainStatusModel({
+    this.audioState,
     this.facilityArrived,
     this.facilityOfficeSelected,
     this.debugMode,
