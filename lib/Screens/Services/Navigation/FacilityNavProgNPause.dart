@@ -127,7 +127,7 @@ class _FacilityNavigationProgNPauseState
     if (_mainStatusProvider.lastFacilityNum!.isEmpty ||
         _mainStatusProvider.lastFacilityName!.isEmpty) {
       setState(() {
-        departureSentence = '엘리베이터';
+        departureSentence = '엘리베이터(대기장소)';
       });
     } else {
       setState(() {
@@ -143,7 +143,7 @@ class _FacilityNavigationProgNPauseState
     } else if (servTableNum == '시설1') {
       if (_mainStatusProvider.robotReturning == true) {
         setState(() {
-          destinationSentence = '대기장소';
+          destinationSentence = '엘리베이터(대기장소)';
         });
       } else {
         setState(() {

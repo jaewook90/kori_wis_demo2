@@ -46,6 +46,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
   final TextEditingController configController = TextEditingController();
   final TextEditingController autoChargeController = TextEditingController();
   final CountdownController _controller = CountdownController(autoStart: true);
+  final CountdownController _controller2 = CountdownController(autoStart: true);
   late SharedPreferences _prefs;
 
   late int officeQTY;
@@ -63,7 +64,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
 
   // assets
   final String _effectFile = 'assets/sounds/button_click.wav';
-  final String mainMap = 'assets/images/facility/323_black_map_modified_v_1_2.svg';
+  final String mainMap =
+      'assets/images/facility/323_black_map_modified_v_1_2.svg';
   final String mainMapBG = 'assets/images/facility/map_bg.svg';
   final String bottomBanner = 'assets/images/facility/bottom.png';
   final String listBtn = 'assets/images/facility/btn.svg';
@@ -308,7 +310,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
     _networkProvider = Provider.of<NetworkModel>(context, listen: false);
     _mainStatusProvider = Provider.of<MainStatusModel>(context, listen: false);
 
-    if(_mainStatusProvider.facilitySelectByBTN == true){
+    if (_mainStatusProvider.facilitySelectByBTN == true) {
       setState(() {
         officeSelected = true;
         officeNumber = _mainStatusProvider.targetFacilityIndex!;
@@ -443,7 +445,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
             officeName.add('화장실1');
           }
         } else {
-          officeName.add('엘리베이터');
+          officeName.add('엘리베이터(대기장소)');
         }
       }
 
@@ -496,9 +498,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                 () {
                               _effectPlayer.dispose();
                               navPage(
-                                      context: context,
-                                      page: const FacilityListScreen(hideThings: false,))
-                                  .navPageToPage();
+                                  context: context,
+                                  page: const FacilityListScreen(
+                                    hideThings: false,
+                                  )).navPageToPage();
                             });
                           });
                         },
@@ -515,8 +518,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   padding: const EdgeInsets.only(left: 54, top: 36),
                   child: SvgPicture.asset(
                     facilityName,
-                    width: 82*3,
-                    height: 14*3,
+                    width: 82 * 3,
+                    height: 14 * 3,
                   ),
                 ),
               ],
@@ -528,8 +531,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
       extendBodyBehindAppBar: true,
       drawerEdgeDragWidth: 70,
       endDrawerEnableOpenDragGesture: true,
-      endDrawer:
-          Drawer(
+      endDrawer: Drawer(
         backgroundColor: const Color(0xff292929),
         shadowColor: const Color(0xff191919),
         width: 800,
@@ -1536,34 +1538,49 @@ class _FacilityScreenState extends State<FacilityScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 1614, left: 51),
                 child: Container(
-                    width: 978,
-                    height: 255,
-                    decoration: BoxDecoration(
-                        image:
-                            DecorationImage(image: AssetImage(bottomBanner))),
+                  width: 978,
+                  height: 255,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage(bottomBanner))),
                   child: Stack(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 25*3, left: 146*3),
-                        width: 34*3,
-                        height: 13*3,
+                        margin: EdgeInsets.only(top: 25 * 3, left: 146 * 3),
+                        width: 34 * 3,
+                        height: 13 * 3,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.location_on_outlined, size: 11*3, color: Color(0xffffffff).withOpacity(0.6),),
-                            Text('주소', style: TextStyle(fontFamily: 'kor', fontSize: 11*3, color: Color(0xffffffff).withOpacity(0.6), fontWeight: FontWeight.w700, height: 1.1),)
+                            Icon(
+                              Icons.location_on_outlined,
+                              size: 11 * 3,
+                              color: Color(0xffffffff).withOpacity(0.6),
+                            ),
+                            Text(
+                              '주소',
+                              style: TextStyle(
+                                  fontFamily: 'kor',
+                                  fontSize: 11 * 3,
+                                  color: Color(0xffffffff).withOpacity(0.6),
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.1),
+                            )
                           ],
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 44*3, left: 108*3),
-                        width: 109*3,
-                        height: 16*3,
-                        child: Text(
-                          '서울특별시 송파구 송파대로 111\n파크하비오 205동 _7층',
+                        margin: EdgeInsets.only(top: 44 * 3, left: 108 * 3),
+                        width: 109 * 3,
+                        height: 16 * 3,
+                        child: Text('서울특별시 송파구 송파대로 111\n파크하비오 205동 _7층',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontFamily: 'kor', fontSize: 7*3, color: Color(0xffffffff).withOpacity(0.4), fontWeight: FontWeight.w400, height: 1.1, letterSpacing: -0.04*3)
-                        ),
+                            style: TextStyle(
+                                fontFamily: 'kor',
+                                fontSize: 7 * 3,
+                                color: Color(0xffffffff).withOpacity(0.4),
+                                fontWeight: FontWeight.w400,
+                                height: 1.1,
+                                letterSpacing: -0.04 * 3)),
                       )
                     ],
                   ),
@@ -1572,7 +1589,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
             ),
             Offstage(
               offstage: !officeSelected,
-              child:SvgPicture.asset(
+              child: SvgPicture.asset(
                 mainMapBG,
                 width: 1080,
                 height: 1920,
@@ -1583,15 +1600,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
                   top: officeSelected ? 176 * 3 : 255, left: 51),
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
-              child: Stack(
-                children: [SvgPicture.asset(
+              child: Stack(children: [
+                SvgPicture.asset(
                   mainMap,
                   width: 978,
                   height: 1335,
                 ),
-                  const FacilityCurrentPositionScreen()
-                ]
-              ),
+                // const FacilityCurrentPositionScreen()
+              ]),
             ),
             // 입주사 화면 버튼
             AnimatedPadding(
@@ -1621,7 +1637,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 0;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1647,7 +1664,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 1;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1673,7 +1691,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 2;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1699,7 +1718,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 3;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1725,7 +1745,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 4;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1751,7 +1772,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 5;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1777,7 +1799,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 6;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1803,7 +1826,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 7;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1829,7 +1853,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 8;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1855,7 +1880,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 9;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1881,7 +1907,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 10;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1907,7 +1934,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 11;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1933,7 +1961,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 12;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1959,7 +1988,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 13;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -1984,7 +2014,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 14;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -2010,7 +2041,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 15;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -2036,7 +2068,8 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               officeSelectionTimeOut = false;
                               _controller.restart();
                               officeNumber = 16;
-                              _mainStatusProvider.targetFacilityIndex = officeNumber;
+                              _mainStatusProvider.targetFacilityIndex =
+                                  officeNumber;
                             });
                           });
                         },
@@ -2048,7 +2081,10 @@ class _FacilityScreenState extends State<FacilityScreen> {
             AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeIn,
-              height: officeSelected ? officeSelectionTimeOut ? 146*3 : 181 * 3
+              height: officeSelected
+                  ? officeSelectionTimeOut
+                      ? 146 * 3
+                      : 181 * 3
                   : 0,
               width: 1080,
               decoration: BoxDecoration(
@@ -2068,207 +2104,241 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [Color(0xff222222), Color(0xff4d4d4d)])),
-              child: Stack(
-                children: [
+              child: Offstage(
+                offstage: !officeSelected,
+                child: Stack(children: [
                   //업장 선택
                   Offstage(
-                  offstage: officeSelectionTimeOut,
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 54 * 3, left: 17 * 3),
-                        child: Container(
-                          width: 280 * 3,
-                          height: 62 * 3,
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2 * 3),
-                                child: Container(
-                                  width: 103 * 3,
-                                  height: 59 * 3,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/images/facility/banners/${_mainStatusProvider.facilityNum![officeNumber]}.png'))),
+                    offstage: officeSelectionTimeOut,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 54 * 3, left: 17 * 3),
+                          child: Container(
+                            width: 280 * 3,
+                            height: 62 * 3,
+                            child: Stack(
+                              children: [
+                                ((officeNumber != 14 && officeNumber != 15) &&
+                                        officeNumber != 16)
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 2 * 3),
+                                        child: Container(
+                                          width: 103 * 3,
+                                          height: 59 * 3,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/facility/banners/${_mainStatusProvider.facilityNum![officeNumber]}.png'))),
+                                        ),
+                                      )
+                                    : Container(),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 114 * 3),
+                                  child: Column(
+                                    children: [
+                                      ((officeNumber != 14 &&
+                                                  officeNumber != 15) &&
+                                              officeNumber != 16)
+                                          ? SizedBox(
+                                              width: (280 - 105) * 3,
+                                              child: Text(
+                                                '${_mainStatusProvider.facilityNum![officeNumber]}호',
+                                                style: const TextStyle(
+                                                    fontFamily: 'kor',
+                                                    fontSize: 14 * 3,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xffffffff),
+                                                    letterSpacing: -0.24),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                            )
+                                          : Container(),
+                                      SizedBox(
+                                        width: (280 - 105) * 3,
+                                        child: Text(
+                                          _mainStatusProvider
+                                              .facilityName![officeNumber],
+                                          style: const TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 14 * 3,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xffffffff),
+                                              letterSpacing: -0.24),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 4 * 3,
+                                      ),
+                                      SizedBox(
+                                        width: (280 - 105) * 3,
+                                        child: Text(
+                                          _mainStatusProvider
+                                              .facilityDetail![officeNumber],
+                                          style: const TextStyle(
+                                              fontFamily: 'kor',
+                                              fontSize: 10 * 3,
+                                              fontWeight: FontWeight.w100,
+                                              color: Color(0xffffffff),
+                                              letterSpacing: -0.21),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 114 * 3),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      width: (280 - 105) * 3,
-                                      child: Text(
-                                        '${_mainStatusProvider.facilityNum![officeNumber]}호',
-                                        style: const TextStyle(
-                                            fontFamily: 'kor',
-                                            fontSize: 14 * 3,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xffffffff),
-                                            letterSpacing: -0.24),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: (280 - 105) * 3,
-                                      child: Text(
-                                        _mainStatusProvider
-                                            .facilityName![officeNumber],
-                                        style: const TextStyle(
-                                            fontFamily: 'kor',
-                                            fontSize: 14 * 3,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xffffffff),
-                                            letterSpacing: -0.24),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 4 * 3,
-                                    ),
-                                    SizedBox(
-                                      width: (280 - 105) * 3,
-                                      child: Text(
-                                        _mainStatusProvider.facilityDetail![officeNumber],
-                                        style: const TextStyle(
-                                            fontFamily: 'kor',
-                                            fontSize: 10 * 3,
-                                            fontWeight: FontWeight.w100,
-                                            color: Color(0xffffffff),
-                                            letterSpacing: -0.21),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // 버튼
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 130 * 3, left: 17 * 3),
-                        child: SizedBox(
-                          width: 326 * 3,
-                          height: 34 * 3,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    _controller.pause();
-                                    setState(() {
-                                      officeSelected = false;
-                                    });
-                                    if (EMGStatus == 0) {
-                                      showEMGStateModal(context);
-                                    } else {
-                                      if (CHGFlag == 3) {
-                                        showAdaptorCableAlert(context);
+                        // 버튼
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 130 * 3, left: 17 * 3),
+                          child: SizedBox(
+                            width: 326 * 3,
+                            height: 34 * 3,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      _controller.pause();
+                                      _controller2.pause();
+                                      setState(() {
+                                        officeSelected = false;
+                                      });
+                                      if (EMGStatus == 0) {
+                                        showEMGStateModal(context);
                                       } else {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          _effectPlayer
-                                              .seek(const Duration(seconds: 0));
-                                          _effectPlayer.play();
-                                          Future.delayed(
-                                              const Duration(milliseconds: 230),
-                                              () {
-                                            _effectPlayer.dispose();
-                                            showCountDownPopup(
-                                                context,
-                                                _mainStatusProvider
-                                                    .facilityNum![officeNumber]);
+                                        if (CHGFlag == 3) {
+                                          showAdaptorCableAlert(context);
+                                        } else {
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            _effectPlayer.seek(
+                                                const Duration(seconds: 0));
+                                            _effectPlayer.play();
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 230), () {
+                                              _effectPlayer.dispose();
+                                              showCountDownPopup(
+                                                  context,
+                                                  _mainStatusProvider
+                                                          .facilityNum![
+                                                      officeNumber]);
+                                            });
+                                          });
+                                        }
+                                      }
+                                    },
+                                    style: TextButton.styleFrom(
+                                        fixedSize: const Size(159 * 3, 34 * 3),
+                                        backgroundColor: const Color(0xff000000)
+                                            .withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12))),
+                                    child: const Center(
+                                        child: Text(
+                                      '로봇 길안내',
+                                      style: TextStyle(
+                                        fontFamily: 'kor',
+                                        color: Color(0xffffffff),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14 * 3,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ))),
+                                TextButton(
+                                    onPressed: () {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
+                                        _effectPlayer.play();
+                                        Future.delayed(
+                                            const Duration(milliseconds: 230),
+                                            () {
+                                          _effectPlayer.dispose();
+                                          setState(() {
+                                            officeSelected = false;
                                           });
                                         });
-                                      }
-                                    }
-                                  },
-                                  style: TextButton.styleFrom(
-                                      fixedSize: const Size(159 * 3, 34 * 3),
-                                      backgroundColor: const Color(0xff000000)
-                                          .withOpacity(0.5),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12))),
-                                  child: const Center(
-                                      child: Text(
-                                    '로봇 길안내',
-                                    style: TextStyle(
-                                      fontFamily: 'kor',
-                                      color: Color(0xffffffff),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14 * 3,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ))),
-                              TextButton(
-                                  onPressed: () {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      _effectPlayer
-                                          .seek(const Duration(seconds: 0));
-                                      _effectPlayer.play();
-                                      Future.delayed(
-                                          const Duration(milliseconds: 230), () {
-                                        _effectPlayer.dispose();
-                                        setState(() {
-                                          officeSelected = false;
-                                        });
                                       });
-                                    });
-                                  },
-                                  style: TextButton.styleFrom(
-                                      fixedSize: const Size(159 * 3, 34 * 3),
-                                      backgroundColor: const Color(0xff000000)
-                                          .withOpacity(0.5),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12))),
-                                  child: const Center(
-                                      child: Text(
-                                    '새로운 안내',
-                                    style: TextStyle(
-                                      fontFamily: 'kor',
-                                      color: Color(0xffffffff),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14 * 3,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ))),
-                            ],
+                                    },
+                                    style: TextButton.styleFrom(
+                                        fixedSize: const Size(159 * 3, 34 * 3),
+                                        backgroundColor: const Color(0xff000000)
+                                            .withOpacity(0.5),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12))),
+                                    child: const Center(
+                                        child: Text(
+                                      '새로운 안내',
+                                      style: TextStyle(
+                                        fontFamily: 'kor',
+                                        color: Color(0xffffffff),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14 * 3,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ))),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Countdown(
-                        controller: _controller,
-                        seconds: 10,
-                        build: (_, double time) {
-                          if (!officeSelected) {
-                            _controller.restart();
-                            _controller.pause();
-                          }
-                          return Container();
-                        },
-                        interval: const Duration(seconds: 1),
-                        onFinished: () {
-                          setState(() {
-                            officeSelectionTimeOut = true;
-                          });
-                        },
-                      ),
-                    ],
+                        Countdown(
+                          controller: _controller,
+                          seconds: 10,
+                          build: (_, double time) {
+                            if (!officeSelected) {
+                              _controller.restart();
+                              _controller.pause();
+                            }
+                            return Container();
+                          },
+                          interval: const Duration(seconds: 1),
+                          onFinished: () {
+                            setState(() {
+                              officeSelectionTimeOut = true;
+                              _controller2.restart();
+                            });
+                          },
+                        ),
+                        Countdown(
+                          controller: _controller2,
+                          seconds: 10,
+                          build: (_, double time) {
+                            if (officeSelectionTimeOut == false) {
+                              _controller2.restart();
+                              _controller2.pause();
+                            }
+                            return Container();
+                          },
+                          interval: const Duration(seconds: 1),
+                          onFinished: () {
+                            setState(() {
+                              officeSelected = false;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
                   //시간 초과
                   Offstage(
                     offstage: !officeSelectionTimeOut,
                     child: Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 50 * 3, left: 70 * 3),
+                          padding:
+                              const EdgeInsets.only(top: 50 * 3, left: 70 * 3),
                           child: Container(
                             width: 230 * 3,
                             child: const Text(
@@ -2285,7 +2355,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                         // 버튼
                         Padding(
                           padding:
-                          const EdgeInsets.only(top: 95 * 3, left: 17 * 3),
+                              const EdgeInsets.only(top: 95 * 3, left: 17 * 3),
                           child: SizedBox(
                             width: 326 * 3,
                             height: 34 * 3,
@@ -2294,10 +2364,14 @@ class _FacilityScreenState extends State<FacilityScreen> {
                               children: [
                                 TextButton(
                                     onPressed: () {
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        _effectPlayer.seek(const Duration(seconds: 0));
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
                                         _effectPlayer.play();
-                                        Future.delayed(const Duration(milliseconds: 230), () {
+                                        Future.delayed(
+                                            const Duration(milliseconds: 230),
+                                            () {
                                           _effectPlayer.dispose();
                                           setState(() {
                                             officeSelectionTimeOut = false;
@@ -2312,24 +2386,28 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                             .withOpacity(0.5),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(12))),
+                                                BorderRadius.circular(12))),
                                     child: const Center(
                                         child: Text(
-                                          '취소',
-                                          style: TextStyle(
-                                            fontFamily: 'kor',
-                                            color: Color(0xffffffff),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14 * 3,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ))),
+                                      '취소',
+                                      style: TextStyle(
+                                        fontFamily: 'kor',
+                                        color: Color(0xffffffff),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14 * 3,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ))),
                                 TextButton(
                                     onPressed: () {
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        _effectPlayer.seek(const Duration(seconds: 0));
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        _effectPlayer
+                                            .seek(const Duration(seconds: 0));
                                         _effectPlayer.play();
-                                        Future.delayed(const Duration(milliseconds: 230), () {
+                                        Future.delayed(
+                                            const Duration(milliseconds: 230),
+                                            () {
                                           _effectPlayer.dispose();
                                           setState(() {
                                             officeSelectionTimeOut = false;
@@ -2340,21 +2418,22 @@ class _FacilityScreenState extends State<FacilityScreen> {
                                     },
                                     style: TextButton.styleFrom(
                                         fixedSize: const Size(159 * 3, 34 * 3),
-                                        backgroundColor: const Color(0xff0a84ff),
+                                        backgroundColor:
+                                            const Color(0xff0a84ff),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(12))),
+                                                BorderRadius.circular(12))),
                                     child: const Center(
                                         child: Text(
-                                          '확인',
-                                          style: TextStyle(
-                                            fontFamily: 'kor',
-                                            color: Color(0xffffffff),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 14 * 3,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ))),
+                                      '확인',
+                                      style: TextStyle(
+                                        fontFamily: 'kor',
+                                        color: Color(0xffffffff),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14 * 3,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ))),
                               ],
                             ),
                           ),
@@ -2362,7 +2441,7 @@ class _FacilityScreenState extends State<FacilityScreen> {
                       ],
                     ),
                   ),
-                ]
+                ]),
               ),
             )
           ],

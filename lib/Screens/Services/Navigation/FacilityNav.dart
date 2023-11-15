@@ -181,11 +181,13 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
       } else if (servTableNum == '시설1') {
         _mainStatusProvider.lastFacilityNum = '';
         _mainStatusProvider.lastFacilityName = '';
+        _mainStatusProvider.audioState = false;
         Future.delayed(const Duration(milliseconds: 230), () {
           navPage(context: context, page: const FacilityScreen())
               .navPageToPage();
         });
       } else if (servTableNum == 'charging_pile') {
+        _mainStatusProvider.audioState = false;
         Future.delayed(const Duration(milliseconds: 230), () {
           navPage(
             context: context,

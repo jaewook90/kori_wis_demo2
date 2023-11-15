@@ -222,10 +222,7 @@ class _ChangingCountDownModalFinalState
                                       Future.delayed(
                                           Duration(milliseconds: 230), () {
                                         _effectPlayer.dispose();
-                                        navPage(
-                                          context: context,
-                                          page: const FacilityNavigation(),
-                                        ).navPageToPage();
+                                        Navigator.pop(context);
                                         setState(() {
                                           _mainStatusProvider.facilityNavDone = false;
                                           _mainStatusProvider.facilityArrived = false;
@@ -395,10 +392,7 @@ class _ChangingCountDownModalFinalState
                                     .Posting(context);
                                 Future.delayed(Duration(milliseconds: 230), () {
                                   _effectPlayer.dispose();
-                                  navPage(
-                                    context: context,
-                                    page: const FacilityNavigation(),
-                                  ).navPageToPage();
+                                  Navigator.pop(context);
                                   setState(() {
                                     _mainStatusProvider.facilityNavDone = false;
                                     _mainStatusProvider.facilityArrived = false;

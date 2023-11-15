@@ -50,7 +50,7 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
     btnClick = false;
     searchResult = '';
     officeName =
-    ['(주)딜라이브', '아워팜', '브레인컴퍼니', 'DAWON\nTax Office', '(주)드림디엔에스', '(주)범건축종합\n건축사사무소', 'Daily Vegan', '(주)엘렉시', '신영비엠이(주)', 'HD인베스트', '(주)엑사로보틱스', '수성엔지니어링', '(주)딜라이브\n자재실', 'JS융합인재교육원(주)', '엘리베이터', '화장실1', '화장실2'];
+    ['(주)딜라이브', '아워팜', '브레인컴퍼니', 'DAWON\nTax Office', '(주)드림디엔에스', '(주)범건축종합\n건축사사무소', 'Daily Vegan', '(주)엘렉시', '신영비엠이(주)', 'HD인베스트', '(주)엑사로보틱스', '수성엔지니어링', '(주)딜라이브\n자재실', 'JS융합인재교육원(주)', '엘리베이터(대기장소)', '화장실1', '화장실2'];
     for (int i = 0;
         i <
             Provider.of<MainStatusModel>(context, listen: false)
