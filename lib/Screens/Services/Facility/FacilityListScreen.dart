@@ -293,6 +293,15 @@ class _FacilityListScreenState extends State<FacilityListScreen> {
                                     splashFactory: NoSplash.splashFactory,
                                   ),
                                   onPressed: (){
+                                    _effectPlayer.seek(const Duration(seconds: 0));
+                                    _effectPlayer.play();
+                                    Future.delayed(const Duration(milliseconds: 100), () {
+                                      setState(() {
+                                        _mainStatusProvider.targetFacilityIndex = (officeQTY-officeQTY%3)+j;
+                                        _mainStatusProvider.facilitySelectByBTN = true;
+                                      });
+                                      navPage(context: context, page: FacilityScreen()).navPageToPage();
+                                    });
                                   },
                                   child: Column(
                                     children: [
