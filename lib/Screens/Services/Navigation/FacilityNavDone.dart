@@ -337,8 +337,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
                           Future.delayed(const Duration(milliseconds: 230), () {
                             // _audioPlayer.dispose();
                             setState(() {
-                              _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
-                              _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
+                              // _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
+                              // _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
                               _mainStatusProvider.facilityNavDoneScroll = false;
                               _mainStatusProvider.facilityNavDone = false;
                               _mainStatusProvider.facilityArrived = false;
@@ -368,8 +368,8 @@ class _FacilityNavigationDoneState extends State<FacilityNavigationDone> {
                       onPressed: () {
                         _audioPlayer.dispose();
                         setState(() {
-                          _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
-                          _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
+                          // _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
+                          // _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
                           _mainStatusProvider.facilityNavDone = false;
                           _mainStatusProvider.facilityNavDoneScroll = false;
                         });

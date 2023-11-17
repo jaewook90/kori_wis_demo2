@@ -170,6 +170,8 @@ class _FacilityNavigationState extends State<FacilityNavigation> {
       setState(() {
         _mainStatusProvider.facilityArrived = true;
         navStatus = 0;
+        _mainStatusProvider.lastFacilityNum = _mainStatusProvider.facilityNum![_mainStatusProvider.targetFacilityIndex!];
+        _mainStatusProvider.lastFacilityName = _mainStatusProvider.facilityName![_mainStatusProvider.targetFacilityIndex!];
       });
       if (servTableNum != '시설1' && servTableNum != 'charging_pile') {
         Future.delayed(const Duration(milliseconds: 230), () {

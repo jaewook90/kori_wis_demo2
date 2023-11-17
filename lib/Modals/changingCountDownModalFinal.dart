@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:kori_wis_demo/Providers/MainStatusModel.dart';
@@ -32,6 +34,9 @@ class _ChangingCountDownModalFinalState
   final CountdownController _controller = CountdownController(autoStart: true);
 
   late bool countDownNav;
+  late bool navPopFlag;
+
+  late Timer _navPopTimer;
 
   late String countDownModalBg;
   late String countDownModalBtn;
@@ -46,6 +51,7 @@ class _ChangingCountDownModalFinalState
     // TODO: implement initState
     super.initState();
     countDownNav = true;
+    navPopFlag = true;
     countDownMSG = '초 후 서빙을 시작합니다.';
     _initAudio();
   }
@@ -63,6 +69,7 @@ class _ChangingCountDownModalFinalState
   void dispose() {
     // TODO: implement dispose
     _effectPlayer.dispose();
+    _navPopTimer.cancel();
     super.dispose();
   }
 
@@ -215,19 +222,33 @@ class _ChangingCountDownModalFinalState
                                         _mainStatusProvider.audioState = true;
                                       });
                                       PostApi(
-                                              url: startUrl,
-                                              endadr: navUrl,
-                                              keyBody: '시설1')
+                                          url: startUrl,
+                                          endadr: navUrl,
+                                          keyBody: '시설1')
                                           .Posting(context);
-                                      Future.delayed(
-                                          Duration(milliseconds: 230), () {
-                                        _effectPlayer.dispose();
-                                        Navigator.pop(context);
-                                        setState(() {
-                                          _mainStatusProvider.facilityNavDone = false;
-                                          _mainStatusProvider.facilityArrived = false;
-                                        });
+                                      // Future.delayed(
+                                      //     Duration(milliseconds: 230), () {
+                                      //
+                                      // });
+                                      _navPopTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+                                        if(Provider.of<NetworkModel>((context), listen: false)
+                                            .APIGetData['status'] != 3){
+                                          if(navPopFlag == true){
+                                            _effectPlayer.dispose();
+                                            Navigator.pop(context);
+                                          }
+                                          setState(() {
+                                            _mainStatusProvider.facilityNavDone = false;
+                                            _mainStatusProvider.facilityArrived = false;
+                                            navPopFlag = false;
+                                          });
+                                        }
                                       });
+                                      // if(Provider.of<NetworkModel>((context), listen: false)
+                                      //     .APIGetData['status'] != 3){
+                                      //   _effectPlayer.dispose();
+                                      //   Navigator.pop(context);
+                                      // }
                                     }
                                   }
                                 },
@@ -390,14 +411,26 @@ class _ChangingCountDownModalFinalState
                                         endadr: navUrl,
                                         keyBody: '시설1')
                                     .Posting(context);
-                                Future.delayed(Duration(milliseconds: 230), () {
-                                  _effectPlayer.dispose();
-                                  Navigator.pop(context);
-                                  setState(() {
-                                    _mainStatusProvider.facilityNavDone = false;
-                                    _mainStatusProvider.facilityArrived = false;
-                                  });
+                                // Future.delayed(
+                                //     Duration(milliseconds: 230), () {
+                                //
+                                // });
+                                _navPopTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+                                  if(Provider.of<NetworkModel>((context), listen: false)
+                                      .APIGetData['status'] != 3){
+                                    setState(() {
+                                      _mainStatusProvider.facilityNavDone = false;
+                                      _mainStatusProvider.facilityArrived = false;
+                                    });
+                                    _effectPlayer.dispose();
+                                    Navigator.pop(context);
+                                  }
                                 });
+                                // if(Provider.of<NetworkModel>((context), listen: false)
+                                //     .APIGetData['status'] != 3){
+                                //   _effectPlayer.dispose();
+                                //   Navigator.pop(context);
+                                // }
                               }
                             }
                           });

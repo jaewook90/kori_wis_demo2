@@ -55,7 +55,7 @@ class _FacilityCurrentPositionScreenState
     _animationController.repeat(reverse: true);
     _animation = Tween(begin: 0, end: 10.0).animate(_animationController)
       ..addListener(() {
-        setState(() {});
+        // setState(() {});
       });
 
     startUrl = Provider.of<NetworkModel>(context, listen: false).startUrl;
